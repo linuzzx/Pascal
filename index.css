@@ -1,0 +1,32 @@
+html {
+    background-color: #F1F1F1;
+    text-align: center;
+    height: 100%;
+}
+
+body {
+    background-color: #F1F1F1;
+    margin: 0;
+    height: 100%;
+}
+
+header {
+    border-bottom: solid black 1px;
+    margin: 0 15vw 20vh 15vw;
+}
+
+h1 {
+    margin: 0;
+}
+
+table {
+    margin: auto;
+}
+
+table tr {
+    text-align: center;
+}
+
+table tr :hover {
+    opacity: .75;
+}
