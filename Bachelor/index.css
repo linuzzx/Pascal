@@ -1,18 +1,28 @@
 html {
-    background-color: #F1F1F1;
     text-align: center;
     height: 100%;
 }
 
 body {
-    background-color: #F1F1F1;
+    background-image: url('Bilder/bakgrunn.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
     margin: 0;
     height: 100%;
+    position: absolute;
+    right: 0;
+    padding: 3vh 3vh;
 }
 
 header {
+    margin: 0 0 23vh 20vw;
+    text-align: right;
+}
+
+#tittel {
+    padding-bottom: 1vh;
     border-bottom: solid black 1px;
-    margin: 0 15vw 20vh 15vw;
 }
 
 h1 {
@@ -27,6 +37,10 @@ table tr {
     text-align: center;
 }
 
-table tr :hover {
+a :hover {
     opacity: .75;
+}
+
+a {
+    margin: 1vh;
 }
