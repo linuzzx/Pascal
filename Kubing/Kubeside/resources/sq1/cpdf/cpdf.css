@@ -1,0 +1,36 @@
+html {
+    height: 100%;
+    padding: 0;
+    overflow-y: hidden;
+}
+body {
+    height: 100%;
+    margin: 0;
+    background: #f1f1f1;
+}
+
+iframe {
+    border: none;
+    height: 100%;
+    width: 100%;
+}
+
+table {
+    margin: 2vw;
+    text-align: center;
+}
+
+.bilder {
+    height: 20%;
+    margin: 0 2vw;
+}
+
+#fargeKnapp {
+    margin: 1vh;
+    height: 10%;
+    width: auto;
+}
+
+#fargeKnapp:hover {
+    opacity: 50%;
+}

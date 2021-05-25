@@ -1,0 +1,158 @@
+html {
+    height: 100%;
+    max-width: 100%;
+    padding: 0;
+    overflow-y: hidden;
+}
+body {
+    height: 100%;
+    margin: 0;
+    background: #f1f1f1;
+}
+
+iframe {
+    border: none;
+    height: 100%;
+    width: 100%;
+}
+
+#header {
+    margin: 0;
+    background: #555555;
+    border-bottom: 0.1vh solid #444444;
+    height: 10%;
+}
+
+#logo {
+    height: 9vh;
+    width: auto;
+    margin: 0.5vh;
+    position: absolute;
+    border-radius: 0.5vh;
+}
+
+#logo:hover {
+    background: white;
+    box-shadow: 0 0 0.5vh 0.5vh white;
+}
+
+#overskrift {
+    margin: 0;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 9vh;
+    text-shadow: 0 0 1vh #777777;
+}
+
+#imgMeny {
+    height: 5vw;
+    width: 5vw;
+    border-radius: 1vw;
+}
+
+#btnMenu {
+    height: auto;
+    width: auto;
+    padding: 0;
+    margin: 1vw;
+    background: transparent;
+    border: 0;
+    border-radius: 1vw;
+    outline: none;
+}
+
+#btnMenu:hover {
+    background: #777777;
+    box-shadow: 0.1vw 0.1vw 1vw 0.5vw #777777;
+}
+
+#grid {
+    display: grid;
+    grid-template-columns: 1fr 9fr;
+    grid-column-gap: 0;
+    height: 90%;
+}
+
+#gridMenu {
+    height: 100%;
+    background: #5F5F5F;
+    box-shadow:   inset -3px 0 5px 0 #3C3F41;
+}
+
+#gridInnhold {
+    height: 100%;
+    background: #f1f1f1;
+}
+
+/* Style the buttons that are used to open the tab content */
+.menuLinks {
+    background-color: transparent;
+    float: left;
+    border: none;
+    outline: none;
+    padding: 2vh;
+    width: 100%;
+    transition: 0.3s;
+    font-size: 5vh;
+    font-family: sans-serif;
+}
+
+/* Change background color of buttons on hover */
+.menuLinks:hover {
+    background-color: #333333;
+}
+
+/* Create an active/current tablink class */
+.menuLinks.active {
+    background-color: #444444;
+}
+
+/* Style the tab content */
+.menuItems {
+    display: none;
+    font-size: 5vh;
+    height: 100%;
+}
+
+#hjem {
+    padding: 6px 12px;
+    height: 100%;
+    box-shadow: inset 3px 3px 5px 0 #3C3F41;
+}
+
+#timer {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    background: #3C3F41;
+}
+
+#3x3 {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.sticky {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+}
+
+/*Scrollbar*/
+::-webkit-scrollbar {
+    width: 1vw;
+    height: 90%;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #444444;
+    border-radius: 0.5vw;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #333333;
+}

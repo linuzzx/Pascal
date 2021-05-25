@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html id="html" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FRURUF timer</title>
+    <link rel="stylesheet" href="FRURUFtimer.css">
+    <script src="FRURUFtimer.js"></script>
+</head>
+<body>
+    <button id="nextScrambleBtn" onclick="scrambleMaker()">Next</button>
+    <h2 id="scramble">Scramble:</h2>
+    <div id="grid">
+        <div id="leftGrid">
+            <h1>Times</h1>
+            <button id="removeAllBtn" onclick="removeAllConfirm()">X all</button>
+            <button id="removeLastBtn" onclick="removeLastConfirm()">X last</button>
+            <table id="pbList">
+                <tr id="nullRad">
+                    <th></th>
+                    <th>Current</th>
+                    <th>Best</th>
+                </tr>
+                <tr id="bestTidRad">
+                    <th>Time</th>
+                    <td id="currentTid" onclick="currentTimeInfo()"> - </td>
+                    <td id="bestTid" onclick="bestTimeInfo()"> - </td>
+                </tr>
+                <tr id="bestAo5Rad">
+                    <th>Ao5</th>
+                    <td id="currentAo5" onclick="currentAo5Info()"> - </td>
+                    <td id="bestAo5" onclick="bestAo5Info()"> - </td>
+                </tr>
+                <tr id="bestAo12Rad">
+                    <th>Ao12</th>
+                    <td id="currentAo12" onclick="currentAo12Info()"> - </td>
+                    <td id="bestAo12" onclick="bestAo12Info()"> - </td>
+                </tr>
+            </table>
+            <div id="innerLeftGrid">
+                <table id="timeList">
+                    <tr id="tableOverskrift">
+                        <th id="thNr">Nr.</th>
+                        <th id="thTime">Time</th>
+                        <th id="thAo5">ao5</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="midGrid">
+            <h1 id="tid" onkeydown="readyTimer(); resetDisplay(e)" onkeyup="startTimer()" onkeypress="stopTimer()">
+                0.00
+            </h1>
+            <div>
+                <h2 id="solution">Solution:</h2>
+            </div>
+        </div>
+        <div id="rightGrid">
+
+        </div>
+    </div>
+</body>
+</html>

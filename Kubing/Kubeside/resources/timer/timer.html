@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html id="html" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Einar's timer</title>
+    <link rel="stylesheet" href="timer.css">
+    <script src="timer.js"></script>
+</head>
+<body>
+    <button id="nextScrambleBtn" onclick="scrambleMaker()">Next</button>
+    <h2 id="scramble">Scramble:</h2>
+    <div id="grid">
+        <div id="leftGrid">
+            <h1>Times</h1>
+            <button id="removeAllBtn" onclick="removeAllConfirm()">X all</button>
+            <button id="removeLastBtn" onclick="removeLastConfirm()">X last</button>
+            <table id="pbList">
+                <tr id="nullRad">
+                    <th></th>
+                    <th>Current</th>
+                    <th>Best</th>
+                </tr>
+                <tr id="bestTidRad">
+                    <th>Time</th>
+                    <td id="currentTid" onclick="currentTimeInfo()"> - </td>
+                    <td id="bestTid" onclick="bestTimeInfo()"> - </td>
+                </tr>
+                <tr id="bestAo5Rad">
+                    <th>Ao5</th>
+                    <td id="currentAo5" onclick="currentAo5Info()"> - </td>
+                    <td id="bestAo5" onclick="bestAo5Info()"> - </td>
+                </tr>
+                <tr id="bestAo12Rad">
+                    <th>Ao12</th>
+                    <td id="currentAo12" onclick="currentAo12Info()"> - </td>
+                    <td id="bestAo12" onclick="bestAo12Info()"> - </td>
+                </tr>
+            </table>
+            <div id="innerLeftGrid">
+                <table id="timeList">
+                    <tr id="tableOverskrift">
+                        <th id="thNr">Nr.</th>
+                        <th id="thTime">Time</th>
+                        <th id="thAo5">ao5</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="midGrid">
+            <h1 id="tid" onkeydown="readyTimer(); resetDisplay(e)" onkeyup="startTimer()" onkeypress="stopTimer()">
+                0.00
+            </h1>
+        </div>
+        <div id="rightGrid">
+            <canvas id="drawScramble" width="1210" height="910" onclick="drawScramble()"></canvas>
+            <script src="draw.js"></script>
+        </div>
+    </div>
+</body>
+</html>

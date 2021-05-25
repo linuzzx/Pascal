@@ -1,7 +1,6 @@
 html {
     text-align: center;
     height: 100%;
-    display: none;
 }
 
 body {
@@ -14,7 +13,6 @@ body {
     position: absolute;
     right: 0;
     padding: 3vh 3vh;
-    display: none;
 }
 
 header {

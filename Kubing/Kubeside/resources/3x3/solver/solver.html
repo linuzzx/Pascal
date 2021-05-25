@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Solver</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link rel="stylesheet" href="solver.css">
+</head>
+<body>
+    <div id="cube">
+        <div id="cubeTop">
+            <div>
+                <canvas id="tom1" width="165" height="165"></canvas>
+            </div>
+            <div id="upDiv">
+                <div>
+                    <canvas id="up1" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="up2" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="up3" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="up4" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="up5" width="50" height="50"></canvas>
+                    <canvas id="up6" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="up7" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="up8" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="up9" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+            </div>
+            <div>
+                <canvas id="tom2" width="165" height="165"></canvas>
+            </div>
+            <div>
+                <canvas id="tom3" width="165" height="165"></canvas>
+            </div>
+        </div>
+        <div id="cubeMid">
+            <div id="leftDiv">
+                <div>
+                    <canvas id="left1" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="left2" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="left3" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="left4" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="left5" width="50" height="50"></canvas>
+                    <canvas id="left6" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="left7" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="left8" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="left9" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+            </div>
+            <div id="frontDiv">
+                <div>
+                    <canvas id="front1" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="front2" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="front3" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="front4" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="front5" width="50" height="50"></canvas>
+                    <canvas id="front6" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="front7" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="front8" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="front9" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+            </div>
+            <div id="rightDiv">
+                <div>
+                    <canvas id="right1" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="right2" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="right3" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="right4" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="right5" width="50" height="50"></canvas>
+                    <canvas id="right6" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="right7" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="right8" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="right9" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+            </div>
+            <div id="backDiv">
+                <div>
+                    <canvas id="back1" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="back2" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="back3" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="back4" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="back5" width="50" height="50"></canvas>
+                    <canvas id="back6" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="back7" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="back8" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="back9" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+            </div>
+        </div>
+        <div id="cubeBot">
+            <div>
+                <canvas id="tom4" width="165" height="165"></canvas>
+            </div>
+            <div id="downDiv">
+                <div>
+                    <canvas id="down1" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="down2" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="down3" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="down4" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="down5" width="50" height="50"></canvas>
+                    <canvas id="down6" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+                <div>
+                    <canvas id="down7" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="down8" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                    <canvas id="down9" width="50" height="50" onclick="settFarge(this.id)"></canvas>
+                </div>
+            </div>
+            <div>
+                <canvas id="tom5" width="165" height="165"></canvas>
+            </div>
+            <div>
+                <canvas id="tom6" width="165" height="165"></canvas>
+            </div>
+        </div>
+        <div>
+            <button id="solveBtn" onclick="solve()">Solve</button>
+            <h1 id="solutionTxt">Solution: </h1>
+        </div>
+    </div>
+    <div id="colors">
+        <canvas id="white" width="50" height="50" onclick="velgW()"></canvas>
+        <canvas id="yellow" width="50" height="50" onclick="velgY()"></canvas>
+        <canvas id="green" width="50" height="50" onclick="velgG()"></canvas>
+        <canvas id="blue" width="50" height="50" onclick="velgB()"></canvas>
+        <canvas id="red" width="50" height="50" onclick="velgR()"></canvas>
+        <canvas id="orange" width="50" height="50" onclick="velgO()"></canvas>
+    </div>
+    <script src="solver.js"></script>
+</body>
+</html>
