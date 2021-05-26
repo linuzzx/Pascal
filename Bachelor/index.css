@@ -44,3 +44,8 @@ a :hover {
 a {
     margin: 1vh;
 }
+
+img {
+    width: auto;
+    height: 25vh;
+}
