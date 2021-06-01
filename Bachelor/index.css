@@ -14,12 +14,12 @@ body {
     position: absolute;
     right: 0;
     padding: 3vh 3vh;
-    display: none;
 }
 
 header {
     margin: 0 0 23vh 20vw;
     text-align: right;
+    display: none;
 }
 
 #tittel {
@@ -50,4 +50,12 @@ a {
 img {
     width: 12vw;
     height: auto;
+}
+
+#forsideLink {
+    display: none;
+}
+
+.thStatusrapport, .thProsjektskisse, .thForprosjektrapport, .thSluttrapport, .thPresentasjon {
+    display: none;
 }
