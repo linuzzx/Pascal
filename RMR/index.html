@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RMR_beregning</title>
+    <script src="readExcel.js"></script>
+    <script src="index.js"></script>
+    <script src="kryptering.js"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div id="ut">
+        <label for="brukernavn">Brukernavn </label><input id="brukernavn" type="text">
+        <br>
+        <br>
+        <label for="passord">Passord </label><input id="passord" type="password">
+        <br>
+        <br>
+        <button id="btnLoggInn" onclick="sjekkInnlogging(document.getElementById('brukernavn').value,
+                                            krypterPassord(document.getElementById('passord').value))">Logg inn</button>
+    </div>
+</body>
+</html>
