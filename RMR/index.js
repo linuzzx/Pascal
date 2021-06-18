@@ -86,7 +86,7 @@ function reset() {
     tblHeader = null;
     rowLength = 0;
 
-    innlogget = false;
+    document.getElementById("rmr").innerText = "";
 }
 
 function lesData(files) {
@@ -99,27 +99,25 @@ function lesData(files) {
 }
 
 function skrivData(data) {
-    dataList = [];
-    for (let i=0; i<data.length; i++) {
-        dataList.push(data[i]);
-    }
 
-    let header = "<table class='tbl'>";
-    let table = "<table class='tbl'>";
+    let table = "<table class='tbl'>" +
+        "<tr><th>TID</th><th>VO2</th><th>RER</th><th>RER/100</th><th>VCO2</th></tr>" +
+        "<tr><th></th><th>ml/min</th><th>l/min</th><th></th><th>ml/min</th></tr>";
     let i=0;
     for (let row of data) {
-        if (i > 1) {
-            table += "<tr><td>"+row[0]+"</td><td>"+row[1]+"</td><td>"+row[2]+"</td><td>"+row[3]+"</td><td>"+row[4]+"</td></tr>"
-            rowLength++;
+        if (i > 9 && i < data.length -1) {
+            dataList.push(row);
         }
-        else {
-            table += "<tr><th>"+row[0]+"</th><th>"+row[1]+"</th><th>"+row[2]+"</th><th>"+row[3]+"</th><th>"+row[4]+"</th></tr>"
+        if (i === data.length-1) {
+            break;
+        }
+        else if (i > 11) {
+            table += "<tr><td>"+row[0]+"</td><td>"+row[1]+"</td><td>"+row[5]+"</td><td>"+row[5]/100+"</td><td>"+row[12]+"</td></tr>"
+            rowLength++;
         }
         i++;
     }
-    header += "</table>";
     table += "</table>";
-    //tblHeader.innerHTML = header;
     tblData.innerHTML = table;
 }
 
@@ -154,7 +152,7 @@ function getRer() {
 
     for (let i = 0; i<rowLength; i++) {
         const row = dataList[i+2];
-        rerList.push(row[2]);
+        rerList.push(row[5]);
     }
 }
 
@@ -163,7 +161,7 @@ function getRer100() {
 
     for (let i = 0; i<rowLength; i++) {
         const row = dataList[i+2];
-        rer100List.push(row[3]);
+        rer100List.push(row[5]/100);
     }
 }
 
@@ -172,7 +170,7 @@ function getVco2() {
 
     for (let i = 0; i<rowLength; i++) {
         const row = dataList[i+2];
-        vco2List.push(row[4]);
+        vco2List.push(row[12]);
     }
 }
 
@@ -274,7 +272,7 @@ function bestemRMR() {
             if (vo2VarKoeff[i] >= 10 || vco2VarKoeff[i] >= 10) {
                 j++;
                 i=0;
-                rmr = "Kan ikke beregne RMR for disse dataene..."
+                rmr = "Kan ikke beregne RMR for disse dataene...";
             }
             else {
                 rmr = "RMR: " + rmrList[i];
