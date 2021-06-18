@@ -99,6 +99,7 @@ function lesData(files) {
 }
 
 function skrivData(data) {
+    dataList = [];
 
     let table = "<table class='tbl'>" +
         "<tr><th>TID</th><th>VO2</th><th>RER</th><th>RER/100</th><th>VCO2</th></tr>" +
