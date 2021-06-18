@@ -12,7 +12,7 @@ let vo2VarKoeff;
 let vco2VarKoeff;
 let rmrList;
 let sumList;
-let dataList;
+let dataList = [];
 
 let tblData, tblHeader;
 let rowLength = 0;
@@ -51,16 +51,46 @@ function loggInn() {
 }
 
 function sjekkInnlogging(bNavn, pass) {
+    const feil = document.getElementById("feil");
     for (let b of brukere) {
         if (bNavn === b.brukernavn && pass === b.passord) {
             innlogget = true;
+            feil.style.setProperty("visibility", "hidden");
             loggInn();
             break;
+        }
+        else {
+            feil.style.setProperty("visibility", "visible");
         }
     }
 }
 
+function reset() {
+    tidList = null;
+    vo2List = null;
+    rerList = null;
+    rer100List = null;
+    vco2List = null;
+
+    vo2Snitt = null;
+    vco2Snitt = null;
+    vo2StdAvvik = null;
+    vco2StdAvvik = null;
+    vo2VarKoeff = null;
+    vco2VarKoeff = null;
+    rmrList = null;
+    sumList = null;
+    dataList = null;
+
+    tblData = null;
+    tblHeader = null;
+    rowLength = 0;
+
+    innlogget = false;
+}
+
 function lesData(files) {
+    reset();
     tblHeader  = document.getElementById("tblHeader");
     tblData  = document.getElementById("tblData");
     readXlsxFile(files[0]).then(function (data) {
@@ -237,32 +267,38 @@ function bestemRMR() {
     for (let i=0; i<vo2VarKoeff.length; i++) {
         sumList.push(vo2VarKoeff[i] + vco2VarKoeff[i]);
     }
-    const minSum = arrayMin(sumList);
+    const minList = sumList.sort(function(a,b) { return a - b;});
+    let j=0;
     for (let i=0; i<vo2VarKoeff.length; i++) {
-        if (vo2VarKoeff[i] + vco2VarKoeff[i] === minSum) {
-            rmr = rmrList[i];
-            break;
+        if (vo2VarKoeff[i] + vco2VarKoeff[i] === minList[j]) {
+            if (vo2VarKoeff[i] >= 10 || vco2VarKoeff[i] >= 10) {
+                j++;
+                i=0;
+                rmr = "Kan ikke beregne RMR for disse dataene..."
+            }
+            else {
+                rmr = "RMR: " + rmrList[i];
+                break;
+            }
         }
     }
-    console.log(rmr)
     return rmr;
 }
 
-function arrayMin(arr) {
-    return arr.reduce(function (p, v) {
-        return ( p < v ? p : v );
-    });
-}
-
 function beregn() {
-    hentData();
-    beregnStdAvvikVo2();
-    beregnStdAvvikVco2();
-    beregnSnittVo2();
-    beregnSnittVco2();
-    beregnVarKoeffVo2();
-    beregnVarKoeffVco2();
-    beregnRMR();
+    if (dataList.length === 0) {
+        alert("Last opp en excel-fil først!")
+    }
+    else {
+        hentData();
+        beregnStdAvvikVo2();
+        beregnStdAvvikVco2();
+        beregnSnittVo2();
+        beregnSnittVco2();
+        beregnVarKoeffVo2();
+        beregnVarKoeffVco2();
+        beregnRMR();
 
-    document.getElementById("rmr").innerText = "RMR: " + bestemRMR();
+        document.getElementById("rmr").innerText = bestemRMR();
+    }
 }
