@@ -14,10 +14,12 @@ let rmrList;
 let sumList;
 let dataList = [];
 
-let tblData, tblHeader;
+let tblData;
 let rowLength = 0;
 
 let innlogget = false;
+
+let excelFormat = "Auto";
 
 const einar = {
     brukernavn: 'einar',
@@ -40,6 +42,10 @@ function loggInn() {
         ut.innerHTML =  "   <div id='grid'>\n" +
             "        <div>\n" +
             "            <input type='file' id='input' onchange='lesData(this.files)'>\n" +
+            "            <div>" +
+            "               <label for='select'>Excel-format: </label>\n" +
+                "            <select id='select' onchange='velgFormat(this.value)'><option>Auto</option><option>Manuell</option></select>\n" +
+        "                </div> " +
             "            <div id='tblData'></div>\n" +
             "        </div>\n" +
             "        <div>\n" +
@@ -48,6 +54,11 @@ function loggInn() {
             "        </div>\n" +
             "    </div>";
     }
+}
+
+function velgFormat(format) {
+    excelFormat = format;
+    lesData(document.getElementById("input").files);
 }
 
 function sjekkInnlogging(bNavn, pass) {
@@ -83,7 +94,6 @@ function reset() {
     dataList = null;
 
     tblData = null;
-    tblHeader = null;
     rowLength = 0;
 
     document.getElementById("rmr").innerText = "";
@@ -91,7 +101,6 @@ function reset() {
 
 function lesData(files) {
     reset();
-    tblHeader  = document.getElementById("tblHeader");
     tblData  = document.getElementById("tblData");
     readXlsxFile(files[0]).then(function (data) {
         skrivData(data);
@@ -104,20 +113,35 @@ function skrivData(data) {
     let table = "<table class='tbl'>" +
         "<tr><th>TID</th><th>VO2</th><th>RER</th><th>RER/100</th><th>VCO2</th></tr>" +
         "<tr><th></th><th>ml/min</th><th>l/min</th><th></th><th>ml/min</th></tr>";
-    let i=0;
-    for (let row of data) {
-        if (i > 9 && i < data.length -1) {
-            dataList.push(row);
+
+    if (excelFormat === "Auto") {
+        let i=0;
+        for (let row of data) {
+            if (i > 9 && i < data.length -1) {
+                dataList.push(row);
+            }
+            if (i === data.length-1) {
+                break;
+            }
+            else if (i > 11) {
+                table += "<tr><td>"+row[0]+"</td><td>"+row[1]+"</td><td>"+row[5]+"</td><td>"+row[5]/100+"</td><td>"+row[12]+"</td></tr>"
+                rowLength++;
+            }
+            i++;
         }
-        if (i === data.length-1) {
-            break;
-        }
-        else if (i > 11) {
-            table += "<tr><td>"+row[0]+"</td><td>"+row[1]+"</td><td>"+row[5]+"</td><td>"+row[5]/100+"</td><td>"+row[12]+"</td></tr>"
-            rowLength++;
-        }
-        i++;
     }
+    else {
+        let i=0;
+        for (let row of data) {
+            if (i > 1) {
+                table += "<tr><td>"+row[0]+"</td><td>"+row[1]+"</td><td>"+row[2]+"</td><td>"+row[2]/100+"</td><td>"+row[4]+"</td></tr>"
+                rowLength++;
+            }
+            dataList.push(row);
+            i++;
+        }
+    }
+
     table += "</table>";
     tblData.innerHTML = table;
 }
@@ -151,27 +175,51 @@ function getVo2() {
 function getRer() {
     rerList = [];
 
-    for (let i = 0; i<rowLength; i++) {
-        const row = dataList[i+2];
-        rerList.push(row[5]);
+    if (excelFormat === "Auto") {
+        for (let i = 0; i<rowLength; i++) {
+            const row = dataList[i+2];
+            rerList.push(row[5]);
+        }
+    }
+    else {
+        for (let i = 0; i<rowLength; i++) {
+            const row = dataList[i+2];
+            rerList.push(row[2]);
+        }
     }
 }
 
 function getRer100() {
     rer100List = [];
 
-    for (let i = 0; i<rowLength; i++) {
-        const row = dataList[i+2];
-        rer100List.push(row[5]/100);
+    if (excelFormat === "Auto") {
+        for (let i = 0; i < rowLength; i++) {
+            const row = dataList[i + 2];
+            rer100List.push(row[5] / 100);
+        }
+    }
+    else {
+        for (let i = 0; i < rowLength; i++) {
+            const row = dataList[i + 2];
+            rer100List.push(row[2] / 100);
+        }
     }
 }
 
 function getVco2() {
     vco2List = [];
 
-    for (let i = 0; i<rowLength; i++) {
-        const row = dataList[i+2];
-        vco2List.push(row[12]);
+    if (excelFormat === "Auto") {
+        for (let i = 0; i < rowLength; i++) {
+            const row = dataList[i + 2];
+            vco2List.push(row[12]);
+        }
+    }
+    else {
+        for (let i = 0; i < rowLength; i++) {
+            const row = dataList[i + 2];
+            vco2List.push(row[4]);
+        }
     }
 }
 

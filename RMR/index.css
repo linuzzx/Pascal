@@ -10,7 +10,7 @@ body {
     display: grid; grid-template-columns: 1fr 1fr; width: 40%;
 }
 
-#input {
+#input, #select {
     margin-bottom: .5vw;
 }
 
