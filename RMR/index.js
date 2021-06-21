@@ -36,8 +36,35 @@ const therese = {
 
 const brukere = [einar, helge, therese];
 
+window.onload = function () {
+    if (localStorage.getItem("husk") === "true") {
+
+        const cbHusk = document.getElementById("cbHusk");
+        const brukernavn = document.getElementById("brukernavn");
+        const passord = document.getElementById("passord");
+        const b = localStorage.getItem("brukernavn");
+        const p = localStorage.getItem("passord");
+
+        cbHusk.checked = true;
+        brukernavn.value = b;
+        passord.value = p;
+    }
+}
+
 function loggInn() {
     if (innlogget) {
+        const cbHusk = document.getElementById("cbHusk");
+        const brukernavn = document.getElementById("brukernavn");
+        const passord = document.getElementById("passord");
+        if (cbHusk.checked) {
+            localStorage.setItem("husk", "true");
+            localStorage.setItem("brukernavn", brukernavn.value);
+            localStorage.setItem("passord", passord.value);
+        }
+        else {
+            localStorage.clear();
+        }
+
         const ut = document.getElementById("ut");
         ut.innerHTML =  "   <div id='grid'>\n" +
             "        <div>\n" +

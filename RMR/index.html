@@ -10,10 +10,12 @@
 </head>
 <body>
     <div id="ut">
-        <label for="brukernavn">Brukernavn </label><input id="brukernavn" type="text">
+        <table style="border-collapse: separate; border: 0">
+            <tr style="border: 0"><td style="border: 0"><label for="brukernavn">Brukernavn</label></td><td style="border: 0"><input id="brukernavn" type="text"></td></tr>
+            <tr style="border: 0"><td style="border: 0"><label for="passord">Passord</label></td><td style="border: 0"><input id="passord" type="password"></td></tr>
+        </table>
         <br>
-        <br>
-        <label for="passord">Passord </label><input id="passord" type="password">
+        <label for="cbHusk">Husk brukernavn/passord</label><input id="cbHusk" type="checkbox">
         <br>
         <br>
         <button id="btnLoggInn" onclick="sjekkInnlogging(document.getElementById('brukernavn').value,
