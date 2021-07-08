@@ -1,0 +1,36 @@
+html {
+    background: #353535;
+}
+
+#content {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+}
+
+a:link {
+    color: #3C3F41;
+}
+
+/* visited link */
+a:visited {
+    color: #3C3F41;
+}
+
+/* mouse over link */
+a:hover {
+    color: #AFB1B3;
+}
+
+/* selected link */
+a:active {
+    color: #AFB1B3;
+}
+
+#grid2Content {
+    background: #CCCCCC;
+    border: #888888;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 2px #888888;
+    padding: .5vw;
+    margin: 0 1vw;
+}
