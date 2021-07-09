@@ -118,6 +118,7 @@ iframe {
     padding: 6px 12px;
     height: 100%;
     box-shadow: inset 3px 3px 5px 0 #3C3F41;
+    background: #353535;
 }
 
 #timer {
