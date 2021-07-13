@@ -1,0 +1,73 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    display: grid;
+    grid-template-rows: 1fr 9fr;
+}
+
+#header {
+    background: #555555;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+a {
+    text-align: center;
+}
+/* unvisited link */
+a:link {
+    color: #000000;
+}
+
+/* visited link */
+a:visited {
+    color: #000000;
+}
+
+/* mouse over link */
+a:hover {
+    color: #888888;
+    cursor: pointer;
+}
+
+/* selected link */
+a:active {
+    color: #888888;
+}
+
+#mainContent {
+    background: #888888;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+}
+
+#mainContent a:hover {
+    color: #555555;
+}
+
+#content {
+    background: #f1f1f1;
+}
+
+#cornerMenu {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+#edgeMenu {
+    display: none;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+#cornerContent {
+    text-align: center;
+}
+
+#edgeContent {
+    text-align: center;
+    display: none;
+}
