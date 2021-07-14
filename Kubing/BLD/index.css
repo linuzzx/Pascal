@@ -6,13 +6,23 @@ body {
     height: 100%;
     margin: 0;
     display: grid;
-    grid-template-rows: 1fr 9fr;
+    grid-template-rows: 1fr 15fr;
 }
 
 #header {
     background: #555555;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 5fr 5fr;
+}
+
+#header a:hover {
+    color: #888888;
+    cursor: pointer;
+}
+
+#letterScheme img {
+    height: 100%;
+    margin: auto;
 }
 
 a {

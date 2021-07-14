@@ -2,6 +2,10 @@ $(function () {
 
 });
 
+function showLetterScheme() {
+
+}
+
 function showCorners() {
     $("#cornerMenu").css("display", "grid");
     $("#cornerContent").css("display", "block");
