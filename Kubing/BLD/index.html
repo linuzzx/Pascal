@@ -12,124 +12,150 @@
 <body>
     <div id="letterSchemeEdit" onclick="closeLetterScheme()">
         <div id="innerLetterSchemeEdit">
-            <h1>Edit your letter scheme here</h1>
-            <div id="btnGrid" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
-                    <div></div>
-                    <div id="buttonsU" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">A</button>
-                            <button id="UB" onclick="changeLetter(this)">A</button>
-                            <button onclick="changeLetter(this)">B</button>
+            <div style="display: grid; grid-template-columns: 2fr 1fr">
+                <div>
+                    <h1>Letter scheme</h1>
+                    <div id="btnGrid" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
+                            <div></div>
+                            <div id="buttonsU" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">A</button>
+                                    <button id="UB" onclick="changeLetter(this)">A</button>
+                                    <button onclick="changeLetter(this)">B</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button id="UL" onclick="changeLetter(this)">D</button>
+                                    <button disabled> </button>
+                                    <button id="UR" onclick="changeLetter(this)">B</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">D</button>
+                                    <button id="UF" onclick="changeLetter(this)">C</button>
+                                    <button onclick="changeLetter(this)">C</button>
+                                </div>
+                            </div>
+                            <div></div>
+                            <div></div>
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button id="UL" onclick="changeLetter(this)">D</button>
-                            <button disabled> </button>
-                            <button id="UR" onclick="changeLetter(this)">B</button>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
+                            <div id="buttonsL" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">E</button>
+                                    <button id="LU" onclick="changeLetter(this)">E</button>
+                                    <button onclick="changeLetter(this)">F</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button id="LB" onclick="changeLetter(this)">H</button>
+                                    <button disabled> </button>
+                                    <button id="LF" onclick="changeLetter(this)">F</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">H</button>
+                                    <button id="LD" onclick="changeLetter(this)">G</button>
+                                    <button onclick="changeLetter(this)">G</button>
+                                </div>
+                            </div>
+                            <div id="buttonsF" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">I</button>
+                                    <button id="FU" onclick="changeLetter(this)">I</button>
+                                    <button onclick="changeLetter(this)">J</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button id="FL" onclick="changeLetter(this)">L</button>
+                                    <button disabled> </button>
+                                    <button id="FR" onclick="changeLetter(this)">J</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">L</button>
+                                    <button id="FD" onclick="changeLetter(this)">K</button>
+                                    <button onclick="changeLetter(this)">K</button>
+                                </div>
+                            </div>
+                            <div id="buttonsR" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">M</button>
+                                    <button id="RU" onclick="changeLetter(this)">M</button>
+                                    <button onclick="changeLetter(this)">N</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button id="RF" onclick="changeLetter(this)">P</button>
+                                    <button disabled> </button>
+                                    <button id="RB" onclick="changeLetter(this)">N</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">P</button>
+                                    <button id="RD" onclick="changeLetter(this)">O</button>
+                                    <button onclick="changeLetter(this)">O</button>
+                                </div>
+                            </div>
+                            <div id="buttonsB" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">Q</button>
+                                    <button id="BU" onclick="changeLetter(this)">Q</button>
+                                    <button onclick="changeLetter(this)">R</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button id="BR" onclick="changeLetter(this)">T</button>
+                                    <button disabled> </button>
+                                    <button id="BL" onclick="changeLetter(this)">R</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">T</button>
+                                    <button id="BD" onclick="changeLetter(this)">S</button>
+                                    <button onclick="changeLetter(this)">S</button>
+                                </div>
+                            </div>
                         </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">D</button>
-                            <button id="UF" onclick="changeLetter(this)">C</button>
-                            <button onclick="changeLetter(this)">C</button>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
+                            <div></div>
+                            <div id="buttonsD" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">U</button>
+                                    <button id="DF" onclick="changeLetter(this)">U</button>
+                                    <button onclick="changeLetter(this)">V</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button id="DL" onclick="changeLetter(this)">X</button>
+                                    <button disabled> </button>
+                                    <button id="DR" onclick="changeLetter(this)">V</button>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                                    <button onclick="changeLetter(this)">X</button>
+                                    <button id="DB" onclick="changeLetter(this)">W</button>
+                                    <button onclick="changeLetter(this)">W</button>
+                                </div>
+                            </div>
+                            <div></div>
+                            <div></div>
                         </div>
                     </div>
-                    <div></div>
-                    <div></div>
+                    <button onclick="speffz()">Speffz</button>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
-                    <div id="buttonsL" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">E</button>
-                            <button id="LU" onclick="changeLetter(this)">E</button>
-                            <button onclick="changeLetter(this)">F</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button id="LB" onclick="changeLetter(this)">H</button>
-                            <button disabled> </button>
-                            <button id="LF" onclick="changeLetter(this)">F</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">H</button>
-                            <button id="LD" onclick="changeLetter(this)">G</button>
-                            <button onclick="changeLetter(this)">G</button>
-                        </div>
+                <div id="btnColors">
+                    <h1>Color scheme</h1>
+                    <h2>Top</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr">
+                        <button id="btnTopW" class="topBtn" onclick="selectTopColor(this, 'white')"></button>
+                        <button id="btnTopY" class="topBtn" onclick="selectTopColor(this, 'yellow')"></button>
+                        <button id="btnTopG" class="topBtn" onclick="selectTopColor(this, 'green')"></button>
+                        <button id="btnTopB" class="topBtn" onclick="selectTopColor(this, 'blue')"></button>
+                        <button id="btnTopO" class="topBtn" onclick="selectTopColor(this, 'orange')"></button>
+                        <button id="btnTopR" class="topBtn" onclick="selectTopColor(this, 'red')"></button>
                     </div>
-                    <div id="buttonsF" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">I</button>
-                            <button id="FU" onclick="changeLetter(this)">I</button>
-                            <button onclick="changeLetter(this)">J</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button id="FL" onclick="changeLetter(this)">L</button>
-                            <button disabled> </button>
-                            <button id="FR" onclick="changeLetter(this)">J</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">L</button>
-                            <button id="FD" onclick="changeLetter(this)">K</button>
-                            <button onclick="changeLetter(this)">K</button>
-                        </div>
+                    <h2>Front</h2>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr">
+                        <button id="btnFrontW" class="frontBtn" onclick="selectFrontColor(this, 'white')"></button>
+                        <button id="btnFrontY" class="frontBtn" onclick="selectFrontColor(this, 'yellow')"></button>
+                        <button id="btnFrontG" class="frontBtn" onclick="selectFrontColor(this, 'green')"></button>
+                        <button id="btnFrontB" class="frontBtn" onclick="selectFrontColor(this, 'blue')"></button>
+                        <button id="btnFrontO" class="frontBtn" onclick="selectFrontColor(this, 'orange')"></button>
+                        <button id="btnFrontR" class="frontBtn" onclick="selectFrontColor(this, 'red')"></button>
                     </div>
-                    <div id="buttonsR" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">M</button>
-                            <button id="RU" onclick="changeLetter(this)">M</button>
-                            <button onclick="changeLetter(this)">N</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button id="RF" onclick="changeLetter(this)">P</button>
-                            <button disabled> </button>
-                            <button id="RB" onclick="changeLetter(this)">N</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">P</button>
-                            <button id="RD" onclick="changeLetter(this)">O</button>
-                            <button onclick="changeLetter(this)">O</button>
-                        </div>
-                    </div>
-                    <div id="buttonsB" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">Q</button>
-                            <button id="BU" onclick="changeLetter(this)">Q</button>
-                            <button onclick="changeLetter(this)">R</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button id="BR" onclick="changeLetter(this)">T</button>
-                            <button disabled> </button>
-                            <button id="BL" onclick="changeLetter(this)">R</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">T</button>
-                            <button id="BD" onclick="changeLetter(this)">S</button>
-                            <button onclick="changeLetter(this)">S</button>
-                        </div>
-                    </div>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
-                    <div></div>
-                    <div id="buttonsD" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">U</button>
-                            <button id="DF" onclick="changeLetter(this)">U</button>
-                            <button onclick="changeLetter(this)">V</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button id="DL" onclick="changeLetter(this)">X</button>
-                            <button disabled> </button>
-                            <button id="DR" onclick="changeLetter(this)">V</button>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
-                            <button onclick="changeLetter(this)">X</button>
-                            <button id="DB" onclick="changeLetter(this)">W</button>
-                            <button onclick="changeLetter(this)">W</button>
-                        </div>
-                    </div>
-                    <div></div>
-                    <div></div>
                 </div>
             </div>
-            <button onclick="speffz()">Speffz</button>
+
         </div>
     </div>
     <div id="header">

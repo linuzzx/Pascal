@@ -1,6 +1,10 @@
 let showing = "corners";
 let showingLetters = false;
 let selectedButton = null;
+let selectedTopBtn = localStorage.getItem("selectedTopBtn") || $("#btnTopW");
+let selectedTopColor = localStorage.getItem("selectedTopColor") || "white";
+let selectedFrontBtn = localStorage.getItem("selectedFrontBtn") || $("#btnFrontG");
+let selectedFrontColor = localStorage.getItem("selectedFrontColor") || "green";
 
 const speffzArr = ['A','A','B','D',' ','B','D','C','C',
                     'E','E','F','H',' ','F','H','G','G',
@@ -34,6 +38,9 @@ $(function () {
     $("#btnGrid :button").width(size);
     $("#btnGrid :button").height(size);
 
+    $("#btnColors :button").width(size);
+    $("#btnColors :button").height(size);
+
     $(window).keypress(function(e) {
         if (selectedButton !== null) {
             $(selectedButton).html(String.fromCharCode(e.keyCode).toUpperCase());
@@ -43,6 +50,9 @@ $(function () {
         }
     });
     updateLetters();
+
+    selectTopColor(selectedTopBtn, selectedTopColor);
+    selectFrontColor(selectedFrontBtn, selectedFrontColor);
 });
 
 function showLetterScheme() {
@@ -135,4 +145,26 @@ function updateLetters() {
         $(b).html(customArr[i]);
         i++;
     }
+}
+
+function selectTopColor(button, color) {
+    selectedTopBtn = button;
+    selectedTopColor = color;
+
+    localStorage.setItem("selectedTopBtn", selectedTopBtn);
+    localStorage.setItem("selectedTopColor", selectedTopColor);
+
+    $(".topBtn").css("box-shadow", "none");
+    $(button).css("box-shadow", "0 0 5px 1px "+color);
+}
+
+function selectFrontColor(button, color) {
+    selectedFrontBtn = button;
+    selectedFrontColor = color;
+
+    localStorage.setItem("selectedFrontBtn", selectedFrontBtn);
+    localStorage.setItem("selectedFrontColor", selectedFrontColor);
+
+    $(".frontBtn").css("box-shadow", "none");
+    $(button).css("box-shadow", "0 0 5px 1px "+color);
 }

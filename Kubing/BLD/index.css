@@ -53,6 +53,36 @@ body {
     background: yellow;
 }
 
+#btnTopW, #btnFrontW {
+    background: white;
+    box-shadow: 0 0 5px 1px white;
+}
+
+#btnTopY, #btnFrontY {
+    background: yellow;
+    box-shadow: 0 0 5px 1px yellow;
+}
+
+#btnTopG, #btnFrontG {
+    background: green;
+    box-shadow: 0 0 5px 1px green;
+}
+
+#btnTopB, #btnFrontB {
+    background: blue;
+    box-shadow: 0 0 5px 1px blue;
+}
+
+#btnTopO, #btnFrontO {
+    background: orange;
+    box-shadow: 0 0 5px 1px orange;
+}
+
+#btnTopR, #btnFrontR {
+    background: red;
+    box-shadow: 0 0 5px 1px red;
+}
+
 button {
     border: 1px solid #000000;
 }
