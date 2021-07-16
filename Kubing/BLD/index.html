@@ -10,6 +10,128 @@
     <script src="index.js"></script>
 </head>
 <body>
+    <div id="letterSchemeEdit" onclick="closeLetterScheme()">
+        <div id="innerLetterSchemeEdit">
+            <h1>Edit your letter scheme here</h1>
+            <div id="btnGrid" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
+                    <div></div>
+                    <div id="buttonsU" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">A</button>
+                            <button id="UB" onclick="changeLetter(this)">A</button>
+                            <button onclick="changeLetter(this)">B</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button id="UL" onclick="changeLetter(this)">D</button>
+                            <button disabled> </button>
+                            <button id="UR" onclick="changeLetter(this)">B</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">D</button>
+                            <button id="UF" onclick="changeLetter(this)">C</button>
+                            <button onclick="changeLetter(this)">C</button>
+                        </div>
+                    </div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
+                    <div id="buttonsL" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">E</button>
+                            <button id="LU" onclick="changeLetter(this)">E</button>
+                            <button onclick="changeLetter(this)">F</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button id="LB" onclick="changeLetter(this)">H</button>
+                            <button disabled> </button>
+                            <button id="LF" onclick="changeLetter(this)">F</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">H</button>
+                            <button id="LD" onclick="changeLetter(this)">G</button>
+                            <button onclick="changeLetter(this)">G</button>
+                        </div>
+                    </div>
+                    <div id="buttonsF" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">I</button>
+                            <button id="FU" onclick="changeLetter(this)">I</button>
+                            <button onclick="changeLetter(this)">J</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button id="FL" onclick="changeLetter(this)">L</button>
+                            <button disabled> </button>
+                            <button id="FR" onclick="changeLetter(this)">J</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">L</button>
+                            <button id="FD" onclick="changeLetter(this)">K</button>
+                            <button onclick="changeLetter(this)">K</button>
+                        </div>
+                    </div>
+                    <div id="buttonsR" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">M</button>
+                            <button id="RU" onclick="changeLetter(this)">M</button>
+                            <button onclick="changeLetter(this)">N</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button id="RF" onclick="changeLetter(this)">P</button>
+                            <button disabled> </button>
+                            <button id="RB" onclick="changeLetter(this)">N</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">P</button>
+                            <button id="RD" onclick="changeLetter(this)">O</button>
+                            <button onclick="changeLetter(this)">O</button>
+                        </div>
+                    </div>
+                    <div id="buttonsB" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">Q</button>
+                            <button id="BU" onclick="changeLetter(this)">Q</button>
+                            <button onclick="changeLetter(this)">R</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button id="BR" onclick="changeLetter(this)">T</button>
+                            <button disabled> </button>
+                            <button id="BL" onclick="changeLetter(this)">R</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">T</button>
+                            <button id="BD" onclick="changeLetter(this)">S</button>
+                            <button onclick="changeLetter(this)">S</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr">
+                    <div></div>
+                    <div id="buttonsD" style="display: grid; grid-template-rows: 1fr 1fr 1fr">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">U</button>
+                            <button id="DF" onclick="changeLetter(this)">U</button>
+                            <button onclick="changeLetter(this)">V</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button id="DL" onclick="changeLetter(this)">X</button>
+                            <button disabled> </button>
+                            <button id="DR" onclick="changeLetter(this)">V</button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr">
+                            <button onclick="changeLetter(this)">X</button>
+                            <button id="DB" onclick="changeLetter(this)">W</button>
+                            <button onclick="changeLetter(this)">W</button>
+                        </div>
+                    </div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <button onclick="speffz()">Speffz</button>
+        </div>
+    </div>
     <div id="header">
         <a id="letterScheme" onclick="showLetterScheme()"><img src="resources/letterScheme60.png" alt="Letter scheme"></a>
         <a onclick="showCorners()"><h1>Corners</h1></a>
@@ -18,31 +140,48 @@
     <div id="mainContent">
         <div id="menu">
             <div id="cornerMenu">
-                <a onclick="">U-Top/D-Side</a>
-                <a onclick="">U-Top/D-Bottom</a>
-                <a onclick="">D-Bottom-D-Bottom</a>
-                <a onclick="">D-Side/D-Side</a>
-                <a onclick="">LUF or BUR/D-Any</a>
-                <a onclick="">U-Side/D-Any</a>
-                <a onclick="">D-Side/D-Bottom</a>
-                <a onclick="">U-Any/U-Any</a>
+                <a onclick="chooseCorner(0)">U-Top/D-Side</a>
+                <a onclick="chooseCorner(1)">U-Top/D-Bottom</a>
+                <a onclick="chooseCorner(2)">D-Bottom-D-Bottom</a>
+                <a onclick="chooseCorner(3)">D-Side/D-Side</a>
+                <a onclick="chooseCorner(4)">LUF or BUR/D-Any</a>
+                <a onclick="chooseCorner(5)">U-Side/D-Any</a>
+                <a onclick="chooseCorner(6)">D-Side/D-Bottom</a>
+                <a onclick="chooseCorner(7)">U-Any/U-Any</a>
+                <a onclick="chooseCorner(8)">Special</a>
             </div>
             <div id="edgeMenu">
-                <a onclick="">4-Mover</a>
-                <a onclick="">M-Swap</a>
-                <a onclick="">U-Swap</a>
-                <a onclick="">E-Swap</a>
-                <a onclick="">S-Swap</a>
-                <a onclick="">F-Swap</a>
-                <a onclick="">S-Insert</a>
+                <a onclick="chooseEdge(0)">4-Mover</a>
+                <a onclick="chooseEdge(1)">M-Swap</a>
+                <a onclick="chooseEdge(2)">U-Swap</a>
+                <a onclick="chooseEdge(3)">E-Swap</a>
+                <a onclick="chooseEdge(4)">S-Swap</a>
+                <a onclick="chooseEdge(5)">F-Swap</a>
+                <a onclick="chooseEdge(6)">S-Insert</a>
+                <a onclick="chooseEdge(7)">Special</a>
             </div>
         </div>
         <div id="content">
             <div id="cornerContent">
-                <h1>Her kommer corners</h1>
+                <div class="cornerContentClass" id="cornerContent0"><h1>U-Top/D-Side</h1></div>
+                <div class="cornerContentClass" id="cornerContent1"><h1>U-Top/D-Bottom</h1></div>
+                <div class="cornerContentClass" id="cornerContent2"><h1>D-Bottom-D-Bottom</h1></div>
+                <div class="cornerContentClass" id="cornerContent3"><h1>D-Side/D-Side</h1></div>
+                <div class="cornerContentClass" id="cornerContent4"><h1>LUF or BUR/D-Any</h1></div>
+                <div class="cornerContentClass" id="cornerContent5"><h1>U-Side/D-Any</h1></div>
+                <div class="cornerContentClass" id="cornerContent6"><h1>D-Side/D-Bottom</h1></div>
+                <div class="cornerContentClass" id="cornerContent7"><h1>U-Any/U-Any</h1></div>
+                <div class="cornerContentClass" id="cornerContent8"><h1>Special</h1></div>
             </div>
             <div id="edgeContent">
-                <h1>Her kommer edges</h1>
+                <div class="edgeContentClass" id="edgeContent0"><h1>4-Mover</h1></div>
+                <div class="edgeContentClass" id="edgeContent1"><h1>M-Swap</h1></div>
+                <div class="edgeContentClass" id="edgeContent2"><h1>U-Swap</h1></div>
+                <div class="edgeContentClass" id="edgeContent3"><h1>E-Swap</h1></div>
+                <div class="edgeContentClass" id="edgeContent4"><h1>S-Swap</h1></div>
+                <div class="edgeContentClass" id="edgeContent5"><h1>F-Swap</h1></div>
+                <div class="edgeContentClass" id="edgeContent6"><h1>S-Insert</h1></div>
+                <div class="edgeContentClass" id="edgeContent7"><h1> Special</h1></div>
             </div>
         </div>
     </div>
