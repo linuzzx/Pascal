@@ -155,7 +155,7 @@ function selectTopColor(button, color) {
     localStorage.setItem("selectedTopColor", selectedTopColor);
 
     $(".topBtn").css("box-shadow", "none");
-    $(button).css("box-shadow", "0 0 5px 1px "+color);
+    $("#"+button).css("box-shadow", "0 0 5px 1px "+color);
 }
 
 function selectFrontColor(button, color) {
@@ -166,5 +166,5 @@ function selectFrontColor(button, color) {
     localStorage.setItem("selectedFrontColor", selectedFrontColor);
 
     $(".frontBtn").css("box-shadow", "none");
-    $(button).css("box-shadow", "0 0 5px 1px "+color);
+    $("#"+button).css("box-shadow", "0 0 5px 1px "+color);
 }
