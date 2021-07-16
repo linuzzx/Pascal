@@ -9,7 +9,10 @@ const speffzArr = ['A','A','B','D',' ','B','D','C','C',
                     'Q','Q','R','T',' ','R','T','S','S',
                     'U','U','V','X',' ','V','X','W','W'];
 
-const customArr = [];
+let customArr = speffzArr;
+if (localStorage.getItem("customArr") !== null) {
+    customArr = localStorage.getItem("customArr").split(";");
+}
 
 $(function () {
     $("#cornerContent0").css("display", "block");
@@ -35,8 +38,11 @@ $(function () {
         if (selectedButton !== null) {
             $(selectedButton).html(String.fromCharCode(e.keyCode).toUpperCase());
             $("#btnGrid :button").css("font-weight", "normal");
+
+            saveLetters();
         }
     });
+    updateLetters();
 });
 
 function showLetterScheme() {
@@ -103,6 +109,30 @@ function speffz() {
     let i = 0;
     for (let b of $("#btnGrid :button")) {
         $(b).html(speffzArr[i]);
+        i++;
+    }
+    saveLetters();
+}
+
+function saveLetters() {
+    let custom = "";
+    let i = 0;
+    for (let b of $("#btnGrid :button")) {
+        if (i === 53) {
+            custom += $(b).html();
+        }
+        else {
+            custom += $(b).html() + ";";
+        }
+        i++;
+    }
+    localStorage.setItem("customArr", custom);
+}
+
+function updateLetters() {
+    let i = 0;
+    for (let b of $("#btnGrid :button")) {
+        $(b).html(customArr[i]);
         i++;
     }
 }
