@@ -6,6 +6,105 @@ let selectedTopColor = localStorage.getItem("selectedTopColor") || "white";
 let selectedFrontBtn = localStorage.getItem("selectedFrontBtn") || $("#btnFrontG");
 let selectedFrontColor = localStorage.getItem("selectedFrontColor") || "green";
 
+const edges = ["UB", "UR", "UL", "LU", "LF", "LD", "LB", "FR", "FD", "FL", "RU", "RB",
+                "RD", "RF", "BU", "BL", "BD", "BR", "DF", "DR", "DB", "DL"];
+const corners = ["UBL", "UBR", "UFL", "LUB", "LUF", "LDF", "LDB", "FUL", "FDR", "FDL",
+                "RUB", "RDB", "RDF", "BUR", "BUL", "BDL", "BDR", "DFL", "DFR", "DBR", "DBL"];
+const ufTypes = [
+    ";4-Mover;4-Mover;4-Mover;U-Swap;U-Swap;U-Swap;4-Mover;E-Swap;4-Mover;4-Mover;U-Swap;U-Swap;U-Swap;;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover".split(";"),
+    "4-Mover;;4-Mover;S-Swap;U-Swap;U-Swap;U-Swap;U-Swap;M-Swap;U-Swap;;U-Swap;U-Swap;U-Swap;M-Swap;U-Swap;Special;U-Swap;F-Swap;4-Mover;M-Swap;Special".split(";"),
+    "4-Mover;4-Mover;;;U-Swap;U-Swap;U-Swap;U-Swap;M-Swap;U-Swap;S-Swap;U-Swap;U-Swap;U-Swap;M-Swap;U-Swap;Special;U-Swap;F-Swap;Special;M-Swap;4-Mover".split(";"),
+    "4-Mover;S-Swap;;;U-Swap;4-Mover;U-Swap;U-Swap;M-Swap;U-Swap;4-Mover;4-Mover;4-Mover;4-Mover;M-Swap;4-Mover;Special;E-Swap;4-Mover;S-Swap;M-Swap;S-Swap".split(";"),
+    "U-Swap;U-Swap;U-Swap;U-Swap;;S-Insert;4-Mover;E-Swap;M-Swap;;4-Mover;4-Mover;4-Mover;4-Mover;M-Swap;E-Swap;E-Swap;E-Swap;F-Swap;4-Mover;M-Swap;4-Mover".split(";"),
+    "U-Swap;U-Swap;U-Swap;4-Mover;S-Insert;;S-Insert;E-Swap;S-Swap;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover;M-Swap;4-Mover;E-Swap;E-Swap;4-Mover;S-Swap;S-Swap;".split(";"),
+    "U-Swap;U-Swap;U-Swap;U-Swap;4-Mover;S-Insert;;E-Swap;M-Swap;E-Swap;4-Mover;4-Mover;4-Mover;4-Mover;M-Swap;;U-Swap;E-Swap;4-Mover;4-Mover;M-Swap;4-Mover".split(";"),
+    "4-Mover;U-Swap;U-Swap;U-Swap;E-Swap;E-Swap;E-Swap;;M-Swap;4-Mover;U-Swap;E-Swap;4-Mover;;M-Swap;4-Mover;M-Swap;4-Mover;4-Mover;Special;M-Swap;4-Mover".split(";"),
+    "E-Swap;M-Swap;M-Swap;M-Swap;M-Swap;S-Swap;M-Swap;M-Swap;;M-Swap;M-Swap;M-Swap;S-Swap;M-Swap;S-Swap;M-Swap;Special;M-Swap;;4-Mover;S-Swap;4-Mover".split(";"),
+    "4-Mover;U-Swap;U-Swap;U-Swap;;4-Mover;E-Swap;4-Mover;M-Swap;;U-Swap;E-Swap;E-Swap;E-Swap;M-Swap;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover;M-Swap;Special".split(";"),
+    "4-Mover;;S-Swap;4-Mover;4-Mover;4-Mover;4-Mover;U-Swap;M-Swap;U-Swap;;U-Swap;4-Mover;U-Swap;M-Swap;U-Swap;Special;4-Mover;4-Mover;S-Swap;M-Swap;S-Swap".split(";"),
+    "U-Swap;U-Swap;U-Swap;4-Mover;4-Mover;4-Mover;4-Mover;E-Swap;M-Swap;U-Swap;U-Swap;;S-Insert;4-Mover;M-Swap;E-Swap;U-Swap;;4-Mover;4-Mover;M-Swap;4-Mover".split(";"),
+    "U-Swap;U-Swap;U-Swap;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover;S-Swap;E-Swap;4-Mover;S-Insert;;S-Insert;M-Swap;E-Swap;E-Swap;4-Mover;4-Mover;;S-Swap;S-Swap".split(";"),
+    "U-Swap;U-Swap;U-Swap;4-Mover;4-Mover;4-Mover;4-Mover;;M-Swap;E-Swap;U-Swap;4-Mover;S-Insert;;M-Swap;E-Swap;E-Swap;E-Swap;F-Swap;4-Mover;M-Swap;4-Mover".split(";"),
+    ";M-Swap;M-Swap;M-Swap;M-Swap;M-Swap;M-Swap;M-Swap;S-Swap;M-Swap;M-Swap;M-Swap;M-Swap;M-Swap;;M-Swap;S-Swap;M-Swap;S-Swap;M-Swap;S-Swap;M-Swap".split(";"),
+    "4-Mover;U-Swap;U-Swap;4-Mover;E-Swap;4-Mover;;4-Mover;M-Swap;4-Mover;U-Swap;E-Swap;E-Swap;E-Swap;M-Swap;;M-Swap;4-Mover;4-Mover;4-Mover;M-Swap;Special".split(";"),
+    "4-Mover;Special;Special;Special;E-Swap;E-Swap;U-Swap;M-Swap;Special;4-Mover;Special;U-Swap;E-Swap;E-Swap;S-Swap;M-Swap;;M-Swap;S-Swap;4-Mover;;4-Mover".split(";"),
+    "4-Mover;U-Swap;U-Swap;U-Swap;E-Swap;E-Swap;E-Swap;4-Mover;M-Swap;4-Mover;4-Mover;;4-Mover;E-Swap;M-Swap;4-Mover;M-Swap;;4-Mover;Special;M-Swap;4-Mover".split(";"),
+    "4-Mover;F-Swap;F-Swap;4-Mover;F-Swap;4-Mover;4-Mover;4-Mover;;4-Mover;4-Mover;4-Mover;4-Mover;F-Swap;S-Swap;4-Mover;S-Swap;4-Mover;;F-Swap;Special;F-Swap".split(";"),
+    "4-Mover;4-Mover;Special;S-Swap;4-Mover;S-Swap;4-Mover;Special;4-Mover;4-Mover;S-Swap;4-Mover;;4-Mover;M-Swap;4-Mover;4-Mover;Special;F-Swap;;F-Swap;4-Mover".split(";"),
+    "4-Mover;M-Swap;M-Swap;M-Swap;M-Swap;S-Swap;M-Swap;M-Swap;S-Swap;M-Swap;M-Swap;M-Swap;S-Swap;M-Swap;S-Swap;M-Swap;;M-Swap;Special;F-Swap;;F-Swap".split(";"),
+    "4-Mover;Special;4-Mover;S-Swap;4-Mover;;4-Mover;4-Mover;4-Mover;Special;S-Swap;4-Mover;S-Swap;4-Mover;M-Swap;Special;4-Mover;4-Mover;F-Swap;4-Mover;F-Swap;".split(";")
+];
+const ufComms = [
+    ";[R2 U' : [R2' , S]];[L2' U : [L2 , S']];[U' M U : [M' , U2]];[U : [R' E R , U2]];[U' : [L' E' L , U2']];[U : [R E' R' , U2]];[R' U : [S , R2]];[R' F' : [E , R U R']];[L U' : [S' , L2']];[U M U' : [M , U2]];[U' : [L' E L , U2']];[U : [R E R' , U2]];[U' : [L E' L' , U2']];;[L' U : [L2 , S']];[U R' B R : [S , R2']];[R U' : [R2' , S]];[M' , U2];[U : [S , R2']];[U2 , M];[U' : [S' , L2]]".split(";"),
+    "[R2 U' : [S , R2']];;[M2' U' : [M , U2]];[L F' L' , S'];[R' E R , U'];[U2' : [L' E' L , U']];[R E' R' , U'];[E' : [R' E R , U']];[R : [U' R' U , M']];[R E2 R' , U'];;[U2' : [L' E L , U']];[R E R' , U'];[U2' : [L E' L' , U']];[R' : [U' R U , M]];[R' E2 R , U'];(M U' M' U')2;[E : [R E' R' , U']];[L F' : [L' S' L , F2']];[R U R' : [S , R2]];[R : [U' R' U , M2']];L U L' U' L' U' L' U L U".split(";"),
+    "[L2' U : [S' , L2]];[M2' U : [M , U2']];;;[U2 : [R' E R , U]];[L' E' L , U];[U2 : [R E' R' , U]];[L' E2' L , U];[L' : [U L U' , M']];[U2 : [R E2 R' , U]];[R' F R , S];[L' E L , U];[U2 : [R E R' , U]];[L E' L' , U];[L : [U L' U' , M]];[U2 : [R' E2 R , U]];(M U M' U)2;[L E2' L' , U];[R' F : [R S R' , F2]];R' U' R U R U R U R U' R' U';[l' M' : [U L U' , M2']];[L' U' L : [S' , L2]]".split(";"),
+    "[U' M U' : [M' , U2]];[S' , L F' L'];;;[S : [R' E R , U']];[l' U L : [S' , L2']];[S : [R E' R' , U']];[M' : [R S' R' , U']];[l' : [U' L U , M']];[L' U' : [L S L' , U']];[M U' : [M' , U2]];[L' F' : [E , L2]];[R' F R' : [S , R2]];[R M U' : [M' , U2]];[l' : [U' L U , M]];[U' R F : [E' , R2']];M2' : (U' M U' M')2;[l' : [E , L U' L']];[L' F' : [E' , L2]];[L2 : [S , L' F' L]];[l' : [U' L U , M2']];[S , L F' L']".split(";"),
+    "[U' : [R' E R , U2]];[U' , R' E R];[U' : [R' E R , U']];[S : [U' , R' E R]];;[U S' U' , L];[M' U L' : [S' , L2']];[R U' R' , E];[M' : [U' L' U , M']];;[M L' U' : [M' , U2']];[r U R : [E , R2']];[M' U R : [E , R2']];[U' E' L : [S' , L2']];[M' , U' L' U];[L U L' , E'];[U' r' : [E , R U R']];[R2' : [R U' R' , E]];[U R' F' : [R S R' , F']];[U' E' R' : [E' , R2]];[M' : [U' L' U , M2']];[U E L' : [E' , L2]]".split(";"),
+    "[U : [L' E' L , U2']];[U : [L' E' L , U]];[U , L' E' L];[l' U L' : [S' , L2]];[L , U S' U'];;[L' , U S' U'];[L' E2' : [L U L' , E]];[U : [S , L F L']];[L f' L : [S , L2']];[L F' L' : [S' , L2]];[L F' : [L2' , E]];[L F' L : [S , L2']];[M' U' L : [E' , L2']];[l' : [U' L' U , M]];[S' U' R : [E' , R2']];[U l : [E , L' U' L]];[L E2' : [L' U L , E']];[L F' : [E' , L2']];[S , L' F' L];[U : [L B' L' , S']];".split(";"),
+    "[U' : [R E' R' , U2]];[U' , R E' R'];[U' : [R E' R' , U']];[S : [U' , R E' R']];[M' U L : [S' , L2']];[U S U' , L'];;[R2 : [R' U' R , E']];[M' : [U' L U , M']];[L' U L , E];[R F : [E' , R2']];[u R' : [S , R2]];[R' F : [E' , R2]];[l' U' L : [E' , L2']];[M' , U' L U];;[U' M : [L S L' , U]];[R' U' R , E'];[l' U : [L2 , S']];[u' R : [E , R2']];[M' : [U' L U , M2']];[u L : [E , L2']]".split(";"),
+    "[R' U' : [S , R2']];[E' : [U' , R' E R]];[U , L' E2' L];[M' : [U' , R S' R']];[E , R U' R'];[L' E' : [L U L' , E']];[R2 : [E' , R' U' R]];;[U' R U , M'];[R' U' R' : [E , R2]];[R U2' : [R' S' R , U']];[E' , R U' R'];[R' f R : [S' , R2']];;[U' R U , M];[R' U' R : [E' , R2']];[U2' : [U R U' , M]];[U R : [S , R2']];[U R U' : [M' , U2]];U2 R U' R' U' R' U' R U R U';[U' R U , M2'];[U L' : [E' , L2]]".split(";"),
+    "[R' F' : [R U R' , E]];[r : [U' R' U , M]];[l' : [U L U' , M]];[l' : [M' , U' L U]];[M2' : [U' L' U , M]];[U : [L F L' , S]];[M' : [M' , U' L U]];[M' , U' R U];;[M' , U L' U'];[r : [M' , U R' U']];[M2' : [U R' U' , M]];[U' : [R' F' R , S']];[M2' : [U R U' , M]];[U' : [R' F' R , S];[M' , U L U'];U M U M' U2 M' U' M U;[M' , U' R' U];;[U R' F' R : [S , R2']];[D : [S' , R F R']];[U' L F L' : [S' , L2]]".split(";"),
+    "[L U : [S' , L2']];[U' , R E2 R'];[U' : [R E2 R' , U'];[L' U2 : [L S L' , U]];;[L f' L' : [S , L2]];[E , L' U L];[R' U' R : [E , R2']];[U L' U' , M'];;[M' : [U , L' S L]];[L2' : [E , L U' L']];[R E : [R' U' R , E]];[E' , L' U L];[U L' U' , M];[U' L' : [S' , L2]];[U' R' B : [R2 , E]];[R U' R : [E , R2']];[U' D R : [E , R2']];[U' R : [E , R2']];[U L' U' , M2']];U2' L' U L U L U L' U' L' U".split(";"),
+    "[U M U : [M' , U2']];;[S , R' F R];[M U : [M' , U2']];[M L' U : [M' , U2']];[L F' L : [S' , L2']];[R F : [R2' , E']];[R U : [R' S' R , U]];[r : [U R' U' , M']];[M' : [L' S L , U]];;[S' : [L' E L , U]];[r U' R' : [S , R2]];[S' : [L E' L' , U]];[r : [U R' U' , M]];[M' : [R E' R' , U]];M2' : (U M U M')2;[R u' R' : [E' , R2]];[R F : [E , R2']];[S' , R' F R];[r : [U R' U' , M2']];[R2' : [S' , R F R']]".split(";"),
+    "[U : [L' E L , U2']];[U : [L' E L , U];[U , L' E L];[L' F' : [E , L2]];[r U R' : [E , R2]];[L F' : [E , L2']];[u' L : [S' , L2']];[R U' R' , E'];[M' : [U R' U' , M']];[L' : [U , L' E L]];[S' : [U , L' E L]];;[U' S U , R];[M' U' R' : [S , R2]];[M' , U R' U'];[L U L' , E];[U M : [R' S' R , U']];;[r U' : [R2' , S]];[u' R' : [E' , R2]];[M' : [U R' U' , M2']];[u L' : [E' , L2]]".split(";"),
+    "[U' : [R E R' , U2]];[U' , R E R'];[U' : [R E R' , U']];[R' F R : [S , R2']];[M' U R' : [E , R2]];[R' F R' : [S' , R2]];[R' F : [R2 , E']];[R' f R' : [S' , R2]];[U' : [S' , R' F' R]];[R E2 : [R' U' R , E']];[r U' R : [S , R2']];[R , U' S U];;[R' , U' S U];[r : [U R U' , M]];[R' E2 : [R U' R' , E]];[U' r' : [E' , R U R']];[S U L' : [E , L2]];[R' F : [E , R2]];;[U' : [R' B R , S]];[S' , R F R']".split(";"),
+    "[U : [L E' L' , U2']];[U : [L E' L' , U];[U , L E' L'];[R M U : [M' , U2]];[U E R' : [S , R2]];[M' U' L' : [E' , L2]];[l' U' L' : [E' , L2]];;[M' : [U R U' , M']];[L' U L , E'];[S' : [U , L E' L']];[M' U' R : [S , R2']];[U' S U , R'];;[M' , U R U'];[L2 : [L' U L , E']];[U l : [E' , L' U' L]];[R' U' R , E];[U' L F : [L' S' L , F]];[U' E' R : [E , R2']];[M' : [U R U' , M2']];[U E L : [E , L2']]".split(";"),
+    ";[r' : [U' R U , M']];[L : [M , U L' U']];[L' : [U' L U , M']];[U' L' U , M'];[L' : [U' L' U , M']];[U' L U , M'];[M , U' R U];[U' : [S , R' F' R]];[M , U L' U'];[R : [U R' U' , M']];[U R' U' , M'];[R : [U R U' , M']];[U R U' , M'];;[M , U L U'];[U' : [S , R B R']];[M , U' R' U];[U : [R' F' R , S];[r' : [U' R' U , M']];[U : [R B R' , S]];[l : [U L U' , M']]".split(";"),
+    "[L' U' : [L2 , S']];[U' , R' E2 R];[U' : [R E2 R' , U'];[U' R F : [R2' , E']];[E' , L U L'];[S' U' R' : [E' , R2]];;[R' U' R' : [E' , R2]];[U L U' , M'];[U' L : [S' , L2']];[M' : [U , R E' R']];[E , L U L'];[R' E' : [R U' R' , E']];[L2 : [E' , L' U L]];[U L U' , M];;[U2 : [U' L U , M]];[R U' R' : [E' , R2]];[U' L U : [M' , U2']];[U' R' : [E' , R2]];[U L U' , M2'];L U' L' U' L' U' L U L U".split(";"),
+    "[U' R' B R : [S , R2']];(U M U M')2;(U' M U' M')2;M' : (U M' U M)2;[U' r' : [R U R' , E]];[U l : [L' U' L , E]];[U' M : [U , L S L']];[U2 : [M , U R U']];U M' U' M U2 M U M' U;[U' R' B : [E , R2]];M' : (U' M' U' M)2;[U M : [U' , l' E l]];[U' r' : [R U R' , E']];[U l : [L' U' L , E']];[U' : [R B R' , S]];[U2' : [M , U' L U]];;[U2 : [M , U R' U']];[D' : [S' , R F R']];[U L B' L : [S , L2']];;[U' R' B R' : [S' , R2]]".split(";"),
+    "[R U : [R2' , S]];[u' : [R E' R' , U]];[U , L E2' L'];[M' : [U' , L' E L]];[R2' : [E , R U' R']];[L E : [L' U L , E]];[E' , R' U' R];[U R' : [S , R2]];[U' R' U , M'];[R U' R' : [E , R2]];[U L' F' : [L2 , E]];;[S U L : [E , L2']];[E , R' U' R];[U' R' U , M];[R U' R : [E' , R2']];[U2' : [U R' U' , M]];;[U R' U' : [M' , U2]];R' U R U R U R' U' R' U';[U' R' U , M2'];[U L : [E , L2']]".split(";"),
+    "[U2 , M'];[L F : [L' S' L , F2']];[R' F' : [R S R' , F2]];[L' F' : [L2 , E']];[U R' F2 : [R S R' , F]];[L F' : [L2' , E']];[l' U : [S' , L2]];[D' U L : [E' , L2']];;[U' D R' : [E , R2]];[R F : [R2' , E]];[r U' : [S , R2']];[R' F : [E , R2]];[U' L F2' : [L' S' L , F']];[U : [S , R' F' R]];[D U' R : [E' , R2']];[D' : [R F R' , S']];[U R' U : [M' , U2]];;[R' F' : [R S' R' , F2]];M' U2 M' U2 M2';[L F : [L' S L , F2']]".split(";"),
+    "[U' : [S , R2']];[R' U R' : [S , R2]];U R U R' U' R' U' R' U R;[L2 : [L' F' L , S]];[U' E' R : [E' , R2']];[L' F' L , S];[u' R' : [E , R2]];U R' U' R' U R U R U R' U2;[U R' F' R' : [S , R2]];[U' R' : [E , R2]];[R' F R , S'];[u' R : [E' , R2']];;[U' E' R' : [E , R2]];[R' : [U' R' U , M]];[U' R : [E' , R2']];[U L B' L' : [S , L2]];U R U R U' R' U' R' U' R;[R' F : [R S' R' , F2]];;[D' R' F' : [R S' R' , F2]];[U' : [R2' , S']]".split(";"),
+    "[M , U2];[r M' : [U' R' U , M2']];[l' M' : [U L U' , M2']];[L' M : [U' L U , M2']];[M : [U' L' U , M2']];[U : [S' , L B' L']];[M : [U' L U , M2']];[M2' , U' R U];[D : [R F R' , S']];[M2' , U L' U'];[R M : [U R' U' , M2']];[M : [U R' U' , M2']];[U' : [S , R' B R]];[M : [U R U' , M2']];[U : [S , R B R']];[M2 , U L U'];;[M2' , U' R' U];u2 M' u2 M';[D' R' F : [R S' R' , F2]];;[D L F' : [L' S L , F2']]".split(";"),
+    "[U : [S' , L2']];U' L' U' L U L U L U' L';[L U' L : [S' , L2']];[L F' L' , S]];[U E L : [E' , L2']];;[u L' : [E , L2]];[U L : [E' , L2']];[U' L F L : [S' , L2']];U' L U L U' L' U' L' U' L U2';[R2' : [R F R' , S']];[u L : [E' , L2']];[R F R' , S']];[U E L' : [E , L2]];[L : [U L U' , M]];U' L' U' L' U L U L U L';[U' R' B R : [S' , R2']];[U L' : [E , L2]];[L F' : [L' S L , F2']];[U' : [S' , R2']];[D L F : [L' S L , F2']];".split(";")
+];
+const ufrTypes = [
+    ";U-Any / U-Any;U-Any / U-Any;;U-Any / U-Any;U-Top / D-Side;U-Top / D-Side;U-Any / U-Any;U-Top / D-Side;U-Top / D-Side;U-Any / U-Any;U-Top / D-Side;U-Top / D-Side;U-Any / U-Any;;U-Top / D-Side;U-Top / D-Side;U-Top / D-Bottom;Special;U-Top / D-Bottom;Special".split(";"),
+    "U-Any / U-Any;;U-Any / U-Any;U-Any / U-Any;U-Any / U-Any;U-Top / D-Side;U-Top / D-Side;U-Any / U-Any;U-Top / D-Side;U-Top / D-Side;;U-Top / D-Side;U-Top / D-Side;;U-Any / U-Any;U-Top / D-Side;U-Top / D-Side;U-Top / D-Bottom;Special;Special;U-Top / D-Bottom".split(";"),
+    "U-Any / U-Any;U-Any / U-Any;;U-Any / U-Any;;U-Top / D-Side;U-Top / D-Side;;U-Top / D-Side;U-Top / D-Side;U-Any / U-Any;U-Top / D-Side;U-Top / D-Side;U-Any / U-Any;U-Any / U-Any;U-Top / D-Side;U-Top / D-Side;Special;Special;U-Top / D-Bottom;Special".split(";"),
+    ";U-Any / U-Any;U-Any / U-Any;;U-Any / U-Any;U-Side / D-Any;U-Side / D-Any;U-Any / U-Any;U-Side / D-Any;U-Side / D-Any;U-Any / U-Any;Special;U-Side / D-Any;U-Any / U-Any;;U-Side / D-Any;U-Side / D-Any;U-Side / D-Any;U-Side / D-Any;U-Side / D-Any;U-Side / D-Any".split(";"),
+    "U-Any / U-Any;U-Any / U-Any;;U-Any / U-Any;;LUF / D-Any;LUF / D-Any;;Special;LUF / D-Any;U-Any / U-Any;Special;LUF / D-Any;U-Any / U-Any;U-Any / U-Any;Special;LUF / D-Any;LUF / D-Any;LUF / D-Any;Special;LUF / D-Any".split(";"),
+    "U-Top / D-Side;U-Top / D-Side;U-Top / D-Side;U-Side / D-Any;LUF / D-Any;;Special;Special;D-Side / D-Side;;U-Side / D-Any;D-Side / D-Side;D-Side / D-Side;BUR / D-Any;Special;D-Side / D-Side;Special;;D-Side / D-Bottom;D-Side / D-Bottom;Special".split(";"),
+    "U-Top / D-Side;U-Top / D-Side;U-Top / D-Side;U-Side / D-Any;LUF / D-Any;Special;;U-Side / D-Any;D-Side / D-Side;D-Side / D-Side;U-Side / D-Any;D-Side / D-Side;D-Side / D-Side;Special;Special;;D-Side / D-Side;Special;Special;Special;".split(";"),
+    "U-Any / U-Any;U-Any / U-Any;;U-Any / U-Any;;Special;U-Side / D-Any;;Special;U-Side / D-Any;U-Any / U-Any;U-Side / D-Any;U-Side / D-Any;U-Any / U-Any;U-Any / U-Any;Special;U-Side / D-Any;U-Side / D-Any;Special;U-Side / D-Any;U-Side / D-Any".split(";"),
+    "U-Top / D-Side;U-Top / D-Side;U-Top / D-Side;U-Side / D-Any;Special;D-Side / D-Side;D-Side / D-Side;Special;;Special;U-Side / D-Any;D-Side / D-Side;;BUR / D-Any;U-Side / D-Any;D-Side / D-Side;Special;Special;;D-Side / D-Bottom;Special".split(";"),
+    "U-Top / D-Side;U-Top / D-Side;U-Top / D-Side;U-Side / D-Any;LUF / D-Any;;D-Side / D-Side;U-Side / D-Any;Special;;U-Side / D-Any;D-Side / D-Side;D-Side / D-Side;Special;Special;D-Side / D-Side;D-Side / D-Side;;Special;D-Side / D-Bottom;D-Side / D-Bottom".split(";"),
+    "U-Any / U-Any;;U-Any / U-Any;U-Any / U-Any;U-Any / U-Any;U-Side / D-Any;U-Side / D-Any;U-Any / U-Any;U-Side / D-Any;U-Side / D-Any;;U-Side / D-Any;U-Side / D-Any;;U-Any / U-Any;U-Side / D-Any;Special;U-Side / D-Any;U-Side / D-Any;U-Side / D-Any;U-Side / D-Any".split(";"),
+    "U-Top / D-Side;U-Top / D-Side;U-Top / D-Side;Special;Special;D-Side / D-Side;D-Side / D-Side;U-Side / D-Any;D-Side / D-Side;D-Side / D-Side;U-Side / D-Any;;Special;BUR / D-Any;Special;D-Side / D-Side;;D-Side / D-Bottom;Special;;D-Side / D-Bottom".split(";"),
+    "U-Top / D-Side;U-Top / D-Side;U-Top / D-Side;U-Side / D-Any;LUF / D-Any;D-Side / D-Side;D-Side / D-Side;U-Side / D-Any;;D-Side / D-Side;U-Side / D-Any;D-Side / D-Side;;BUR / D-Any;Special;D-Side / D-Side;D-Side / D-Side;D-Side / D-Bottom;;Special;D-Side / D-Bottom".split(";"),
+    "U-Any / U-Any;;U-Any / U-Any;U-Any / U-Any;U-Any / U-Any;BUR / D-Any;Special;U-Any / U-Any;BUR / D-Any;Special;;BUR / D-Any;BUR / D-Any;;U-Any / U-Any;BUR / D-Any;Special;BUR / D-Any;Special;BUR / D-Any;BUR / D-Any".split(";"),
+    ";U-Any / U-Any;U-Any / U-Any;;U-Any / U-Any;Special;Special;U-Any / U-Any;U-Side / D-Any;Special;U-Any / U-Any;Special;Special;U-Any / U-Any;;U-Side / D-Any;Special;U-Side / D-Any;U-Side / D-Any;Special;Special".split(";"),
+    "U-Top / D-Side;U-Top / D-Side;U-Top / D-Side;U-Side / D-Any;Special;D-Side / D-Side;;Special;D-Side / D-Side;D-Side / D-Side;U-Side / D-Any;D-Side / D-Side;D-Side / D-Side;BUR / D-Any;U-Side / D-Any;;Special;D-Side / D-Bottom;D-Side / D-Bottom;D-Side / D-Bottom;".split(";"),
+    "U-Top / D-Side;U-Top / D-Side;U-Top / D-Side;U-Side / D-Any;LUF / D-Any;Special;D-Side / D-Side;U-Side / D-Any;Special;D-Side / D-Side;Special;;D-Side / D-Side;Special;Special;Special;;D-Side / D-Bottom;D-Side / D-Bottom;;D-Side / D-Bottom".split(";"),
+    "U-Top / D-Bottom;U-Top / D-Bottom;Special;U-Side / D-Any;LUF / D-Any;;Special;U-Side / D-Any;Special;;U-Side / D-Any;D-Side / D-Bottom;D-Side / D-Bottom;BUR / D-Any;U-Side / D-Any;D-Side / D-Bottom;D-Side / D-Bottom; ;D-Bottom / D-Bottom;D-Bottom / D-Bottom;D-Bottom / D-Bottom".split(";"),
+    "Special;Special;Special;U-Side / D-Any;LUF / D-Any;D-Side / D-Bottom;Special;Special;;Special;U-Side / D-Any;Special;;Special;U-Side / D-Any;D-Side / D-Bottom;D-Side / D-Bottom;D-Bottom / D-Bottom;;D-Bottom / D-Bottom;D-Bottom / D-Bottom".split(";"),
+    "U-Top / D-Bottom;Special;U-Top / D-Bottom;U-Side / D-Any;Special;D-Side / D-Bottom;Special;U-Side / D-Any;D-Side / D-Bottom;D-Side / D-Bottom;U-Side / D-Any;;Special;BUR / D-Any;Special;D-Side / D-Bottom;;;D-Bottom / D-Bottom;;D-Bottom / D-Bottom".split(";"),
+    "Special;U-Top / D-Bottom;Special;U-Side / D-Any;LUF / D-Any;Special;;U-Side / D-Any;Special;D-Side / D-Bottom;U-Side / D-Any;D-Side / D-Bottom;D-Side / D-Bottom;BUR / D-Any;Special;;D-Side / D-Bottom;D-Bottom / D-Bottom;D-Bottom / D-Bottom;D-Bottom / D-Bottom;".split(";")
+];
+const ufrComms = [
+    ";[R' B' R : [U' , R D R']];[R' D R U' : [R' D' R , U']];;[F : [R' D' R , U2]];[U2 , R' D R];[U : [R D' R' , U2]];R' D R U' R : [F , R' U R U'];[U D : [R D R' , U2]];[D' U : [R D' R' , U2]];[R' U D R : [D' , R U' R']];[U : [R D R' , U2]];[U2 , R' D' R];[R' U' D : [R D R' , U2]];;[U D' : [R D R' , U2]];[U D : [R D' R' , U2]];[R F' R' U : [R D R' , U2]];[U2 , R' D R U' R D' R'];[R D' R' : [U2 , R' D R]];[R' U' D' R : [D , R U' R']]".split(";"),
+    "[R' B' R : [R D R' , U']];;[R F' R' : [U , R' D R]];[R2 : [D , R' U R]];[R' : [U' , R' D' R]];[U , R' D R];[R D' R' , U'];[R2 U' : [R U R' , D']];[D' : [U , R' D R]];[D : [U , R' D' R]];;[R D R' , U'];[U , R' D' R];;[R2 U : [D , R' U' R]];[D' : [R D R' , U']];[D : [R D' R' , U']];[R F' : [D , R' U' R]];[U , R' D R U' R D' R'];[R D' R' U R' D R , U'];[R' B : [R U R' , D']]".split(";"),
+    "[R' D R U2 : [R' D' R , U]];[R F' R' : [R' D R, U]];;[U' R : [U2 , R D R']];;[U' , R' D R];[U2 : [R D' R' , U]];;[D' : [U' , R' D R]];[D : [U' , R' D' R]];[U' R2' : [D' , R U2 R']];[U2 : [R D R' , U]];[U' , R' D' R];[R' D' : [R' D R , U']];[U' R2' : [D' , R U' R']];[D : [U' , R' D R]];[D' : [U' , R' D' R]];[U' : [F2' , U R' U' R]];[U' , R' D R U' R D' R'];[R D' R' : [U' , R' D R]];[R' D' R : [D , R U' R']]".split(";"),
+    ";[R : [U , R D R']];[U' R2 : [D , R' U2 R]];;[U' R' U , L];[U R' : [R' D R , U']];[R D' : [U , R D R']];[l' U' : [R D' R' , U2]];[D' U R' : [R' D R , U']];[R U2 : [R' D R , U']];[R : [U , R2 D R2 D' R2]];[U' R' F R : [R D R' , U']];[U R' U' : [R D R' , U']];[F' L F , R'];;[D U R' : [R' D R , U']];[R U2 : [R' D' R , U']];[D' R : [U , R D' R']];[U R' D' : [R' D' R , U']];[D R : [U , R D' R']];[R : [U , R D' R']]".split(";"),
+    "[F : [U2 , F' R F R']];[R2 : [D' , R U' R']];;[U' R' F : [D , R U R']];;[R' U' : [R U R' , D]];[U' R U' : [R' U R , D']];;[U R U' : [F , U R' U' R]];[D R' U' : [R U R' , D']];[R U' D' R' : [R' U R , D]];[D' R : [R' U R U' , F]];[R' U' : [R U R' , D']];[R' F : [D , R U R']];[F , l U' l'];[F , l U2 l'];[D' R' U' : [R U R' , D']];[U' R' U : [D , R U' R']];[U' D' R' U : [D , R U' R']];[R U' R2' : [U , R D R']];[U' D R' U : [D , R U' R']]".split(";"),
+    "[R' D R , U2];[R' D R , U];[R' D R , U'];[U R' : [U' , R' D R]];[R' U' : [D , R U R']];;[R' D : [F' , D' R D R']];[R' D : [F2 , D' R D R']];[U : [R U' R' , D]];;[U R U' : [R' D R , U2]];[U D' : [R U' R' , D2]];[U R' D' : [R U' R' , D2]];[R' U : [D , R U' R']];[R B' R' : [U , R' D R]];[U D2 : [R U' R' , D']];[R' D R2 : [U , R' D' R]];;[U D R D' : [R' D R , U']];[U R2 : [U' , R' D R]];[D R : [F2 , R' U R U']]".split(";"),
+    "[U' : [R D' R' , U2]];[U' , R D' R'];[U' : [R D' R' , U']];[R D' : [R D R' , U]];[U' R U' : [D' , R' U R]];[D R' : [F' , R D' R']];;[R U D : [R' D R , U2]];[l' U : [R U' R' , D]];[D : [R U R' , D]];[U R : [U2 , R D' R']];[R D : [R' U' R , D2]];[R U R' , D2];[R , U' L U];[U D R' F' : [R U' R' , D]];;[D' : [R U R' , D']];[D R U' R' : [U2 , R' D R]];[R U' D R' : [U2 , R' D R]];[R D' R' : [U , R' D R]];".split(";"),
+    "[r D' U : [R D R' , U2]];[R2 U' : [D' , R U R']];;[l' U : [R D' R' , U2]];;[D R' : [F2 , R D' R' D]];[R U' D : [R' D R , U2]];;[R' : [F2 , R D' R' D]];[R U' : [R' D R , U U]];[R' F' R D U : [R' D' R , U2];[R D' U' : [R' D R , U2]];[D R U' : [R' D' R , U2]];[R D' U' : [R' D' R , U2]];[R U R' D' : [R' D R , U2]];[D R' D : [F2 , D' R D R']];[R U' : [R' D' R , U2]];[R D U' : [R' D' R , U2]];[R U' R' U D : [R D R' , U2]];[D R : [U2 , R D' R']];[R2 U : [R' U R , D']]".split(";"),
+    "[D U' : [R D R' , U2]];[D' : [R' D R , U]];[D' : [R' D R , U']];[U D' R' : [U' , R' D R]];[R : [F , R' U R U']];[U : [D , R U' R']];[l' U : [D , R U' R']];[D' R' D : [F2 , D' R D R']];;[D' R' D : [F' , D' R D R']];[U' R' U' : [R D R' , U2]];[U : [D' , R U' R']];;[D' R' U : [D , R U' R']];[U' R' U' : [R D R' , U']];[U : [D2 , R U' R']];[R U R' U' : [R U R' , D']];[R : [F2 , R' U R U']];;[U R D' : [R' D R , U']];[R' D' R : [D ,R U R']]".split(";"),
+    "[D : [R' D' R , U2]];[D : [R' D' R , U]];[D : [R' D' R , U']];[R U : [R' D R , U]];[D R' U' : [D' , R U R']];;[D2 : [R U R' , D']];[R U : [R' D R , U2]];[R' : [F' , R D' R' D]];;[U R U' D : [R' D' R , U2]];[R D : [R' U' R , D]];[R U R' , D];[R' F : [D , R U' R']];[D R' : [R' U R , D]];[D' R D : [R' U' R , D2]];[D' : [R U R' , D2]];;[R U' R' : [U2 , R' D R]];[D' R2 : [R' U' R , D']];[D R D : [R' D' R , U]]".split(";"),
+    "[R' U D R2 : [U' , R' D' R]];;[U' R' : [U2 , R' D' R]];[R' D R2 D' R2' : [U , R2 D R2' D' R2]];[R U' D' R' : [D , R' U R]];[U R U : [R' D R , U2]];[U R : [R D' R' , U2]];[R' F' R D U : [U2 , R' D' R];[U' R' U : [R D R' , U2]];[U R U D : [R' D' R , U2]];;[U R U : [R' D' R , U2]];[U' R' D U : [R D' R' , U2]];;[U R2 U' : [R U R' , D']];[U' R' U : [R D' R' , U2]];[R' F' R D' U' : [R' D R , U2]];[U' R' : [U2 , R' D R]];[U' D' R' : [U2 , R' D R]];[U R U D' : [R' D R , U2]];[D U' R' : [U2 , R' D R]]".split(";"),
+    "[U' : [R D R' , U2]];[U' , R D R'];[U' : [R D R' , U']];[U' R : [R U' R' , D']];[D' R : [F , R' U R U']];[U D : [R U' R' , D2]];[R D' : [R' U' R , D2]];[R D' U : [R' D R , U2]];[U : [R U' R' , D']];[R D2 : [R' U' R , D']];[U R U' : [R' D' R , U2]];;[R D' : [U , R' D R]];[U' R U : [D , R' U' R]];[R B' : [D , R' U' R]];[U' : [D' , R' U' R]];;[U' R' : [U , R' D R]];[D' R : [F2 , R' U R U']];;[U D' R D' : [R' D R , U']]".split(";"),
+    "[R' D' R , U2];[R' D' R , U];[R' D' R , U'];[U R' U2 : [R D R' , U]];[R' U' : [D' , R U R']];[U R' D : [R U' R' , D2]];[D2 , R U R'];[D R U : [R' D' R , U2]];;[D , R U R'];[U' R' D U' : [R D' R' , U2]];[R D' : [R' D R , U]];;[R' U : [D' , R U' R']];[R2' : [U , R D R']];[U R' D' : [D' , R U' R']];[D' , R U R'];[R D : [R' D' R , U]];;[D' R U' R' : [U2 , R' D R]];[R2 : [R' U' R , D']]".split(";"),
+    "[R' U D : [R D R' , U2]];;[R' D' : [U' , R' D R]];[R' , F' L F]];[R' F : [R U R' , D]];[R' U : [R U' R' , D]];[U' L U , R];[R U D' : [R' D' R , U2]];[D' R' U : [R U' R' , D]];[R' F : [R U' R' , D]];;[U' R U : [R' U' R , D]];[R' U : [R U' R' , D']];;[U' L' U , R];[D R' U : [R U' R' , D]];[R U' : [D , R' U R]];[D' R U' : [D' , R' U R]];[U R' U' : [D' , R U R']];[D R U' : [D' , R' U R]];[R U' : [D' , R' U R]]".split(";"),
+    ";[R2 U : [R' U' R , D]];[U' R' : [U' , R' D' R]];;[l U' l' , F];[R B' R' : [R' D R , U]];[U D R' F' : [D , R U' R']];[R U R' U D : [R D R' , U2]];[U' R' U2 : [R D R' , U]];[D R' : [D , R' U R]];[U R2 U' : [D' , R U R']];[R B' : [R' U' R , D]];[R' : [D , R' U R]];[R , U' L' U];;[U' R' U2 : [R D' R' , U]];[D' R' : [D , R' U R]];[U' R' : [U' , R' D R]];[D' U' R' : [U' , R' D R]];[U R2 : [U' , R' D' R]];[R2 U : [R' U' R , D']]".split(";"),
+    "[D' U' : [R D R' , U2]];[D' : [U' , R D R']];[D : [R' D R , U']];[U D R' : [U' , R' D R]];[l U2 l' , F];[U D : [R U' R' , D]];;[D R' D : [F2 , D' R D R']];[U : [R U' R' , D2]];[D' R D' : [R' U' R , D2]];[U' R' U' : [R D' R' , U2]];[U' : [R' U' R , D']];[U R' D' : [R U' R' , D']];[D R' U : [D , R U' R']];[U' R' U' : [R D' R' , U']];;[D R' D : [F' , D' R D R']];[U' D' R' D' : [R D R' , U']];[U' D' R' : [U , R' D R]];[U R2 : [U' , R' D2 R]];".split(";"),
+    "[D U' : [R D' R' , U2]];[D : [U' , R D' R']];[D' : [R' D' R , U']];[R U : [R' D' R , U]];[D' R' U' : [D' , R U R']];[R' D R : [D' , R U R']];[D2 : [R U R' , D]];[R U : [R' D' R , U2]];[R U R' U' : [D' , R U R']];[D : [R U R' , D2]];[R' F' R D' U : [R' D R , U2]];;[R U R' , D'];[R U' : [R' U R , D]];[D' R2' : [U , R D R']];[D2' R' : [F' , R D' R' D]];;[D' R : [U' , R D' R']];[D' R D : [R' D' R , U]];;[R U' D' : [R' U R , D2]]".split(";"),
+    "[R F' R' U' : [R D R' , U2]];[R F' : [R' U' R , D]];[R' U' R : [F2' , R' U R U']];[D' R : [R D' R' , U]];[U' R' U : [R U' R' , D]];;[D R U' R' : [R' D R , U2]];[D' R : [R D' R' , U2]];[U R U' : [F2' , U R' U' R]];;[U' R' : [R' D R , U2]];[U' R' : [R' D R , U]];[R D : [U , R' D' R]];[D' R U' : [R' U R , D']];[U' R' : [R' D R , U']];[U' D' R' D' : [U' , R D R']];[D' R : [R D' R' , U']]; ;[U' R' U R : [R U' R' , D]];[U' R2' : [D , R2 U R2' U' R2]];[R U' D' : [R' U R , D']]".split(";"),
+    "[R' D R U' R D' R' , U2];[R' D R U' R D' R' , U];[R' D R U' R D' R' , U'];[U R' D' : [U' , R' D' R]];[U' D' R' U : [R U' R' , D]];[U D R D' : [U' , R' D R]];[R U' D R' : [R' D R , U2]];[R U' R' D' : [R' D R , U2]];;[R U' R' : [R' D R , U2]];[D' U' R' : [R' D R , U2]];[D' U R U' : [F2 , U R' U' R]];;[U R' U' : [R U R' , D']];[D' U' R' : [R' D R , U']];[U' D' R' : [R' D R , U]];[D' R D : [U , R' D' R]];[U' R' U R : [D , R U' R']];;[D R U' R' : [D' , R' U R]];[R U' R' U' : [R D' R' , U2]]".split(";"),
+    "[R D' R' : [R' D R , U2]];[U' , R D' R' U R' D R];[R D' R' : [R' D R , U']];[D R : [R D' R', U]];[R U' R' : [D , R' U R]];[U R : [D , R U' R']];[R D' R' : [R' D R , U]];[D R : [R D' R' , U2]];[U R' D' : [U' , R' D R]];[D R : [R D' R' , U']];[U R U' D' : [R' D R , U2]];;[D' R U' R' : [R' D R , U2]];[D R U' : [R' U R , D']];[U R : [D' , R U' R']];[U R : [D2 , R U' R']];;;[D R U' R' : [R' U R , D']];;[R U' R' : [D' , R' U R]]".split(";"),
+    "[R' U' D' R : [R U' R' , D]];[R' B : [D' , R U R']];[R' D' R : [R U' R' , D]];[R : [R D' R' , U]];[U' D R' U : [R U' R' , D]];[D U R U' : [F2' , U R' U' R]];;[R : [R D' R' , U2]];[R' D' R : [R U R' , D]];[D R D : [U , R' D' R]];[D U' R' : [R' D R , U2]];[U D' R D' : [U' , R' D R]];[R : [R D' R' , U']];[R U' : [R' U R , D']];[R2 U : [D' , R' U' R]];;[R U' D : [R' U R , D2]];[R U' D2 : [R' U R , D]];[R U' R' U : [R D' R' , U2]];[R U' R' : [R' U R , D']];".split(";")
+];
+
 const speffzArr = ['A','A','B','D',' ','B','D','C','C',
                     'E','E','F','H',' ','F','H','G','G',
                     'I','I','J','L',' ','J','L','K','K',
@@ -16,6 +115,12 @@ const speffzArr = ['A','A','B','D',' ','B','D','C','C',
 let customArr = speffzArr;
 if (localStorage.getItem("customArr") !== null) {
     customArr = localStorage.getItem("customArr").split(";");
+}
+
+function Alg(pos1, pos2, alg) {
+    this.pos1 = pos1;
+    this.pos2 = pos2;
+    this.alg = alg;
 }
 
 $(function () {
@@ -53,6 +158,8 @@ $(function () {
 
     selectTopColor(selectedTopBtn, selectedTopColor);
     selectFrontColor(selectedFrontBtn, selectedFrontColor);
+
+    makeAlgs();
 });
 
 function showLetterScheme() {
@@ -278,4 +385,154 @@ function updateColor() {
     $("#buttonsR :button").css("background", colorArr[3]);
     $("#buttonsB :button").css("background", colorArr[4]);
     $("#buttonsD :button").css("background", colorArr[5]);
+}
+
+function makeAlgs() {
+    makeCornerAlgs();
+    makeEdgeAlgs();
+}
+
+function makeCornerAlgs() {
+    const cornerContent0 = $("#cornerContent0");
+    const cornerContent1 = $("#cornerContent1");
+    const cornerContent2 = $("#cornerContent2");
+    const cornerContent3 = $("#cornerContent3");
+    const cornerContent4 = $("#cornerContent4");
+    const cornerContent5 = $("#cornerContent5");
+    const cornerContent6 = $("#cornerContent6");
+    const cornerContent7 = $("#cornerContent7");
+    const cornerContent8 = $("#cornerContent8");
+
+    let cornerContent0Arr = [];
+    let cornerContent1Arr = [];
+    let cornerContent2Arr = [];
+    let cornerContent3Arr = [];
+    let cornerContent4Arr = [];
+    let cornerContent5Arr = [];
+    let cornerContent6Arr = [];
+    let cornerContent7Arr = [];
+    let cornerContent8Arr = [];
+
+    for (let y=0; y<ufrTypes.length; y++) {
+        for (let x=0; x<ufrTypes[y].length; x++) {
+            if (ufrTypes[y][x] === "U-Top / D-Side") {
+                cornerContent0Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+            else if (ufrTypes[y][x] === "U-Top / D-Bottom") {
+                cornerContent1Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+            else if (ufrTypes[y][x] === "D-Bottom / D-Bottom") {
+                cornerContent2Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+            else if (ufrTypes[y][x] === "D-Side / D-Side") {
+                cornerContent3Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+            else if (ufrTypes[y][x] === "BUR / D-Any" || ufrTypes[y][x] === "LUF / D-Any") {
+                cornerContent4Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+            else if (ufrTypes[y][x] === "U-Side / D-Any") {
+                cornerContent5Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+            else if (ufrTypes[y][x] === "D-Side / D-Bottom") {
+                cornerContent6Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+            else if (ufrTypes[y][x] === "U-Any / U-Any") {
+                cornerContent7Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+            else if (ufrTypes[y][x] === "Special") {
+                cornerContent8Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+            }
+        }
+    }
+
+    listAlgs(cornerContent0, cornerContent0Arr);
+    listAlgs(cornerContent1, cornerContent1Arr);
+    listAlgs(cornerContent2, cornerContent2Arr);
+    listAlgs(cornerContent3, cornerContent3Arr);
+    listAlgs(cornerContent4, cornerContent4Arr);
+    listAlgs(cornerContent5, cornerContent5Arr);
+    listAlgs(cornerContent6, cornerContent6Arr);
+    listAlgs(cornerContent7, cornerContent7Arr);
+    listAlgs(cornerContent8, cornerContent8Arr);
+}
+
+function makeEdgeAlgs() {
+    const edgeContent0 = $("#edgeContent0");
+    const edgeContent1 = $("#edgeContent1");
+    const edgeContent2 = $("#edgeContent2");
+    const edgeContent3 = $("#edgeContent3");
+    const edgeContent4 = $("#edgeContent4");
+    const edgeContent5 = $("#edgeContent5");
+    const edgeContent6 = $("#edgeContent6");
+    const edgeContent7 = $("#edgeContent7");
+
+    let edgeContent0Arr = [];
+    let edgeContent1Arr = [];
+    let edgeContent2Arr = [];
+    let edgeContent3Arr = [];
+    let edgeContent4Arr = [];
+    let edgeContent5Arr = [];
+    let edgeContent6Arr = [];
+    let edgeContent7Arr = [];
+
+    for (let y=0; y<ufTypes.length; y++) {
+        for (let x=0; x<ufTypes[y].length; x++) {
+            if (ufTypes[y][x] === "4-Mover") {
+                edgeContent0Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+            }
+            else if (ufTypes[y][x] === "M-Swap") {
+                edgeContent1Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+            }
+            else if (ufTypes[y][x] === "U-Swap") {
+                edgeContent2Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+            }
+            else if (ufTypes[y][x] === "E-Swap") {
+                edgeContent3Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+            }
+            else if (ufTypes[y][x] === "S-Swap") {
+                edgeContent4Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+            }
+            else if (ufTypes[y][x] === "F-Swap") {
+                edgeContent5Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+            }
+            else if (ufTypes[y][x] === "S-Insert") {
+                edgeContent6Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+            }
+            else if (ufTypes[y][x] === "Special") {
+                edgeContent7Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+            }
+        }
+    }
+
+    listAlgs(edgeContent0, edgeContent0Arr);
+    listAlgs(edgeContent1, edgeContent1Arr);
+    listAlgs(edgeContent2, edgeContent2Arr);
+    listAlgs(edgeContent3, edgeContent3Arr);
+    listAlgs(edgeContent4, edgeContent4Arr);
+    listAlgs(edgeContent5, edgeContent5Arr);
+    listAlgs(edgeContent6, edgeContent6Arr);
+    listAlgs(edgeContent7, edgeContent7Arr);
+}
+
+function listAlgs(content, arr) {
+    let utL = "<table class='tblAlgs'>";
+    let utR = "<table class='tblAlgs'>";
+
+    let i=0;
+    for (let a of arr) {
+        if (i <= arr.length / 2) {
+            utL += "<tr><td>"+a.pos1+" / "+a.pos2+"</td><td><b>"+a.alg+"</b></td></tr>";
+        }
+        else {
+            utR += "<tr><td>"+a.pos1+" / "+a.pos2+"</td><td><b>"+a.alg+"</b></td></tr>";
+        }
+        i++;
+    }
+
+    utL += "</table>";
+    utR += "</table>";
+
+    const ut = "<div style='display: grid; grid-template-columns: 2fr 1fr 2fr'>"+utL+"<div></div>"+utR+"</div>"
+
+    content.html(ut);
 }
