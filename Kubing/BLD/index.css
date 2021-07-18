@@ -172,6 +172,10 @@ a:active {
     margin: 0 1vw;
 }
 
+td {
+    font-size: 4vh;
+}
+
 @media screen and (orientation: portrait) {
     #innerInnerLetterSchemeDiv {
         display: block;
@@ -184,5 +188,11 @@ a:active {
 
     table {
         width: 100%;
+    }
+}
+
+@media screen and (orientation: landscape) {
+    #menu {
+        font-size: 3vh;
     }
 }

@@ -516,21 +516,12 @@ function listAlgs(content, arr) {
     arr.sort(compareLetters);
 
     let i=0;
-    /*for (let a of arr) {
-        if (i <= arr.length / 2) {
-            utL += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>("+a.pos1+" / "+a.pos2+")</td><td><b>"+a.alg+"</b></td></tr>";
-        }
-        else {
-            utR += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>("+a.pos1+" / "+a.pos2+")</td><td><b>"+a.alg+"</b></td></tr>";
-        }
-        i++;
-    }*/
     for (let a of arr) {
         if (i <= arr.length / 2) {
-            utL += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td><b>"+a.alg+"</b></td></tr>";
+            utL += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
         }
         else {
-            utR += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td><b>"+a.alg+"</b></td></tr>";
+            utR += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
         }
         i++;
     }
@@ -544,7 +535,7 @@ function listAlgs(content, arr) {
         ut = "<div id='"+content+"' style='display: block'>"+utL+"<div></div>"+utR+"</div>"
     }
     else {
-        ut = "<div id='"+content+"' style='display: grid; grid-template-columns: 2fr 1fr 2fr'>"+utL+"<div></div>"+utR+"</div>"
+        ut = "<div id='"+content+"' style='display: grid; grid-template-columns: 3fr 1fr 3fr'>"+utL+"<div></div>"+utR+"</div>"
     }
 
     $("#"+content).html(ut);
