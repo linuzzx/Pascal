@@ -9,12 +9,6 @@ body {
     grid-template-rows: 1fr 15fr;
 }
 
-#inputField {
-    position: fixed;
-    z-index: 2;
-    background-color: rgba(254,0,0,1);
-}
-
 #letterSchemeEdit {
     position: fixed;
     display: none;

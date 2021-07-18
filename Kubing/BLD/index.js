@@ -232,7 +232,6 @@ function changeLetter(button) {
     $("#btnGrid :button").css("font-weight", "normal");
     $(button).css("font-weight", "bold");
     selectedButton = button;
-    $("#inputField").focus();
 }
 
 function speffz() {
