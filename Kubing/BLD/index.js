@@ -131,6 +131,7 @@ function Alg(letter1, letter2, pos1, pos2, alg) {
     this.alg = alg;
 }
 
+//Startfunksjon
 $(function () {
     $("#cornerContent0").css("display", "block");
 
@@ -169,6 +170,8 @@ $(function () {
     selectFrontColor(selectedFrontBtn, selectedFrontColor);
 
     makeAlgs();
+
+
 });
 
 function showLetterScheme() {
@@ -415,6 +418,7 @@ function makeCornerAlgs() {
 
     for (let y=0; y<ufrTypes.length; y++) {
         for (let x=0; x<ufrTypes[y].length; x++) {
+            //Sjekk localstorage for sjekkbokser her
             if (ufrTypes[y][x] === "U-Top / D-Side") {
                 cornerContent0Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
@@ -525,16 +529,19 @@ function listAlgs(content, arr) {
     utL += "</table>";
     utR += "</table>";
 
-    const ut = "<div id='"+content+"' style='display: grid; grid-template-columns: 2fr 1fr 2fr'>"+utL+"<div></div>"+utR+"</div>"
+    let ut = "";
+
+    if (window.innerHeight > window.innerWidth) {
+        ut = "<div id='"+content+"' style='display: block'>"+utL+"<div></div>"+utR+"</div>"
+    }
+    else {
+        ut = "<div id='"+content+"' style='display: grid; grid-template-columns: 2fr 1fr 2fr'>"+utL+"<div></div>"+utR+"</div>"
+    }
 
     $("#"+content).html(ut);
-    console.log(arr)
 }
 
 function getLetter(piece) {
-    console.log(piece)
-    console.log(pieces.indexOf(piece))
-    console.log(customLetters[pieces.indexOf(piece)])
     return customLetters[pieces.indexOf(piece)];
 }
 

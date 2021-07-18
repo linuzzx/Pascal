@@ -77,6 +77,11 @@ body {
     background: red;
 }
 
+#innerInnerLetterSchemeDiv {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
 button {
     border: 1px solid #000000;
 }
@@ -165,4 +170,10 @@ a:active {
 .tblAlgs {
     text-align: left;
     margin: 0 1vw;
+}
+
+@media screen and (orientation: portrait) {
+    #innerInnerLetterSchemeDiv {
+        display: block;
+    }
 }
