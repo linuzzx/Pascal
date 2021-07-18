@@ -516,12 +516,21 @@ function listAlgs(content, arr) {
     arr.sort(compareLetters);
 
     let i=0;
-    for (let a of arr) {
+    /*for (let a of arr) {
         if (i <= arr.length / 2) {
             utL += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>("+a.pos1+" / "+a.pos2+")</td><td><b>"+a.alg+"</b></td></tr>";
         }
         else {
             utR += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>("+a.pos1+" / "+a.pos2+")</td><td><b>"+a.alg+"</b></td></tr>";
+        }
+        i++;
+    }*/
+    for (let a of arr) {
+        if (i <= arr.length / 2) {
+            utL += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td><b>"+a.alg+"</b></td></tr>";
+        }
+        else {
+            utR += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td><b>"+a.alg+"</b></td></tr>";
         }
         i++;
     }
