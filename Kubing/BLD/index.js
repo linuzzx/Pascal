@@ -10,6 +10,12 @@ const edges = ["UB", "UR", "UL", "LU", "LF", "LD", "LB", "FR", "FD", "FL", "RU",
                 "RD", "RF", "BU", "BL", "BD", "BR", "DF", "DR", "DB", "DL"];
 const corners = ["UBL", "UBR", "UFL", "LUB", "LUF", "LDF", "LDB", "FUL", "FDR", "FDL",
                 "RUB", "RDB", "RDF", "BUR", "BUL", "BDL", "BDR", "DFL", "DFR", "DBR", "DBL"];
+const pieces = ["UBL", "UB", "UBR", "UL", "", "UR", "UFL", "UF", "UFR",
+                "LUB", "LU", "LUF", "LB", "", "LF", "LDB", "LD", "LDF",
+                "FUL", "FU", "FUR", "FL", "", "FR", "FDL", "FD", "FDR",
+                "RUF", "RU", "RUB", "RF", "", "RB", "RDF", "RD", "RDB",
+                "BUR", "BU", "BUL", "BR", "", "BL", "BDR", "BD", "BDL",
+                "DFL", "DF", "DFR", "DL", "", "DR", "DBL", "DB", "DBR"];
 const ufTypes = [
     ";4-Mover;4-Mover;4-Mover;U-Swap;U-Swap;U-Swap;4-Mover;E-Swap;4-Mover;4-Mover;U-Swap;U-Swap;U-Swap;;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover;4-Mover".split(";"),
     "4-Mover;;4-Mover;S-Swap;U-Swap;U-Swap;U-Swap;U-Swap;M-Swap;U-Swap;;U-Swap;U-Swap;U-Swap;M-Swap;U-Swap;Special;U-Swap;F-Swap;4-Mover;M-Swap;Special".split(";"),
@@ -112,12 +118,14 @@ const speffzArr = ['A','A','B','D',' ','B','D','C','C',
                     'Q','Q','R','T',' ','R','T','S','S',
                     'U','U','V','X',' ','V','X','W','W'];
 
-let customArr = speffzArr;
+let customLetters = speffzArr;
 if (localStorage.getItem("customArr") !== null) {
-    customArr = localStorage.getItem("customArr").split(";");
+    customLetters = localStorage.getItem("customArr").split(";");
 }
 
-function Alg(pos1, pos2, alg) {
+function Alg(letter1, letter2, pos1, pos2, alg) {
+    this.letter1 = letter1;
+    this.letter2 = letter2;
     this.pos1 = pos1;
     this.pos2 = pos2;
     this.alg = alg;
@@ -152,6 +160,7 @@ $(function () {
             $("#btnGrid :button").css("font-weight", "normal");
 
             saveLetters();
+            makeAlgs();
         }
     });
     updateLetters();
@@ -244,12 +253,13 @@ function saveLetters() {
         i++;
     }
     localStorage.setItem("customArr", custom);
+    customLetters = localStorage.getItem("customArr").split(";");
 }
 
 function updateLetters() {
     let i = 0;
     for (let b of $("#btnGrid :button")) {
-        $(b).html(customArr[i]);
+        $(b).html(customLetters[i]);
         i++;
     }
 }
@@ -393,16 +403,6 @@ function makeAlgs() {
 }
 
 function makeCornerAlgs() {
-    const cornerContent0 = $("#cornerContent0");
-    const cornerContent1 = $("#cornerContent1");
-    const cornerContent2 = $("#cornerContent2");
-    const cornerContent3 = $("#cornerContent3");
-    const cornerContent4 = $("#cornerContent4");
-    const cornerContent5 = $("#cornerContent5");
-    const cornerContent6 = $("#cornerContent6");
-    const cornerContent7 = $("#cornerContent7");
-    const cornerContent8 = $("#cornerContent8");
-
     let cornerContent0Arr = [];
     let cornerContent1Arr = [];
     let cornerContent2Arr = [];
@@ -416,56 +416,47 @@ function makeCornerAlgs() {
     for (let y=0; y<ufrTypes.length; y++) {
         for (let x=0; x<ufrTypes[y].length; x++) {
             if (ufrTypes[y][x] === "U-Top / D-Side") {
-                cornerContent0Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent0Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "U-Top / D-Bottom") {
-                cornerContent1Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent1Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "D-Bottom / D-Bottom") {
-                cornerContent2Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent2Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "D-Side / D-Side") {
-                cornerContent3Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent3Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "BUR / D-Any" || ufrTypes[y][x] === "LUF / D-Any") {
-                cornerContent4Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent4Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "U-Side / D-Any") {
-                cornerContent5Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent5Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "D-Side / D-Bottom") {
-                cornerContent6Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent6Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "U-Any / U-Any") {
-                cornerContent7Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent7Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "Special") {
-                cornerContent8Arr.push(new Alg(corners[x], corners[y], ufrComms[y][x]));
+                cornerContent8Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
             }
         }
     }
 
-    listAlgs(cornerContent0, cornerContent0Arr);
-    listAlgs(cornerContent1, cornerContent1Arr);
-    listAlgs(cornerContent2, cornerContent2Arr);
-    listAlgs(cornerContent3, cornerContent3Arr);
-    listAlgs(cornerContent4, cornerContent4Arr);
-    listAlgs(cornerContent5, cornerContent5Arr);
-    listAlgs(cornerContent6, cornerContent6Arr);
-    listAlgs(cornerContent7, cornerContent7Arr);
-    listAlgs(cornerContent8, cornerContent8Arr);
+    listAlgs("cornerContent0", cornerContent0Arr);
+    listAlgs("cornerContent1", cornerContent1Arr);
+    listAlgs("cornerContent2", cornerContent2Arr);
+    listAlgs("cornerContent3", cornerContent3Arr);
+    listAlgs("cornerContent4", cornerContent4Arr);
+    listAlgs("cornerContent5", cornerContent5Arr);
+    listAlgs("cornerContent6", cornerContent6Arr);
+    listAlgs("cornerContent7", cornerContent7Arr);
+    listAlgs("cornerContent8", cornerContent8Arr);
 }
 
 function makeEdgeAlgs() {
-    const edgeContent0 = $("#edgeContent0");
-    const edgeContent1 = $("#edgeContent1");
-    const edgeContent2 = $("#edgeContent2");
-    const edgeContent3 = $("#edgeContent3");
-    const edgeContent4 = $("#edgeContent4");
-    const edgeContent5 = $("#edgeContent5");
-    const edgeContent6 = $("#edgeContent6");
-    const edgeContent7 = $("#edgeContent7");
-
     let edgeContent0Arr = [];
     let edgeContent1Arr = [];
     let edgeContent2Arr = [];
@@ -478,53 +469,55 @@ function makeEdgeAlgs() {
     for (let y=0; y<ufTypes.length; y++) {
         for (let x=0; x<ufTypes[y].length; x++) {
             if (ufTypes[y][x] === "4-Mover") {
-                edgeContent0Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+                edgeContent0Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "M-Swap") {
-                edgeContent1Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+                edgeContent1Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "U-Swap") {
-                edgeContent2Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+                edgeContent2Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "E-Swap") {
-                edgeContent3Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+                edgeContent3Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "S-Swap") {
-                edgeContent4Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+                edgeContent4Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "F-Swap") {
-                edgeContent5Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+                edgeContent5Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "S-Insert") {
-                edgeContent6Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+                edgeContent6Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "Special") {
-                edgeContent7Arr.push(new Alg(edges[x], edges[y], ufComms[y][x]));
+                edgeContent7Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
         }
     }
 
-    listAlgs(edgeContent0, edgeContent0Arr);
-    listAlgs(edgeContent1, edgeContent1Arr);
-    listAlgs(edgeContent2, edgeContent2Arr);
-    listAlgs(edgeContent3, edgeContent3Arr);
-    listAlgs(edgeContent4, edgeContent4Arr);
-    listAlgs(edgeContent5, edgeContent5Arr);
-    listAlgs(edgeContent6, edgeContent6Arr);
-    listAlgs(edgeContent7, edgeContent7Arr);
+    listAlgs("edgeContent0", edgeContent0Arr);
+    listAlgs("edgeContent1", edgeContent1Arr);
+    listAlgs("edgeContent2", edgeContent2Arr);
+    listAlgs("edgeContent3", edgeContent3Arr);
+    listAlgs("edgeContent4", edgeContent4Arr);
+    listAlgs("edgeContent5", edgeContent5Arr);
+    listAlgs("edgeContent6", edgeContent6Arr);
+    listAlgs("edgeContent7", edgeContent7Arr);
 }
 
 function listAlgs(content, arr) {
     let utL = "<table class='tblAlgs'>";
     let utR = "<table class='tblAlgs'>";
 
+    arr.sort(compareLetters);
+
     let i=0;
     for (let a of arr) {
         if (i <= arr.length / 2) {
-            utL += "<tr><td>"+a.pos1+" / "+a.pos2+"</td><td><b>"+a.alg+"</b></td></tr>";
+            utL += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>("+a.pos1+" / "+a.pos2+")</td><td><b>"+a.alg+"</b></td></tr>";
         }
         else {
-            utR += "<tr><td>"+a.pos1+" / "+a.pos2+"</td><td><b>"+a.alg+"</b></td></tr>";
+            utR += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>("+a.pos1+" / "+a.pos2+")</td><td><b>"+a.alg+"</b></td></tr>";
         }
         i++;
     }
@@ -532,7 +525,25 @@ function listAlgs(content, arr) {
     utL += "</table>";
     utR += "</table>";
 
-    const ut = "<div style='display: grid; grid-template-columns: 2fr 1fr 2fr'>"+utL+"<div></div>"+utR+"</div>"
+    const ut = "<div id='"+content+"' style='display: grid; grid-template-columns: 2fr 1fr 2fr'>"+utL+"<div></div>"+utR+"</div>"
 
-    content.html(ut);
+    $("#"+content).html(ut);
+    console.log(arr)
+}
+
+function getLetter(piece) {
+    console.log(piece)
+    console.log(pieces.indexOf(piece))
+    console.log(customLetters[pieces.indexOf(piece)])
+    return customLetters[pieces.indexOf(piece)];
+}
+
+function compareLetters(a, b) {
+    if (a.letter1 < b.letter1){
+        return -1;
+    }
+    if (a.letter1 > b.letter1){
+        return 1;
+    }
+    return 0;
 }
