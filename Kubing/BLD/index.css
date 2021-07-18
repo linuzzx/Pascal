@@ -181,4 +181,8 @@ a:active {
         /*font-size: 3vh;*/
         font-size: 2vh;
     }
+
+    table {
+        width: 100%;
+    }
 }
