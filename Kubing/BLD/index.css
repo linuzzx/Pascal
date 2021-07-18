@@ -176,4 +176,8 @@ a:active {
     #innerInnerLetterSchemeDiv {
         display: block;
     }
+
+    td {
+        font-size: 3vh;
+    }
 }
