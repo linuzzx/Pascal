@@ -233,7 +233,7 @@ function changeLetter(button) {
     $(button).css("font-weight", "bold");
     selectedButton = button;
     $("#inputField").focus();
-    alert("HADE")
+    alert("HEI")
 }
 
 function speffz() {
