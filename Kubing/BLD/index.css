@@ -161,3 +161,8 @@ a:active {
 .edgeContentClass {
     display: none;
 }
+
+.tblAlgs {
+    text-align: left;
+    margin: 0 1vw;
+}
