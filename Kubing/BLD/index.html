@@ -166,29 +166,32 @@
     <div id="mainContent">
         <div id="menu">
             <div id="cornerMenu">
-                <a onclick="chooseCorner(0)">U-Top/D-Side</a>
-                <a onclick="chooseCorner(1)">U-Top/D-Bottom</a>
-                <a onclick="chooseCorner(2)">D-Bottom-D-Bottom</a>
-                <a onclick="chooseCorner(3)">D-Side/D-Side</a>
-                <a onclick="chooseCorner(4)">LUF or BUR/D-Any</a>
-                <a onclick="chooseCorner(5)">U-Side/D-Any</a>
-                <a onclick="chooseCorner(6)">D-Side/D-Bottom</a>
-                <a onclick="chooseCorner(7)">U-Any/U-Any</a>
-                <a onclick="chooseCorner(8)">Special</a>
+                <a id="aCornerAll" class="aCorner" onclick="chooseCorner('All')">All algorithms</a>
+                <a id="aCorner0" class="aCorner" onclick="chooseCorner(0)">U-Top/D-Side</a>
+                <a id="aCorner1" class="aCorner" onclick="chooseCorner(1)">U-Top/D-Bottom</a>
+                <a id="aCorner2" class="aCorner" onclick="chooseCorner(2)">D-Bottom-D-Bottom</a>
+                <a id="aCorner3" class="aCorner" onclick="chooseCorner(3)">D-Side/D-Side</a>
+                <a id="aCorner4" class="aCorner" onclick="chooseCorner(4)">LUF or BUR/D-Any</a>
+                <a id="aCorner5" class="aCorner" onclick="chooseCorner(5)">U-Side/D-Any</a>
+                <a id="aCorner6" class="aCorner" onclick="chooseCorner(6)">D-Side/D-Bottom</a>
+                <a id="aCorner7" class="aCorner" onclick="chooseCorner(7)">U-Any/U-Any</a>
+                <a id="aCorner8" class="aCorner" onclick="chooseCorner(8)">Special</a>
             </div>
             <div id="edgeMenu">
-                <a onclick="chooseEdge(0)">4-Mover</a>
-                <a onclick="chooseEdge(1)">M-Swap</a>
-                <a onclick="chooseEdge(2)">U-Swap</a>
-                <a onclick="chooseEdge(3)">E-Swap</a>
-                <a onclick="chooseEdge(4)">S-Swap</a>
-                <a onclick="chooseEdge(5)">F-Swap</a>
-                <a onclick="chooseEdge(6)">S-Insert</a>
-                <a onclick="chooseEdge(7)">Special</a>
+                <a id="aEdgeAll" class="aEdge" onclick="chooseEdge('All')">All algorithms</a>
+                <a id="aEdge0" class="aEdge" onclick="chooseEdge(0)">4-Mover</a>
+                <a id="aEdge1" class="aEdge" onclick="chooseEdge(1)">M-Swap</a>
+                <a id="aEdge2" class="aEdge" onclick="chooseEdge(2)">U-Swap</a>
+                <a id="aEdge3" class="aEdge" onclick="chooseEdge(3)">E-Swap</a>
+                <a id="aEdge4" class="aEdge" onclick="chooseEdge(4)">S-Swap</a>
+                <a id="aEdge5" class="aEdge" onclick="chooseEdge(5)">F-Swap</a>
+                <a id="aEdge6" class="aEdge" onclick="chooseEdge(6)">S-Insert</a>
+                <a id="aEdge7" class="aEdge" onclick="chooseEdge(7)">Special</a>
             </div>
         </div>
         <div id="content">
             <div id="cornerContent">
+                <div class="cornerContentClass" id="cornerContentAll"><h1>All algorithms</h1></div>
                 <div class="cornerContentClass" id="cornerContent0"><h1>U-Top / D-Side</h1></div>
                 <div class="cornerContentClass" id="cornerContent1"><h1>U-Top / D-Bottom</h1></div>
                 <div class="cornerContentClass" id="cornerContent2"><h1>D-Bottom / D-Bottom</h1></div>
@@ -200,6 +203,7 @@
                 <div class="cornerContentClass" id="cornerContent8"><h1>Special</h1></div>
             </div>
             <div id="edgeContent">
+                <div class="edgeContentClass" id="edgeContentAll"><h1>All algorithms</h1></div>
                 <div class="edgeContentClass" id="edgeContent0"><h1>4-Mover</h1></div>
                 <div class="edgeContentClass" id="edgeContent1"><h1>M-Swap</h1></div>
                 <div class="edgeContentClass" id="edgeContent2"><h1>U-Swap</h1></div>

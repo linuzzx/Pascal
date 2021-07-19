@@ -133,7 +133,8 @@ function Alg(letter1, letter2, pos1, pos2, alg) {
 
 //Startfunksjon
 $(function () {
-    $("#cornerContent0").css("display", "block");
+    $("#cornerContentAll").css("display", "block");
+    $("#aCornerAll").css("fontWeight", "bold");
 
     $("#innerLetterSchemeEdit").on("click", function (e) {
         e.stopPropagation();
@@ -197,7 +198,9 @@ function showCorners() {
 
         $(".cornerContentClass").css("display", "none");
         $(".edgeContentClass").css("display", "none");
-        $("#cornerContent0").css("display", "block");
+        $("#cornerContentAll").css("display", "block");
+        $(".aCorner").css("fontWeight", "normal");
+        $("#aCornerAll").css("fontWeight", "bold");
     }
 }
 
@@ -212,20 +215,26 @@ function showEdges() {
 
         $(".cornerContentClass").css("display", "none");
         $(".edgeContentClass").css("display", "none");
-        $("#edgeContent0").css("display", "block");
+        $("#edgeContentAll").css("display", "block");
+        $(".aEdges").css("fontWeight", "normal");
+        $("#aEdgeAll").css("fontWeight", "bold");
     }
 }
 
 function chooseCorner(val) {
     $(".cornerContentClass").css("display", "none");
+    $(".aCorner").css("fontWeight", "normal");
 
     $("#cornerContent" + val).css("display", "block");
+    $("#aCorner"+val).css("fontWeight", "bold");
 }
 
 function chooseEdge(val) {
     $(".edgeContentClass").css("display", "none");
+    $(".aEdge").css("fontWeight", "normal");
 
     $("#edgeContent" + val).css("display", "block");
+    $("#aEdge"+val).css("fontWeight", "bold");
 }
 
 function changeLetter(button) {
@@ -413,6 +422,7 @@ function makeAlgs() {
 }
 
 function makeCornerAlgs() {
+    let cornerContentAllArr = [];
     let cornerContent0Arr = [];
     let cornerContent1Arr = [];
     let cornerContent2Arr = [];
@@ -425,6 +435,9 @@ function makeCornerAlgs() {
 
     for (let y=0; y<ufrTypes.length; y++) {
         for (let x=0; x<ufrTypes[y].length; x++) {
+            if (ufrComms[y][x] !== "") {
+                cornerContentAllArr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+            }
             //Sjekk localstorage for sjekkbokser her
             if (ufrTypes[y][x] === "U-Top / D-Side") {
                 cornerContent0Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
@@ -456,6 +469,7 @@ function makeCornerAlgs() {
         }
     }
 
+    listAlgs("cornerContentAll", cornerContentAllArr);
     listAlgs("cornerContent0", cornerContent0Arr);
     listAlgs("cornerContent1", cornerContent1Arr);
     listAlgs("cornerContent2", cornerContent2Arr);
@@ -468,6 +482,7 @@ function makeCornerAlgs() {
 }
 
 function makeEdgeAlgs() {
+    let edgeContentAllArr = [];
     let edgeContent0Arr = [];
     let edgeContent1Arr = [];
     let edgeContent2Arr = [];
@@ -479,6 +494,9 @@ function makeEdgeAlgs() {
 
     for (let y=0; y<ufTypes.length; y++) {
         for (let x=0; x<ufTypes[y].length; x++) {
+            if (ufComms[y][x] !== "") {
+                edgeContentAllArr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+            }
             if (ufTypes[y][x] === "4-Mover") {
                 edgeContent0Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
             }
@@ -506,6 +524,7 @@ function makeEdgeAlgs() {
         }
     }
 
+    listAlgs("edgeContentAll", edgeContentAllArr);
     listAlgs("edgeContent0", edgeContent0Arr);
     listAlgs("edgeContent1", edgeContent1Arr);
     listAlgs("edgeContent2", edgeContent2Arr);
