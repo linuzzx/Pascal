@@ -2,13 +2,19 @@ let showingSolution = false;
 let currentPiece = "";
 
 let uColor = "white";
+let lColor = "orange";
 let fColor = "green";
 let rColor = "red";
+let bColor = "blue";
+let dColor = "yellow";
 
 if (localStorage.getItem("uColor") !== null) {
     uColor = localStorage.getItem("uColor");
+    lColor = localStorage.getItem("lColor");
     fColor = localStorage.getItem("fColor");
     rColor = localStorage.getItem("rColor");
+    bColor = localStorage.getItem("bColor");
+    dColor = localStorage.getItem("dColor");
 }
 
 let uArr = [];
@@ -22,16 +28,16 @@ let rufArr = [];
 
 $(function () {
     makeArrays();
-    setCenters($("#imgU"), uColor, uArr);
-    setCenters($("#imgF"), fColor, fArr);
-    setCenters($("#imgR"), rColor, rArr);
+    $("#imgU").attr("src", "./resources/u_"+colorAsLetter(uColor)+".png");
+    $("#imgF").attr("src", "./resources/f_"+colorAsLetter(fColor)+".png");
+    $("#imgR").attr("src", "./resources/r_"+colorAsLetter(rColor)+".png");
 
     nextPiece()
 });
 
 function makeArrays() {
-    const colors = ['W','O','G','R','B','Y'];
-
+    const colors = [colorAsLetter(uColor), colorAsLetter(lColor), colorAsLetter(fColor),
+                    colorAsLetter(rColor), colorAsLetter(bColor), colorAsLetter(dColor)];
     for (let c of colors) {
         uArr.push("./resources/u_"+c+".png");
         ufArr.push("./resources/uf_"+c+".png");
@@ -41,29 +47,6 @@ function makeArrays() {
         furArr.push("./resources/fur_"+c+".png");
         rArr.push("./resources/r_"+c+".png");
         rufArr.push("./resources/ruf_"+c+".png");
-    }
-}
-
-function setCenters(piece, color, arr) {
-    switch (color) {
-        case 'white':
-            $(piece).attr("src",arr[0]);
-            break;
-        case 'orange':
-            $(piece).attr("src",arr[1]);
-            break;
-        case 'green':
-            $(piece).attr("src",arr[2]);
-            break;
-        case 'red':
-            $(piece).attr("src",arr[3]);
-            break;
-        case 'blue':
-            $(piece).attr("src",arr[4]);
-            break;
-        case 'yellow':
-            $(piece).attr("src",arr[5]);
-            break;
     }
 }
 
@@ -365,4 +348,21 @@ function showSolution() {
     showingSolution = true;
     $("#solution").css("display", "block");
     $("#solution").text(getLetter(currentPiece));
+}
+
+function colorAsLetter(color) {
+    switch (color) {
+        case "white":
+            return "W";
+        case "orange":
+            return "O";
+        case "green":
+            return "G";
+        case "red":
+            return "R";
+        case "blue":
+            return "B";
+        case "yellow":
+            return "Y";
+    }
 }
