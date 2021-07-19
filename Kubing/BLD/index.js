@@ -398,6 +398,10 @@ function updateColor() {
     $("#buttonsR :button").css("background", colorArr[3]);
     $("#buttonsB :button").css("background", colorArr[4]);
     $("#buttonsD :button").css("background", colorArr[5]);
+
+    localStorage.setItem("uColor",colorArr[0]);
+    localStorage.setItem("fColor",colorArr[2]);
+    localStorage.setItem("rColor",colorArr[3]);
 }
 
 function makeAlgs() {

@@ -1,0 +1,44 @@
+html {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    background: #353535;
+}
+
+header {
+    height: 10%;
+    background: #555555;
+    text-align: center;
+}
+
+#practiceContent {
+    width: 100%;
+    height: 75%;
+    background: #353535;
+}
+
+#solution {
+    text-align: center;
+    height: 15%;
+    font-size: 10vh;
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#imgU, #imgF, #imgR {
+    z-index: 2;
+}
+
+#imgUF, #imgUFR, #imgFU, #imgFUR, #imgRU, #imgRUF {
+    display: none;
+    z-index: 2;
+}
