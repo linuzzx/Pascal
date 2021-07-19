@@ -32,6 +32,12 @@ $(function () {
     $("#imgF").attr("src", "./resources/f_"+colorAsLetter(fColor)+".png");
     $("#imgR").attr("src", "./resources/r_"+colorAsLetter(rColor)+".png");
 
+    $(window).keypress(function(e) {
+        if (e.keyCode === 32 || e.keyCode === 13) {
+            showOrNext();
+        }
+    });
+
     nextPiece()
 });
 
