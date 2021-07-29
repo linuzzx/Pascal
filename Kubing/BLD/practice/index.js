@@ -25,6 +25,7 @@ let fuArr = [];
 let furArr = [];
 let rArr = [];
 let rufArr = [];
+let lastPiece = "";
 
 $(function () {
     makeArrays();
@@ -60,13 +61,15 @@ function nextPiece() {
     $("#solution").css("display", "none");
     showingSolution = false;
     resetCube();
-    const piece = pieces[Math.floor(Math.random()*pieces.length)];
-    if (piece === "") {
+    const piece = pieces[Math.floor(Math.random() * pieces.length)];
+    if (piece === "" || piece === lastPiece || piece === "UF" || piece === "FU" ||
+        piece === "UFR" || piece === "FUR" || piece === "RUF") {
         nextPiece();
     }
     else {
         currentPiece = piece;
         paintCube(piece);
+        lastPiece = piece;
     }
 }
 
