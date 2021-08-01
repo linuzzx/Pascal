@@ -10,6 +10,13 @@
     <script src="index.js"></script>
 </head>
 <body>
+<div id="newDrawingBox">
+    <div id="innerNewDrawingBox">
+        <label for="inputWidth">Width</label><input id="inputWidth" type="number" min="1" oninput="validity.valid || (value='')">
+        <label for="inputHeight">Height</label><input id="inputHeight" type="number" min="1" oninput="validity.valid || (value='')">
+        <button onclick="createNewDrawing()">Create</button>
+    </div>
+</div>
 <div id="header">
     <h1>PixelArt</h1>
     <div id="subHeader">
@@ -21,9 +28,9 @@
     <div id="menu">
         <label for="inputColor"></label><input id="inputColor" type="text" placeholder="Color">
         <button onclick="chooseColor()">Color</button>
-        <button onclick="">Draw</button>
-        <button onclick="">Erase</button>
-        <button onclick="">Fill</button>
+        <button onclick="funcDraw()">Draw</button>
+        <button onclick="funcErase()">Erase</button>
+        <button onclick="funcFill()">Fill</button>
     </div>
     <div id="canvasBoard"></div>
 </div>

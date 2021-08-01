@@ -4,31 +4,31 @@ let canvas;
 let ctx;
 let lastX, lastY;
 let X, Y;
-let pixelWidth, pixelHeight;
 let isPressed = false;
+let showingNewDrawingBox = false;
+let drawingWidth, drawingHeight;
 
 $(function () {
     func = "draw";
     color = "black";
-    const width = 25;
-    const height = 25;
+    const width = 10;
+    const height = 10;
     makeBoard(width,height);
-    if ($(window).width() / $(window).height() >= width / height) {
-        const size = $(window).height() / height;
-        $("#pixelBoard").css("height","100%");
-        $("#pixelBoard").css("width","fit-content");
-        $(".pixel").css("width",size);
-    }
-    else {
-        const size = $(window).width() / width;
-        $("#pixelBoard").css("width","100%");
-        $("#pixelBoard").css("height","fit-content");
-        $(".pixel").css("height",size);
-    }
 });
 
 function newDrawing() {
+    showingNewDrawingBox = true;
+    $("#newDrawingBox").css("display", "block");
+}
 
+function createNewDrawing() {
+    const inputWidth = $("#inputWidth");
+    const inputHeight = $("#inputHeight");
+    makeBoard($(inputWidth).val(), $(inputHeight).val());
+    $(inputWidth).val("");
+    $(inputHeight).val("");
+    $("#newDrawingBox").css("display", "none");
+    showingNewDrawingBox = false;
 }
 
 function saveDrawing() {
@@ -36,6 +36,8 @@ function saveDrawing() {
 }
 
 function makeBoard(width, height) {
+    drawingWidth = width;
+    drawingHeight = height;
     let columns = "";
     let rows = "";
     for (let w=0; w<width; w++) {
@@ -48,19 +50,43 @@ function makeBoard(width, height) {
     for (let i=0; i<height; i++) {
         out += "<div class='pixelRow' style='display: grid; grid-template-columns:" + columns + "'>";
         for (let j=0; j<width; j++) {
-            out += "<div class='pixel' onmousemove='draw(this)' onmousedown='pressDraw(this)' onmouseup='releaseDraw()'></div>";
+            out += "<div id='x"+ j + "y" + i + "' class='pixel' onmousemove='draw(this)' onmousedown='pressDraw(this)' onmouseup='releaseDraw()'></div>";
         }
         out += "</div>";
     }
     out += "</div>";
 
     $("#canvasBoard").html(out);
+
+    stylePixels(width, height);
+}
+
+function stylePixels(width, height) {
+    let size;
+    if ($(window).width() / $(window).height() >= width / height) {
+        size = $("#canvasBoard").height() / height;
+        $("#pixelBoard").css("height","100%");
+        $("#pixelBoard").css("width","fit-content");
+    }
+    else {
+        size = $("#canvasBoard").width() / width;
+        $("#pixelBoard").css("width","100%");
+        $("#pixelBoard").css("height","fit-content");
+    }
+    $(".pixel").css("width",size);
+    $(".pixel").css("height",size);
 }
 
 function draw(pixel) {
     if (isPressed) {
         if (func === "draw") {
             $(pixel).css("background", color);
+        }
+        else if (func === "erase") {
+
+        }
+        else if (func === "fill") {
+            fill(pixel);
         }
     }
 }
@@ -75,6 +101,48 @@ function releaseDraw() {
 }
 
 function chooseColor() {
-    color = $("#inputColor").val();
-    $("#inputColor").val("");
+    const inputColor = $("#inputColor");
+    color = $(inputColor).val();
+    $(inputColor).val("");
+}
+
+function fill(pixel) {
+    const x = pixel.id.split("x")[1].split("y")[0];
+    const y = pixel.id.split("x")[1].split("y")[1];
+    const col = $(pixel).css("background");
+    let array = [];
+
+    //Oppretter et int array utifra fargene
+    for (let i=0; i<drawingHeight; i++) {
+        let innerArray = [];
+        for (let j=0; j<drawingWidth; j++) {
+            const pixel = $("#x"+j+"y"+i);
+            if ($(pixel).css("background") === col) {
+                innerArray.push(1);
+            }
+            else {
+                innerArray.push(0);
+            }
+        }
+        array.push(innerArray);
+    }
+
+    floodFill(array);
+}
+
+function floodFill(array){
+    let queue = {};
+    const currentColor = 1;
+}
+
+function funcDraw() {
+    func = "draw";
+}
+
+function funcErase() {
+    func = "erase";
+}
+
+function funcFill() {
+    func = "fill";
 }
