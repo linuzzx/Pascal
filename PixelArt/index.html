@@ -19,12 +19,13 @@
 </div>
 <div id="content">
     <div id="menu">
-        <button onclick="">Color</button>
+        <label for="inputColor"></label><input id="inputColor" type="text" placeholder="Color">
+        <button onclick="chooseColor()">Color</button>
         <button onclick="">Draw</button>
         <button onclick="">Erase</button>
         <button onclick="">Fill</button>
     </div>
-    <canvas id="canvasBoard" onmousemove="draw(this)" onmousedown="pressDraw(this)" onmouseup="releaseDraw()"></canvas>
+    <div id="canvasBoard"></div>
 </div>
 </body>
 </html>

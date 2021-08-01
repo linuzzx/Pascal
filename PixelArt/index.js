@@ -10,26 +10,21 @@ let isPressed = false;
 $(function () {
     func = "draw";
     color = "black";
-    canvas = $("#canvasBoard");
-    ctx = canvas[0].getContext("2d");
-    canvas.mousemove(function(event){
-        X = event.pageX - $(this).offset().left;
-        Y = event.pageY - $(this).offset().top;
-    });
-
-    canvas.attr("width", canvas.width());
-    canvas.attr("height", canvas.height());
-    ctx.fillStyle = color;
-
-    /*pixelWidth = canvas.width() / 10;
-    pixelHeight = canvas.height() / 10;
-
-    for (let x=0; x<canvas.width(); x+= pixelWidth) {
-        ctx.fillRect(x,0, 1,canvas.height());
+    const width = 25;
+    const height = 25;
+    makeBoard(width,height);
+    if ($(window).width() / $(window).height() >= width / height) {
+        const size = $(window).height() / height;
+        $("#pixelBoard").css("height","100%");
+        $("#pixelBoard").css("width","fit-content");
+        $(".pixel").css("width",size);
     }
-    for (let y=0; y<canvas.height(); y+= pixelHeight) {
-        ctx.fillRect(0, y, canvas.width(),1);
-    }*/
+    else {
+        const size = $(window).width() / width;
+        $("#pixelBoard").css("width","100%");
+        $("#pixelBoard").css("height","fit-content");
+        $(".pixel").css("height",size);
+    }
 });
 
 function newDrawing() {
@@ -40,24 +35,46 @@ function saveDrawing() {
 
 }
 
-function draw() {
+function makeBoard(width, height) {
+    let columns = "";
+    let rows = "";
+    for (let w=0; w<width; w++) {
+        columns += " 1fr";
+    }
+    for (let h=0; h<height; h++) {
+        rows += " 1fr";
+    }
+    let out = "<div id='pixelBoard' style='display: grid; grid-template-rows:" + rows + "'>";
+    for (let i=0; i<height; i++) {
+        out += "<div class='pixelRow' style='display: grid; grid-template-columns:" + columns + "'>";
+        for (let j=0; j<width; j++) {
+            out += "<div class='pixel' onmousemove='draw(this)' onmousedown='pressDraw(this)' onmouseup='releaseDraw()'></div>";
+        }
+        out += "</div>";
+    }
+    out += "</div>";
+
+    $("#canvasBoard").html(out);
+}
+
+function draw(pixel) {
     if (isPressed) {
-        let w = 5;
-        let h = 5;
         if (func === "draw") {
-            ctx.fillStyle = color;
-            ctx.fillRect(X-w/2, Y-h/2, w, h);
-            lastX = X;
-            lastY = Y;
+            $(pixel).css("background", color);
         }
     }
 }
 
-function pressDraw() {
+function pressDraw(pixel) {
     isPressed = true;
-    draw();
+    draw(pixel);
 }
 
 function releaseDraw() {
     isPressed = false;
+}
+
+function chooseColor() {
+    color = $("#inputColor").val();
+    $("#inputColor").val("");
 }

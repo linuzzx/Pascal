@@ -37,13 +37,27 @@ body {
 }
 
 #canvasBoard {
-    background: #f1f1f1;
     margin: auto;
     height: 90%;
     width: 90%;
 }
 
+#pixelBoard {
+    background: #f1f1f1;
+    margin: auto;
+}
+
 #menu button {
     margin: 5% 5% 0 5%;
     width: 90%;
+}
+
+#inputColor {
+    margin: 5% 5% 0 5%;
+    width: 90%;
+}
+
+.pixel {
+    height: 100%;
+    border: solid black 1px;
 }
