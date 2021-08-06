@@ -6,6 +6,7 @@ let X, Y;
 let isPressed = false;
 let showingNewDrawingBox = false;
 let drawingWidth, drawingHeight;
+let cells;
 
 $(function () {
     func = "draw";
@@ -24,18 +25,34 @@ function createNewDrawing() {
     const inputWidth = $("#inputWidth");
     const inputHeight = $("#inputHeight");
     makeBoard($(inputWidth).val(), $(inputHeight).val());
+
     $(inputWidth).val("");
     $(inputHeight).val("");
     $("#newDrawingBox").css("display", "none");
     showingNewDrawingBox = false;
-
-    /*$("#canvasDrawing").attr("width", inputWidth);
-    $("#canvasDrawing").attr("height", inputHeight);*/
 }
 
 function saveDrawing() {
-    const canvasDrawing = $("#canvasDrawing");
-    window.location.href=canvasDrawing.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    const canvasDrawing = document.createElement("canvas");
+    canvasDrawing.setAttribute("width", drawingWidth);
+    canvasDrawing.setAttribute("height", drawingHeight);
+    const ctx = canvasDrawing.getContext("2d");
+    cells = makeCellArray();
+
+    for (let y=0; y<drawingHeight; y++) {
+        for (let x=0; x<drawingWidth; x++) {
+            ctx.fillStyle = $(cells[y][x]).css("background-color");
+            console.log($(cells[y][x]).css("background-color"))
+            ctx.fillRect(x, y, 1, 1);
+        }
+    }
+
+    const a = document.createElement("a");
+    document.body.appendChild(a);
+    a.href = canvasDrawing.toDataURL();
+    a.download = "image.png";
+    a.click();
+    document.body.removeChild(a);
 }
 
 function makeBoard(width, height) {
@@ -86,7 +103,7 @@ function draw(pixel) {
             $(pixel).css("background", color);
         }
         else if (func === "erase") {
-
+            $(pixel).css("background", "transparent");
         }
         else if (func === "fill") {
             fill(pixel);
@@ -111,22 +128,7 @@ function fill(pixel) {
     const x = pixel.id.split("x")[1].split("y")[0];
     const y = pixel.id.split("x")[1].split("y")[1];
     const col = $(pixel).css("background");
-    let array = [];
-
-    //Oppretter et int array utifra fargene
-    for (let i=0; i<drawingHeight; i++) {
-        let innerArray = [];
-        for (let j=0; j<drawingWidth; j++) {
-            const pixel = $("#x"+j+"y"+i);
-            if ($(pixel).css("background") === col) {
-                innerArray.push(1);
-            }
-            else {
-                innerArray.push(0);
-            }
-        }
-        array.push(innerArray);
-    }
+    let array = makeCellArray();
 
     floodFill(array);
 }
@@ -146,4 +148,17 @@ function funcErase() {
 
 function funcFill() {
     func = "fill";
+}
+
+function makeCellArray() {
+    let array = [];
+    for (let i=0; i<drawingHeight; i++) {
+        let innerArray = [];
+        for (let j=0; j<drawingWidth; j++) {
+            const pixel = $("#x"+j+"y"+i);
+            innerArray.push(pixel);
+        }
+        array.push(innerArray);
+    }
+    return array;
 }
