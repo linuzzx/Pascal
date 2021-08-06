@@ -26,8 +26,7 @@
 </div>
 <div id="content">
     <div id="menu">
-        <label for="inputColor"></label><input id="inputColor" type="text" placeholder="Color">
-        <button onclick="chooseColor()">Color</button>
+        <label for="inputColor"></label><input id="inputColor" type="color" value="#000000" onchange="chooseColor(this.value)">
         <button onclick="funcDraw()">Draw</button>
         <button onclick="funcErase()">Erase</button>
         <button onclick="funcFill()">Fill</button>

@@ -1,6 +1,5 @@
 let func;
 let color;
-let canvas;
 let ctx;
 let lastX, lastY;
 let X, Y;
@@ -29,10 +28,14 @@ function createNewDrawing() {
     $(inputHeight).val("");
     $("#newDrawingBox").css("display", "none");
     showingNewDrawingBox = false;
+
+    /*$("#canvasDrawing").attr("width", inputWidth);
+    $("#canvasDrawing").attr("height", inputHeight);*/
 }
 
 function saveDrawing() {
-
+    const canvasDrawing = $("#canvasDrawing");
+    window.location.href=canvasDrawing.toDataURL("image/png").replace("image/png", "image/octet-stream");
 }
 
 function makeBoard(width, height) {
@@ -100,10 +103,8 @@ function releaseDraw() {
     isPressed = false;
 }
 
-function chooseColor() {
-    const inputColor = $("#inputColor");
-    color = $(inputColor).val();
-    $(inputColor).val("");
+function chooseColor(col) {
+    color = col;
 }
 
 function fill(pixel) {
