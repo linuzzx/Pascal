@@ -5,12 +5,15 @@ let lastX, lastY;
 let X, Y;
 let isPressed = false;
 let showingNewDrawingBox = false;
+let showingSaveBox = false;
 let drawingWidth, drawingHeight;
 let cells;
+const activeButtonColor = "#939DA3";
 
 $(function () {
     func = "draw";
     color = "black";
+    $("#btnDraw").css("background", activeButtonColor);
     const width = 10;
     const height = 10;
     makeBoard(width,height);
@@ -46,13 +49,28 @@ function saveDrawing() {
             ctx.fillRect(x, y, 1, 1);
         }
     }
+    let filename = "";
+    if ($("#inputFileName").val().length > 0) {
+        filename = $("#inputFileName").val();
+    }
+    else {
+        filename = "image";
+    }
 
     const a = document.createElement("a");
     document.body.appendChild(a);
     a.href = canvasDrawing.toDataURL();
-    a.download = "image.png";
+    a.download = filename + ".png";
     a.click();
     document.body.removeChild(a);
+
+    showingSaveBox = false;
+    $("#saveBox").css("display", "none");
+}
+
+function openSaveBox() {
+    showingSaveBox = true;
+    $("#saveBox").css("display", "block");
 }
 
 function makeBoard(width, height) {
@@ -140,14 +158,20 @@ function floodFill(array){
 
 function funcDraw() {
     func = "draw";
+    $(".funcButtons").css("background", "#EFEFEF");
+    $("#btnDraw").css("background", activeButtonColor);
 }
 
 function funcErase() {
     func = "erase";
+    $(".funcButtons").css("background", "#EFEFEF");
+    $("#btnErase").css("background", activeButtonColor);
 }
 
 function funcFill() {
     func = "fill";
+    $(".funcButtons").css("background", "#EFEFEF");
+    $("#btnFill").css("background", activeButtonColor);
 }
 
 function makeCellArray() {

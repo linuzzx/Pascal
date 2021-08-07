@@ -17,19 +17,25 @@
         <button onclick="createNewDrawing()">Create</button>
     </div>
 </div>
+<div id="saveBox">
+    <div id="innerSaveBox">
+        <label for="inputFileName"></label><input id="inputFileName" type="text" placeholder="Filename">
+        <button onclick="saveDrawing()">Save</button>
+    </div>
+</div>
 <div id="header">
     <h1>PixelArt</h1>
     <div id="subHeader">
         <button onclick="newDrawing()">New</button>
-        <button onclick="saveDrawing()">Save</button>
+        <button onclick="openSaveBox()">Save</button>
     </div>
 </div>
 <div id="content">
     <div id="menu">
         <label for="inputColor"></label><input id="inputColor" type="color" value="#000000" onchange="chooseColor(this.value)">
-        <button onclick="funcDraw()">Draw</button>
-        <button onclick="funcErase()">Erase</button>
-        <button onclick="funcFill()" disabled>Fill</button>
+        <button class="funcButtons" id="btnDraw" onclick="funcDraw()">Draw</button>
+        <button class="funcButtons" id="btnErase" onclick="funcErase()">Erase</button>
+        <button class="funcButtons" id="btnFill" onclick="funcFill()" disabled>Fill</button>
     </div>
     <div id="canvasBoard"></div>
 </div>
