@@ -137,6 +137,7 @@ function draw(pixel) {
         }
         else if (func === "fill") {
             fill(pixel);
+            isPressed = false;
         }
     }
 }
@@ -158,7 +159,6 @@ function fill(pixel) {
     const x = pixel.id.split("x")[1].split("y")[0];
     const y = pixel.id.split("x")[1].split("y")[1];
     const currentColor = $(pixel).css("background-color");
-    //let array = makeCellArray();
 
     let queue = [];
     let arr = [];
@@ -175,12 +175,12 @@ function fill(pixel) {
         }
         arr.push(newArr);
     }
+    console.log(arr)
 
     let posX = parseInt(x);
     let posY = parseInt(y);
     queue.push(new Position(posX, posY));
 
-    console.log(arr)
     while (queue.length !== 0) {
         posX = parseInt(queue[0].x);
         posY = parseInt(queue[0].y);
@@ -188,27 +188,24 @@ function fill(pixel) {
         queue.shift();
 
         if (0 <= posX && posX < drawingWidth && 0 <= posY && posY < drawingHeight) {
-            if (arr[posX][posY] === 1) {
-                arr[posX][posY] = 2;
+            if (arr[posY][posX] === 1) {
+                arr[posY][posX] = 2;
 
                 queue.push(new Position(posX-1, posY));
                 queue.push(new Position(posX+1, posY));
                 queue.push(new Position(posX, posY-1));
                 queue.push(new Position(posX, posY+1));
-
-                console.log(queue)
             }
         }
     }
 
-    for (let i=0; i<arr.length; i++) {
-        for (let j=0; j<arr[i].length; j++) {
-            if (arr[j][i] === 2) {
-                $("#x"+i+"y"+j).css("background-color", color);
+    for (let i=0; i<drawingHeight; i++) {
+        for (let j=0; j<drawingWidth; j++) {
+            if (arr[i][j] === 2) {
+                $("#x"+j+"y"+i).css("background-color", color);
             }
         }
     }
-    console.log(arr)
 }
 
 function funcDraw() {
