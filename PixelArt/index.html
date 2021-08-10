@@ -12,9 +12,12 @@
 <body>
 <div id="newDrawingBox">
     <div id="innerNewDrawingBox">
-        <label for="inputWidth">Width</label><input id="inputWidth" type="number" min="1" oninput="validity.valid || (value='')">
-        <label for="inputHeight">Height</label><input id="inputHeight" type="number" min="1" oninput="validity.valid || (value='')">
+        <label for="inputWidth">Width</label><input id="inputWidth" type="number" min="1" oninput="validity.valid || (value='1')" value="1">
+        <label for="inputHeight">Height</label><input id="inputHeight" type="number" min="1" oninput="validity.valid || (value='1')" value="1">
         <button onclick="createNewDrawing()">Create</button>
+        <div>
+            <button onclick="closeNewDrawing()">Cancel</button>
+        </div>
     </div>
 </div>
 <div id="saveBox">

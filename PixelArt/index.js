@@ -34,8 +34,15 @@ function createNewDrawing() {
     const inputHeight = $("#inputHeight");
     makeBoard($(inputWidth).val(), $(inputHeight).val());
 
-    $(inputWidth).val("");
-    $(inputHeight).val("");
+    closeNewDrawing();
+}
+
+function closeNewDrawing() {
+    const inputWidth = $("#inputWidth");
+    const inputHeight = $("#inputHeight");
+
+    $(inputWidth).val("1");
+    $(inputHeight).val("1");
     $("#newDrawingBox").css("display", "none");
     showingNewDrawingBox = false;
 }
