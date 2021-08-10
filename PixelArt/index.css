@@ -83,7 +83,7 @@ body {
 }
 
 #pixelBoard {
-    background: #f1f1f1;
+    background: url("background.png") repeat;
     margin: auto;
 }
 
