@@ -19,6 +19,11 @@ $(function () {
     makeBoard(width,height);
 });
 
+function Position(x, y) {
+    this.x = x;
+    this.y = y;
+}
+
 function newDrawing() {
     showingNewDrawingBox = true;
     $("#newDrawingBox").css("display", "block");
@@ -145,15 +150,58 @@ function chooseColor(col) {
 function fill(pixel) {
     const x = pixel.id.split("x")[1].split("y")[0];
     const y = pixel.id.split("x")[1].split("y")[1];
-    const col = $(pixel).css("background");
-    let array = makeCellArray();
+    const currentColor = $(pixel).css("background-color");
+    //let array = makeCellArray();
 
-    floodFill(array);
-}
+    let queue = [];
+    let arr = [];
 
-function floodFill(array){
-    let queue = {};
-    const currentColor = 1;
+    for (let i=0; i<drawingHeight; i++) {
+        let newArr = [];
+        for (let j=0; j<drawingWidth; j++) {
+            if ($("#x"+j+"y"+i).css("background-color") === currentColor) {
+                newArr.push(1);
+            }
+            else {
+                newArr.push(0);
+            }
+        }
+        arr.push(newArr);
+    }
+
+    let posX = parseInt(x);
+    let posY = parseInt(y);
+    queue.push(new Position(posX, posY));
+
+    console.log(arr)
+    while (queue.length !== 0) {
+        posX = parseInt(queue[0].x);
+        posY = parseInt(queue[0].y);
+
+        queue.shift();
+
+        if (0 <= posX && posX < drawingWidth && 0 <= posY && posY < drawingHeight) {
+            if (arr[posX][posY] === 1) {
+                arr[posX][posY] = 2;
+
+                queue.push(new Position(posX-1, posY));
+                queue.push(new Position(posX+1, posY));
+                queue.push(new Position(posX, posY-1));
+                queue.push(new Position(posX, posY+1));
+
+                console.log(queue)
+            }
+        }
+    }
+
+    for (let i=0; i<arr.length; i++) {
+        for (let j=0; j<arr[i].length; j++) {
+            if (arr[j][i] === 2) {
+                $("#x"+i+"y"+j).css("background-color", color);
+            }
+        }
+    }
+    console.log(arr)
 }
 
 function funcDraw() {

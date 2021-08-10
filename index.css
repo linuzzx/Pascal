@@ -12,8 +12,37 @@ body {
     padding: 0;
 }
 
-iframe {
-    border: none;
+#header {
+    width: 100%;
+    display: grid;
+    text-align: center;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#header a {
+    margin: 0;
+    color: #000000;
+    font-weight: bold;
+    font-size: xxx-large;
+}
+
+#header a:link {
+    color: #CCCCCC;
+}
+
+/* visited link */
+#header a:visited {
+    color: #CCCCCC;
+}
+
+/* mouse over link */
+#header a:hover {
+    color: #888888;
+}
+
+/* selected link */
+#header a:active {
+    color: #AFB1B3;
 }
 
 #content {
@@ -48,4 +77,16 @@ a:active {
     box-shadow: 0 0 5px 2px #888888;
     padding: .5vw;
     margin: 0 1vw;
+}
+
+#divMe {
+    display: block;
+}
+
+#divMyProjects {
+    display: none;
+}
+
+#divOther {
+    display: none;
 }
