@@ -17,6 +17,15 @@ $(function () {
     const width = 10;
     const height = 10;
     makeBoard(width,height);
+
+    $("#content").bind('mousewheel', function(event) {
+        if (event.originalEvent.wheelDelta >= 0) {
+            zoomIn();
+        }
+        else {
+            zoomOut();
+        }
+    });
 });
 
 function Position(x, y) {
@@ -237,4 +246,13 @@ function makeCellArray() {
         array.push(innerArray);
     }
     return array;
+}
+
+function zoomIn() {
+    console.log("Zoomed in")
+}
+
+function zoomOut() {
+    console.log("Zoomed out")
+
 }
