@@ -30,6 +30,7 @@
     <h1>PixelArt</h1>
     <div id="subHeader">
         <button onclick="newDrawing()">New</button>
+        <input type="file" onchange="openDrawing(this.files)" accept="image/*">
         <button onclick="openSaveBox()">Save</button>
     </div>
 </div>
@@ -43,4 +44,5 @@
     <div id="canvasBoard"></div>
 </div>
 </body>
+<img id="fileImage" style="display: none">
 </html>
