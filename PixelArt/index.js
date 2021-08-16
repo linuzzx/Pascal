@@ -9,6 +9,7 @@ let showingSaveBox = false;
 let drawingWidth, drawingHeight;
 let cells;
 const activeButtonColor = "#939DA3";
+let buttonColors = ["black", "grey", "white", "red", "orange", "yellow", "green", "blue", "purple", "pink"];
 
 $(function () {
     func = "draw";
@@ -16,9 +17,9 @@ $(function () {
     $("#btnDraw").css("background", activeButtonColor);
     const width = 10;
     const height = 10;
-    makeBoard(width,height);
+    makeBoard(width, height);
 
-    $("#content").bind('mousewheel', function(event) {
+    $("#content").bind('mousewheel', function (event) {
         if (event.originalEvent.wheelDelta >= 0) {
             zoomIn();
         }
@@ -26,6 +27,14 @@ $(function () {
             zoomOut();
         }
     });
+
+    if (localStorage.getItem("buttonColors") !== null) {
+        buttonColors = localStorage.getItem("buttonColors").split(";");
+    }
+
+    setButtonColors();
+
+    $("#inputColor").val("#000000");
 });
 
 function Position(x, y) {
@@ -60,7 +69,7 @@ function openDrawing(files) {
     const image = document.getElementById("fileImage");
     image.src = URL.createObjectURL(event.target.files[0]);
 
-    setTimeout(function() {
+    setTimeout(function () {
         makeBoard(image.width, image.height);
 
         var canvas = document.createElement('canvas');
@@ -72,17 +81,19 @@ function openDrawing(files) {
 
         const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
         console.log(imageData)
-        for (let i=0; i<image.height; i++) {
-            for (let j=0; j<image.width; j++) {
-                const index = (i*imageData.width + j) * 4;
+        for (let i = 0; i < image.height; i++) {
+            for (let j = 0; j < image.width; j++) {
+                const index = (i * imageData.width + j) * 4;
                 const red = imageData.data[index];
                 const green = imageData.data[index + 1];
                 const blue = imageData.data[index + 2];
                 const alpha = imageData.data[index + 3];
-                $("#x"+j+"y"+i).css("background", 'rgba('+red+','+green+','+blue+','+alpha+')');
+                $("#x" + j + "y" + i).css("background", 'rgba(' + red + ',' + green + ',' + blue + ',' + alpha + ')');
             }
         }
     }, 500);
+
+    files = [];
 }
 
 function saveDrawing() {
@@ -92,8 +103,8 @@ function saveDrawing() {
     const ctx = canvasDrawing.getContext("2d");
     cells = makeCellArray();
 
-    for (let y=0; y<drawingHeight; y++) {
-        for (let x=0; x<drawingWidth; x++) {
+    for (let y = 0; y < drawingHeight; y++) {
+        for (let x = 0; x < drawingWidth; x++) {
             ctx.fillStyle = $(cells[y][x]).css("background-color");
             console.log($(cells[y][x]).css("background-color"))
             ctx.fillRect(x, y, 1, 1);
@@ -128,17 +139,17 @@ function makeBoard(width, height) {
     drawingHeight = height;
     let columns = "";
     let rows = "";
-    for (let w=0; w<width; w++) {
+    for (let w = 0; w < width; w++) {
         columns += " 1fr";
     }
-    for (let h=0; h<height; h++) {
+    for (let h = 0; h < height; h++) {
         rows += " 1fr";
     }
     let out = "<div id='pixelBoard' style='display: grid; grid-template-rows:" + rows + "'>";
-    for (let i=0; i<height; i++) {
+    for (let i = 0; i < height; i++) {
         out += "<div class='pixelRow' style='display: grid; grid-template-columns:" + columns + "'>";
-        for (let j=0; j<width; j++) {
-            out += "<div id='x"+ j + "y" + i + "' class='pixel' onmousemove='draw(this)' onmousedown='pressDraw(this)' onmouseup='releaseDraw()'></div>";
+        for (let j = 0; j < width; j++) {
+            out += "<div id='x" + j + "y" + i + "' class='pixel' onmousemove='draw(this)' onmousedown='pressDraw(this)' onmouseup='releaseDraw()'></div>";
         }
         out += "</div>";
     }
@@ -153,16 +164,16 @@ function stylePixels(width, height) {
     let size;
     if ($(window).width() / $(window).height() >= width / height) {
         size = $("#canvasBoard").height() / height;
-        $("#pixelBoard").css("height","100%");
-        $("#pixelBoard").css("width","fit-content");
+        $("#pixelBoard").css("height", "100%");
+        $("#pixelBoard").css("width", "fit-content");
     }
     else {
         size = $("#canvasBoard").width() / width;
-        $("#pixelBoard").css("width","100%");
-        $("#pixelBoard").css("height","fit-content");
+        $("#pixelBoard").css("width", "100%");
+        $("#pixelBoard").css("height", "fit-content");
     }
-    $(".pixel").css("width",size);
-    $(".pixel").css("height",size);
+    $(".pixel").css("width", size);
+    $(".pixel").css("height", size);
 }
 
 function draw(pixel) {
@@ -191,6 +202,41 @@ function releaseDraw() {
 
 function chooseColor(col) {
     color = col;
+    //document.getElementById("inputColor").value = col;
+    $("#inputColor").val(val);
+}
+
+function setButtonColors() {
+    $("#colorButton1").css("background", buttonColors[0]);
+    $("#colorButton1").css("color", buttonColors[0]);
+    $("#colorButton1").val(buttonColors[0]);
+    $("#colorButton2").css("background", buttonColors[1]);
+    $("#colorButton2").css("color", buttonColors[1]);
+    $("#colorButton2").val(buttonColors[1]);
+    $("#colorButton3").css("background", buttonColors[2]);
+    $("#colorButton3").css("color", buttonColors[2]);
+    $("#colorButton3").val(buttonColors[2]);
+    $("#colorButton4").css("background", buttonColors[3]);
+    $("#colorButton4").css("color", buttonColors[3]);
+    $("#colorButton4").val(buttonColors[3]);
+    $("#colorButton5").css("background", buttonColors[4]);
+    $("#colorButton5").css("color", buttonColors[4]);
+    $("#colorButton5").val(buttonColors[4]);
+    $("#colorButton6").css("background", buttonColors[5]);
+    $("#colorButton6").css("color", buttonColors[5]);
+    $("#colorButton6").val(buttonColors[5]);
+    $("#colorButton7").css("background", buttonColors[6]);
+    $("#colorButton7").css("color", buttonColors[6]);
+    $("#colorButton7").val(buttonColors[6]);
+    $("#colorButton8").css("background", buttonColors[7]);
+    $("#colorButton8").css("color", buttonColors[7]);
+    $("#colorButton8").val(buttonColors[7]);
+    $("#colorButton9").css("background", buttonColors[8]);
+    $("#colorButton9").css("color", buttonColors[8]);
+    $("#colorButton9").val(buttonColors[8]);
+    $("#colorButton10").css("background", buttonColors[9]);
+    $("#colorButton10").css("color", buttonColors[9]);
+    $("#colorButton10").val(buttonColors[9]);
 }
 
 function fill(pixel) {
@@ -201,10 +247,10 @@ function fill(pixel) {
     let queue = [];
     let arr = [];
 
-    for (let i=0; i<drawingHeight; i++) {
+    for (let i = 0; i < drawingHeight; i++) {
         let newArr = [];
-        for (let j=0; j<drawingWidth; j++) {
-            if ($("#x"+j+"y"+i).css("background-color") === currentColor) {
+        for (let j = 0; j < drawingWidth; j++) {
+            if ($("#x" + j + "y" + i).css("background-color") === currentColor) {
                 newArr.push(1);
             }
             else {
@@ -229,18 +275,18 @@ function fill(pixel) {
             if (arr[posY][posX] === 1) {
                 arr[posY][posX] = 2;
 
-                queue.push(new Position(posX-1, posY));
-                queue.push(new Position(posX+1, posY));
-                queue.push(new Position(posX, posY-1));
-                queue.push(new Position(posX, posY+1));
+                queue.push(new Position(posX - 1, posY));
+                queue.push(new Position(posX + 1, posY));
+                queue.push(new Position(posX, posY - 1));
+                queue.push(new Position(posX, posY + 1));
             }
         }
     }
 
-    for (let i=0; i<drawingHeight; i++) {
-        for (let j=0; j<drawingWidth; j++) {
+    for (let i = 0; i < drawingHeight; i++) {
+        for (let j = 0; j < drawingWidth; j++) {
             if (arr[i][j] === 2) {
-                $("#x"+j+"y"+i).css("background-color", color);
+                $("#x" + j + "y" + i).css("background-color", color);
             }
         }
     }
@@ -266,10 +312,10 @@ function funcFill() {
 
 function makeCellArray() {
     let array = [];
-    for (let i=0; i<drawingHeight; i++) {
+    for (let i = 0; i < drawingHeight; i++) {
         let innerArray = [];
-        for (let j=0; j<drawingWidth; j++) {
-            const pixel = $("#x"+j+"y"+i);
+        for (let j = 0; j < drawingWidth; j++) {
+            const pixel = $("#x" + j + "y" + i);
             innerArray.push(pixel);
         }
         array.push(innerArray);

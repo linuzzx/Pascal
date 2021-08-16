@@ -87,7 +87,17 @@ body {
     margin: auto;
 }
 
-#menu button {
+.funcButtons {
+    margin: 5% 5% 0 5%;
+    width: 90%;
+}
+
+#prevColors {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.colorButtons {
     margin: 5% 5% 0 5%;
     width: 90%;
 }
