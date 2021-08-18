@@ -15,8 +15,8 @@ $(function () {
     func = "draw";
     color = "black";
     $("#btnDraw").css("background", activeButtonColor);
-    const width = 10;
-    const height = 10;
+    const width = 16;
+    const height = 16;
     makeBoard(width, height);
 
     $("#content").bind('mousewheel', function (event) {
@@ -202,7 +202,6 @@ function releaseDraw() {
 
 function chooseColor(col) {
     color = col;
-    //document.getElementById("inputColor").value = col;
     $("#inputColor").val(val);
 }
 
