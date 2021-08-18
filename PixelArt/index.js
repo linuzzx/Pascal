@@ -59,8 +59,8 @@ function closeNewDrawing() {
     const inputWidth = $("#inputWidth");
     const inputHeight = $("#inputHeight");
 
-    $(inputWidth).val("1");
-    $(inputHeight).val("1");
+    $(inputWidth).val("16");
+    $(inputHeight).val("16");
     $("#newDrawingBox").css("display", "none");
     showingNewDrawingBox = false;
 }
