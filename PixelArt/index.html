@@ -38,7 +38,10 @@
         <div id="subHeader">
             <button onclick="newDrawing()">New</button>
             <button onclick="openSaveBox()">Save</button>
-            <input type="file" onchange="openDrawing(this.files)" accept="image/*">
+            <label for="fileInput" class="custom-file-upload">
+                <i class="fa fa-cloud-upload"></i> Custom Upload
+            </label>
+            <input id="fileInput" type="file" onchange="openDrawing(this.files)" accept="image/*" style="color: #555555;">
         </div>
     </div>
     <div id="content">

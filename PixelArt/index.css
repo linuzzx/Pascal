@@ -65,6 +65,16 @@ body {
     background: #606060;
 }
 
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    background: #606060;
+    box-shadow: 0 0 0 1px inset black;
+    padding: 3px;
+    cursor: pointer;
+}
+
 #content {
     height: 100%;
     display: grid;

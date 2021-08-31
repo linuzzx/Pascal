@@ -93,7 +93,7 @@ function openDrawing(files) {
         }
     }, 500);
 
-    files = [];
+    $("#fileInput").replaceWith("<input id='fileInput' type='file' onchange='openDrawing(this.files)' accept='image/*'>");
 }
 
 function saveDrawing() {
