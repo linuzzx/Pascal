@@ -1,6 +1,9 @@
 $(function() {
     listCubeTypes();
+    drawCube("");
 })
+
+let url = "/?";
 
 const cubeTypes = ["3x3", "2x2", "4x4", "Square-1"]; //["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx","Pyraminx", "Skewb", "Square-1"];
 let setupArray = [];
@@ -22,7 +25,14 @@ function listCubeTypes() {
 }
 
 function updateArrays() {
-    $("#allMoves").html(getMoves("#taSetup") + " " + getMoves("#taMoves"));
+    const setup = getMoves("#taSetup");
+    const moves = getMoves("#taMoves");
+
+    //updateURL();
+
+    drawCube(setup+" "+moves);
+
+    //$("#allMoves").html(setup + " " + moves);
 }
 
 function getMoves(moves) {
@@ -42,4 +52,26 @@ function getMoves(moves) {
 
 function checkEmpty(move) {
     return move !== "";
+}
+
+function updateURL() {
+    const rawSetup = $("#taSetup").val();
+    const rawMoves = $("#taMoves").val();
+    let urlExtra = "";
+
+    // Må definere mellomrom, ', //, og ny linje
+    const space = "_";
+    const inverse = "-";
+    const slash = "%2F";
+    const newLine = "%0A";
+    if (rawSetup !== "") {
+        urlExtra += "setup="+rawSetup;
+        if (rawMoves !== "") {
+            urlExtra += "&moves="+rawMoves;
+        }
+    }
+    else if (rawMoves !== "") {
+        urlExtra += "moves="+rawMoves;
+    }
+    console.log(url+urlExtra);
 }
