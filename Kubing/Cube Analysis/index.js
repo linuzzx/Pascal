@@ -22,34 +22,22 @@ function listCubeTypes() {
 }
 
 function updateArrays() {
-    getSetup();
-    getMoves();
+    $("#allMoves").html(getMoves("#taSetup") + " " + getMoves("#taMoves"));
 }
 
-function getSetup() {
+function getMoves(moves) {
     let strSetup = "";
-    const lines = $("#taSetup").val().split("\n");
+    let arrSetup = [];
+    const lines = $(moves).val().split("\n");
     for (let line of lines) {
-        strSetup += line.split("//")[0];
+        arrSetup.push(line.split("//")[0]);
     }
 
-    const arr = strSetup.split(" ").filter(checkEmpty);
-    console.log("Setup: "+arr);
-
-    return arr;
-}
-
-function getMoves() {
-    let strSetup = "";
-    const lines = $("#taMoves").val().split("\n");
-    for (let line of lines) {
-        strSetup += line.split("//")[0];
-    }
+    strSetup = arrSetup.join(" ");
 
     const arr = strSetup.split(" ").filter(checkEmpty);
-    console.log("Moves: "+arr);
 
-    return arr;
+    return arr.join(" ");
 }
 
 function checkEmpty(move) {

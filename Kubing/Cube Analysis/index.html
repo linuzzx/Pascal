@@ -13,13 +13,14 @@
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
-        <div id="cubeDisplay" onclick="updateArrays()">
+        <div id="cubeDisplay">
+            <h1 id="allMoves"></h1>
             <canvas id="cubeCanvas" width="600" height="450" style="margin: auto;"></canvas>
         </div>
         <div id="analysisDiv">
             <textarea type="text" id="taTitle" placeholder="Title" rows="1"></textarea>
-            <textarea type="text" id="taSetup" placeholder="Setup" rows="2"></textarea>
-            <textarea type="text" id="taMoves" placeholder="Moves" rows="8"></textarea>
+            <textarea type="text" id="taSetup" placeholder="Setup" rows="2" onkeyup="updateArrays()"></textarea>
+            <textarea type="text" id="taMoves" placeholder="Moves" rows="8" onkeyup="updateArrays()"></textarea>
             <div id="tools">
                 <select id="selectCube"></select>
             </div>
