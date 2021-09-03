@@ -612,9 +612,3 @@ function updateCube() {
         }
     }
 }
-
-function getTPS() {
-    // R, L, U, D, F, B = 1
-    // M, S, E = 2
-    // x, y, z = 0
-}
