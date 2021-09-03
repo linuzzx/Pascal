@@ -2,6 +2,8 @@ const c = document.getElementById("cubeCanvas");
 const ctx = c.getContext("2d");
 let cubeState = [];
 let drawScrambleArray = [];
+let displayWidth = $("#cubeDisplay").width();
+let size = Math.floor(displayWidth / 150);
 
 let r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
 let l1 = "orange", l2 = "orange", l3 = "orange", l4 = "orange", l5 = "orange", l6 = "orange", l7 = "orange", l8 = "orange", l9 = "orange", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
@@ -21,47 +23,47 @@ function drawCube(allMoves) {
     d1 = "yellow", d2 = "yellow", d3 = "yellow", d4 = "yellow", d5 = "yellow", d6 = "yellow", d7 = "yellow", d8 = "yellow", d9 = "yellow";
 
     ctx.fillStyle = "black";
-    ctx.fillRect(30, 0, 31, 31);
-    ctx.fillRect(0, 30, 31, 31);
-    ctx.fillRect(30, 30, 31, 31);
-    ctx.fillRect(60, 30, 31, 31);
-    ctx.fillRect(90, 30, 31, 31);
-    ctx.fillRect(30, 60, 31, 31);
+    ctx.fillRect(30*size, 0, 31*size, 31*size);
+    ctx.fillRect(0, 30*size, 31*size, 31*size);
+    ctx.fillRect(30*size, 30*size, 31*size, 31*size);
+    ctx.fillRect(60*size, 30*size, 31*size, 31*size);
+    ctx.fillRect(90*size, 30*size, 31*size, 31*size);
+    ctx.fillRect(30*size, 60*size, 31*size, 31*size);
 
     for (var i = 31; i < 61; i += 10) {
         for (var j = 1; j < 31; j += 10) {
             ctx.fillStyle = "white";
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
         }
     }
     for (var i = 1; i < 31; i += 10) {
         for (var j = 31; j < 61; j += 10) {
             ctx.fillStyle = "orange";
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
         }
     }
     for (var i = 31; i < 61; i += 10) {
         for (var j = 31; j < 61; j += 10) {
             ctx.fillStyle = "green";
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
         }
     }
     for (var i = 61; i < 91; i += 10) {
         for (var j = 31; j < 61; j += 10) {
             ctx.fillStyle = "red";
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
         }
     }
     for (var i = 91; i < 121; i += 10) {
         for (var j = 31; j < 61; j += 10) {
             ctx.fillStyle = "blue";
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
         }
     }
     for (var i = 31; i < 61; i += 10) {
         for (var j = 61; j < 91; j += 10) {
             ctx.fillStyle = "yellow";
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
         }
     }
 
@@ -590,42 +592,42 @@ function updateCube() {
     for (var i = 31; i < 61; i += 10) {
         for (var j = 1; j < 31; j += 10) {
             ctx.fillStyle = cubeState[x];
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
             x++;
         }
     }
     for (var i = 1; i < 31; i += 10) {
         for (var j = 31; j < 61; j += 10) {
             ctx.fillStyle = cubeState[x];
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
             x++;
         }
     }
     for (var i = 31; i < 61; i += 10) {
         for (var j = 31; j < 61; j += 10) {
             ctx.fillStyle = cubeState[x];
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
             x++;
         }
     }
     for (var i = 61; i < 91; i += 10) {
         for (var j = 31; j < 61; j += 10) {
             ctx.fillStyle = cubeState[x];
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
             x++;
         }
     }
     for (var i = 91; i < 121; i += 10) {
         for (var j = 31; j < 61; j += 10) {
             ctx.fillStyle = cubeState[x];
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
             x++;
         }
     }
     for (var i = 31; i < 61; i += 10) {
         for (var j = 61; j < 91; j += 10) {
             ctx.fillStyle = cubeState[x];
-            ctx.fillRect(i, j, 9, 9);
+            ctx.fillRect(i*size, j*size, 9*size, 9*size);
             x++;
         }
     }

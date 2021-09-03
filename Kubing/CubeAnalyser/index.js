@@ -2,6 +2,9 @@ $(function() {
     listCubeTypes();
     drawCube("");
     updateTPS();
+
+    $("#cubeCanvas").width = $("#cubeDisplay").width();
+    $("#cubeCanvas").height = $("#cubeDisplay").height();
 })
 
 let url = "/?";
