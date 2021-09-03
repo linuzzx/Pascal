@@ -10,6 +10,7 @@ let u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "
 let d1 = "yellow", d2 = "yellow", d3 = "yellow", d4 = "yellow", d5 = "yellow", d6 = "yellow", d7 = "yellow", d8 = "yellow", d9 = "yellow", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
 
 function drawCube(allMoves) {
+    // Lag et array med kubens farger, deretter tegn utifra arrayet
     drawScrambleArray = allMoves.split(" ");
 
     r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red";
