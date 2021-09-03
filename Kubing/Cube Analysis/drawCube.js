@@ -1,5 +1,6 @@
 const c = document.getElementById("cubeCanvas");
 const ctx = c.getContext("2d");
+let cubeState = [];
 let drawScrambleArray = [];
 
 let r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
@@ -10,7 +11,6 @@ let u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "
 let d1 = "yellow", d2 = "yellow", d3 = "yellow", d4 = "yellow", d5 = "yellow", d6 = "yellow", d7 = "yellow", d8 = "yellow", d9 = "yellow", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
 
 function drawCube(allMoves) {
-    // Lag et array med kubens farger, deretter tegn utifra arrayet
     drawScrambleArray = allMoves.split(" ");
 
     r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red";
@@ -139,6 +139,8 @@ function drawCube(allMoves) {
             d();
         }
     }
+
+    updateCube();
 }
 
 function r() {
@@ -155,7 +157,7 @@ function r() {
     b7 = nu3; b4 = nu6; b1= nu9;
     r1 = nr7; r2 = nr4; r3 = nr1; r4 = nr8; r6 = nr2; r7 = nr9; r8 = nr6; r9 = nr3;
 
-    ctx.fillStyle = u3;
+    /*ctx.fillStyle = u3;
     ctx.fillRect(51, 1, 9, 9);
     ctx.fillStyle = u6;
     ctx.fillRect(51, 11, 9, 9);
@@ -194,7 +196,7 @@ function r() {
     ctx.fillStyle = r8;
     ctx.fillRect(71, 51, 9, 9);
     ctx.fillStyle = r9;
-    ctx.fillRect(81, 51, 9, 9);
+    ctx.fillRect(81, 51, 9, 9);*/
 }
 function l() {
     nf1 = f1; nf2 = f2; nf3 = f3; nf4 = f4; nf6=f6; nf7=f7; nf8=f8; nf9=f9;
@@ -210,7 +212,7 @@ function l() {
     b9 = nd1; b6 = nd4; b3= nd7;
     l1 = nl7; l2 = nl4; l3 = nl1; l4 = nl8; l6 = nl2; l7 = nl9; l8 = nl6; l9 = nl3;
 
-    ctx.fillStyle = u1;
+    /*ctx.fillStyle = u1;
     ctx.fillRect(31, 10, 90, 90);
     ctx.fillStyle = u4;
     ctx.fillRect(31, 11, 9, 9);
@@ -249,7 +251,7 @@ function l() {
     ctx.fillStyle = l8;
     ctx.fillRect(11, 51, 9, 9);
     ctx.fillStyle = l9;
-    ctx.fillRect(21, 51, 9, 9);
+    ctx.fillRect(21, 51, 9, 9);*/
 }
 function f() {
     nf1 = f1; nf2 = f2; nf3 = f3; nf4 = f4; nf6=f6; nf7=f7; nf8=f8; nf9=f9;
@@ -265,7 +267,7 @@ function f() {
     l9 = nd3; l6 = nd2; l3 = nd1;
     f1 = nf7; f2 = nf4; f3 = nf1; f4 = nf8; f6 = nf2; f7 = nf9; f8 = nf6; f9 = nf3;
 
-    ctx.fillStyle = u7;
+    /*ctx.fillStyle = u7;
     ctx.fillRect(31, 21, 9, 9);
     ctx.fillStyle = u8;
     ctx.fillRect(41, 21, 9, 9);
@@ -304,7 +306,7 @@ function f() {
     ctx.fillStyle = f8;
     ctx.fillRect(41, 51, 9, 9);
     ctx.fillStyle = f9;
-    ctx.fillRect(51, 51, 9, 9);
+    ctx.fillRect(51, 51, 9, 9);*/
 }
 function b() {
     nf1 = f1; nf2 = f2; nf3 = f3; nf4 = f4; nf6=f6; nf7=f7; nf8=f8; nf9=f9;
@@ -320,7 +322,7 @@ function b() {
     l1 = nu3; l4 = nu2; l7 = nu1;
     b1 = nb7; b2 = nb4; b3 = nb1; b4 = nb8; b6 = nb2; b7 = nb9; b8 = nb6; b9 = nb3;
 
-    ctx.fillStyle = u1;
+    /*ctx.fillStyle = u1;
     ctx.fillRect(31, 1, 9, 90);
     ctx.fillStyle = u2;
     ctx.fillRect(41, 1, 9, 90);
@@ -359,7 +361,7 @@ function b() {
     ctx.fillStyle = b8;
     ctx.fillRect(101, 51, 9, 90);
     ctx.fillStyle = b9;
-    ctx.fillRect(111, 51, 9, 90);
+    ctx.fillRect(111, 51, 9, 90);*/
 }
 function u() {
     nf1 = f1; nf2 = f2; nf3 = f3; nf4 = f4; nf6=f6; nf7=f7; nf8=f8; nf9=f9;
@@ -375,7 +377,7 @@ function u() {
     b1 = nl1; b2 = nl2; b3= nl3;
     u1 = nu7; u2 = nu4; u3 = nu1; u4 = nu8; u6 = nu2; u7 = nu9; u8 = nu6; u9 = nu3;
 
-    ctx.fillStyle = l1;
+    /*ctx.fillStyle = l1;
     ctx.fillRect(1, 31, 9, 9);
     ctx.fillStyle = l2;
     ctx.fillRect(11, 31, 9, 9);
@@ -414,7 +416,7 @@ function u() {
     ctx.fillStyle = u8;
     ctx.fillRect(41, 21, 9, 9);
     ctx.fillStyle = u9;
-    ctx.fillRect(51, 21, 9, 9);
+    ctx.fillRect(51, 21, 9, 9);*/
 }
 function d() {
     nf1 = f1; nf2 = f2; nf3 = f3; nf4 = f4; nf6=f6; nf7=f7; nf8=f8; nf9=f9;
@@ -430,7 +432,7 @@ function d() {
     b7 = nr7; b8 = nr8; b9 = nr9;
     d1 = nd7; d2 = nd4; d3 = nd1; d4 = nd8; d6 = nd2; d7 = nd9; d8 = nd6; d9 = nd3;
 
-    ctx.fillStyle = l7;
+    /*ctx.fillStyle = l7;
     ctx.fillRect(1, 51, 9, 90);
     ctx.fillStyle = l8;
     ctx.fillRect(11, 51, 9, 90);
@@ -469,5 +471,58 @@ function d() {
     ctx.fillStyle = d8;
     ctx.fillRect(41, 81, 9, 90);
     ctx.fillStyle = d9;
-    ctx.fillRect(51, 81, 9, 90);
+    ctx.fillRect(51, 81, 9, 90);*/
+}
+
+function updateCube() {
+    cubeState = [u1,u4,u7,u2,u5,u8,u3,u6,u9,
+                 l1,l4,l7,l2,l5,l8,l3,l6,l9,
+                 f1,f4,f7,f2,f5,f8,f3,f6,f9,
+                 r1,r4,r7,r2,r5,r8,r3,r6,r9,
+                 b1,b4,b7,b2,b5,b8,b3,b6,b9,
+                 d1,d4,d7,d2,d5,d8,d3,d6,d9];
+
+    let x = 0;
+    for (var i = 31; i < 61; i += 10) {
+        for (var j = 1; j < 31; j += 10) {
+            ctx.fillStyle = cubeState[x];
+            ctx.fillRect(i, j, 9, 9);
+            x++;
+        }
+    }
+    for (var i = 1; i < 31; i += 10) {
+        for (var j = 31; j < 61; j += 10) {
+            ctx.fillStyle = cubeState[x];
+            ctx.fillRect(i, j, 9, 9);
+            x++;
+        }
+    }
+    for (var i = 31; i < 61; i += 10) {
+        for (var j = 31; j < 61; j += 10) {
+            ctx.fillStyle = cubeState[x];
+            ctx.fillRect(i, j, 9, 9);
+            x++;
+        }
+    }
+    for (var i = 61; i < 91; i += 10) {
+        for (var j = 31; j < 61; j += 10) {
+            ctx.fillStyle = cubeState[x];
+            ctx.fillRect(i, j, 9, 9);
+            x++;
+        }
+    }
+    for (var i = 91; i < 121; i += 10) {
+        for (var j = 31; j < 61; j += 10) {
+            ctx.fillStyle = cubeState[x];
+            ctx.fillRect(i, j, 9, 9);
+            x++;
+        }
+    }
+    for (var i = 31; i < 61; i += 10) {
+        for (var j = 61; j < 91; j += 10) {
+            ctx.fillStyle = cubeState[x];
+            ctx.fillRect(i, j, 9, 9);
+            x++;
+        }
+    }
 }
