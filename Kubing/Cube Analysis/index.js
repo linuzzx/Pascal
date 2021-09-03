@@ -1,6 +1,7 @@
 $(function() {
     listCubeTypes();
     drawCube("");
+    updateTPS();
 })
 
 let url = "/?";
@@ -55,20 +56,6 @@ function checkEmpty(move) {
 }
 
 function updateTPS() {
-    getTPS();
-}
-
-function getTPS() {
-    /*
-    R, L, U, D, F, B = 1
-    M, S, E = 2
-    x, y, z = 0
-    
-    12a5) Outer Block Turn Metric (OBTM) is defined as:
-    12a5a) Each move of the categories Face Moves and Outer Block Moves is counted as 1 move.
-    12a5b) Each move of the Rotations category is counted as 0 moves.
-    12a6) Execution Turn Metric (ETM) is defined as: Each move of the categories Face Moves, Outer Block Moves, and Rotations is counted as 1 move.
-    */
     let moveCount = 0;
 
     for (let s of getMoves("#taMoves").split(" ")) {
@@ -80,7 +67,7 @@ function getTPS() {
         }
     }
 
-    const tps = moveCount / $("#inputTime").val();
+    const tps = (moveCount / $("#inputTime").val()).toFixed(2);
 
     $("#tps").html(tps + " TPS (HTM)");
 }
