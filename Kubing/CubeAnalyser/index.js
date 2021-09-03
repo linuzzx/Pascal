@@ -2,9 +2,11 @@ $(function() {
     listCubeTypes();
     drawCube("");
     updateTPS();
+    let displayWidth = $("#cubeDisplay").width();
+    let displayHeight = $("#cubeDisplay").height();
     
-    $("#cubeCanvas").width = $("#cubeDisplay").width();
-    $("#cubeCanvas").height = $("#cubeDisplay").height();
+    //$("#cubeCanvas").css("width", displayWidth+"px");
+    //$("#cubeCanvas").css("height", displayHeight+"px");
 })
 
 let url = "/?";
