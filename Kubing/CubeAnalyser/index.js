@@ -9,7 +9,7 @@ $(function() {
     //$("#cubeCanvas").css("height", displayHeight+"px");
 })
 
-let url = "/?";
+let url = "Kubing/CubeAnalyser/?";
 
 const cubeTypes = ["3x3", "2x2", "4x4", "Square-1"]; //["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx","Pyraminx", "Skewb", "Square-1"];
 let setupArray = [];
@@ -34,7 +34,7 @@ function updateArrays() {
     const setup = getMoves("#taSetup");
     const moves = getMoves("#taMoves");
 
-    //updateURL();
+    updateURL();
 
     drawCube(setup+" "+moves);
 
@@ -96,5 +96,9 @@ function updateURL() {
     else if (rawMoves !== "") {
         urlExtra += "moves="+rawMoves;
     }
+    const state = { 'page_id': 1, 'user_id': 5 }
+    const title = ''
+
+    history.pushState(state, title, url+urlExtra);
     console.log(url+urlExtra);
 }
