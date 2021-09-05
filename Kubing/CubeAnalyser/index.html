@@ -9,11 +9,12 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" 
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
         <div id="cubeDisplay">
-            <h1 id="allMoves"></h1>
             <canvas id="cubeCanvas" width="750" height="670" style="margin: auto;"></canvas>
         </div>
         <div id="analysisDiv">
@@ -21,7 +22,7 @@
             <input type="number" id="inputTime" placeholder="Time" step="0.01" onkeyup="updateURL(); updateTPS()">
             <textarea type="text" id="taSetup" placeholder="Setup" rows="2" onkeyup="updateURL(); updateArrays()"></textarea>
             <textarea type="text" id="taMoves" placeholder="Moves" rows="8" onkeyup="updateURL(); updateArrays(); updateTPS()"></textarea>
-            <div id="tools">
+            <div id="tpsDiv">
                 <h1 id="tps"></h1>
             </div>
             

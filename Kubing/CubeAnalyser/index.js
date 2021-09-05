@@ -1,13 +1,8 @@
 $(function() {
     getParams();
-    listCubeTypes();
     drawCube("");
     updateTPS();
-    let displayWidth = $("#cubeDisplay").width();
-    let displayHeight = $("#cubeDisplay").height();
-    
-    //$("#cubeCanvas").css("width", displayWidth+"px");
-    //$("#cubeCanvas").css("height", displayHeight+"px");
+    //listCubeTypes();
 })
 
 let url = "Kubing/CubeAnalyser/?";
