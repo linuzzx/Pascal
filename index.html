@@ -4,27 +4,35 @@
     <meta charset="UTF-8">
     <title>Einar KL</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <script src="index.js"></script>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<div id="content">
-    <div id="grid1">
-
+    <div id="header">
+        <div><button class="btnTabs" onclick="showHome()">Home</button></div>
+        <div><button class="btnTabs" onclick="showProjects()">Projects</button></div>
+        <div><button class="btnTabs" onclick="showApps()">Apps</button></div>
     </div>
-    <div id="grid2">
-        <div id="grid2Content">
-            <h3>Mine apper</h3>
-            <h4><a href="https://play.google.com/store/apps/details?id=no.einarkl.einarskubeapp&gl=NO">Einars kubeapp</a></h4>
-            <h3>Mine prosjekter</h3>
-            <h4><a href="Bachelor">Bacheloroppgave</a></h4>
-            <h4><a href="Kubing/BLD">BLD</a></h4>
-            <h4><a href="Kubing/CubeAnalyser/">Cube Analyser</a></h4>
-            <h4><a href="Kubing/Kubeside/resources">Kubeside</a></h4>
-            <h4><a href="MiniEinar">Mini Einar</a></h4>
-            <h4><a href="PixelArt">PixelArt</a></h4>
+    <div id="content">
+        <div id="tabHome" class="tabContent">
+            <h1>Home</h1>
+        </div>
+        <div id="tabProjects" class="tabContent">
+            <h1><a href="Bachelor">Bacheloroppgave</a></h1>
+            <h1><a href="Kubing/BLD">BLD</a></h1>
+            <h1><a href="Kubing/CubeAnalyser">Cube Analyser</a></h1>
+            <h1><a href="Kubing/Kubeside/resources">Kubeside</a></h1>
+            <h1><a href="MiniEinar">Mini Einar</a></h1>
+            <h1><a href="PixelArt">PixelArt</a></h1>
+        </div>
+        <div id="tabApps" class="tabContent">
+            <h1><a href="https://play.google.com/store/apps/details?id=no.einarkl.einarskubeapp&gl=NO"><div><img class="tabAppsImg" src="./resources/EinarsKubeapp_logo.png" alt="Logo">Einars kubeapp</div></a></h1>
         </div>
     </div>
-</div>
 </body>
 </html>
