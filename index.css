@@ -26,6 +26,14 @@ body {
     background: transparent;
     border: none;
     font-size: xxx-large;
+    transition: color 0.5s linear;
+    -webkit-transition: color 0.5s linear;
+}
+
+.btnTabs:hover {
+    color: #ffffff;
+    transition: color 0.5s linear;
+    -webkit-transition: color 0.5s linear;
 }
 
 /* Style the tab content */
@@ -52,12 +60,6 @@ body {
     vertical-align: middle;
 }
 
-.btnTabs:hover {
-    color: #F1F1F1;
-    -webkit-animation: fadeHover 0.5s;
-    animation: fadeHover 0.5s;
-}
-
 #content {
     height: 80%;
     display: flex;
@@ -73,6 +75,8 @@ h1 {
 a:link {
     color: #aaaaaa;
     text-decoration: none;
+    transition: color 0.5s linear;
+    -webkit-transition: color 0.5s linear;
 }
 
 /* visited link */
@@ -82,22 +86,12 @@ a:visited {
 
 /* mouse over link */
 a:hover {
-    color: #F1F1F1;
-    -webkit-animation: fadeHover 0.5s;
-    animation: fadeHover 0.5s;
+    color: #ffffff;
+    transition: color 0.5s linear;
+    -webkit-transition: color 0.5s linear;
 }
 
 /* selected link */
 a:active {
     color: #aaaaaa;
-}
-
-@-webkit-keyframes fadeHover {
-    from {color: #aaaaaa;}
-    to {color: #F1F1F1;}
-}
-  
-@keyframes fadeHover {
-    from {color: #aaaaaa;}
-    to {color: #F1F1F1;}
 }
