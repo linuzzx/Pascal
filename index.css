@@ -99,12 +99,12 @@ a:active {
 
 einar {
     color: #aaaaaa;
-    transition: color 0.25s linear;
-    -webkit-transition: color 0.25s linear;
+    transition: color 0.1s linear;
+    -webkit-transition: color 0.1s linear;
 }
 
 einar:hover {
     color: #ffffff;
-    transition: color 0.25s linear;
-    -webkit-transition: color 0.25s linear;
+    transition: color 0.1s linear;
+    -webkit-transition: color 0.1s linear;
 }
