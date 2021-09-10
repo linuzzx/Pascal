@@ -20,32 +20,6 @@ body {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
-#header a {
-    margin: 0;
-    color: #000000;
-    font-weight: bold;
-    font-size: xxx-large;
-}
-
-#header a:link {
-    color: #CCCCCC;
-}
-
-/* visited link */
-#header a:visited {
-    color: #CCCCCC;
-}
-
-/* mouse over link */
-#header a:hover {
-    color: #888888;
-}
-
-/* selected link */
-#header a:active {
-    color: #AFB1B3;
-}
-
 .btnTabs {
     color: #aaaaaa;
     margin: 0;
@@ -79,7 +53,9 @@ body {
 }
 
 .btnTabs:hover {
-    color: #888888;
+    color: #F1F1F1;
+    -webkit-animation: fadeHover 0.5s;
+    animation: fadeHover 0.5s;
 }
 
 #content {
@@ -90,18 +66,18 @@ body {
 }
 
 h1 {
-    color: #bbbbbb;
+    color: #aaaaaa;
     margin: 0;
 }
 
 a:link {
-    color: #bbbbbb;
+    color: #aaaaaa;
     text-decoration: none;
 }
 
 /* visited link */
 a:visited {
-    color: #bbbbbb;
+    color: #aaaaaa;
 }
 
 /* mouse over link */
@@ -111,17 +87,17 @@ a:hover {
     animation: fadeHover 0.5s;
 }
 
+/* selected link */
+a:active {
+    color: #aaaaaa;
+}
+
 @-webkit-keyframes fadeHover {
-    from {color: #bbbbbb;}
+    from {color: #aaaaaa;}
     to {color: #F1F1F1;}
 }
   
 @keyframes fadeHover {
-    from {color: #bbbbbb;}
+    from {color: #aaaaaa;}
     to {color: #F1F1F1;}
-}
-
-/* selected link */
-a:active {
-    color: #bbbbbb;
 }
