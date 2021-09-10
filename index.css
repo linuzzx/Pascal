@@ -107,6 +107,18 @@ a:visited {
 /* mouse over link */
 a:hover {
     color: #F1F1F1;
+    -webkit-animation: fadeHover 0.5s;
+    animation: fadeHover 0.5s;
+}
+
+@-webkit-keyframes fadeHover {
+    from {color: #bbbbbb;}
+    to {color: #F1F1F1;}
+}
+  
+@keyframes fadeHover {
+    from {color: #bbbbbb;}
+    to {color: #F1F1F1;}
 }
 
 /* selected link */
