@@ -97,13 +97,13 @@ a:active {
     color: #aaaaaa;
 }
 
-e {
+einar {
     color: #aaaaaa;
     transition: color 0.25s linear;
     -webkit-transition: color 0.25s linear;
 }
 
-e:hover {
+einar:hover {
     color: #ffffff;
     transition: color 0.25s linear;
     -webkit-transition: color 0.25s linear;

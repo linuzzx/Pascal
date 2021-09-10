@@ -9,7 +9,7 @@ $(function() {
     const tabHomeLetters = $("#tabHome h1").text().split("");
     let newTabHome = "";
     for (let e of tabHomeLetters) {
-        newTabHome += "<e>"+e+"</e>"
+        newTabHome += "<einar>"+e+"</einar>"
     }
     $("#tabHome h1").html(newTabHome);
 });
