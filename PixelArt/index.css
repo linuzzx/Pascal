@@ -59,19 +59,16 @@ body {
 
 #subHeader {
     text-align: left;
-}
-
-#subHeader button {
-    background: #606060;
+    margin-left: 5px;
 }
 
 input[type="file"] {
     display: none;
 }
-.custom-file-upload {
-    background: #606060;
-    box-shadow: 0 0 0 1px inset black;
+.menuButtons {
+    background: #EFEFEF;;
     padding: 3px;
+    border: none;
     cursor: pointer;
 }
 

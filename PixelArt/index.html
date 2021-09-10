@@ -36,12 +36,12 @@
     <div id="header">
         <h1>PixelArt</h1>
         <div id="subHeader">
-            <button onclick="newDrawing()">New</button>
-            <button onclick="openSaveBox()">Save</button>
-            <label for="fileInput" class="custom-file-upload">
-                <i class="fa fa-cloud-upload"></i> Custom Upload
+            <button class="menuButtons" onclick="newDrawing()">New</button>
+            <button class="menuButtons" onclick="openSaveBox()">Save</button>
+            <label for="fileInput" class="menuButtons">
+                <i class="fa fa-cloud-upload"></i>Upload
             </label>
-            <input id="fileInput" type="file" onchange="openDrawing(this.files)" accept="image/*" style="color: #555555;">
+            <input id="fileInput" type="file" onchange="openDrawing(this.files)" accept="image/*">
         </div>
     </div>
     <div id="content">
