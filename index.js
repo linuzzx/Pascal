@@ -30,7 +30,7 @@ function showApps() {
 
 function adjustImg() {
     const size = $("h1").css("font-size");
-    
+
     $(".tabAppsImg").css("height", size);
     $(".tabAppsImg").css("width", "auto");
     $(".tabAppsImg").css("margin-right", "0.25%");

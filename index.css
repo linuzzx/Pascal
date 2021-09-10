@@ -74,6 +74,10 @@ body {
     to {opacity: 1;}
 }
 
+.tabAppsImg {
+    vertical-align: middle;
+}
+
 .btnTabs:hover {
     color: #888888;
 }
@@ -87,6 +91,7 @@ body {
 
 h1 {
     color: #bbbbbb;
+    margin: 0;
 }
 
 a:link {
