@@ -5,6 +5,13 @@ $(function() {
 
     adjustImg();
     showHome();
+
+    const tabHomeLetters = $("#tabHome h1").text().split("");
+    let newTabHome = "";
+    for (let e of tabHomeLetters) {
+        newTabHome += "<e>"+e+"</e>"
+    }
+    $("#tabHome h1").html(newTabHome);
 });
 
 function hideAll() {

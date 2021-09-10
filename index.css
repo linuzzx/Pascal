@@ -70,6 +70,7 @@ body {
 h1 {
     color: #aaaaaa;
     margin: 0;
+    cursor: default;
 }
 
 a:link {
@@ -94,4 +95,16 @@ a:hover {
 /* selected link */
 a:active {
     color: #aaaaaa;
+}
+
+e {
+    color: #aaaaaa;
+    transition: color 0.25s linear;
+    -webkit-transition: color 0.25s linear;
+}
+
+e:hover {
+    color: #ffffff;
+    transition: color 0.25s linear;
+    -webkit-transition: color 0.25s linear;
 }
