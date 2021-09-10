@@ -180,8 +180,6 @@ function stylePixels(width, height) {
     else {
         $(".pixel").css("border", "solid rgba(0,0,0,0.25) 1px");
     }
-    console.log(size / width);
-    console.log(size / height);
 }
 
 function draw(pixel) {
