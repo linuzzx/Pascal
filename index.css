@@ -38,7 +38,7 @@ body {
 
 /* Style the tab content */
 .tabContent {
-    width: 50%;
+    width: 100%;
     text-align: center;
     display: none;
     -webkit-animation: fadeEffect 1s;
