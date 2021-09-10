@@ -174,6 +174,14 @@ function stylePixels(width, height) {
     }
     $(".pixel").css("width", size);
     $(".pixel").css("height", size);
+    if (size / width <= 0.7 || size / height <= 0.7) {
+        $(".pixel").css("border", "none");
+    }
+    else {
+        $(".pixel").css("border", "solid rgba(0,0,0,0.25) 1px");
+    }
+    console.log(size / width);
+    console.log(size / height);
 }
 
 function draw(pixel) {
