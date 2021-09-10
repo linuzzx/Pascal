@@ -72,8 +72,8 @@ function adjustImg() {
 }
 
 function updateUnderline(tab) {
-    console.log($(window).width());
     $("#underline").css("width", $(window).width() / 9);
+    
     if (tab === 0) {
         $("#underline").css("margin-left", $(window).width() / 9);
     }
