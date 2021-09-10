@@ -109,3 +109,8 @@ einar:hover {
     transition: color 0.1s linear;
     -webkit-transition: color 0.1s linear;
 }
+
+#underline {
+    background: #ffffff;
+    border-radius: 5px;
+}
