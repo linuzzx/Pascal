@@ -2,8 +2,7 @@ const URL = "https://www.worldcubeassociation.org/persons/2015LUND03";
 //const URL = "./data.html";
 
 $(function() {
-    $("#iframeURL").attr('src', URL);
-    /*$.ajax({
+    $.ajax({
         headers: "Access-Control-Allow-Origin",
         type: 'GET',
         url: URL,
@@ -15,5 +14,5 @@ $(function() {
         success: function(data, textStatus, request){
             console.log(data);
         }
-    });*/
+    });
 });
