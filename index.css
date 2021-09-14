@@ -114,3 +114,26 @@ einar:hover {
     background: #ffffff;
     border-radius: 5px;
 }
+
+#socialLinks {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding-bottom: 1%;
+}
+
+#socialLinks > a {
+    margin: .25%;
+}
+
+#socialLinks > a > img:hover {
+    opacity: 0.5;
+    transition: opacity 0.1s linear;
+    -webkit-transition: opacity 0.1s linear;
+}
+
+#socialLinks > a > img {
+    opacity: 1;
+    transition: opacity 0.1s linear;
+    -webkit-transition: opacity 0.1s linear;
+}
