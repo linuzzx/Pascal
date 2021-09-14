@@ -1,4 +1,4 @@
-const url = "https://cors-anywhere.herokuapp.com/www.worldcubeassociation.org/persons/";
+const url = "https://www.worldcubeassociation.org/persons/";
 
 $(function() {
     
