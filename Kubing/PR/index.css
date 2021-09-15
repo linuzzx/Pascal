@@ -10,4 +10,32 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#hiddenDiv {
+    display: none;
+}
+
+#content {
+    width: 100%;
+}
+
+h1 {
+    color: #f1f1f1;
+    text-align: center;
+}
+
+#tablePR {
+    width: 100%;
+    margin: 0;
+}
+
+#tbodyPR > tr:nth-child(even) {
+    background-color: #f1f1f1;
+}
+#tbodyPR > tr:nth-child(odd) {
+    background-color: #f9f9f9;
 }
