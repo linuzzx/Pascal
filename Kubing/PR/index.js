@@ -23,6 +23,10 @@ $(function() {
     });
 });
 
+$(window).resize(function(){
+    styleTable();
+});
+
 function makePRList() {
     const table = $("#tbodyPR");
     let out = "<tr><th>Event</th><th>NR</th><th>CR</th><th>WR</th><th>Single</th><th>Average</th><th>WR</th><th>CR</th><th>NR</th></tr>";
@@ -44,6 +48,10 @@ function makePRList() {
 
     $(table).html(out);
 
+    styleTable();
+}
+
+function styleTable() {
     const height = $("#content").css("height").split("px")[0] - $("#content h1").css("height").split("px")[0];
     $("#tablePR").css("height",height);
 }
