@@ -34,10 +34,3 @@ h1 {
     width: 100%;
     margin: 0;
 }
-
-#tbodyPR > tr:nth-child(even) {
-    background-color: #f1f1f1;
-}
-#tbodyPR > tr:nth-child(odd) {
-    background-color: #f9f9f9;
-}
