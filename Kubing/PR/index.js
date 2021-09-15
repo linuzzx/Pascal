@@ -46,7 +46,4 @@ function makePRList() {
 
     const height = $("#content").css("height").split("px")[0] - $("#content h1").css("height").split("px")[0];
     $("#tablePR").css("height",height);
-    console.log($("#content").css("height"));
-    console.log($("#content h1").css("height"));
-    console.log(height);
 }
