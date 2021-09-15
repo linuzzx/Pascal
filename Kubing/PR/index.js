@@ -39,7 +39,7 @@ function makePRList() {
         "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(4)").text()+"</td>"+
         "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(5)").text()+"</th>"+
         "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(6)").text()+"</th>"+
-        "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(7)").text()+"</th>"+
+        "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(7)").text()+"</td>"+
         "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(8)").text()+"</td>"+
         "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(9)").text()+"</td>"+
         "</tr>";
@@ -49,9 +49,19 @@ function makePRList() {
     $(table).html(out);
 
     styleTable();
+    styleRanking();
 }
 
 function styleTable() {
     const height = $("#content").css("height").split("px")[0] - $("#content h1").css("height").split("px")[0];
     $("#tablePR").css("height",height);
+}
+
+function styleRanking() {
+    const rankings = $("#tablePR td:nth-child(2), #tablePR td:nth-child(3), #tablePR td:nth-child(4), #tablePR td:nth-child(7), #tablePR td:nth-child(8), #tablePR td:nth-child(9)");
+    for (let r of rankings) {
+        if (parseInt(r.textContent) <= 10) {
+            $(r).css("color", "#00ff00");
+        }
+    }
 }
