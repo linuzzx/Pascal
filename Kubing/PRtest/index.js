@@ -3,7 +3,7 @@ const URL = "https://www.worldcubeassociation.org/persons/2015LUND03";
 let events = ["3x3x3","2x2x2","4x4x4","5x5x5","6x6x6","7x7x7","3x3x3 Blindfolded","3x3x3 Fewest Moves","3x3x3 One-Handed","Clock","Megaminx","Pyraminx","Skewb","Square-1","3x3x3 Multi-Blind"];
 
 $(function() {
-    $.getJSON('http://api.allorigins.win/get?url=https%3A//www.worldcubeassociation.org/persons/2015LUND03&callback=?', function (data) {
+    $.getJSON('https://api.allorigins.win/get?url=https%3A//www.worldcubeassociation.org/persons/2015LUND03&callback=?', function (data) {
         $('#hiddenDiv').html(data.contents);
         setTimeout(function(){
             makePRList();
