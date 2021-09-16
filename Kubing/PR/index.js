@@ -36,15 +36,15 @@ function makePRList() {
         out = "<tr><th>Event</th><th>NR</th><th>CR</th><th>WR</th><th>Single</th><th>Average</th><th>WR</th><th>CR</th><th>NR</th></tr>";
         for (let event of events) {
             out += "<tr>"+
-            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(1)").text()+"</td>"+
-            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(2)").text()+"</td>"+
-            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(3)").text()+"</td>"+
-            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(4)").text()+"</td>"+
-            "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(5)").text()+"</th>"+
-            "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(6)").text()+"</th>"+
-            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(7)").text()+"</td>"+
-            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(8)").text()+"</td>"+
-            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(9)").text()+"</td>"+
+            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(1)").text().trim()+"</td>"+
+            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(2)").text().trim()+"</td>"+
+            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(3)").text().trim()+"</td>"+
+            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(4)").text().trim()+"</td>"+
+            "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(5)").text().trim()+"</th>"+
+            "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(6)").text().trim()+"</th>"+
+            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(7)").text().trim()+"</td>"+
+            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(8)").text().trim()+"</td>"+
+            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(9)").text().trim()+"</td>"+
             "</tr>";
             i++;
         }
@@ -53,9 +53,9 @@ function makePRList() {
         out = "<tr><th>Event</th><th>Single</th><th>Average</th></tr>";
         for (let event of events) {
             out += "<tr>"+
-            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(1)").text()+"</td>"+
-            "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(5)").text()+"</th>"+
-            "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(6)").text()+"</th>"+
+            "<td>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(1)").text().trim()+"</td>"+
+            "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(5)").text().trim()+"</th>"+
+            "<th>"+$("#hiddenDiv > tbody:nth-child(3) > tr:nth-child("+i+") > td:nth-child(6)").text().trim()+"</th>"+
             "</tr>";
             i++;
         }
@@ -69,7 +69,9 @@ function makePRList() {
 
 function styleTable() {
     const height = $("#content").css("height").split("px")[0] - $("#content h1").css("height").split("px")[0];
-    $("#tablePR").css("height",height);
+
+    $("#tablePR").css("height", height);
+    $("#tablePR, th, td").css("font-size", "2.5vh");
 }
 
 function styleRanking() {
