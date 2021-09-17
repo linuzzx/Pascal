@@ -12,6 +12,12 @@ $(function() {
     $(window).resize(function(){
         updateUnderline(currentTab);
     });
+
+    $("#inputSearch").on('keyup', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            searchTheWeb();
+        }
+    });
 });
 
 
@@ -83,4 +89,8 @@ function updateUnderline(tab) {
     else if (tab === 2) {
         $("#underline").css("margin-left", ($(window).width() / 9)*7);
     }
+}
+
+function searchTheWeb() {
+    window.location.href = "https://www.google.com/search?q="+$("#inputSearch").val();
 }

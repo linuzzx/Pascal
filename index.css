@@ -137,3 +137,11 @@ einar:hover {
     transition: opacity 0.1s linear;
     -webkit-transition: opacity 0.1s linear;
 }
+
+#inputSearch {
+    background: transparent;
+    width: 25%;
+    margin: 0 auto;
+    border: solid #aaaaaa;
+    color: #aaaaaa;
+}
