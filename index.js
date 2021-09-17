@@ -92,5 +92,8 @@ function updateUnderline(tab) {
 }
 
 function searchTheWeb() {
-    window.location.href = "https://www.google.com/search?q="+$("#inputSearch").val();
+    const url = "https://www.google.com/search?q="+$("#inputSearch").val();
+    $("#inputSearch").val("");
+
+    window.open(url, "_blank");
 }
