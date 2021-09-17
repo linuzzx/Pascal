@@ -71,7 +71,7 @@ function loggInn() {
             "            <input type='file' id='input' onchange='lesData(this.files)'>\n" +
             "            <div>" +
             "               <label for='select'>Excel-format: </label>\n" +
-                "            <select id='select' onchange='velgFormat(this.value)'><option>Auto</option><option>Manuell</option></select>\n" +
+                "            <select id='select' onchange='velgFormat(this.value)'><option>Manuell</option><option>Auto</option></select>\n" +
         "                </div> " +
             "            <div id='tblData'></div>\n" +
             "        </div>\n" +
