@@ -20,9 +20,6 @@ body {
     padding: 1%;
 }
 
-#selectDiv {
-}
-
 #cubeDisplay {
     display: grid;
     grid-template-rows: 1fr 5fr 1fr 1fr;

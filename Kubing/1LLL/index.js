@@ -55,10 +55,10 @@ function setAlgset(algset) {
         }
     }
 
-    showNextAlg();
+    nextCase();
 }
 
-function showNextAlg() {
+function nextCase() {
     const scramble = inverse(algList[nextAlg]);
     draw(scramble);
     $("#setupAlg").html(scramble);
