@@ -11,3 +11,16 @@ body {
     margin: 0;
     padding: 0;
 }
+
+#content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+label {
+    color: #aaaaaa;
+}
+
+h1 {
+    color: #aaaaaa;
+}

@@ -16,9 +16,15 @@
 <body>
     <div id="content">
         <div id="cubeDisplay">
-            <canvas id="cubeCanvas" width="560" height="560" style="margin: auto;"></canvas>
+            <h1 id="setupAlg"></h1>
+            <canvas id="cubeCanvas" width="400" height="400" style="margin: auto;"></canvas>
+            <button onclick="showSolution()">Show solution</button>
+            <h1 id="solutionAlg"></h1>
         </div>
-        <h1>1LLL</h1>
+        <div>
+            <label for="selectAlgset">Choose algset</label>
+            <select id="selectAlgset" onchange="setAlgset(this.value)"></select>
+        </div>
     </div>
     
     <script src="drawCube.js"></script>
