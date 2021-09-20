@@ -2,9 +2,9 @@ const c = $("#cubeCanvas")[0];
 const ctx = c.getContext("2d");
 let cubeState = [];
 let drawScrambleArray = [];
-let displayWidth = $("#cubeCanvas").width();
-let size = Math.floor(displayWidth / 10);
 let gap = 3;
+let displayWidth = $("#cubeCanvas").width();
+let size = Math.floor((displayWidth-6*gap) / 5);
 
 let r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
 let l1 = "orange", l2 = "orange", l3 = "orange", l4 = "orange", l5 = "orange", l6 = "orange", l7 = "orange", l8 = "orange", l9 = "orange", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;

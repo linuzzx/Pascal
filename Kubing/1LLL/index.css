@@ -13,8 +13,31 @@ body {
 }
 
 #content {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 1%;
+}
+
+#selectDiv {
+}
+
+#cubeDisplay {
+    display: grid;
+    grid-template-rows: 1fr 5fr 1fr 1fr;
+    height: 90%;
+    margin: auto;
+    text-align: center;
+}
+
+#buttonDiv {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: 5%;
+    width: 75%;
+    height: 5vh;
+    margin: auto;
 }
 
 label {
