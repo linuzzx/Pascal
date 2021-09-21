@@ -8,11 +8,11 @@ $(function() {
     
     listCases();
     setAlgset(currentAlgset);
-    adjustCBs();
+    adjustSize();
 });
 
 $(window).resize(function(){
-    adjustCBs();
+    adjustSize();
 });
 
 function showContent() {
@@ -125,7 +125,7 @@ function inverse(alg) {
     return newAlg;
 }
 
-function adjustCBs() {
+function adjustSize() {
     let cbSize = 0;
     if ($("#content").width() >= $("#content").height()) {
         cbSize = $("#content").height() / 40;
@@ -137,5 +137,6 @@ function adjustCBs() {
     $("input[type='checkbox']").css("height", cbSize);
     $("#selectDiv label").css("font-size", cbSize);
     $("#selectAlgset").css("font-size", cbSize);
+    $("#buttonDiv").css("font-size", $("#buttonDiv").height() / 2);
     console.log(cbSize);
 }
