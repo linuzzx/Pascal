@@ -84,7 +84,6 @@ function setSubsets() {
             }
         }
     }
-    console.log(algList);
 
     nextAlg = 0;
     nextCase();
@@ -96,6 +95,11 @@ function nextCase() {
     $("#setupAlg").html(scramble);
     $("#solutionAlg").html(algList[nextAlg]);
     nextAlg++;
+
+    if (nextAlg === algList.length) {
+        nextAlg = 0;
+    }
+
     hideSolution();
 }
 
@@ -144,5 +148,4 @@ function adjustSize() {
     $("#selectDiv label").css("font-size", cbSize);
     $("#selectAlgset").css("font-size", cbSize);
     $("#buttonDiv").css("font-size", $("#buttonDiv").height() / 2);
-    console.log(cbSize);
 }
