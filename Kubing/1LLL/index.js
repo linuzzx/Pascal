@@ -129,9 +129,15 @@ function adjustSize() {
     let cbSize = 0;
     if ($("#content").width() >= $("#content").height()) {
         cbSize = $("#content").height() / 40;
+        $("#cubeDisplay").css("grid-template-rows","0fr 1fr 5fr 1fr 1fr");
+        $("#setupAlg").css("font-size", $("#content").height() / 25);
+        $("#solutionAlg").css("font-size", $("#content").height() / 25);
     }
     else {
         cbSize = $("#content").width() / 40;
+        $("#cubeDisplay").css("grid-template-rows","1fr 1fr 5fr 1fr 1fr");
+        $("#setupAlg").css("font-size", $("#content").width() / 15);
+        $("#solutionAlg").css("font-size", $("#content").width() / 15);
     }
     $("input[type='checkbox']").css("width", cbSize);
     $("input[type='checkbox']").css("height", cbSize);

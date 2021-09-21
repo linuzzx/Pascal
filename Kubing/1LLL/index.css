@@ -22,7 +22,6 @@ body {
 
 #cubeDisplay {
     display: grid;
-    grid-template-rows: 1fr 5fr 1fr 1fr;
     height: 90%;
     margin: auto;
     text-align: center;
