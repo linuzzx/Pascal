@@ -41,6 +41,12 @@ label {
     color: #aaaaaa;
 }
 
+input[type='checkbox'] {
+    margin: 0.1%;
+    height: 1vw;
+    width: 1vw;
+}
+
 h1 {
     color: #aaaaaa;
 }

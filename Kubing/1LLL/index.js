@@ -46,15 +46,46 @@ function listCases() {
 }
 
 function setAlgset(algset) {
-    algList = [];
     localStorage.setItem("currentAlgset", algset);
 
-    for (let i=1; i<Object.keys(algs[algset]).length; i++) {
-        for (let a of algs[algset][i]) {
-            algList.push(a);
-        }
+    const cbCount = Object.keys(algs[algset]).length;
+    let out = "";
+    
+    for (let i=1; i<cbCount; i++) {
+        out += "<label>"+i+"<input id='cb"+i+"' type='checkbox' value='"+i+"' onchange='setSubsets()'></label>";
     }
 
+    $("#cbSubsetDiv").html(out);
+
+    setSubsets();
+}
+
+function setSubsets() {
+    const algset = localStorage.getItem("currentAlgset") || 0;
+    let checkedCBs = [];
+    algList = [];
+
+    for (let c of $("#cbSubsetDiv input:checked")) {
+        checkedCBs.push(c.value);
+    }
+    
+    if (checkedCBs.length === 0) {
+        for (let i=1; i<Object.keys(algs[algset]).length; i++) {
+            for (let a of algs[algset][i]) {
+                algList.push(a);
+            }
+        }
+    }
+    else {
+        for (let c of checkedCBs) {
+            for (let a of algs[algset][c]) {
+                algList.push(a);
+            }
+        }
+    }
+    console.log(algList);
+
+    nextAlg = 0;
     nextCase();
 }
 
