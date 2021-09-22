@@ -10,10 +10,19 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
         <script src="index.js"></script>
+        <script src="giiker.js"></script>
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
-        <button onclick="searchForBTDevice()">Search for device</button>
-        <h1 id="battery">Battery: </h1>
+        <button id="connectGiiker">Connect to Giiker Cube</button>
+        <button onclick="searchForBTDevice()">Connect to smartcube</button>
+        <h1 id="battery"></h1>
+        <div id='cubeDisplay'>
+            <div></div>
+            <h1 id='setupAlg'></h1>
+            <canvas id='cubeCanvas' width='400' height='400' style='margin: auto;'></canvas>
+            <h1 id='solutionAlg'></h1>
+        </div>
     </body>
+    <script src="drawCube.js"></script>
 </html>
