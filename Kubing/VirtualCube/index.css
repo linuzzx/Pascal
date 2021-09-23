@@ -1,0 +1,60 @@
+html {
+    background-image: linear-gradient(to bottom, #181818, #464646);
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: transparent;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    margin: 0;
+    padding: 1%;
+}
+
+#cubeDisplay {
+    display: block;
+    height: 90%;
+    margin: auto;
+    text-align: center;
+}
+
+#buttonDiv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5%;
+    width: 75%;
+    height: 5vh;
+    margin: auto;
+}
+
+label {
+    color: #aaaaaa;
+}
+
+input[type='checkbox'] {
+    margin: 0.1%;
+    height: 1vw;
+    width: 1vw;
+}
+
+h1 {
+    color: #aaaaaa;
+}
+
+#time {
+    font-size: 15vh;
+    text-align: end;
+}
+
+#moves {
+    font-size: 10vh;
+    text-align: end;
+}
