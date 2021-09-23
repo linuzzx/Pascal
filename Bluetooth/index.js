@@ -34,7 +34,7 @@ function connectToGiiker() {
 
 function searchForBTDevice() {
     console.log('Requesting Bluetooth Device...');
-    navigator.bluetooth.requestDevice(
+    window.navigator.bluetooth.requestDevice(
         {filters: [
             {namePrefix: 'Gi'},
             {namePrefix: 'GAN'}
@@ -56,8 +56,8 @@ function searchForBTDevice() {
     .then(characteristic => {
         console.log("Characteristic");
         console.log(characteristic);
-        //return characteristic.readValue();
-        _parseCubeValue(characteristic.readValue());
+        //_parseCubeValue(characteristic.readValue());
+        return characteristic.readValue();
     })
     .then(value => {
         let batteryLevel = value.getUint8(0);

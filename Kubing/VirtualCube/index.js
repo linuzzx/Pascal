@@ -2,23 +2,30 @@ const currentAlgset = localStorage.getItem("currentAlgset") || 0;
 let nextAlg = 0;
 let algList = [];
 let keyBinds = [];
-//U Ui F Fi R Ri L Li D Di B Bi M Mi x xi y yi z zi
-let possibleMoves = ["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'"];
+let possibleMoves = [];//["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];
 
 $(function() {
     updateBindings();
 
+    getPossibleMoves();
+
     $(window).keypress(function(e) {
         getTurn(e.keyCode);
-    })
+    });
 });
 
 function updateBindings() {
     keyBinds = [];
-    for (let v of $("#keysDiv label input")) {
+    for (let v of $("#keysDiv table tr td:nth-child(2) input")) {
         keyBinds.push($(v).val());
     }
-    console.log(keyBinds);
+}
+
+function getPossibleMoves() {
+    possibleMoves = [];
+    for (let m of $("#keysDiv table tr td:nth-child(1)")) {
+        possibleMoves.push($(m).text());
+    }
 }
 
 function getTurn(e) {

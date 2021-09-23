@@ -58,3 +58,12 @@ h1 {
     font-size: 10vh;
     text-align: end;
 }
+
+span {
+    color: #aaaaaa;
+}
+
+#keysDiv input {
+    width: 25%;
+    text-align: center;
+}
