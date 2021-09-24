@@ -9,6 +9,8 @@ let timing = false;
 let ready = false;
 
 $(function() {
+    getBindings();
+
     updateBindings();
 
     getPossibleMoves();
@@ -20,11 +22,25 @@ $(function() {
     draw("");
 });
 
+function getBindings() {
+        let i = 0;
+    if (localStorage.getItem("keys")) {
+        const keys = localStorage.getItem("keys").split("KEY");
+        for (let inp of $("#keysDiv table tr td:nth-child(2) input")) {
+            $(inp).val(keys[i]);
+            i++;
+        }
+    }
+}
+
 function updateBindings() {
     keyBinds = [];
+    let keysToStore = "";
     for (let v of $("#keysDiv table tr td:nth-child(2) input")) {
         keyBinds.push($(v).val());
+        keysToStore += $(v).val()+"KEY";
     }
+    localStorage.setItem("keys",keysToStore);
 }
 
 function getPossibleMoves() {
