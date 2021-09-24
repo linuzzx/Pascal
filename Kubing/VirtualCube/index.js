@@ -93,7 +93,8 @@ function startTimer() {
                 if (s < 10) s = "0" + s;
                 $("#time").html(m + ":" + s + "." + ms);
             }
-            if (moveCount === 10) {
+            const solved = checkState();
+            if (solved) {
                 stopTimer();
             }
         }, 10);
@@ -291,6 +292,22 @@ function makeTurn(e) {
             _lwi();
             break;
     }
+}
+
+function checkState() {
+    let isSolved = false;
+
+    if ((u1 === u2 && u1 === u3 && u1 === u4 && u1 === u5 && u1 === u6 && u1 === u7 && u1 === u8 && u1 === u9) &&
+        (d1 === d2 && d1 === d3 && d1 === d4 && d1 === d5 && d1 === d6 && d1 === d7 && d1 === d8 && d1 === d9) &&
+        (f1 === f2 && f1 === f3 && f1 === f4 && f1 === f5 && f1 === f6 && f1 === f7 && f1 === f8 && f1 === f9) &&
+        (b1 === b2 && b1 === b3 && b1 === b4 && b1 === b5 && b1 === b6 && b1 === b7 && b1 === b8 && b1 === b9) &&
+        (r1 === r2 && r1 === r3 && r1 === r4 && r1 === r5 && r1 === r6 && r1 === r7 && r1 === r8 && r1 === r9) &&
+        (l1 === l2 && l1 === l3 && l1 === l4 && l1 === l5 && l1 === l6 && l1 === l7 && l1 === l8 && l1 === l9)) {
+            isSolved = true;
+            console.log("Solved!");
+    }
+
+    return isSolved;
 }
 
 
