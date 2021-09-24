@@ -1,5 +1,5 @@
 // Variabler
-var ready = false;
+/*var ready = false;
 var timing = false;
 var stopped = true;
 var interval;
@@ -20,7 +20,7 @@ var formattedAo12s = JSON.parse(localStorage.getItem("formattedAo12s")) || [];
 var scrambles = JSON.parse(localStorage.getItem("scrambles")) || [];
 var timeInfos = JSON.parse(localStorage.getItem("timeInfos")) || [];
 var ao5Infos = JSON.parse(localStorage.getItem("ao5Infos")) || [];
-var ao12Infos = JSON.parse(localStorage.getItem("ao12Infos")) || [];
+var ao12Infos = JSON.parse(localStorage.getItem("ao12Infos")) || [];*/
 
 // Lag scramble
 function scrambleMaker() {
@@ -866,7 +866,7 @@ function readyTouch() {
         ready = true;
     }
 }
-function startTimer(e) {
+function startTimer2(e) {
     if (e.keyCode === 32) {
         startTouch();
     }
@@ -882,7 +882,7 @@ function startTouch() {
         timer();
     }
 }
-function stopTimer(e) {
+function stopTimer2(e) {
     if (e.keyCode !== 27) {
         stopTouch();
     }
@@ -953,7 +953,7 @@ function kopier(kopi) {
 // Ved oppstart
 window.onload=function() {
     //document.getElementById("grid").addEventListener("contextmenu", function(e) { e.preventDefault(); });
-    scrambleMaker();
+    //scrambleMaker();
     /*document.getElementById("tid").click();
 
     document.addEventListener("keydown", readyTimer, false);
