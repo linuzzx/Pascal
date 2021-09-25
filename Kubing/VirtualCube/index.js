@@ -86,6 +86,8 @@ function getReady() {
         ready = true;
         scrambleMaker();
         $("#time").html("0.00");
+        moveCount = 0;
+        $("#moves").html(moveCount + " moves");
     }
 }
 
