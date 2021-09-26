@@ -566,11 +566,6 @@ function updateCube() {
         index--;
     }
     index = 0;
-    /*for (let i = size+2*gap; i < 4*(size+gap); i += size+gap) {
-        ctx.fillStyle = front[index];
-        ctx.fillRect(i, 4*size+5*gap, size, size);
-        index++;
-    }*/
     for (let j = 4*size+5*gap; j < 7*(size+gap); j += size+gap) {
         for (let i = size+2*gap; i < 4*(size+gap); i += size+gap) {
             ctx.fillStyle = front[index];

@@ -55,7 +55,7 @@ h1 {
     text-align: end;
 }
 
-#moves {
+#moves, #tps {
     font-size: 5vh;
     text-align: end;
 }

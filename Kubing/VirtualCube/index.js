@@ -3,7 +3,9 @@ let nextAlg = 0;
 let algList = [];
 let keyBinds = [];
 let possibleMoves = [];//["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];
+let time = 0;
 let moveCount = 0;
+let tps = 0;
 let interval;
 let timing = false;
 let ready = false;
@@ -88,6 +90,7 @@ function getReady() {
         $("#time").html("0.00");
         moveCount = 0;
         $("#moves").html(moveCount + " moves");
+        $("#tps").html("");
     }
 }
 
@@ -111,6 +114,7 @@ function startTimer() {
                 if (s < 10) s = "0" + s;
                 $("#time").html(m + ":" + s + "." + ms);
             }
+
             const solved = checkState();
             if (solved) {
                 stopTimer();
@@ -124,6 +128,11 @@ function stopTimer() {
         console.log("Stop timer()");
         timing = false;
         clearInterval(interval);
+
+        tps = moveCount / Math.floor((time / 1000) % 60);
+        console.log(tps);
+        console.log(tps.toFixed(2));
+        $("#tps").html(tps.toFixed(2) + " tps");
     }
 }
 
