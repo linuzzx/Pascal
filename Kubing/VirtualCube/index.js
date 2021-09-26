@@ -61,7 +61,6 @@ function getTurn(e) {
     else {
         const key = keyBinds.indexOf(String.fromCharCode(e));
         const turn = possibleMoves[key];
-        console.log(turn);
         if (turn) {
             if (turn.includes("x") || turn.includes("y") || turn.includes("z")) {}
             else {
@@ -125,13 +124,10 @@ function startTimer() {
 
 function stopTimer() {
     if (timing) {
-        console.log("Stop timer()");
         timing = false;
         clearInterval(interval);
 
         tps = moveCount / (time / 1000);
-        console.log(tps);
-        console.log(tps.toFixed(2));
         $("#tps").html(tps.toFixed(2) + " tps");
     }
 }
@@ -331,7 +327,6 @@ function checkState() {
         (r1 === r2 && r1 === r3 && r1 === r4 && r1 === r5 && r1 === r6 && r1 === r7 && r1 === r8 && r1 === r9) &&
         (l1 === l2 && l1 === l3 && l1 === l4 && l1 === l5 && l1 === l6 && l1 === l7 && l1 === l8 && l1 === l9)) {
             isSolved = true;
-            console.log("Solved!");
     }
 
     return isSolved;
