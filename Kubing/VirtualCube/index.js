@@ -129,7 +129,7 @@ function stopTimer() {
         timing = false;
         clearInterval(interval);
 
-        tps = moveCount / Math.floor((time / 1000) % 60);
+        tps = moveCount / (time / 1000);
         console.log(tps);
         console.log(tps.toFixed(2));
         $("#tps").html(tps.toFixed(2) + " tps");
