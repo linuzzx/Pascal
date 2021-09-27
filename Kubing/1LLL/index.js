@@ -1,6 +1,7 @@
-const currentAlgset = localStorage.getItem("currentAlgset") || 0;
+let currentAlgset = localStorage.getItem("currentAlgset") || 0;
 let nextAlg = 0;
 let algList = [];
+let currentAlg = "";
 
 $(function() {
     showContent();
@@ -54,15 +55,21 @@ function listCases() {
 
 function setAlgset(algset) {
     localStorage.setItem("currentAlgset", algset);
-
-    const cbCount = Object.keys(algs[algset]).length;
-    let out = "";
+    currentAlgset = algset;
     
-    for (let i=1; i<cbCount; i++) {
-        out += "<label>"+i+"<input type='checkbox' value='"+i+"' onchange='setSubsets()'></label>";
-    }
+    if (algs[algset].name !== "Custom") {
+        const cbCount = Object.keys(algs[algset]).length;
+        let out = "";
+        
+        for (let i=1; i<cbCount; i++) {
+            out += "<label>"+i+"<input type='checkbox' value='"+i+"' onchange='setSubsets()'></label>";
+        }
 
-    $("#cbSubsetDiv").html(out);
+        $("#cbSubsetDiv").html(out);
+    }
+    else {
+        $("#cbSubsetDiv").html("");
+    }
 
     setSubsets();
 }
@@ -96,25 +103,75 @@ function setSubsets() {
 }
 
 function nextCase() {
-    const scramble = inverse(algList[nextAlg]);
-    draw(scramble);
-    $("#setupAlg").html(scramble);
-    $("#solutionAlg").html(algList[nextAlg]);
-    nextAlg++;
+    currentAlg = algList[nextAlg];
+    
+    if (currentAlg) {
+        const scramble = inverse(currentAlg);
+        draw(scramble);
+        $("#setupAlg").html(scramble);
+        $("#solutionAlg").html(algList[nextAlg]);
+        addCustomAlgButton();
+        nextAlg++;
 
-    if (nextAlg === algList.length) {
-        nextAlg = 0;
+        if (nextAlg === algList.length) {
+            nextAlg = 0;
+        }
+
+        hideSolution();
+    }
+    else {
+        draw("");
+        $("#setupAlg").html("Currently no algs");
+        $("#addToCustom").html("");
+    }
+}
+
+function addCustomAlgButton() {
+    let out = "";
+
+    if (!algs[algs.length-1][1].includes(currentAlg)) {
+        out = "<button id='customAlgButton' onclick='addCustomAlg()'>Add to custom</button>";
+    }
+    else {
+        out = "<button id='customAlgButton' onclick='removeCustomAlg()'>Remove from custom</button>";
     }
 
-    hideSolution();
+    $("#addToCustom").html(out);
+}
+
+function addCustomAlg() {
+    algs[algs.length-1][1].push(currentAlg);
+    addCustomAlgButton();
+    console.log(currentAlgset);
+}
+
+function removeCustomAlg() {
+    const index = algs[algs.length-1][1].indexOf(currentAlg);
+    if (index !== -1) {
+        algs[algs.length-1][1].splice(index, 1);
+    }
+    addCustomAlgButton();
+    console.log(currentAlgset);
+    setAlgset(currentAlgset);
+}
+
+function toggleSolution() {
+    if ($("#solutionAlg").css("visibility") === "hidden") {
+        showSolution();
+    }
+    else {
+        hideSolution();
+    }
 }
 
 function showSolution() {
     $("#solutionAlg").css("visibility", "visible");
+    $("#btnShowSolution").text("Hide solution");
 }
 
 function hideSolution() {
     $("#solutionAlg").css("visibility", "hidden");
+    $("#btnShowSolution").text("Show solution");
 }
 
 function inverse(alg) {
@@ -139,13 +196,13 @@ function adjustSize() {
     let cbSize = 0;
     if ($("#content").width() >= $("#content").height()) {
         cbSize = $("#content").height() / 40;
-        $("#cubeDisplay").css("grid-template-rows","0fr 1fr 5fr 1fr 1fr");
+        $("#cubeDisplay").css("grid-template-rows","0fr 1fr 5fr 1fr 1fr 1fr");
         $("#setupAlg").css("font-size", $("#content").height() / 25);
         $("#solutionAlg").css("font-size", $("#content").height() / 25);
     }
     else {
         cbSize = $("#content").width() / 40;
-        $("#cubeDisplay").css("grid-template-rows","1fr 1fr 5fr 1fr 1fr");
+        $("#cubeDisplay").css("grid-template-rows","1fr 1fr 5fr 1fr 1fr 1fr");
         $("#setupAlg").css("font-size", $("#content").width() / 15);
         $("#solutionAlg").css("font-size", $("#content").width() / 15);
     }
@@ -159,12 +216,7 @@ function adjustSize() {
 function keyListener(e) {
     // Space
     if (e === 32) {
-        if ($("#solutionAlg").css("visibility") === "hidden") {
-            showSolution();
-        }
-        else {
-            hideSolution();
-        }
+        toggleSolution();
     }
     // Enter
     else if (e === 13) {
