@@ -34,6 +34,7 @@ body {
     width: 75%;
     height: 5vh;
     margin: auto;
+    font-size: 100%;
 }
 
 label {
@@ -53,9 +54,11 @@ h1 {
 #btnRemoveAllCustom {
     height: 5vh;
     margin: 1% 0 0 0;
+    font-size: 100%;
 }
 
 #customAlgButton {
     height: 5vh;
     margin: auto;
+    font-size: 100%;
 }
