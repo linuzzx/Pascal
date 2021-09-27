@@ -7,13 +7,12 @@ $(function() {
     showContent();
     draw("");
     
+    getCustomAlgs();
     listCases();
     setAlgset(currentAlgset);
     adjustSize();
 
     $(window).keypress(function(e) {
-        console.log(e);
-        console.log(e.keyCode);
         keyListener(e.keyCode);
     });
 });
@@ -68,7 +67,7 @@ function setAlgset(algset) {
         $("#cbSubsetDiv").html(out);
     }
     else {
-        $("#cbSubsetDiv").html("");
+        $("#cbSubsetDiv").html("<button id='btnRemoveAllCustom' onclick='removeAllCustomAlgs()'>Remove all from custom</button>");
     }
 
     setSubsets();
@@ -110,6 +109,7 @@ function nextCase() {
         draw(scramble);
         $("#setupAlg").html(scramble);
         $("#solutionAlg").html(algList[nextAlg]);
+        $("#btnRemoveAllCustom").prop("disabled", false);
         addCustomAlgButton();
         nextAlg++;
 
@@ -122,6 +122,7 @@ function nextCase() {
     else {
         draw("");
         $("#setupAlg").html("Currently no algs");
+        $("#btnRemoveAllCustom").prop("disabled", true);
         $("#addToCustom").html("");
     }
 }
@@ -135,14 +136,14 @@ function addCustomAlgButton() {
     else {
         out = "<button id='customAlgButton' onclick='removeCustomAlg()'>Remove from custom</button>";
     }
-
+    
     $("#addToCustom").html(out);
 }
 
 function addCustomAlg() {
     algs[algs.length-1][1].push(currentAlg);
     addCustomAlgButton();
-    console.log(currentAlgset);
+    saveCustomAlgs();
 }
 
 function removeCustomAlg() {
@@ -151,8 +152,31 @@ function removeCustomAlg() {
         algs[algs.length-1][1].splice(index, 1);
     }
     addCustomAlgButton();
-    console.log(currentAlgset);
     setAlgset(currentAlgset);
+    saveCustomAlgs();
+}
+
+function removeAllCustomAlgs() {
+    while (algs[algs.length-1][1].length > 0) {
+        algs[algs.length-1][1].pop();
+    }
+    addCustomAlgButton();
+    setAlgset(currentAlgset);
+    saveCustomAlgs();
+}
+
+function saveCustomAlgs() {
+    localStorage.setItem("customAlgs", algs[algs.length-1][1].join(";"));
+}
+
+function getCustomAlgs() {
+    if (localStorage.getItem("customAlgs")) {
+        const customAlgs = localStorage.getItem("customAlgs").split(";");
+
+        for (let a of customAlgs) {
+            algs[algs.length-1][1].push(a);
+        }
+    }
 }
 
 function toggleSolution() {
