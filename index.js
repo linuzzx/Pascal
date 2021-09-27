@@ -95,5 +95,5 @@ function searchTheWeb() {
     const url = "https://www.google.com/search?q="+$("#inputSearch").val();
     $("#inputSearch").val("");
 
-    window.open(url, "_blank");
+    window.location = url; //window.open(url);
 }
