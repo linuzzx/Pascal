@@ -139,6 +139,7 @@ function addCustomAlgButton() {
     }
     
     $("#addToCustom").html(out);
+    adjustSize();
 }
 
 function addCustomAlg() {
