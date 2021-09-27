@@ -1,6 +1,7 @@
 $(function() {
     getParams();
     drawCube("");
+    updateArrays();
     updateTPS();
     //listCubeTypes();
 })
@@ -28,7 +29,6 @@ function getParams() {
                     break;
             }
         }
-        console.log(params);
     }
 }
 
