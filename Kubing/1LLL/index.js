@@ -126,6 +126,8 @@ function nextCase() {
         $("#btnRemoveAllCustom").prop("disabled", true);
         $("#addToCustom").html("");
     }
+
+    adjustSize();
 }
 
 function addCustomAlgButton() {
