@@ -236,9 +236,9 @@ function adjustSize() {
     $("input[type='checkbox']").css("height", cbSize);
     $("#selectDiv label").css("font-size", cbSize);
     $("#selectAlgset").css("font-size", cbSize);
-    $("#buttonDiv").css("font-size", $("#buttonDiv").height() / 2);
-    $("#customAlgButton").css("font-size", $("#customAlgButton").height() / 2);
-    $("#btnRemoveAllCustom").css("font-size", $("#btnRemoveAllCustom").height() / 2);
+    $("#buttonDiv").css("font-size", "2.5vh");
+    $("#customAlgButton").css("font-size", "2.5vh");
+    $("#btnRemoveAllCustom").css("font-size", "2.5vh");
 }
 
 function keyListener(e) {
