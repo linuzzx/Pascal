@@ -543,13 +543,15 @@ function updateCube() {
 
     const up = [u1,u2,u3,u4,u5,u6,u7,u8,u9];
     const left = [l1,l2,l3];
+    const left2 = [l3,l6,l9];
     const right = [r1,r2,r3];
+    const right2 = [r1,r4,r7];
     const front = [f1,f2,f3,f4,f5,f6,f7,f8,f9];
     const back = [b1,b2,b3];
 
     ctx.fillStyle = "black";
     ctx.fillRect(size+gap, 0, 3*size+4*gap, 7*size+8*gap);
-    ctx.fillRect(0, size+gap, 5*size+6*gap, 3*size+4*gap);
+    ctx.fillRect(0, size+gap, 5*size+6*gap, 6*size+7*gap);
 
     let index = 0;
     for (let j = size+2*gap; j < 4*(size+gap); j += size+gap) {
@@ -579,10 +581,27 @@ function updateCube() {
         ctx.fillRect(gap, j, size, size);
         index++;
     }
+    index = 0;
+    for (let j = 4*size+5*gap; j < 7*(size+gap); j += size+gap) {
+        ctx.fillStyle = left2[index];
+        ctx.fillRect(gap, j, size, size);
+        index++;
+    }
     index = right.length-1;
     for (let j = size+2*gap; j < 4*(size+gap); j += size+gap) {
         ctx.fillStyle = right[index];
         ctx.fillRect(4*size+5*gap, j, size, size);
         index--;
     }
+    index = 0;
+    for (let j = 4*size+5*gap; j < 7*(size+gap); j += size+gap) {
+        ctx.fillStyle = right2[index];
+        ctx.fillRect(4*size+5*gap, j, size, size);
+        index++;
+    }
+    // Fyll linje for left og right
+    ctx.fillStyle = left2[0];
+    ctx.fillRect(gap, 4*(size+gap), size, gap);
+    ctx.fillStyle = right2[0];
+    ctx.fillRect(4*size+5*gap, 4*(size+gap), size, gap);
 }
