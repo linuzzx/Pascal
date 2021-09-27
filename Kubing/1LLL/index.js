@@ -70,6 +70,7 @@ function setAlgset(algset) {
         $("#cbSubsetDiv").html("<button id='btnRemoveAllCustom' onclick='removeAllCustomAlgs()'>Remove all from custom</button>");
     }
 
+    adjustSize();
     setSubsets();
 }
 
@@ -234,6 +235,9 @@ function adjustSize() {
     $("input[type='checkbox']").css("height", cbSize);
     $("#selectDiv label").css("font-size", cbSize);
     $("#selectAlgset").css("font-size", cbSize);
+    $("#buttonDiv").css("font-size", $("#buttonDiv").height() / 2);
+    $("#customAlgButton").css("font-size", $("#buttonDiv").height() / 2);
+    $("#btnRemoveAllCustom").css("font-size", $("#buttonDiv").height() / 2);
 }
 
 function keyListener(e) {
