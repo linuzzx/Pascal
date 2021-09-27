@@ -51,13 +51,11 @@ h1 {
 }
 
 #btnRemoveAllCustom {
-    width: 15%;
     height: 5vh;
     margin: 1% 0 0 0;
 }
 
 #customAlgButton {
-    width: 15%;
     height: 5vh;
     margin: auto;
 }
