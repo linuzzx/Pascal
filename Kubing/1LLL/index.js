@@ -231,13 +231,14 @@ function adjustSize() {
         $("#setupAlg").css("font-size", $("#content").width() / 15);
         $("#solutionAlg").css("font-size", $("#content").width() / 15);
     }
+
     $("input[type='checkbox']").css("width", cbSize);
     $("input[type='checkbox']").css("height", cbSize);
     $("#selectDiv label").css("font-size", cbSize);
     $("#selectAlgset").css("font-size", cbSize);
     $("#buttonDiv").css("font-size", $("#buttonDiv").height() / 2);
-    $("#customAlgButton").css("font-size", $("#buttonDiv").height() / 2);
-    $("#btnRemoveAllCustom").css("font-size", $("#buttonDiv").height() / 2);
+    $("#customAlgButton").css("font-size", $("#customAlgButton").height() / 2);
+    $("#btnRemoveAllCustom").css("font-size", $("#btnRemoveAllCustom").height() / 2);
 }
 
 function keyListener(e) {
