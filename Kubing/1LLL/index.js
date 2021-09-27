@@ -70,8 +70,8 @@ function setAlgset(algset) {
         $("#cbSubsetDiv").html("<button id='btnRemoveAllCustom' onclick='removeAllCustomAlgs()'>Remove all from custom</button>");
     }
 
-    adjustSize();
     setSubsets();
+    adjustSize();
 }
 
 function setSubsets() {
@@ -139,7 +139,6 @@ function addCustomAlgButton() {
     }
     
     $("#addToCustom").html(out);
-    adjustSize();
 }
 
 function addCustomAlg() {
