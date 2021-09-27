@@ -9,6 +9,12 @@ $(function() {
     listCases();
     setAlgset(currentAlgset);
     adjustSize();
+
+    $(window).keypress(function(e) {
+        console.log(e);
+        console.log(e.keyCode);
+        keyListener(e.keyCode);
+    });
 });
 
 $(window).resize(function(){
@@ -148,4 +154,20 @@ function adjustSize() {
     $("#selectDiv label").css("font-size", cbSize);
     $("#selectAlgset").css("font-size", cbSize);
     $("#buttonDiv").css("font-size", $("#buttonDiv").height() / 2);
+}
+
+function keyListener(e) {
+    // Space
+    if (e === 32) {
+        if ($("#solutionAlg").css("visibility") === "hidden") {
+            showSolution();
+        }
+        else {
+            hideSolution();
+        }
+    }
+    // Enter
+    else if (e === 13) {
+        nextCase();
+    }
 }
