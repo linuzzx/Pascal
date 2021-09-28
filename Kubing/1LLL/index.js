@@ -160,12 +160,15 @@ function removeCustomAlg() {
 }
 
 function removeAllCustomAlgs() {
-    while (algs[algs.length-1][1].length > 0) {
-        algs[algs.length-1][1].pop();
-    }
-    addCustomAlgButton();
-    setAlgset(currentAlgset);
-    saveCustomAlgs();
+    const r = confirm("Are you sure you want to remove all algs from custom?");
+    if (r) {
+        while (algs[algs.length-1][1].length > 0) {
+            algs[algs.length-1][1].pop();
+        }
+        addCustomAlgButton();
+        setAlgset(currentAlgset);
+        saveCustomAlgs();
+    }    
 }
 
 function saveCustomAlgs() {
