@@ -109,7 +109,7 @@ function cpuRandom() {
     setTimeout(() => {
         chooseTile(false, $(possibleMoves[Math.floor(Math.random()*possibleMoves.length)]));
         waiting = false;
-    }, 500);
+    }, 250);
 }
 
 function cpuMiniMax() {
