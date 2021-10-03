@@ -3,12 +3,14 @@ const moves = ["X","O",""];
 let index = 0;
 let players = 0;
 let first = 0;
+let difficulty = 0;
 let finished = false;
 let waiting = false;
 
 $(function() {
     $("input[name=players][value='"+localStorage.getItem("selectedPlayers")+"']").prop("checked",true);
     $("input[name=first][value='"+localStorage.getItem("selectedFirst")+"']").prop("checked",true);
+    $("input[name=difficulty][value='"+localStorage.getItem("selectedDifficulty")+"']").prop("checked",true);
     adjustSize();
 });
 
@@ -25,6 +27,7 @@ function start() {
     }
     selectPlayers();
     selectFirst();
+    selectDifficulty();
 
     if (players === 1) {
         if (first === 1) {
@@ -57,12 +60,17 @@ function chooseTile(tf, b) {
 
 function selectPlayers() {
     players = parseInt($("input[name=players]:checked", "#players").val());
-    localStorage.setItem("selectedPlayers", parseInt($("input[name=players]:checked", "#players").val()));
+    localStorage.setItem("selectedPlayers", players);
 }
 
 function selectFirst() {
     first = parseInt($("input[name=first]:checked", "#first").val());
-    localStorage.setItem("selectedFirst", parseInt($("input[name=first]:checked", "#first").val()));
+    localStorage.setItem("selectedFirst", first);
+}
+
+function selectDifficulty() {
+    difficulty = parseInt($("input[name=difficulty]:checked", "#difficulty").val());
+    localStorage.setItem("selectedDifficulty", difficulty);
 }
 
 function reset() {
@@ -83,8 +91,15 @@ function getBoardValues() {
 }
 
 function cpuMakeMove() {
-    // Minimax
+    if (difficulty === 0) {
+        cpuRandom();
+    }
+    else {
+        cpuMiniMax();
+    }
+}
 
+function cpuRandom() {
     let possibleMoves = [];
     for (let b of $("#board button")) {
         if ($(b).text() === "") {
@@ -95,6 +110,11 @@ function cpuMakeMove() {
         chooseTile(false, $(possibleMoves[Math.floor(Math.random()*possibleMoves.length)]));
         waiting = false;
     }, 500);
+}
+
+function cpuMiniMax() {
+    //Fjern denne
+    cpuRandom();
 }
 
 function checkIfWon() {
