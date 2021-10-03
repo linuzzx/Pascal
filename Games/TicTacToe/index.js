@@ -155,6 +155,7 @@ function adjustSize() {
 
     const fontSize = size / 6;
     $("#startDiv").css("width", size * 1.1);
+    $("#btnStart").css("font-size", fontSize * 2 / 3);
     $("#board button").css("font-size", fontSize);
 }
 
