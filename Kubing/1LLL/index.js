@@ -219,7 +219,7 @@ function inverse(alg) {
         }
     }
 
-    return newAlg;
+    return newAlg.trim();
 }
 
 function adjustSize() {
