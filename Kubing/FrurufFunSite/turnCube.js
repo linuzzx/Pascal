@@ -11,13 +11,6 @@ let d1 = "", d2 = "", d3 = "", d4 = "", d5 = "", d6 = "", d7 = "", d8 = "", d9 =
 function doTurns(allMoves) {
     drawScrambleArray = allMoves.split(" ");
 
-    r1 = "", r2 = "", r3 = "", r4 = "", r5 = "", r6 = "", r7 = "", r8 = "", r9 = "";
-    l1 = "", l2 = "", l3 = "", l4 = "", l5 = "", l6 = "", l7 = "", l8 = "", l9 = "";
-    f1 = "", f2 = "", f3 = "", f4 = "", f5 = "", f6 = "", f7 = "", f8 = "", f9 = "";
-    b1 = "", b2 = "", b3 = "", b4 = "", b5 = "", b6 = "", b7 = "", b8 = "", b9 = "";
-    u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "white", u7 = "white", u8 = "white", u9 = "white";
-    d1 = "", d2 = "", d3 = "", d4 = "", d5 = "", d6 = "", d7 = "", d8 = "", d9 = "";
-
     for (let move of drawScrambleArray) {
         switch (move) {
             case "R":
@@ -204,9 +197,22 @@ function doTurns(allMoves) {
     }
 }
 
-function applyMoves(scramble, solution) {
+function resetCube() {
+    r1 = "", r2 = "", r3 = "", r4 = "", r5 = "", r6 = "", r7 = "", r8 = "", r9 = "";
+    l1 = "", l2 = "", l3 = "", l4 = "", l5 = "", l6 = "", l7 = "", l8 = "", l9 = "";
+    f1 = "", f2 = "", f3 = "", f4 = "", f5 = "", f6 = "", f7 = "", f8 = "", f9 = "";
+    b1 = "", b2 = "", b3 = "", b4 = "", b5 = "", b6 = "", b7 = "", b8 = "", b9 = "";
+    u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "white", u7 = "white", u8 = "white", u9 = "white";
+    d1 = "", d2 = "", d3 = "", d4 = "", d5 = "", d6 = "", d7 = "", d8 = "", d9 = "";
+}
+
+function scrambleCube(scramble) {
+    resetCube();
     doTurns(scramble);
-    doTurns(solution);
+}
+
+function applyMoves(moves) {
+    doTurns(moves);
 
     return getCubeState();
 }
