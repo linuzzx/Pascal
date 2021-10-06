@@ -4,32 +4,32 @@ let tabContents = [];
 let currentTab = 0;
 
 const frurufState1 = [
-    "gray","gray","white","white","white","white","gray","gray","white",
-    "white","gray","white",
-    "gray","white","gray",
-    "gray","gray","gray",
-    "gray","white","gray"
+    "#505050","#505050","white","white","white","white","#505050","#505050","white",
+    "white","#505050","white",
+    "#505050","white","#505050",
+    "#505050","#505050","#505050",
+    "#505050","white","#505050"
 ];
 const frurufState2 = [
-    "gray","white","gray","gray","white","gray","white","white","white",
-    "gray","white","gray",
-    "gray","gray","gray",
-    "gray","white","gray",
-    "white","gray","white"
+    "#505050","white","#505050","#505050","white","#505050","white","white","white",
+    "#505050","white","#505050",
+    "#505050","#505050","#505050",
+    "#505050","white","#505050",
+    "white","#505050","white"
 ];
 const frurufState3 = [
-    "white","gray","gray","white","white","white","white","gray","gray",
-    "gray","gray","gray",
-    "gray","white","gray",
-    "white","gray","white",
-    "gray","white","gray"
+    "white","#505050","#505050","white","white","white","white","#505050","#505050",
+    "#505050","#505050","#505050",
+    "#505050","white","#505050",
+    "white","#505050","white",
+    "#505050","white","#505050"
 ];
 const frurufState4 = [
-    "white","white","white","gray","white","gray","gray","white","gray",
-    "gray","white","gray",
-    "white","gray","white",
-    "gray","white","gray",
-    "gray","gray","gray"
+    "white","white","white","#505050","white","#505050","#505050","white","#505050",
+    "#505050","white","#505050",
+    "white","#505050","white",
+    "#505050","white","#505050",
+    "#505050","#505050","#505050"
 ];
 
 let olls = [
@@ -95,6 +95,14 @@ let olls = [
 let ollsInversed = [];
 let f2lsInversed = [];
 let f2lInversed = [];
+
+let triggers = [
+    "R U R'",
+    "R U2 R'",
+    "R U R' U'",
+    "R' F R F'",
+    "F R' F' R"
+];
 
 let other = [
     "",
@@ -173,9 +181,9 @@ function getAlgs() {
     let i = 0;
     for (let raw of rawF2l) {
         for (let oll of olls) {
-            f2ls.push(oll+" "+raw.split(" / ")[0].trim());
+            f2ls.push(oll+" "+raw.split("/")[0].trim());
 
-            if (f2ls[i].includes("y2")) {
+            /*if (f2ls[i].includes("y2")) {
                 f2ls[i] = f2ls[i] + " y2";
             }
             else if (f2ls[i].includes("y'")) {
@@ -192,8 +200,8 @@ function getAlgs() {
             }
             else if (f2ls[i].includes("Dw")) {
                 f2ls[i] = f2ls[i] + " y";
-            }
-            i++;            
+            }*/
+            i++;
         }
     }
     
@@ -208,9 +216,9 @@ function getAlgs() {
     for (let i=0; i<f2l.length; i++) {
         f2lInversed.push(inverse(f2l[i]));
     }
-    
+    console.log(f2lsInversed);
     myAlgs = olls.concat(algs, other, ollsInversed, plls).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
-    myF2lAlgs = f2ls.concat(f2lsInversed, f2l, f2lInversed).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
+    myF2lAlgs = triggers.concat(f2ls, f2lsInversed, f2l, f2lInversed).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
 
     getFLL();
     getFLS();
@@ -241,8 +249,8 @@ function getFLL() {
     for (let i = 0; i < fll.length; i++) {
         out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='case"+i+"' width='"+canvasSize+"' height='"+canvasSize+"' style='margin: auto;'></canvas><br>"+ollsInversed[i]+"</td><td>"+fll[i]+"</td></tr>";
     }
-    /*
-    for (let i = 0; i < ollsInversed.length; i++) {
+    
+    /*for (let i = 0; i < ollsInversed.length; i++) {
         out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='case"+i+"' width='"+canvasSize+"' height='"+canvasSize+"' style='margin: auto;'></canvas><br>"+ollsInversed[i]+"</td><td>"+solutions[i]+"</td></tr>";
     }*/
     $("#algTable").html(out);
@@ -269,14 +277,31 @@ function getFLS() {
             }
         }
         arrIndex++;
+    }
+    for (let alg1 of f2lsInversed) {
+        outerLoop:
+        for (let alg2 of triggers) {
+            for (let u1 of [[""], ["U "], ["U' "], ["U2 "]]) {
+                for (let alg3 of triggers) {
+                    for (let u2 of [[" "], [" U "], [" U' "], [" U2 "]]) {
+                        scrambleCube(alg1);
+                        auf = "";
+                        if (checkFrurufState(applyMoves(u1+alg2+u2+alg3))) {
+                            solutionsF2l[arrIndex] = u1+alg2+u2+alg3+auf;
+                            break outerLoop;
+                        }
+                    }
+                }
+            }
+        }
+        arrIndex++;
     }*/
-
     let out = "<tr><th>#</th><th>Setup</th><th>Alg</th></tr>";
     for (let i = 0; i < fls.length; i++) {
         out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='caseF2l"+i+"' width='"+canvasSize+"' height='"+((canvasSize / 5) * 7)+"' style='margin: auto;'></canvas><br>"+f2lsInversed[i]+"</td><td>"+fls[i]+"</td></tr>";
     }
-    /*
-    for (let i = 0; i < f2lsInversed.length; i++) {
+    
+    /*for (let i = 0; i < f2lsInversed.length; i++) {
         out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='caseF2l"+i+"' width='"+canvasSize+"' height='"+((canvasSize / 5) * 7)+"' style='margin: auto;'></canvas><br>"+f2lsInversed[i]+"</td><td>"+solutionsF2l[i]+"</td></tr>";
     }*/
     $("#algFlsTable").html(out);
