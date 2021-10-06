@@ -93,6 +93,8 @@ let olls = [
 ];
 
 let ollsInversed = [];
+let f2lsInversed = [];
+let f2lInversed = [];
 
 let other = [
     "",
@@ -130,21 +132,20 @@ let plls = [
     "M' U' M2 U' M2 U' M' U2 M2",
 ];
 
+let f2ls = [];
+
 let solutions = [];
+let solutionsF2l = [];
 let myAlgs = [];
+let myF2lAlgs = [];
 
 $(function() {
     tabContents = $(".tabContent");
     makeUnderline();
     showFLL();
     adjustSize();
-    
-    for (let i=0; i<olls.length; i++) {
-        ollsInversed.push(inverse(olls[i]));
-    }
 
-    getFLL();
-    adjustSize();
+    getAlgs();
 });
         
 $(window).resize(function(){
@@ -163,11 +164,65 @@ function adjustSize() {
     }
 }
 
+function getAlgs() {
+    
+    for (let i=0; i<olls.length; i++) {
+        ollsInversed.push(inverse(olls[i]));
+    }
+    
+    let i = 0;
+    for (let raw of rawF2l) {
+        for (let oll of olls) {
+            f2ls.push(oll+" "+raw.split(" / ")[0].trim());
+
+            if (f2ls[i].includes("y2")) {
+                f2ls[i] = f2ls[i] + " y2";
+            }
+            else if (f2ls[i].includes("y'")) {
+                f2ls[i] = f2ls[i] + " y";
+            }
+            else if (f2ls[i].includes("y")) {
+                f2ls[i] = f2ls[i] + " y'";
+            }
+            if (f2ls[i].includes("Dw2")) {
+                f2ls[i] = f2ls[i] + " y2";
+            }
+            else if (f2ls[i].includes("Dw'")) {
+                f2ls[i] = f2ls[i] + " y'";
+            }
+            else if (f2ls[i].includes("Dw")) {
+                f2ls[i] = f2ls[i] + " y";
+            }
+            i++;            
+        }
+    }
+    
+    for (let i=0; i<f2ls.length; i++) {
+        f2lsInversed.push(inverse(f2ls[i]));
+    }
+    
+    for (let i=0; i<f2l.length; i++) {
+        f2l[i] = f2l[i].trim();
+    }
+    
+    for (let i=0; i<f2l.length; i++) {
+        f2lInversed.push(inverse(f2l[i]));
+    }
+    
+    myAlgs = olls.concat(algs, other, ollsInversed, plls).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
+    myF2lAlgs = f2ls.concat(f2lsInversed, f2l, f2lInversed).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
+
+    getFLL();
+    getFLS();
+
+    adjustSize();
+}
+
 function getFLL() {
     let arrIndex = 0;
-    myAlgs = olls.concat(algs, other, ollsInversed, plls).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
-    console.log(myAlgs);
-    for (let alg1 of ollsInversed) {
+
+    //Kode for å generere algs
+    /*for (let alg1 of ollsInversed) {
         outerLoop:
         for (let alg2 of myAlgs) {
             for (let u of [[""], ["U "], ["U' "], ["U2 "]]) {
@@ -180,16 +235,54 @@ function getFLL() {
             }
         }
         arrIndex++;
-    }
+    }*/
 
     let out = "<tr><th>#</th><th>Setup</th><th>Alg</th></tr>";
+    for (let i = 0; i < fll.length; i++) {
+        out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='case"+i+"' width='"+canvasSize+"' height='"+canvasSize+"' style='margin: auto;'></canvas><br>"+ollsInversed[i]+"</td><td>"+fll[i]+"</td></tr>";
+    }
+    /*
     for (let i = 0; i < ollsInversed.length; i++) {
         out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='case"+i+"' width='"+canvasSize+"' height='"+canvasSize+"' style='margin: auto;'></canvas><br>"+ollsInversed[i]+"</td><td>"+solutions[i]+"</td></tr>";
-    }
-    $("#algTable").html(out)
+    }*/
+    $("#algTable").html(out);
 
     for (let i = 0; i < ollsInversed.length; i++) {
         drawCube("#case"+i, ollsInversed[i]);
+    }
+}
+
+function getFLS() {
+    let arrIndex = 0;
+
+    //Kode for å generere algs
+    /*for (let alg1 of f2lsInversed) {
+        outerLoop:
+        for (let alg2 of myF2lAlgs) {
+            for (let u of [[""], ["U "], ["U' "], ["U2 "]]) {
+                scrambleCube(alg1);
+                auf = "";
+                if (checkFrurufState(applyMoves(u+alg2))) {
+                    solutionsF2l[arrIndex] = u+alg2+auf;
+                    break outerLoop;
+                }
+            }
+        }
+        arrIndex++;
+    }*/
+
+    let out = "<tr><th>#</th><th>Setup</th><th>Alg</th></tr>";
+    for (let i = 0; i < fls.length; i++) {
+        out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='caseF2l"+i+"' width='"+canvasSize+"' height='"+((canvasSize / 5) * 7)+"' style='margin: auto;'></canvas><br>"+f2lsInversed[i]+"</td><td>"+fls[i]+"</td></tr>";
+    }
+    /*
+    for (let i = 0; i < f2lsInversed.length; i++) {
+        out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='caseF2l"+i+"' width='"+canvasSize+"' height='"+((canvasSize / 5) * 7)+"' style='margin: auto;'></canvas><br>"+f2lsInversed[i]+"</td><td>"+solutionsF2l[i]+"</td></tr>";
+    }*/
+    $("#algFlsTable").html(out);
+
+    for (let i = 0; i < f2lsInversed.length; i++) {
+        drawCubeF2l("#caseF2l"+i, f2lsInversed[i]);
     }
 }
 

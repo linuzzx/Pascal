@@ -1,12 +1,12 @@
 let cubeState = [];
 let drawScrambleArray = [];
 
-let r1 = "gray", r2 = "gray", r3 = "gray", r4 = "gray", r5 = "gray", r6 = "gray", r7 = "gray", r8 = "gray", r9 = "gray", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
-let l1 = "gray", l2 = "gray", l3 = "gray", l4 = "gray", l5 = "gray", l6 = "gray", l7 = "gray", l8 = "gray", l9 = "gray", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
-let f1 = "gray", f2 = "gray", f3 = "gray", f4 = "gray", f5 = "gray", f6 = "gray", f7 = "gray", f8 = "gray", f9 = "gray", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
-let b1 = "gray", b2 = "gray", b3 = "gray", b4 = "gray", b5 = "gray", b6 = "gray", b7 = "gray", b8 = "gray", b9 = "gray", nb1, nb2, nb3, nb4, nb5, nb6, nb7, nb8, nb9;
+let r1 = "#505050", r2 = "#505050", r3 = "#505050", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
+let l1 = "#505050", l2 = "#505050", l3 = "#505050", l4 = "orange", l5 = "orange", l6 = "orange", l7 = "orange", l8 = "orange", l9 = "orange", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
+let f1 = "#505050", f2 = "#505050", f3 = "#505050", f4 = "green", f5 = "green", f6 = "green", f7 = "green", f8 = "green", f9 = "green", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
+let b1 = "#505050", b2 = "#505050", b3 = "#505050", b4 = "blue", b5 = "blue", b6 = "blue", b7 = "blue", b8 = "blue", b9 = "blue", nb1, nb2, nb3, nb4, nb5, nb6, nb7, nb8, nb9;
 let u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "white", u7 = "white", u8 = "white", u9 = "white", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
-let d1 = "gray", d2 = "gray", d3 = "gray", d4 = "gray", d5 = "gray", d6 = "gray", d7 = "gray", d8 = "gray", d9 = "gray", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
+let d1 = "yellow", d2 = "yellow", d3 = "yellow", d4 = "yellow", d5 = "yellow", d6 = "yellow", d7 = "yellow", d8 = "yellow", d9 = "yellow", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
 
 function doTurns(allMoves) {
     drawScrambleArray = allMoves.split(" ");
@@ -198,12 +198,12 @@ function doTurns(allMoves) {
 }
 
 function resetCube() {
-    r1 = "gray", r2 = "gray", r3 = "gray", r4 = "gray", r5 = "gray", r6 = "gray", r7 = "gray", r8 = "gray", r9 = "gray";
-    l1 = "gray", l2 = "gray", l3 = "gray", l4 = "gray", l5 = "gray", l6 = "gray", l7 = "gray", l8 = "gray", l9 = "gray";
-    f1 = "gray", f2 = "gray", f3 = "gray", f4 = "gray", f5 = "gray", f6 = "gray", f7 = "gray", f8 = "gray", f9 = "gray";
-    b1 = "gray", b2 = "gray", b3 = "gray", b4 = "gray", b5 = "gray", b6 = "gray", b7 = "gray", b8 = "gray", b9 = "gray";
+    r1 = "#505050", r2 = "#505050", r3 = "#505050", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red";
+    l1 = "#505050", l2 = "#505050", l3 = "#505050", l4 = "orange", l5 = "orange", l6 = "orange", l7 = "orange", l8 = "orange", l9 = "orange";
+    f1 = "#505050", f2 = "#505050", f3 = "#505050", f4 = "green", f5 = "green", f6 = "green", f7 = "green", f8 = "green", f9 = "green";
+    b1 = "#505050", b2 = "#505050", b3 = "#505050", b4 = "blue", b5 = "blue", b6 = "blue", b7 = "blue", b8 = "blue", b9 = "blue";
     u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "white", u7 = "white", u8 = "white", u9 = "white";
-    d1 = "gray", d2 = "gray", d3 = "gray", d4 = "gray", d5 = "gray", d6 = "gray", d7 = "gray", d8 = "gray", d9 = "gray";
+    d1 = "yellow", d2 = "yellow", d3 = "yellow", d4 = "yellow", d5 = "yellow", d6 = "yellow", d7 = "yellow", d8 = "yellow", d9 = "yellow";
 }
 
 function scrambleCube(scramble) {
