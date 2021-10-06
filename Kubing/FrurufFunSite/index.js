@@ -1,11 +1,36 @@
 let canvasSize = 0;
+let auf = "";
+let tabContents = [];
+let currentTab = 0;
 
-const frurufState = [
-    "","","white","white","white","white","","","white",
-    "white","","white",
-    "","white","",
-    "","","",
-    "","white",""];
+const frurufState1 = [
+    "gray","gray","white","white","white","white","gray","gray","white",
+    "white","gray","white",
+    "gray","white","gray",
+    "gray","gray","gray",
+    "gray","white","gray"
+];
+const frurufState2 = [
+    "gray","white","gray","gray","white","gray","white","white","white",
+    "gray","white","gray",
+    "gray","gray","gray",
+    "gray","white","gray",
+    "white","gray","white"
+];
+const frurufState3 = [
+    "white","gray","gray","white","white","white","white","gray","gray",
+    "gray","gray","gray",
+    "gray","white","gray",
+    "white","gray","white",
+    "gray","white","gray"
+];
+const frurufState4 = [
+    "white","white","white","gray","white","gray","gray","white","gray",
+    "gray","white","gray",
+    "white","gray","white",
+    "gray","white","gray",
+    "gray","gray","gray"
+];
 
 let olls = [
     "R U2 R2 F R F' U2 R' F R F'",
@@ -109,53 +134,63 @@ let solutions = [];
 let myAlgs = [];
 
 $(function() {
+    tabContents = $(".tabContent");
+    makeUnderline();
+    showFLL();
     adjustSize();
     
     for (let i=0; i<olls.length; i++) {
         ollsInversed.push(inverse(olls[i]));
     }
+
     getFLL();
+    adjustSize();
 });
         
 $(window).resize(function(){
     adjustSize();
+    updateUnderline(currentTab);
 });
 
 function adjustSize() {
     if ($("#content").width() > $("#content").height()) {
-        canvasSize = $("#content").height() / 10;
+        canvasSize = $("#content").height() / 5;
+        $("th, td").css("font-size", $("#content").height() / 25);
     }
     else {
-        canvasSize = $("#content").width() / 10;
+        canvasSize = $("#content").width() / 5;
+        $("th, td").css("font-size", $("#content").width() / 15);
     }
-    
 }
 
 function getFLL() {
     let arrIndex = 0;
-    myAlgs = olls.concat(other, ollsInversed, plls).sort(function(a, b){return a.length - b.length});
-    for (let alg1 of olls) {
+    myAlgs = olls.concat(algs, other, ollsInversed, plls).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
+    console.log(myAlgs);
+    for (let alg1 of ollsInversed) {
         outerLoop:
         for (let alg2 of myAlgs) {
-            scrambleCube(inverse(alg1));
             for (let u of [[""], ["U "], ["U' "], ["U2 "]]) {
+                scrambleCube(alg1);
+                auf = "";
                 if (checkFrurufState(applyMoves(u+alg2))) {
-                    solutions[arrIndex] = u+alg2;
+                    solutions[arrIndex] = u+alg2+auf;
                     break outerLoop;
                 }
             }
         }
         arrIndex++;
     }
-    console.log(olls);
-    console.log(solutions);
-    console.log(solutions.filter(function (el) {return el != null;}).length);
 
-    let out = "";
-    for (let i = 0; i < olls.length; i++) {
-        out += "<tr><td>"+ollsInversed[i]+"</td><td><canvas id='case"+i+"' width='"+canvasSize+"' height='"+canvasSize+"' style='margin: auto;'></canvas></td><td>"+solutions[i]+"</td></tr>";
+    let out = "<tr><th>#</th><th>Setup</th><th>Alg</th></tr>";
+    for (let i = 0; i < ollsInversed.length; i++) {
+        out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='case"+i+"' width='"+canvasSize+"' height='"+canvasSize+"' style='margin: auto;'></canvas><br>"+ollsInversed[i]+"</td><td>"+solutions[i]+"</td></tr>";
     }
     $("#algTable").html(out)
+
+    for (let i = 0; i < ollsInversed.length; i++) {
+        drawCube("#case"+i, ollsInversed[i]);
+    }
 }
 
 function inverse(alg) {
@@ -179,27 +214,62 @@ function inverse(alg) {
 function checkFrurufState(state) {
     let isFrurufState = false;
 
-    if (state.join(",") === frurufState.join(",")) {
+    if (state.join(",") === frurufState1.join(",")) {
         isFrurufState = true;
     }
-    else {
-        _u();
-        if (state.join(",") === frurufState.join(",")) {
-            isFrurufState = true;
-        }
-        else {
-            _u();
-            if (state.join(",") === frurufState.join(",")) {
-                isFrurufState = true;
-            }
-            else {
-                _u();
-                if (state.join(",") === frurufState.join(",")) {
-                    isFrurufState = true;
-                }
-            }
-        }
+    else if (state.join(",") === frurufState2.join(",")) {
+        auf = " U'";
+        isFrurufState = true;
+    }
+    else if (state.join(",") === frurufState3.join(",")) {
+        auf = " U2";
+        isFrurufState = true;
+    }
+    else if (state.join(",") === frurufState4.join(",")) {
+        auf = " U";
+        isFrurufState = true;
     }
 
     return isFrurufState;
+}
+
+function hideAll() {
+    for (let c of tabContents) {
+        $(c).css("display", "none");
+    }
+}
+
+function showFLL() {
+    currentTab = 0;
+    hideAll();
+    $("#tabFLL").css("display", "block");
+    $("#underline").css("margin-left", ($(window).width() / 6));
+    $("#underline").css("transition", "margin-left 0.1s linear");
+    $("#underline").css("-webkit-transition", "margin-left 0.1s linear");
+}
+
+function showFLS() {
+    currentTab = 1;
+    hideAll();
+    $("#tabFLS").css("display", "block");
+    $("#underline").css("margin-left", ($(window).width() / 6)*4);
+    $("#underline").css("transition", "margin-left 0.1s linear");
+    $("#underline").css("-webkit-transition", "margin-left 0.1s linear");
+}
+
+function makeUnderline() {
+    $("#underline").css("height", "5px");
+    $("#underline").css("width", $(window).width() / 6);
+    $("#underline").css("margin-left", $(window).width() / 6);
+}
+
+function updateUnderline(tab) {
+    $("#underline").css("width", $(window).width() / 6);
+    
+    if (tab === 0) {
+        $("#underline").css("margin-left", $(window).width() / 6);
+    }
+    else if (tab === 1) {
+        $("#underline").css("margin-left", ($(window).width() / 6)*4);
+    }
 }
