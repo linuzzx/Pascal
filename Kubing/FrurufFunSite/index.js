@@ -92,6 +92,8 @@ let olls = [
     "R U R' U' M' U R U' Rw'"
 ];
 
+let allOlls = [];
+let allOllsInversed = [];
 let ollsInversed = [];
 let f2lsInversed = [];
 let f2lInversed = [];
@@ -177,9 +179,20 @@ function getAlgs() {
         ollsInversed.push(inverse(olls[i]));
     }
     
+    for (let o of olls) {
+        for (let u of ["", " U", " U2", " U'"]) {
+            allOlls.push(o+u);
+        }
+    }
+    
+    for (let o of allOlls) {
+        allOllsInversed.push(inverse(o));
+    }
+    
     let i = 0;
     for (let raw of rawF2l) {
         for (let oll of olls) {
+        //for (let oll of allOlls) {
             f2ls.push(fixAlg(raw.split("/")[0].trim()+" "+oll));
             
             i++;
@@ -205,75 +218,6 @@ function getAlgs() {
     getFLS();
 
     adjustSize();
-}
-
-function fixAlg(alg) {
-    let newAlg = alg;
-
-    return cleanAlg(fixRotation(newAlg));
-}
-
-function fixRotation(alg) {
-    const moves = alg.split(" ");
-    let newAlg = alg;
-    //.filter(function (el) {return el !== " ";}).join(" ")
-    for (let move of moves) {
-        switch (move) {
-            case "y2":
-                newAlg = newAlg + " y2";
-                break;
-            case "y'":
-                newAlg = newAlg + " y";
-                break;
-            case "y":
-                newAlg = newAlg + " y'";
-                break;
-            case "Dw2":
-                newAlg = newAlg + " y2";
-                break;
-            case "Dw'":
-                newAlg = newAlg + " y'";
-                break;
-            case "Dw":
-                newAlg = newAlg + " y";
-                break;
-            default:
-                break;
-        }
-    }
-
-    return newAlg;
-}
-
-function cleanAlg(alg) {
-    const moveArr = ["R","L","F","B","U","D","Rw","Lw","Fw","Bw","Uw","Dw","x","y","z"];
-    const moves = alg.split(" ");
-    let newAlg = alg.replaceAll("Rw","r").replaceAll("Lw","l").replaceAll("Uw","u").replaceAll("Dw","d").replaceAll("Fw","f").replaceAll("Bw","b");
-    
-
-    for (let _move of moves) {
-        for (let m of moveArr) {
-            //Fjerne doble mellomrom
-            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
-
-            newAlg = newAlg.replaceAll((m + " " + m + "2"),(m + "'"));
-            newAlg = newAlg.replaceAll((m + " " + m + "'"),(""));
-            newAlg = newAlg.replaceAll((m + " " + m),(m + "2"));
-
-            newAlg = newAlg.replaceAll((m + "2 " + m + "2"),(""));
-            newAlg = newAlg.replaceAll((m + "2 " + m + "'"),(m));
-            newAlg = newAlg.replaceAll((m + "2 " + m),(m + "'"));
-
-            newAlg = newAlg.replaceAll((m + "' " + m + "2"),(m));
-            newAlg = newAlg.replaceAll((m + "' " + m + "'"),(m + "2"));
-            newAlg = newAlg.replaceAll((m + "' " + m),(""));
-            
-            //Fjerne doble mellomrom
-            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
-        }
-    }
-
-    return newAlg.replaceAll("r","Rw").replaceAll("l","Lw").replaceAll("u","Uw").replaceAll("d","Dw").replaceAll("f","Fw").replaceAll("b","Bw").trim();
 }
 
 function getFLL() {
@@ -359,6 +303,75 @@ function getFLS() {
     for (let i = 0; i < f2lsInversed.length; i++) {
         drawCubeF2l("#caseF2l"+i, f2lsInversed[i]);
     }
+}
+
+function fixAlg(alg) {
+    let newAlg = alg;
+
+    return cleanAlg(fixRotation(newAlg));
+}
+
+function fixRotation(alg) {
+    const moves = alg.split(" ");
+    let newAlg = alg;
+    //.filter(function (el) {return el !== " ";}).join(" ")
+    for (let move of moves) {
+        switch (move) {
+            case "y2":
+                newAlg = newAlg + " y2";
+                break;
+            case "y'":
+                newAlg = newAlg + " y";
+                break;
+            case "y":
+                newAlg = newAlg + " y'";
+                break;
+            case "Dw2":
+                newAlg = newAlg + " y2";
+                break;
+            case "Dw'":
+                newAlg = newAlg + " y'";
+                break;
+            case "Dw":
+                newAlg = newAlg + " y";
+                break;
+            default:
+                break;
+        }
+    }
+
+    return newAlg;
+}
+
+function cleanAlg(alg) {
+    const moveArr = ["R","L","F","B","U","D","Rw","Lw","Fw","Bw","Uw","Dw","x","y","z"];
+    const moves = alg.split(" ");
+    let newAlg = alg.replaceAll("Rw","r").replaceAll("Lw","l").replaceAll("Uw","u").replaceAll("Dw","d").replaceAll("Fw","f").replaceAll("Bw","b");
+    
+
+    for (let _move of moves) {
+        for (let m of moveArr) {
+            //Fjerne doble mellomrom
+            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
+
+            newAlg = newAlg.replaceAll((m + " " + m + "2"),(m + "'"));
+            newAlg = newAlg.replaceAll((m + " " + m + "'"),(""));
+            newAlg = newAlg.replaceAll((m + " " + m),(m + "2"));
+
+            newAlg = newAlg.replaceAll((m + "2 " + m + "2"),(""));
+            newAlg = newAlg.replaceAll((m + "2 " + m + "'"),(m));
+            newAlg = newAlg.replaceAll((m + "2 " + m),(m + "'"));
+
+            newAlg = newAlg.replaceAll((m + "' " + m + "2"),(m));
+            newAlg = newAlg.replaceAll((m + "' " + m + "'"),(m + "2"));
+            newAlg = newAlg.replaceAll((m + "' " + m),(""));
+            
+            //Fjerne doble mellomrom
+            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
+        }
+    }
+
+    return newAlg.replaceAll("r","Rw").replaceAll("l","Lw").replaceAll("u","Uw").replaceAll("d","Dw").replaceAll("f","Fw").replaceAll("b","Bw").trim();
 }
 
 function inverse(alg) {
