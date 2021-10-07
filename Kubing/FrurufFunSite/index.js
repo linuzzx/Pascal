@@ -152,7 +152,6 @@ $(function() {
     makeUnderline();
     showFLL();
     adjustSize();
-
     getAlgs();
 });
         
@@ -181,26 +180,8 @@ function getAlgs() {
     let i = 0;
     for (let raw of rawF2l) {
         for (let oll of olls) {
-            f2ls.push(oll+" "+raw.split("/")[0].trim());
-
-            /*if (f2ls[i].includes("y2")) {
-                f2ls[i] = f2ls[i] + " y2";
-            }
-            else if (f2ls[i].includes("y'")) {
-                f2ls[i] = f2ls[i] + " y";
-            }
-            else if (f2ls[i].includes("y")) {
-                f2ls[i] = f2ls[i] + " y'";
-            }
-            if (f2ls[i].includes("Dw2")) {
-                f2ls[i] = f2ls[i] + " y2";
-            }
-            else if (f2ls[i].includes("Dw'")) {
-                f2ls[i] = f2ls[i] + " y'";
-            }
-            else if (f2ls[i].includes("Dw")) {
-                f2ls[i] = f2ls[i] + " y";
-            }*/
+            f2ls.push(fixAlg(raw.split("/")[0].trim()+" "+oll));
+            
             i++;
         }
     }
@@ -216,7 +197,7 @@ function getAlgs() {
     for (let i=0; i<f2l.length; i++) {
         f2lInversed.push(inverse(f2l[i]));
     }
-    console.log(f2lsInversed);
+    
     myAlgs = olls.concat(algs, other, ollsInversed, plls).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
     myF2lAlgs = triggers.concat(f2ls, f2lsInversed, f2l, f2lInversed).sort().sort(function(a, b){return a.split(" ").length - b.split(" ").length});
 
@@ -224,6 +205,75 @@ function getAlgs() {
     getFLS();
 
     adjustSize();
+}
+
+function fixAlg(alg) {
+    let newAlg = alg;
+
+    return cleanAlg(fixRotation(newAlg));
+}
+
+function fixRotation(alg) {
+    const moves = alg.split(" ");
+    let newAlg = alg;
+    //.filter(function (el) {return el !== " ";}).join(" ")
+    for (let move of moves) {
+        switch (move) {
+            case "y2":
+                newAlg = newAlg + " y2";
+                break;
+            case "y'":
+                newAlg = newAlg + " y";
+                break;
+            case "y":
+                newAlg = newAlg + " y'";
+                break;
+            case "Dw2":
+                newAlg = newAlg + " y2";
+                break;
+            case "Dw'":
+                newAlg = newAlg + " y'";
+                break;
+            case "Dw":
+                newAlg = newAlg + " y";
+                break;
+            default:
+                break;
+        }
+    }
+
+    return newAlg;
+}
+
+function cleanAlg(alg) {
+    const moveArr = ["R","L","F","B","U","D","Rw","Lw","Fw","Bw","Uw","Dw","x","y","z"];
+    const moves = alg.split(" ");
+    let newAlg = alg.replaceAll("Rw","r").replaceAll("Lw","l").replaceAll("Uw","u").replaceAll("Dw","d").replaceAll("Fw","f").replaceAll("Bw","b");
+    
+
+    for (let _move of moves) {
+        for (let m of moveArr) {
+            //Fjerne doble mellomrom
+            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
+
+            newAlg = newAlg.replaceAll((m + " " + m + "2"),(m + "'"));
+            newAlg = newAlg.replaceAll((m + " " + m + "'"),(""));
+            newAlg = newAlg.replaceAll((m + " " + m),(m + "2"));
+
+            newAlg = newAlg.replaceAll((m + "2 " + m + "2"),(""));
+            newAlg = newAlg.replaceAll((m + "2 " + m + "'"),(m));
+            newAlg = newAlg.replaceAll((m + "2 " + m),(m + "'"));
+
+            newAlg = newAlg.replaceAll((m + "' " + m + "2"),(m));
+            newAlg = newAlg.replaceAll((m + "' " + m + "'"),(m + "2"));
+            newAlg = newAlg.replaceAll((m + "' " + m),(""));
+            
+            //Fjerne doble mellomrom
+            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
+        }
+    }
+
+    return newAlg.replaceAll("r","Rw").replaceAll("l","Lw").replaceAll("u","Uw").replaceAll("d","Dw").replaceAll("f","Fw").replaceAll("b","Bw").trim();
 }
 
 function getFLL() {
@@ -243,7 +293,7 @@ function getFLL() {
             }
         }
         arrIndex++;
-    }*/
+    }console.log(solutions);*/
 
     let out = "<tr><th>#</th><th>Setup</th><th>Alg</th></tr>";
     for (let i = 0; i < fll.length; i++) {
@@ -277,7 +327,7 @@ function getFLS() {
             }
         }
         arrIndex++;
-    }
+    }console.log(solutionsF2l);
     for (let alg1 of f2lsInversed) {
         outerLoop:
         for (let alg2 of triggers) {
@@ -295,7 +345,7 @@ function getFLS() {
             }
         }
         arrIndex++;
-    }*/
+    }console.log(solutionsF2l);*/
     let out = "<tr><th>#</th><th>Setup</th><th>Alg</th></tr>";
     for (let i = 0; i < fls.length; i++) {
         out += "<tr><th>"+(i+1)+"</th><td><canvas class='canvasCase' id='caseF2l"+i+"' width='"+canvasSize+"' height='"+((canvasSize / 5) * 7)+"' style='margin: auto;'></canvas><br>"+f2lsInversed[i]+"</td><td>"+fls[i]+"</td></tr>";
