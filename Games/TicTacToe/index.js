@@ -6,6 +6,7 @@ let first = 0;
 let difficulty = 0;
 let finished = false;
 let waiting = false;
+let startEnd = (4,4);
 
 $(function() {
     $("input[name=players][value='"+localStorage.getItem("selectedPlayers")+"']").prop("checked",true);
@@ -25,6 +26,9 @@ function start() {
     for (let b of $("#board button")) {
         $(b).attr("disabled", false);
     }
+    $("#line").css("width","0");
+    $("#line").css("height","0");
+
     selectPlayers();
     selectFirst();
     selectDifficulty();
@@ -124,27 +128,35 @@ function checkIfWon() {
 
     if (boardTiles[0] === boardTiles[1] && boardTiles[0] === boardTiles[2] && boardTiles[0] !== 2) {
         winner = moves[boardTiles[0]] + " won!";
+        startEnd = [0,2];
     }
     else if (boardTiles[3] === boardTiles[4] && boardTiles[3] === boardTiles[5] && boardTiles[3] !== 2) {
         winner = moves[boardTiles[3]] + " won!";
+        startEnd = [3,5];
     }
     else if (boardTiles[6] === boardTiles[7] && boardTiles[6] === boardTiles[8] && boardTiles[6] !== 2) {
         winner = moves[boardTiles[6]] + " won!";
+        startEnd = [6,8];
     }
     else if (boardTiles[0] === boardTiles[3] && boardTiles[0] === boardTiles[6] && boardTiles[0] !== 2) {
         winner = moves[boardTiles[0]] + " won!";
+        startEnd = [0,6];
     }
     else if (boardTiles[1] === boardTiles[4] && boardTiles[1] === boardTiles[7] && boardTiles[1] !== 2) {
         winner = moves[boardTiles[1]] + " won!";
+        startEnd = [1,7];
     }
     else if (boardTiles[2] === boardTiles[5] && boardTiles[2] === boardTiles[8] && boardTiles[2] !== 2) {
         winner = moves[boardTiles[2]] + " won!";
+        startEnd = [2,8];
     }
     else if (boardTiles[0] === boardTiles[4] && boardTiles[0] === boardTiles[8] && boardTiles[0] !== 2) {
         winner = moves[boardTiles[0]] + " won!";
+        startEnd = [0,8];
     }
     else if (boardTiles[2] === boardTiles[4] && boardTiles[2] === boardTiles[6] && boardTiles[2] !== 2) {
         winner = moves[boardTiles[2]] + " won!";
+        startEnd = [2,6];
     }
     else if (index === 9) {
         winner = "Draw";
@@ -153,6 +165,7 @@ function checkIfWon() {
     $("#winner").text(winner);
 
     if (winner !== "" || winner === "Draw") {
+        drawLine(startEnd)
         finish();
     }
 }
@@ -177,6 +190,10 @@ function adjustSize() {
     $("#startDiv").css("width", size * 1.1);
     $("#btnStart").css("font-size", fontSize * 2 / 3);
     $("#board button").css("font-size", fontSize);
+
+    if (finished) {
+        drawLine(startEnd);
+    }
 }
 
 function printBoard() {
@@ -186,4 +203,40 @@ function printBoard() {
             boardTiles[6] + " " + boardTiles[7] + " " + boardTiles[8];
     
     console.log(str);
+}
+
+function drawLine(stend) {
+    const start = stend[0];
+    const end = stend[1];
+    console.log(start, end);
+    const startButton = $("#btn"+start);
+    const endButton = $("#btn"+end);
+    const buttonSize = $("#btn"+start).height();
+    const line = $("#line");
+    const sTop = startButton.position().top;
+    const eTop = endButton.position().top;
+    const sLeft = startButton.position().left;
+    const eLeft = endButton.position().left;
+
+    const rotation = sTop < eTop && sLeft < eLeft ? 45 : (sTop < eTop && sLeft > eLeft ? 315 : (sTop < eTop && sLeft === eLeft ? 90 : 0));
+    const top = (sTop < eTop ? sTop : eTop) + 0.5*buttonSize - 0.5*$(line).height();
+    const left = (sLeft < eLeft ? sLeft : eLeft) + 0.5*buttonSize - 0.5*$(line).height();
+    const width = sTop === eTop || sLeft === eLeft ? 2*buttonSize : 4*Math.sqrt(buttonSize*buttonSize*0.5);
+    const height = buttonSize / 10;
+    const borderRadius = buttonSize / 4;
+
+    $(line).css("width",width);
+    $(line).css("height",height);
+    $(line).css("border-radius",borderRadius);
+
+    if (rotation !== 0) {
+        $(line).css("transform","rotate("+rotation+"deg)");
+        $(line).css("-webkit-transform","rotate("+rotation+"deg)");
+        $(line).css("top", $("#btn4").position().top + 0.5*buttonSize - 0.5*height);
+        $(line).css("left", $("#btn3").position().left + (3*buttonSize - width) / 2);
+    }
+    else {
+        $(line).css("top",top);
+        $(line).css("left",left);
+    }
 }
