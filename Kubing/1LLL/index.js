@@ -43,7 +43,7 @@ function listCases() {
 
     let i = 0;
     for (let a of algs) {
-        out += "<option value='"+i+"'>"+a.name+"</option>";
+        out += "<option value='"+i+"'><canvas id='canvas"+i+"'></canvas>"+a.name+"</option>";
         i++;
     }
 
