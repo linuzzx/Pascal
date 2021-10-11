@@ -8,7 +8,9 @@ let letterScheme = [ubl,ub,ubr,ur,ufr,uf,ufl,ul,lub,lu,luf,lf,ldf,ld,ldb,lb,ful,
 let edges = [ub,ur,uf,ul,lu,lf,ld,lb,fu,fr,fd,fl,ru,rb,rd,rf,bu,bl,bd,br,df,dr,db,dl];
 let corners = [ubl,ubr,ufr,ufl,lub,luf,ldf,ldb,ful,fur,fdr,fdl,ruf,rub,rdb,rdf,bur,bul,bdl,bdr,dfl,dfr,dbr,dbl];
 
-let bufferE = df;//uf;
+let rawEdges = ["ub","ur","uf","ul","lu","lf","ld","lb","fu","fr","fd","fl","ru","rb","rd","rf","bu","bl","bd","br","df","dr","db","dl"];
+
+let bufferE = uf;
 let bufferC = ufr;
 
 let cubeState = [];
@@ -27,30 +29,33 @@ function scrambleCube() {
 function getEdgeSolution() {
     let solution = [];
     let unsolved = [ub,ur,uf,ul,lu,lf,ld,lb,fu,fr,fd,fl,ru,rb,rd,rf,bu,bl,bd,br,df,dr,db,dl];
-    bufferE = uf;
+    bufferE = rawEdges[edges.indexOf(uf)];
 
     solvedEdges = checkIfSolvedEdges();
-
-    while (!solvedEdges) {
+    let edgeState = getEdgeStateBLD();
+    
+    while (unsolved.length !== 0) {
         if (solution.indexOf(bufferE) === -1) {
-            solution.push(bufferE);
+            solution.push(edges[rawEdges.indexOf(bufferE)]);
             unsolved.splice(unsolved.indexOf(bufferE),1);
-            bufferE = cubeState[letterScheme.indexOf(bufferE)];
+            console.log(rawEdges.indexOf(bufferE));
+            bufferE = edges[rawEdges.indexOf(edgeState[rawEdges.indexOf(bufferE)])];
         }
         else {
             bufferE = unsolved[0];
         }
-console.log("unsolved: ",unsolved);
-console.log("solution: ",solution);
+
         solvedEdges = checkIfSolvedEdges();
     }
-console.log(solution);
+
+    console.log(solution);
+
     return solution;
 }
 
 function checkIfSolvedEdges() {
     let isSolved = true;
-    let edgeState = getEdgeState();
+    let edgeState = getEdgeStateBLD();
 
     outerloop:
     for (let i=0; i<edgeState.length; i++) {

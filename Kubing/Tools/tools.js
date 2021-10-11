@@ -338,7 +338,7 @@ function applyMoves(allMoves) {
         }
     }
 
-    getCubeStateWoCenters();
+    return getCubeStateWoCenters();
 }
 
 function getCubeState() {
@@ -374,7 +374,30 @@ function getEdgeState() {
     ];
 }
 
+function getEdgeStateBLD() {
+    return [
+        u2,u6,u8,u4,
+        l2,l6,l8,l4,
+        f2,f6,f8,f4,
+        r2,r6,r8,r4,
+        b2,b6,b8,b4,
+        d2,d6,d8,d4
+    ];
+}
+
 function getCornerState() {
+    return [
+        u1,u3,u7,u9,
+        l1,l3,l7,l9,
+        f1,f3,f7,f9,
+        r1,r3,r7,r9,
+        b1,b3,b7,b9,
+        d1,d3,d7,d9
+    ];
+}
+
+function getCornerStateBLD() {
+    //MÅ FIKSES
     return [
         u1,u3,u7,u9,
         l1,l3,l7,l9,
