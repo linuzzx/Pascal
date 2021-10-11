@@ -81,10 +81,10 @@ function startRecon() {
 }
 
 function checkMemo() {
-    const success = $("#inpMemo").val().toLowerCase().trim().split(" ").join("") === $("#memo").text().toLowerCase().split(" ").join("");
+    const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("") === $("#memo").text().toUpperCase().split(" ").join("");
     let out = "<div><br>";
-    let inpMemo = $("#inpMemo").val().toLowerCase().trim().split(" ").join("").split("");
-    let memo = $("#memo").text().toLowerCase().trim().split(" ").join("").split("");
+    let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").split("");
+    let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").split("");
 
     while (memo.length < inpMemo.length) {
         memo.push("");
@@ -93,14 +93,14 @@ function checkMemo() {
     for (let i=0; i<memo.length; i++) {
         if (inpMemo[i]) {
             if (inpMemo[i] === memo[i]) {
-                out += "<e style='color: green'>"+inpMemo[i].toUpperCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                out += "<e style='color: green'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
             }
             else {
-                out += "<e style='color: red'>"+inpMemo[i].toUpperCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                out += "<e style='color: red'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
             }
         }
         else {
-            out += "<e>"+memo[i].toUpperCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+            out += "<e>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
         }
     }
 
@@ -152,7 +152,7 @@ function adjustSize() {
     else {
         $("#inpMemo").css("width", "80%");
     }*/
-    
+
     $("#inpMemo").css("width", "80%");
     $("#selectCubeType").css("font-size", inpFontSize);
     $("#selectGrouping").css("font-size", inpFontSize);
