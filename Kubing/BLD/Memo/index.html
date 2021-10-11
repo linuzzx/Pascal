@@ -10,11 +10,12 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="index.css">
+    <script src="../../Tools/tools.js"></script>
 </head>
 <body>
     <div id="content">
         <h1 id="memo">Memo</h1>
-        <h1><input id="inpMemo" class="form-control" type="text" placeholder="Type memo..." onkeypress="startRecon()"></h1>
+        <h1><input id="inpMemo" class="form-control" type="text" placeholder="Type memo..." oninput="startRecon()"></h1>
         <button id="btnCheck" class="btn btn-secondary" onclick="checkMemo()">Check</button>
         <h1 id="result"></h1>
     </div>
