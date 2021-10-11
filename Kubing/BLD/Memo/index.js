@@ -7,6 +7,8 @@ let first = false;
 let start = 0;
 let interval = null;
 let time = "00.00";
+let cubeType = localStorage.getItem("cubeType") || "3BLD";
+let grouping = localStorage.getItem("grouping") || "1";
 
 $(function() {
     $("#inpMemo").on('keyup', function (e) {
@@ -17,6 +19,8 @@ $(function() {
     const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75)
 
     $("#inpMemo").css("font-size", fontSize);
+
+    getOptions();
     adjustSize();
 });
         
@@ -26,10 +30,20 @@ $(window).resize(function(){
 
 function getMemo() {
     let memo = "";
+    let numOfLetters = 0;
+    if (cubeType === "3BLD") {
+        numOfLetters = numOfLetters3BLD;
+    }
+    else if (cubeType === "4BLD") {
+        numOfLetters = numOfLetters4BLD;
+    }
+    else if (cubeType === "5BLD") {
+        numOfLetters = numOfLetters5BLD;
+    }
 
     for (let i=0; i<numOfCubes; i++) {
-        for (let j=0; j<numOfLetters3BLD; j++) {
-            memo += letters[Math.floor(Math.random() * letters.length)] + (j % 2 === 0 ? "":" ");
+        for (let j=0; j<numOfLetters; j++) {
+            memo += letters[Math.floor(Math.random() * letters.length)] + ((j+1) % grouping === 0 ? " ":"");
         }
     }
     
@@ -43,13 +57,19 @@ function getMemo() {
 
 function showMemo() {
     $("#memo").css("visibility","visible");
+    adjustSize();
 }
 
 function hideMemo() {
+    $("#memo").css("visibility","hidden");
+        $("#result").html("");
+}
+
+function startRecon() {
     if (first) {
         first = false;
-        $("#memo").css("visibility","hidden");
-        $("#result").html("");
+        hideMemo();
+        stopTimer();
     }
 }
 
@@ -66,14 +86,14 @@ function checkMemo() {
     for (let i=0; i<memo.length; i++) {
         if (inpMemo[i]) {
             if (inpMemo[i] === memo[i]) {
-                out += "<e style='color: green'>"+inpMemo[i].toUpperCase()+"</e>";
+                out += "<e style='color: green'>"+inpMemo[i].toUpperCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
             }
             else {
-                out += "<e style='color: red'>"+inpMemo[i].toUpperCase()+"</e>";
+                out += "<e style='color: red'>"+inpMemo[i].toUpperCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
             }
         }
         else {
-            out += "<e>"+memo[i].toUpperCase()+"</e>";
+            out += "<e>"+memo[i].toUpperCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
         }
     }
 
@@ -89,19 +109,46 @@ function checkMemo() {
     $("#result").html(out);
 
     $("#inpMemo").val("");
+
+    getOptions();
+}
+
+function getOptions() {
+    const options = "<label for='selectCubeType'>Event&nbsp<select id='selectCubeType' onchange='setCubeType(this.value)'><option value='3BLD'>3BLD</option><option value='4BLD'>4BLD</option><option value='5BLD'>5BLD</option></select>&nbsp</label>"+
+                    "<label for='selectGrouping'>Grouping&nbsp</label><select id='selectGrouping' onchange='setGrouping(this.value)'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option></select>&nbsp</label>"+
+                    "<button class='btn btn-secondary' onclick='getMemo()'>Start</button>";
     
-    $("#memo").html("<button class='btn btn-secondary' onclick='getMemo()'>Start</button>");
+    $("#memo").html(options);
+
+    $("#selectCubeType").val(cubeType);
+    $("#selectGrouping").val(grouping);
 
     showMemo();
 }
 
+function setCubeType(ct) {
+    cubeType = ct;
+    localStorage.setItem("cubeType", cubeType);
+}
+
+function setGrouping(g) {
+    grouping = g;
+    localStorage.setItem("grouping", grouping);
+}
+
 function adjustSize() {
+    const inpFontSize = $("#btnCheck").css("font-size").split("px")[0]*1.5;
+    
     if ($("#content").width() > $("#content").height()) {
         $("#inpMemo").css("width", "50%");
     }
     else {
         $("#inpMemo").css("width", "80%");
     }
+
+    $("#selectCubeType").css("font-size", inpFontSize);
+    $("#selectGrouping").css("font-size", inpFontSize);
+    $("label").css("font-size", inpFontSize);
 }
 
 function startTimer() {
