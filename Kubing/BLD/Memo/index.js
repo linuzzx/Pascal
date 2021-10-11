@@ -146,13 +146,14 @@ function setGrouping(g) {
 function adjustSize() {
     const inpFontSize = $("#btnCheck").css("font-size").split("px")[0]*1.5;
     
-    if ($("#content").width() > $("#content").height()) {
+    /*if ($("#content").width() > $("#content").height()) {
         $("#inpMemo").css("width", "50%");
     }
     else {
         $("#inpMemo").css("width", "80%");
-    }
-
+    }*/
+    
+    $("#inpMemo").css("width", "80%");
     $("#selectCubeType").css("font-size", inpFontSize);
     $("#selectGrouping").css("font-size", inpFontSize);
     $("label").css("font-size", inpFontSize);
