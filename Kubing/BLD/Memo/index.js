@@ -9,6 +9,7 @@ let interval = null;
 let time = "00.00";
 let cubeType = localStorage.getItem("cubeType") || "3BLD";
 let grouping = localStorage.getItem("grouping") || "1";
+let checkable = false;
 
 $(function() {
     $("#inpMemo").on('keyup', function (e) {
@@ -70,47 +71,53 @@ function startRecon() {
         first = false;
         hideMemo();
         stopTimer();
+        $("#btnCheck").prop("disabled", false);
+
+        checkable = true;
     }
 }
 
 function checkMemo() {
-    const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("") === $("#memo").text().toUpperCase().split(" ").join("");
-    let out = "<div><br>";
-    let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").split("");
-    let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").split("");
+    if (checkable) {
+        const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("") === $("#memo").text().toUpperCase().split(" ").join("");
+        let out = "<div><br>";
+        let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").split("");
+        let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").split("");
 
-    while (memo.length < inpMemo.length) {
-        memo.push("");
-    }
+        while (memo.length < inpMemo.length) {
+            memo.push("");
+        }
 
-    for (let i=0; i<memo.length; i++) {
-        if (inpMemo[i]) {
-            if (inpMemo[i] === memo[i]) {
-                out += "<e style='color: green'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+        for (let i=0; i<memo.length; i++) {
+            if (inpMemo[i]) {
+                if (inpMemo[i] === memo[i]) {
+                    out += "<e style='color: green'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                }
+                else {
+                    out += "<e style='color: red'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                }
             }
             else {
-                out += "<e style='color: red'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                out += "<e>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
             }
         }
-        else {
-            out += "<e>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+
+        out += "</div>";
+
+        if (success) {
+            out += "<br><p style='color: green'>"+getTime(time)+"</p>";
         }
+        else {
+            out += "<br><p style='color: red'>DNF<br>("+getTime(time)+")</p>";
+        }
+
+        $("#result").html(out);
+
+        $("#inpMemo").val("");
+
+        getOptions();
+        checkable = false;
     }
-
-    out += "</div>";
-
-    if (success) {
-        out += "<br><p style='color: green'>"+getTime(time)+"</p>";
-    }
-    else {
-        out += "<br><p style='color: red'>DNF<br>("+getTime(time)+")</p>";
-    }
-
-    $("#result").html(out);
-
-    $("#inpMemo").val("");
-
-    getOptions();
 }
 
 function getOptions() {
@@ -122,6 +129,8 @@ function getOptions() {
 
     $("#selectCubeType").val(cubeType);
     $("#selectGrouping").val(grouping);
+
+    $("#btnCheck").prop("disabled", true);
 
     showMemo();
 }

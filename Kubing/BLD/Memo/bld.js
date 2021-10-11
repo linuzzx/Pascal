@@ -5,8 +5,12 @@ let ubl="A",ub="A",ubr="B",ur="B",ufr="C",uf="C",ufl="D",ul="D",lub="E",lu="E",l
 let letterScheme = [ubl,ub,ubr,ur,ufr,uf,ufl,ul,lub,lu,luf,lf,ldf,ld,ldb,lb,ful,fu,fur,fr,fdr,fd,fdl,fl,
                     ruf,ru,rub,rb,rdb,rd,rdf,rf,bur,bu,bul,bl,bdl,bd,bdr,br,dfl,df,dfr,dr,dbr,db,dbl,dl];
 
-function scrambleCube(scramble=scramble()) {
-    
+let cubeState = [];
+
+function scrambleCube() {
+    cubeState = applyMoves(scramble());
+
+    console.log(cubeState);
 }
 
 function getEdgeSolution() {

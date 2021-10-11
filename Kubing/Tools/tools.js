@@ -1,9 +1,9 @@
-let r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
-let l1 = "orange", l2 = "orange", l3 = "orange", l4 = "orange", l5 = "orange", l6 = "orange", l7 = "orange", l8 = "orange", l9 = "orange", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
-let f1 = "green", f2 = "green", f3 = "green", f4 = "green", f5 = "green", f6 = "green", f7 = "green", f8 = "green", f9 = "green", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
-let b1 = "blue", b2 = "blue", b3 = "blue", b4 = "blue", b5 = "blue", b6 = "blue", b7 = "blue", b8 = "blue", b9 = "blue", nb1, nb2, nb3, nb4, nb5, nb6, nb7, nb8, nb9;
-let u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "white", u7 = "white", u8 = "white", u9 = "white", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
-let d1 = "yellow", d2 = "yellow", d3 = "yellow", d4 = "yellow", d5 = "yellow", d6 = "yellow", d7 = "yellow", d8 = "yellow", d9 = "yellow", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
+let u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
+let l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
+let f1 = "ful", f2 = "fu", f3 = "fur", f4 = "fl", f5 = "f", f6 = "fr", f7 = "fdl", f8 = "fd", f9 = "fdr", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
+let r1 = "ruf", r2 = "ru", r3 = "rub", r4 = "rf", r5 = "r", r6 = "rb", r7 = "rdf", r8 = "rd", r9 = "rdb", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
+let b1 = "bur", b2 = "bu", b3 = "bul", b4 = "br", b5 = "b", b6 = "bl", b7 = "bdr", b8 = "bd", b9 = "bdl", nb1, nb2, nb3, nb4, nb5, nb6, nb7, nb8, nb9;
+let d1 = "dfl", d2 = "df", d3 = "dfr", d4 = "dl", d5 = "d", d6 = "dr", d7 = "dbl", d8 = "db", d9 = "dbr", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
 
 function scramble() {
     scramble = "";
@@ -142,9 +142,209 @@ function scramble() {
     return scramble;
 }
 
-function applyMoves(scramble) {
+function applyMoves(allMoves) {
+    scrambleArray = allMoves.split(" ");
 
-    return state;
+    u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr";
+    l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf";
+    f1 = "ful", f2 = "fu", f3 = "fur", f4 = "fl", f5 = "f", f6 = "fr", f7 = "fdl", f8 = "fd", f9 = "fdr";
+    r1 = "ruf", r2 = "ru", r3 = "rub", r4 = "rf", r5 = "r", r6 = "rb", r7 = "rdf", r8 = "rd", r9 = "rdb";
+    b1 = "bur", b2 = "bu", b3 = "bul", b4 = "br", b5 = "b", b6 = "bl", b7 = "bdr", b8 = "bd", b9 = "bdl";
+    d1 = "dfl", d2 = "df", d3 = "dfr", d4 = "dl", d5 = "d", d6 = "dr", d7 = "dbl", d8 = "db", d9 = "dbr";
+
+    for (var i = 0; i < scrambleArray.length; i++) {
+        switch (scrambleArray[i]) {
+            case "R":
+                _r();
+                break;
+            case "R2":
+            case "R2'":
+                _r2();
+                break;
+            case "R'":
+                _ri();
+                break;
+            case "L":
+                _l();
+                break;
+            case "L2":
+            case "L2'":
+                _l2();
+                break;
+            case "L'":
+                _li();
+                break;
+            case "F":
+                _f();
+                break;
+            case "F2":
+            case "F2'":
+                _f2();
+                break;
+            case "F'":
+                _fi();
+                break;
+            case "B":
+                _b();
+                break;
+            case "B2":
+            case "B2'":
+                _b2();
+                break;
+            case "B'":
+                _bi();
+                break;
+            case "U":
+                _u();
+                break;
+            case "U2":
+            case "U2'":
+                _u2();
+                break;
+            case "U'":
+                _ui();
+                break;
+            case "D":
+                _d();
+                break;
+            case "D2":
+            case "D2'":
+                _d2();
+                break;
+            case "D'":
+                _di();
+                break;
+            case "x":
+                _x();
+                break;
+            case "x2":
+            case "x2'":
+                _x2();
+                break;
+            case "x'":
+                _xi();
+                break;
+            case "y":
+                _y();
+                break;
+            case "y2":
+            case "y2'":
+                _y2();
+                break;
+            case "y'":
+                _yi();
+                break;
+            case "z":
+                _z();
+                break;
+            case "z2":
+            case "z2'":
+                _z2();
+                break;
+            case "z'":
+                _zi();
+                break;
+            case "M":
+                _m();
+                break;
+            case "M2":
+            case "M2'":
+                _m2();
+                break;
+            case "M'":
+                _mi();
+                break;
+            case "S":
+                _s();
+                break;
+            case "S2":
+            case "S2'":
+                _s2();
+                break;
+            case "S'":
+                _si();
+                break;
+            case "E":
+                _e();
+                break;
+            case "E2":
+            case "E2'":
+                _e2();
+                break;
+            case "E'":
+                _ei();
+                break;
+            case "Uw":
+                _uw();
+                break;
+            case "Uw2":
+            case "Uw2'":
+                _uw2();
+                break;
+            case "Uw'":
+                _uwi();
+                break;
+            case "Dw":
+                _dw();
+                break;
+            case "Dw2":
+            case "Dw2'":
+                _dw2();
+                break;
+            case "Dw'":
+                _dwi();
+                break;
+            case "Fw":
+                _fw();
+                break;
+            case "Fw2":
+            case "Fw2'":
+                _fw2();
+                break;
+            case "Fw'":
+                _fwi();
+                break;
+            case "Bw":
+                _bw();
+                break;
+            case "Bw2":
+            case "Bw2'":
+                _bw2();
+                break;
+            case "Bw'":
+                _bwi();
+                break;
+            case "Rw":
+                _rw();
+                break;
+            case "Rw2":
+            case "Rw2'":
+                _rw2();
+                break;
+            case "Rw'":
+                _rwi();
+                break;
+            case "Lw":
+                _lw();
+                break;
+            case "Lw2":
+            case "Lw2'":
+                _lw2();
+                break;
+            case "Lw'":
+                _lwi();
+                break;
+        }
+    }
+
+    return [
+        u1,u2,u3,u4,u5,u6,u7,u8,u9,
+        l1,l2,l3,l4,l5,l6,l7,l8,l9,
+        f1,f2,f3,f4,f5,f6,f7,f8,f9,
+        r1,r2,r3,r4,r5,r6,r7,r8,r9,
+        b1,b2,b3,b4,b5,b6,b7,b8,b9,
+        d1,d2,d3,d4,d5,d6,d7,d8,d9
+    ];
 }
 
 function _r() {
