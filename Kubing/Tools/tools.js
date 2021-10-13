@@ -397,14 +397,13 @@ function getCornerState() {
 }
 
 function getCornerStateBLD() {
-    //MÅ FIKSES
     return [
-        u1,u3,u7,u9,
-        l1,l3,l7,l9,
-        f1,f3,f7,f9,
-        r1,r3,r7,r9,
-        b1,b3,b7,b9,
-        d1,d3,d7,d9
+        u1,u3,u9,u7,
+        l1,l3,l9,l7,
+        f1,f3,f9,f7,
+        r1,r3,r9,r7,
+        b1,b3,b9,b7,
+        d1,d3,d9,d7
     ];
 }
 

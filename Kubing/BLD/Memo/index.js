@@ -42,12 +42,26 @@ function getMemo() {
         numOfLetters = numOfLetters5BLD;
     }
 
-    for (let i=0; i<numOfCubes; i++) {
-        for (let j=0; j<numOfLetters; j++) {
-            memo += letters[Math.floor(Math.random() * letters.length)] + ((j+1) % grouping === 0 ? " ":"");
+    //Fiks dette
+    if (cubeType === "x3BLD") {
+        const sol = getSolution();
+        for (let i=0; i<sol.length; i++) {
+            if (sol[i].includes("(")) {
+                memo += sol[i] + " ";
+            }
+            else {
+                memo += sol[i] + ((i+1) % grouping === 0 ? " ":"");
+            }
         }
     }
-    
+    else {
+        for (let i=0; i<numOfCubes; i++) {
+            for (let j=0; j<numOfLetters; j++) {
+                memo += letters[Math.floor(Math.random() * letters.length)] + ((j+1) % grouping === 0 ? " ":"");
+            }
+        }
+    }
+
     $("#memo").html(memo);
     $("#result").html("");
 
@@ -91,6 +105,7 @@ function checkMemo() {
         for (let i=0; i<memo.length; i++) {
             if (inpMemo[i]) {
                 if (inpMemo[i] === memo[i]) {
+                    
                     out += "<e style='color: green'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
                 }
                 else {
