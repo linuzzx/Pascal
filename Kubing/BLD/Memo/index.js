@@ -44,15 +44,38 @@ function getMemo() {
 
     //Fiks dette
     if (cubeType === "x3BLD") {
-        const sol = getSolution();
-        for (let i=0; i<sol.length; i++) {
-            if (sol[i].includes("(")) {
-                memo += sol[i] + " ";
-            }
-            else {
-                memo += sol[i] + ((i+1) % grouping === 0 ? " ":"");
-            }
+        scrambleCube();
+
+        const edgeSol = getEdgeSolution().join(" ").split(";")[0].split(" ");
+
+        let edgesFlipped = [];
+        if (getEdgeSolution().join(" ").includes(";")) {
+            edgesFlipped = getEdgeSolution().join(" ").split(";")[1].split(" ");
         }
+
+        const cornersSol = getCornerSolution().join(" ").split(";")[0].split(" ");
+
+        let cornersTwisted = [];
+        if (getCornerSolution().join(" ").includes(";")) {
+            cornersTwisted = getCornerSolution().join(" ").split(";")[1].split(" ");
+        }
+
+        for (let i=0; i<edgeSol.length; i++) {
+            memo += edgeSol[i] + ((i+1) % grouping === 0 ? " ":"");
+        }
+        memo = memo.trim() + " ";
+        for (let e of edgesFlipped) {
+            memo += e;
+        }
+        memo = memo.trim() + " ";
+        for (let i=0; i<cornersSol.length; i++) {
+            memo += cornersSol[i] + ((i+1) % grouping === 0 ? " ":"");
+        }
+        memo = memo.trim() + " ";
+        for (let c of cornersTwisted) {
+            memo += c;
+        }
+        memo = memo.trim();
     }
     else {
         for (let i=0; i<numOfCubes; i++) {
@@ -91,9 +114,11 @@ function startRecon() {
     }
 }
 
+//Fiks
 function checkMemo() {
     if (checkable) {
-        const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("") === $("#memo").text().toUpperCase().split(" ").join("");
+        const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","") === 
+                        $("#memo").text().toUpperCase().split(" ").join("").replaceAll("(","").replaceAll(")","");
         let out = "<div><br>";
         let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").split("");
         let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").split("");

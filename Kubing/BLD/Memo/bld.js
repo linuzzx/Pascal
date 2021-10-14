@@ -31,13 +31,15 @@ let bufferCWC = 0;
 let bufferCCWC = 0;
 
 $(function() {
-    scrambleCube();
-    getEdgeSolution();
+    //scrambleCube();
+    //getSolution();
+    //getEdgeSolution();
     //getCornerSolution();
 });
 
 function scrambleCube() {
-    cubeState = applyMoves(scramble());
+    cubeState = applyMoves("U R U' M2 U R' U2 L' U M2 U' L U");//B' L2 R' F2 R' D R2 D U' L F' U' L2 D' L2 F2 R F' L2 D2 R2
+    //cubeState = applyMoves(getScramble());
 }
 
 function getSolution() {
@@ -55,7 +57,7 @@ function getEdgeSolution() {
     //const bufferE = 2; //Setter buffer til UF
     //const bufferOppE = 8; //Setter bufferOpp til FU
 
-    let buffer = edges[bufferE];    
+    let buffer = edges[bufferE];//DF
     let target = "";
     
     //Remove buffer piece from unsolved
@@ -77,8 +79,7 @@ function getEdgeSolution() {
         //If target is bufferpiece
         if (target === edges[bufferE] || target === edges[bufferOppE]) {
             target = unsolved[0];
-            cycleBreak = true;
-            console.log("cycleBreak");
+            cycleBreak = true;console.log("cycleBreak");
         }
         
         //Add target to solution
@@ -111,10 +112,13 @@ function getEdgeSolution() {
         sol.push(letterSchemeEdges[edges.indexOf(s)]);
     }
 
+    if (flipped.length !== 0) {
+        sol.push(";");
+    }
+
     for (let f of flipped) {
         sol.push("("+letterSchemeEdges[edges.indexOf(f)]+")");
     }
-    console.log(sol.join(" "));
     return sol;
 }
 
@@ -154,7 +158,6 @@ function getCornerSolution() {
         if (target === corners[bufferC] || target === corners[bufferCWC] || target === corners[bufferCCWC]) {
             target = unsolved[0];
             cycleBreak = true;
-            console.log("cycleBreak");
         }
         
         //Add target to solution
@@ -166,7 +169,7 @@ function getCornerSolution() {
             
             for (let u of unsolved) {
                 //Removes every orientation of target from unsolved
-                if (u.includes(target.split("")[0]) && u.includes(target.split("")[1])) {
+                if (u.includes(target.split("")[0]) && u.includes(target.split("")[1]) && u.includes(target.split("")[2])) {
                     toRemove.push(u);
                 }
             }
@@ -186,10 +189,12 @@ function getCornerSolution() {
     for (let s of solution) {
         sol.push(letterSchemeCorners[corners.indexOf(s)].toLowerCase());
     }
+    if (twisted.length !== 0) {
+        sol.push(";");
+    }
     for (let t of twisted) {
         sol.push("("+letterSchemeCorners[corners.indexOf(t)].toLowerCase()+")");
     }
-    console.log(sol.join(" "));
     return sol;
 }
 
