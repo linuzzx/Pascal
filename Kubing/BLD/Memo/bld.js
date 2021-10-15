@@ -35,6 +35,7 @@ $(function() {
 });
 
 function scrambleCube() {
+    //cubeState = applyMoves("M2 U M2 U2 M2 U M2");
     //cubeState = applyMoves("U D2 R2 D2 L R U' B U' B' D L U R' L2 D F2 L2 F' U D'");
     cubeState = applyMoves(getScramble());
 }
@@ -152,9 +153,9 @@ function getCornerSolution() {
 
         //If buffer is bufferpiece
         if (buffer === corners[bufferC] || buffer === corners[bufferCWC] || buffer === corners[bufferCCWC]) {            
-            cornerState[bufferC] = unsolved[0];//ubr
-            cornerState[bufferCWC] = getCornerCW(unsolved[0]);//bur
-            cornerState[bufferCCWC] = getCornerCCW(unsolved[0]);//rub
+            cornerState[bufferC] = unsolved[0];
+            cornerState[bufferCWC] = getCornerCW(unsolved[0]);
+            cornerState[bufferCCWC] = getCornerCCW(unsolved[0]);
             
             cornerState[corners.indexOf(unsolved[0])] = buffer;
             cornerState[corners.indexOf(getCornerCW(unsolved[0]))] = getCornerCW(buffer);
@@ -168,8 +169,6 @@ function getCornerSolution() {
         
         //Add buffer to solution
         solution.push(buffer);
-        console.log("buffer: "+buffer);
-        console.log("target: "+target);
         
         //Remove buffer from unsolved
         let toRemove = [];
