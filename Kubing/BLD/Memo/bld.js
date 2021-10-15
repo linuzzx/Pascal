@@ -31,19 +31,12 @@ let bufferCWC = 0;
 let bufferCCWC = 0;
 
 $(function() {
-    //scrambleCube();
-    //getSolution();
-    //getEdgeSolution();
-    //getCornerSolution();
+    
 });
 
 function scrambleCube() {
-    cubeState = applyMoves("U R U' M2 U R' U2 L' U M2 U' L U");//B' L2 R' F2 R' D R2 D U' L F' U' L2 D' L2 F2 R F' L2 D2 R2
+    cubeState = applyMoves("U D2 R2 D2 L R U' B U' B' D L U R' L2 D F2 L2 F' U D'");
     //cubeState = applyMoves(getScramble());
-}
-
-function getSolution() {
-    return getEdgeSolution().concat(getCornerSolution());
 }
 
 function getEdgeSolution() {
@@ -52,58 +45,64 @@ function getEdgeSolution() {
     let flipped = [];
 
     edgeState = getEdgeStateBLD();
-    bufferE = 20; //Setter buffer til DF
-    bufferOppE = 10; //Setter bufferOpp til FD
-    //const bufferE = 2; //Setter buffer til UF
-    //const bufferOppE = 8; //Setter bufferOpp til FU
+    bufferE = 20; //Setter buffer til DF //const bufferE = 2; //Setter buffer til UF
+    bufferOppE = 10; //Setter bufferOpp til FD //const bufferOppE = 8; //Setter bufferOpp til FU
 
-    let buffer = edges[bufferE];//DF
+    let buffer = edgeState[bufferE];//DF
     let target = "";
     
     //Remove buffer piece from unsolved
     unsolved.splice(unsolved.indexOf(edges[bufferE]),1);
     unsolved.splice(unsolved.indexOf(edges[bufferOppE]),1);
     
-
     //Remove solved edges
     removeSolvedEdges(unsolved);
 
     //Get flipped edges
     getFlipped(flipped, unsolved);
-
+    
     while (unsolved.length !== 0) {
+        //Make new buffer
+        buffer = edgeState[bufferE];
+
+        //If buffer is bufferpiece
+        if (buffer === edges[bufferE] || buffer === edges[bufferOppE]) {
+            edgeState[bufferE] = unsolved[0];
+            edgeState[bufferOppE] = unsolved[0].split("")[1]+unsolved[0].split("")[0];
+
+            edgeState[edges.indexOf(unsolved[0])] = buffer;
+            edgeState[edges.indexOf(unsolved[0].split("")[1]+unsolved[0].split("")[0])] = buffer.split("")[1]+buffer.split("")[0];
+
+            buffer = unsolved[0];
+        }
+
         //Make target
         target = edgeState[edges.indexOf(buffer)];
-        cycleBreak = false;
-
-        //If target is bufferpiece
-        if (target === edges[bufferE] || target === edges[bufferOppE]) {
-            target = unsolved[0];
-            cycleBreak = true;console.log("cycleBreak");
-        }
         
-        //Add target to solution
-        solution.push(target);
+        //Add buffer to solution
+        solution.push(buffer);
         
-        //Remove target from unsolved
-        if (!cycleBreak) {
-            let toRemove = [];
+        //Remove buffer from unsolved
+        let toRemove = [];
             
-            for (let u of unsolved) {
-                //Removes every orientation of target from unsolved
-                if (u.includes(target.split("")[0]) && u.includes(target.split("")[1])) {
-                    toRemove.push(u);
-                }
+        for (let u of unsolved) {
+            //Removes every orientation of target from unsolved
+            if (u.includes(buffer.split("")[0]) && u.includes(buffer.split("")[1])) {
+                toRemove.push(u);
             }
-            if (toRemove.length !== 0) {
-                for (let i=toRemove.length-1; i>=0; i--) {
-                    unsolved.splice(unsolved.indexOf(toRemove[i]),1);
-                }
+        }
+        if (toRemove.length !== 0) {
+            for (let i=toRemove.length-1; i>=0; i--) {
+                unsolved.splice(unsolved.indexOf(toRemove[i]),1);
             }
         }
 
-        //Make new buffer
-        buffer = target;
+        //Swap buffer and target
+        edgeState[bufferE] = target;
+        edgeState[bufferOppE] = target.split("")[1]+target.split("")[0];
+
+        edgeState[edges.indexOf(buffer)] = buffer;
+        edgeState[edges.indexOf(buffer.split("")[1]+buffer.split("")[0])] = buffer.split("")[1]+buffer.split("")[0];
     }
 
     let sol = [];
@@ -129,14 +128,72 @@ function getCornerSolution() {
     let twisted = [];
 
     cornerState = getCornerStateBLD();
-    bufferC = 0; //Setter bufferC til UBL
-    bufferCWC = 4; //Setter bufferCWC til LUB
-    bufferCCWC = 17; //Setter bufferCCWC til BUL
-    //bufferC = 2; //Setter bufferC til UFR
-    //bufferCWC = 12; //Setter bufferCWC til RUF
-    //bufferCCWC = 9; //Setter bufferCCWC til FUR
+    bufferC = 0; //Setter bufferC til UBL //bufferC = 2; //Setter bufferC til UFR
+    bufferCWC = 4; //Setter bufferCWC til LUB //bufferCWC = 12; //Setter bufferCWC til RUF
+    bufferCCWC = 17; //Setter bufferCCWC til BUL //bufferCCWC = 9; //Setter bufferCCWC til FUR
 
-    let buffer = corners[bufferC];    
+    let buffer = cornerState[bufferC];//UFR
+    let target = "";
+    
+    //Remove buffer piece from unsolved
+    unsolved.splice(unsolved.indexOf(corners[bufferC]),1);
+    unsolved.splice(unsolved.indexOf(corners[bufferCWC]),1);
+    unsolved.splice(unsolved.indexOf(corners[bufferCCWC]),1);
+    
+    //Remove solved corners
+    removeSolvedCorners(unsolved);
+
+    //Get twisted corners
+    getTwisted(twisted, unsolved);
+    
+    while (unsolved.length !== 0) {
+        //Make new buffer
+        buffer = cornerState[bufferC];
+
+        //If buffer is bufferpiece
+        if (buffer === corners[bufferC] || buffer === corners[bufferCWC] || buffer === corners[bufferCCWC]) {
+            cornerState[bufferC] = unsolved[0];
+            cornerState[bufferCWC] = unsolved[0].split("")[2]+unsolved[0].split("")[0]+unsolved[0].split("")[1];
+            cornerState[bufferCCWC] = unsolved[0].split("")[1]+unsolved[0].split("")[2]+unsolved[0].split("")[0];
+            
+            cornerState[corners.indexOf(unsolved[0])] = buffer;
+            cornerState[corners.indexOf(unsolved[0].split("")[2]+unsolved[0].split("")[0]+unsolved[0].split("")[1])] = buffer.split("")[2]+buffer.split("")[0]+buffer.split("")[1];
+            cornerState[corners.indexOf(unsolved[0].split("")[1]+unsolved[0].split("")[2]+unsolved[0].split("")[0])] = buffer.split("")[1]+buffer.split("")[2]+buffer.split("")[0];
+
+            buffer = unsolved[0];
+        }
+
+        //Make target
+        target = cornerState[corners.indexOf(buffer)];
+        
+        //Add buffer to solution
+        solution.push(buffer);
+        
+        //Remove buffer from unsolved
+        let toRemove = [];
+            
+        for (let u of unsolved) {
+            //Removes every orientation of target from unsolved
+            if (u.includes(buffer.split("")[0]) && u.includes(buffer.split("")[1]) && u.includes(buffer.split("")[2])) {
+                toRemove.push(u);
+            }
+        }
+        if (toRemove.length !== 0) {
+            for (let i=toRemove.length-1; i>=0; i--) {
+                unsolved.splice(unsolved.indexOf(toRemove[i]),1);
+            }
+        }
+
+        //Swap buffer and target
+        cornerState[bufferC] = target;
+        cornerState[bufferCWC] = target.split("")[2]+target.split("")[0]+target.split("")[1];
+        cornerState[bufferCCWC] = target.split("")[1]+target.split("")[2]+target.split("")[0];
+        
+        cornerState[corners.indexOf(buffer)] = buffer;
+        cornerState[corners.indexOf(buffer.split("")[2]+buffer.split("")[0]+buffer.split("")[1])] = buffer.split("")[2]+buffer.split("")[0]+buffer.split("")[1];
+        cornerState[corners.indexOf(buffer.split("")[1]+buffer.split("")[2]+buffer.split("")[0])] = buffer.split("")[1]+buffer.split("")[2]+buffer.split("")[0];
+    }
+    /*let buffer = corners[bufferC];
     let target = "";
     
     //Remove buffer piece from unsolved
@@ -182,16 +239,18 @@ function getCornerSolution() {
 
         //Make new buffer
         buffer = target;
-    }
+    }*/
 
     let sol = [];
 
     for (let s of solution) {
         sol.push(letterSchemeCorners[corners.indexOf(s)].toLowerCase());
     }
+
     if (twisted.length !== 0) {
         sol.push(";");
     }
+
     for (let t of twisted) {
         sol.push("("+letterSchemeCorners[corners.indexOf(t)].toLowerCase()+")");
     }
@@ -276,7 +335,9 @@ function getTwisted(twisted, unsolved) {
     for (let c of ["ubl","ubr","ufr","ufl","dfl","dfr","dbr","dbl"]) {
         let index = twisted.indexOf(c);
         if (index !== -1) {
-            switch (c) {
+            twisted.splice(twisted.indexOf(c.split("")[2]+c.split("")[0]+c.split("")[1]), 1);
+            twisted.splice(twisted.indexOf(c.split("")[1]+c.split("")[2]+c.split("")[0]), 1);
+            /*switch (c) {
                 case "ubl":
                     twisted.splice(twisted.indexOf("bul"), 1);
                     twisted.splice(twisted.indexOf("lub"), 1);
@@ -309,7 +370,7 @@ function getTwisted(twisted, unsolved) {
                     twisted.splice(twisted.indexOf("bdl"), 1);
                     twisted.splice(twisted.indexOf("ldb"), 1);
                     break;
-            }
+            }*/
         }
     }
 }

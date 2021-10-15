@@ -43,21 +43,24 @@ function getMemo() {
     }
 
     //Fiks dette
-    if (cubeType === "x3BLD") {
+    if (cubeType === "3BLD") {
         scrambleCube();
 
-        const edgeSol = getEdgeSolution().join(" ").split(";")[0].split(" ");
+        const edgeSolution = getEdgeSolution();
+        const cornerSolution = getCornerSolution();
+
+        const edgeSol = edgeSolution.join(" ").split(";")[0].split(" ");
 
         let edgesFlipped = [];
-        if (getEdgeSolution().join(" ").includes(";")) {
-            edgesFlipped = getEdgeSolution().join(" ").split(";")[1].split(" ");
+        if (edgeSolution.join(" ").includes(";")) {
+            edgesFlipped = edgeSolution.join(" ").split(";")[1].split(" ");
         }
 
-        const cornersSol = getCornerSolution().join(" ").split(";")[0].split(" ");
+        const cornersSol = cornerSolution.join(" ").split(";")[0].split(" ");
 
         let cornersTwisted = [];
-        if (getCornerSolution().join(" ").includes(";")) {
-            cornersTwisted = getCornerSolution().join(" ").split(";")[1].split(" ");
+        if (cornerSolution.join(" ").includes(";")) {
+            cornersTwisted = cornerSolution.join(" ").split(";")[1].split(" ");
         }
 
         for (let i=0; i<edgeSol.length; i++) {
