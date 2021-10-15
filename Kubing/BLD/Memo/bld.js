@@ -68,10 +68,10 @@ function getEdgeSolution() {
         //If buffer is bufferpiece
         if (buffer === edges[bufferE] || buffer === edges[bufferOppE]) {
             edgeState[bufferE] = unsolved[0];
-            edgeState[bufferOppE] = unsolved[0].split("")[1]+unsolved[0].split("")[0];
+            edgeState[bufferOppE] = getFlippedE(unsolved[0]);
 
             edgeState[edges.indexOf(unsolved[0])] = buffer;
-            edgeState[edges.indexOf(unsolved[0].split("")[1]+unsolved[0].split("")[0])] = buffer.split("")[1]+buffer.split("")[0];
+            edgeState[edges.indexOf(getFlippedE(unsolved[0]))] = getFlippedE(buffer);
 
             buffer = unsolved[0];
         }
@@ -99,10 +99,10 @@ function getEdgeSolution() {
 
         //Swap buffer and target
         edgeState[bufferE] = target;
-        edgeState[bufferOppE] = target.split("")[1]+target.split("")[0];
+        edgeState[bufferOppE] = getFlippedE(target);
 
         edgeState[edges.indexOf(buffer)] = buffer;
-        edgeState[edges.indexOf(buffer.split("")[1]+buffer.split("")[0])] = buffer.split("")[1]+buffer.split("")[0];
+        edgeState[edges.indexOf(getFlippedE(buffer))] = getFlippedE(buffer);
     }
 
     let sol = [];
@@ -151,23 +151,25 @@ function getCornerSolution() {
         buffer = cornerState[bufferC];
 
         //If buffer is bufferpiece
-        if (buffer === corners[bufferC] || buffer === corners[bufferCWC] || buffer === corners[bufferCCWC]) {
-            cornerState[bufferC] = unsolved[0];
-            cornerState[bufferCWC] = unsolved[0].split("")[2]+unsolved[0].split("")[0]+unsolved[0].split("")[1];
-            cornerState[bufferCCWC] = unsolved[0].split("")[1]+unsolved[0].split("")[2]+unsolved[0].split("")[0];
+        if (buffer === corners[bufferC] || buffer === corners[bufferCWC] || buffer === corners[bufferCCWC]) {            
+            cornerState[bufferC] = unsolved[0];//ubr
+            cornerState[bufferCWC] = getCornerCW(unsolved[0]);//bur
+            cornerState[bufferCCWC] = getCornerCCW(unsolved[0]);//rub
             
             cornerState[corners.indexOf(unsolved[0])] = buffer;
-            cornerState[corners.indexOf(unsolved[0].split("")[2]+unsolved[0].split("")[0]+unsolved[0].split("")[1])] = buffer.split("")[2]+buffer.split("")[0]+buffer.split("")[1];
-            cornerState[corners.indexOf(unsolved[0].split("")[1]+unsolved[0].split("")[2]+unsolved[0].split("")[0])] = buffer.split("")[1]+buffer.split("")[2]+buffer.split("")[0];
+            cornerState[corners.indexOf(getCornerCW(unsolved[0]))] = getCornerCW(buffer);
+            cornerState[corners.indexOf(getCornerCCW(unsolved[0]))] = getCornerCCW(buffer);
 
             buffer = unsolved[0];
         }
-
+        
         //Make target
         target = cornerState[corners.indexOf(buffer)];
         
         //Add buffer to solution
         solution.push(buffer);
+        console.log("buffer: "+buffer);
+        console.log("target: "+target);
         
         //Remove buffer from unsolved
         let toRemove = [];
@@ -186,60 +188,13 @@ function getCornerSolution() {
 
         //Swap buffer and target
         cornerState[bufferC] = target;
-        cornerState[bufferCWC] = target.split("")[2]+target.split("")[0]+target.split("")[1];
-        cornerState[bufferCCWC] = target.split("")[1]+target.split("")[2]+target.split("")[0];
+        cornerState[bufferCWC] = getCornerCW(target);
+        cornerState[bufferCCWC] = getCornerCCW(target);
         
         cornerState[corners.indexOf(buffer)] = buffer;
-        cornerState[corners.indexOf(buffer.split("")[2]+buffer.split("")[0]+buffer.split("")[1])] = buffer.split("")[2]+buffer.split("")[0]+buffer.split("")[1];
-        cornerState[corners.indexOf(buffer.split("")[1]+buffer.split("")[2]+buffer.split("")[0])] = buffer.split("")[1]+buffer.split("")[2]+buffer.split("")[0];
+        cornerState[corners.indexOf(getCornerCW(buffer))] = getCornerCW(buffer);
+        cornerState[corners.indexOf(getCornerCCW(buffer))] = getCornerCCW(buffer);
     }
-    /*let buffer = corners[bufferC];
-    let target = "";
-    
-    //Remove buffer piece from unsolved
-    unsolved.splice(unsolved.indexOf(corners[bufferC]),1);
-    unsolved.splice(unsolved.indexOf(corners[bufferCWC]),1);
-    unsolved.splice(unsolved.indexOf(corners[bufferCCWC]),1);    
-
-    //Remove solved corners
-    removeSolvedCorners(unsolved);
-    //Get twisted corners
-    getTwisted(twisted, unsolved);
-
-    while (unsolved.length !== 0) {
-        //Make target
-        target = cornerState[corners.indexOf(buffer)];
-        cycleBreak = false;
-
-        //If target is bufferpiece
-        if (target === corners[bufferC] || target === corners[bufferCWC] || target === corners[bufferCCWC]) {
-            target = unsolved[0];
-            cycleBreak = true;
-        }
-        
-        //Add target to solution
-        solution.push(target);
-        
-        //Remove target from unsolved
-        if (!cycleBreak) {
-            let toRemove = [];
-            
-            for (let u of unsolved) {
-                //Removes every orientation of target from unsolved
-                if (u.includes(target.split("")[0]) && u.includes(target.split("")[1]) && u.includes(target.split("")[2])) {
-                    toRemove.push(u);
-                }
-            }
-            if (toRemove.length !== 0) {
-                for (let i=toRemove.length-1; i>=0; i--) {
-                    unsolved.splice(unsolved.indexOf(toRemove[i]),1);
-                }
-            }
-        }
-
-        //Make new buffer
-        buffer = target;
-    }*/
 
     let sol = [];
 
@@ -333,9 +288,7 @@ function getTwisted(twisted, unsolved) {
     for (let c of ["ubl","ubr","ufr","ufl","dfl","dfr","dbr","dbl"]) {
         let index = twisted.indexOf(c);
         if (index !== -1) {
-            twisted.splice(twisted.indexOf(c.split("")[2]+c.split("")[0]+c.split("")[1]), 1);
-            twisted.splice(twisted.indexOf(c.split("")[1]+c.split("")[2]+c.split("")[0]), 1);
-            /*switch (c) {
+            switch (c) {
                 case "ubl":
                     twisted.splice(twisted.indexOf("bul"), 1);
                     twisted.splice(twisted.indexOf("lub"), 1);
@@ -368,7 +321,117 @@ function getTwisted(twisted, unsolved) {
                     twisted.splice(twisted.indexOf("bdl"), 1);
                     twisted.splice(twisted.indexOf("ldb"), 1);
                     break;
-            }*/
+            }
         }
+    }
+}
+
+function getFlippedE(e) {
+    return e.split("")[1]+e.split("")[0];
+}
+
+function getCornerCW(c) {
+    switch (c) {
+        case "ubl":
+            return "lub";
+        case "lub":
+            return "bul";
+        case "bul":
+            return "ubl";
+        case "ubr":
+            return "bur";
+        case "bur":
+            return "rub";
+        case "rub":
+            return "ubr";
+        case "ufr":
+            return "ruf";
+        case "ruf":
+            return "fur";
+        case "fur":
+            return "ufr";
+        case "ufl":
+            return "ful";
+        case "ful":
+            return "luf";
+        case "luf":
+            return "ufl";
+        case "dfl":
+            return "ldf";
+        case "ldf":
+            return "fdl";
+        case "fdl":
+            return "dfl";
+        case "dfr":
+            return "fdr";
+        case "fdr":
+            return "rdf";
+        case "rdf":
+            return "dfr";
+        case "dbr":
+            return "rdb";
+        case "rdb":
+            return "bdr";
+        case "bdr":
+            return "dbr";
+        case "dbl":
+            return "bdl";
+        case "bdl":
+            return "ldb";
+        case "ldb":
+            return "dbl";
+    }
+}
+
+function getCornerCCW(c) {
+    switch (c) {
+        case "ubl":
+            return "bul";
+        case "bul":
+            return "lub";
+        case "lub":
+            return "ubl";
+        case "ubr":
+            return "rub";
+        case "rub":
+            return "bur";
+        case "bur":
+            return "ubr";
+        case "ufr":
+            return "fur";
+        case "fur":
+            return "ruf";
+        case "ruf":
+            return "ufr";
+        case "ufl":
+            return "luf";
+        case "luf":
+            return "ful";
+        case "ful":
+            return "ufl";
+        case "dfl":
+            return "fdl";
+        case "fdl":
+            return "ldf";
+        case "ldf":
+            return "dfl";
+        case "dfr":
+            return "rdf";
+        case "rdf":
+            return "fdr";
+        case "fdr":
+            return "dfr";
+        case "dbr":
+            return "bdr";
+        case "bdr":
+            return "rdb";
+        case "rdb":
+            return "dbr";
+        case "dbl":
+            return "ldb";
+        case "ldb":
+            return "bdl";
+        case "bdl":
+            return "dbl";
     }
 }
