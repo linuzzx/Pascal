@@ -35,8 +35,8 @@ $(function() {
 });
 
 function scrambleCube() {
-    cubeState = applyMoves("U D2 R2 D2 L R U' B U' B' D L U R' L2 D F2 L2 F' U D'");
-    //cubeState = applyMoves(getScramble());
+    //cubeState = applyMoves("U D2 R2 D2 L R U' B U' B' D L U R' L2 D F2 L2 F' U D'");
+    cubeState = applyMoves(getScramble());
 }
 
 function getEdgeSolution() {
@@ -132,7 +132,7 @@ function getCornerSolution() {
     bufferCWC = 4; //Setter bufferCWC til LUB //bufferCWC = 12; //Setter bufferCWC til RUF
     bufferCCWC = 17; //Setter bufferCCWC til BUL //bufferCCWC = 9; //Setter bufferCCWC til FUR
 
-    let buffer = cornerState[bufferC];//UFR
+    let buffer = cornerState[bufferC];//UBL
     let target = "";
     
     //Remove buffer piece from unsolved
@@ -296,7 +296,6 @@ function getFlipped(flipped, unsolved) {
     }
 }
 
-//Fiks
 function removeSolvedCorners(unsolved) {
     let toRemove = [];
     
@@ -313,7 +312,6 @@ function removeSolvedCorners(unsolved) {
     }
 }
 
-//Fiks
 function getTwisted(twisted, unsolved) {
     //Find all twisted corners
     for (let i=0; i<cornerState.length; i++) {
