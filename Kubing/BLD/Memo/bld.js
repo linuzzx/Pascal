@@ -35,9 +35,10 @@ $(function() {
 });
 
 function scrambleCube() {
-    cubeState = applyMoves("M2 U M2 U2 M2 U M2");
+    //cubeState = applyMoves("x R U' R' D R U R' D' R U R' D R U' R' D' x'");
+    //cubeState = applyMoves("M2 U M2 U2 M2 U M2");
     //cubeState = applyMoves("U D2 R2 D2 L R U' B U' B' D L U R' L2 D F2 L2 F' U D'");
-    //cubeState = applyMoves(getScramble());
+    cubeState = applyMoves(getScramble());
 }
 
 function getEdgeSolution() {
@@ -66,41 +67,36 @@ function getEdgeSolution() {
     //Get flipped edges
     getFlipped(flipped, unsolved);
 
-    //FJERN DENNE
-    let targets = []
     while (unsolved.length !== 0) {
         cycleBreak = false;
         
         //Make new buffer
         buffer = edgeState[bufferE];
 
-        //Make target
-        target = edgeState[edges.indexOf(buffer)];
-
         //If buffer is bufferpiece
         if (buffer === edges[bufferE] || buffer === edges[bufferOppE]) {
             cycleBreak = true;
 
             edgeState[bufferE] = unsolved[0];
-            edgeState[bufferOppE] = getFlippedE(unsolved[0]);
+            edgeState[bufferOppE] = getEdgeF(unsolved[0]);
 
             edgeState[edgeState.indexOf(unsolved[0])] = buffer;
-            edgeState[edgeState.indexOf(getFlippedE(unsolved[0]))] = getFlippedE(buffer);
+            edgeState[edgeState.indexOf(getEdgeF(unsolved[0]))] = getEdgeF(buffer);
 
             buffer = edgeState[bufferE];
-            target = edgeState[edges.indexOf(buffer)];
 
             edgesToSolveAgain.push(buffer);
         }
+
+        //Make target
+        target = edgeState[edges.indexOf(buffer)];
     
-    //FJERN DENNE
-        targets.push(target)
         //Add buffer to solution
         solution.push(buffer);
         
         //Remove buffer from unsolved
         for (let e of edgesToSolveAgain) {
-            if (e === buffer || e === getFlippedE(buffer)) {
+            if (e === buffer || e === getEdgeF(buffer)) {
                 numOfEdgesToSolveAgain++;
             }
         }
@@ -124,14 +120,12 @@ function getEdgeSolution() {
 
         //Swap buffer and target
         edgeState[bufferE] = target;
-        edgeState[bufferOppE] = getFlippedE(target);
+        edgeState[bufferOppE] = getEdgeF(target);
 
         edgeState[edges.indexOf(buffer)] = buffer;
-        edgeState[edges.indexOf(getFlippedE(buffer))] = getFlippedE(buffer);
+        edgeState[edges.indexOf(getEdgeF(buffer))] = getEdgeF(buffer);
     }
     
-    //FJERN DENNE
-console.log(targets);
     let sol = [];
 
     for (let s of solution) {
@@ -150,11 +144,15 @@ console.log(targets);
 
 //Fiks
 function getCornerSolution() {
+    cornerState = getCornerStateBLD();
+
     let solution = [];
     let unsolved = corners.slice(0);
     let twisted = [];
 
-    cornerState = getCornerStateBLD();
+    let cornersToSolveAgain = [];
+    let numOfCornersToSolveAgain = 0;
+
     bufferC = 0; //Setter bufferC til UBL //bufferC = 2; //Setter bufferC til UFR
     bufferCWC = 4; //Setter bufferCWC til LUB //bufferCWC = 12; //Setter bufferCWC til RUF
     bufferCCWC = 17; //Setter bufferCCWC til BUL //bufferCCWC = 9; //Setter bufferCCWC til FUR
@@ -174,20 +172,26 @@ function getCornerSolution() {
     getTwisted(twisted, unsolved);
     
     while (unsolved.length !== 0) {
+        cycleBreak = false;
+        
         //Make new buffer
         buffer = cornerState[bufferC];
 
         //If buffer is bufferpiece
         if (buffer === corners[bufferC] || buffer === corners[bufferCWC] || buffer === corners[bufferCCWC]) {            
+            cycleBreak = true;
+
             cornerState[bufferC] = unsolved[0];
             cornerState[bufferCWC] = getCornerCW(unsolved[0]);
             cornerState[bufferCCWC] = getCornerCCW(unsolved[0]);
             
-            cornerState[corners.indexOf(unsolved[0])] = buffer;
-            cornerState[corners.indexOf(getCornerCW(unsolved[0]))] = getCornerCW(buffer);
-            cornerState[corners.indexOf(getCornerCCW(unsolved[0]))] = getCornerCCW(buffer);
+            cornerState[cornerState.indexOf(unsolved[0])] = buffer;
+            cornerState[cornerState.indexOf(getCornerCW(unsolved[0]))] = getCornerCW(buffer);
+            cornerState[cornerState.indexOf(getCornerCCW(unsolved[0]))] = getCornerCCW(buffer);
 
-            buffer = unsolved[0];
+            buffer = cornerState[bufferC];
+
+            cornersToSolveAgain.push(buffer);
         }
         
         //Make target
@@ -197,19 +201,29 @@ function getCornerSolution() {
         solution.push(buffer);
         
         //Remove buffer from unsolved
-        let toRemove = [];
+        for (let c of cornersToSolveAgain) {
+            if (c === buffer || c === getCornerCW(buffer) || c === getCornerCCW(buffer)) {
+                numOfCornersToSolveAgain++;
+            }
+        }
+
+        if (!cycleBreak || numOfCornersToSolveAgain === 2) {
+            let toRemove = [];
             
-        for (let u of unsolved) {
-            //Removes every orientation of target from unsolved
-            if (u.includes(buffer.split("")[0]) && u.includes(buffer.split("")[1]) && u.includes(buffer.split("")[2])) {
-                toRemove.push(u);
+            for (let u of unsolved) {
+                //Removes every orientation of target from unsolved
+                if (u.includes(buffer.split("")[0]) && u.includes(buffer.split("")[1]) && u.includes(buffer.split("")[2])) {
+                    toRemove.push(u);
+                }
             }
-        }
-        if (toRemove.length !== 0) {
-            for (let i=toRemove.length-1; i>=0; i--) {
-                unsolved.splice(unsolved.indexOf(toRemove[i]),1);
+            if (toRemove.length !== 0) {
+                for (let i=toRemove.length-1; i>=0; i--) {
+                    unsolved.splice(unsolved.indexOf(toRemove[i]),1);
+                }
             }
+            numOfCornersToSolveAgain = 0;
         }
+        
 
         //Swap buffer and target
         cornerState[bufferC] = target;
@@ -351,7 +365,7 @@ function getTwisted(twisted, unsolved) {
     }
 }
 
-function getFlippedE(e) {
+function getEdgeF(e) {
     return e.split("")[1]+e.split("")[0];
 }
 
