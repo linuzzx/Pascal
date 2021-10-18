@@ -35,17 +35,21 @@ $(function() {
 });
 
 function scrambleCube() {
-    //cubeState = applyMoves("M2 U M2 U2 M2 U M2");
+    cubeState = applyMoves("M2 U M2 U2 M2 U M2");
     //cubeState = applyMoves("U D2 R2 D2 L R U' B U' B' D L U R' L2 D F2 L2 F' U D'");
-    cubeState = applyMoves(getScramble());
+    //cubeState = applyMoves(getScramble());
 }
 
 function getEdgeSolution() {
+    edgeState = getEdgeStateBLD();
+
     let solution = [];
     let unsolved = edges.slice(0);
     let flipped = [];
 
-    edgeState = getEdgeStateBLD();
+    let edgesToSolveAgain = [];
+    let numOfEdgesToSolveAgain = 0;
+
     bufferE = 20; //Setter buffer til DF //const bufferE = 2; //Setter buffer til UF
     bufferOppE = 10; //Setter bufferOpp til FD //const bufferOppE = 8; //Setter bufferOpp til FU
 
@@ -61,41 +65,61 @@ function getEdgeSolution() {
 
     //Get flipped edges
     getFlipped(flipped, unsolved);
-    
+
+    //FJERN DENNE
+    let targets = []
     while (unsolved.length !== 0) {
+        cycleBreak = false;
+        
         //Make new buffer
         buffer = edgeState[bufferE];
 
+        //Make target
+        target = edgeState[edges.indexOf(buffer)];
+
         //If buffer is bufferpiece
         if (buffer === edges[bufferE] || buffer === edges[bufferOppE]) {
+            cycleBreak = true;
+
             edgeState[bufferE] = unsolved[0];
             edgeState[bufferOppE] = getFlippedE(unsolved[0]);
 
-            edgeState[edges.indexOf(unsolved[0])] = buffer;
-            edgeState[edges.indexOf(getFlippedE(unsolved[0]))] = getFlippedE(buffer);
+            edgeState[edgeState.indexOf(unsolved[0])] = buffer;
+            edgeState[edgeState.indexOf(getFlippedE(unsolved[0]))] = getFlippedE(buffer);
 
-            buffer = unsolved[0];
+            buffer = edgeState[bufferE];
+            target = edgeState[edges.indexOf(buffer)];
+
+            edgesToSolveAgain.push(buffer);
         }
-
-        //Make target
-        target = edgeState[edges.indexOf(buffer)];
-        
+    
+    //FJERN DENNE
+        targets.push(target)
         //Add buffer to solution
         solution.push(buffer);
         
         //Remove buffer from unsolved
-        let toRemove = [];
-            
-        for (let u of unsolved) {
-            //Removes every orientation of target from unsolved
-            if (u.includes(buffer.split("")[0]) && u.includes(buffer.split("")[1])) {
-                toRemove.push(u);
+        for (let e of edgesToSolveAgain) {
+            if (e === buffer || e === getFlippedE(buffer)) {
+                numOfEdgesToSolveAgain++;
             }
         }
-        if (toRemove.length !== 0) {
-            for (let i=toRemove.length-1; i>=0; i--) {
-                unsolved.splice(unsolved.indexOf(toRemove[i]),1);
+
+        if (!cycleBreak || numOfEdgesToSolveAgain === 2) {
+            let toRemove = [];
+            
+            for (let u of unsolved) {
+                //Removes every orientation of target from unsolved
+                if (u.includes(buffer.split("")[0]) && u.includes(buffer.split("")[1])) {
+                    toRemove.push(u);
+                }
             }
+            if (toRemove.length !== 0) {
+                for (let i=toRemove.length-1; i>=0; i--) {
+                    unsolved.splice(unsolved.indexOf(toRemove[i]),1);
+                }
+            }
+            numOfEdgesToSolveAgain = 0;
         }
 
         //Swap buffer and target
@@ -105,7 +129,9 @@ function getEdgeSolution() {
         edgeState[edges.indexOf(buffer)] = buffer;
         edgeState[edges.indexOf(getFlippedE(buffer))] = getFlippedE(buffer);
     }
-
+    
+    //FJERN DENNE
+console.log(targets);
     let sol = [];
 
     for (let s of solution) {
