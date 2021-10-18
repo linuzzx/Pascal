@@ -165,7 +165,9 @@ function checkIfWon() {
     $("#winner").text(winner);
 
     if (winner !== "" || winner === "Draw") {
-        drawLine(startEnd)
+        if (winner !== "Draw") {
+            drawLine(startEnd);
+        }
         finish();
     }
 }
@@ -208,7 +210,7 @@ function printBoard() {
 function drawLine(stend) {
     const start = stend[0];
     const end = stend[1];
-    console.log(start, end);
+    
     const startButton = $("#btn"+start);
     const endButton = $("#btn"+end);
     const buttonSize = $("#btn"+start).height();
@@ -218,25 +220,42 @@ function drawLine(stend) {
     const sLeft = startButton.position().left;
     const eLeft = endButton.position().left;
 
-    const rotation = sTop < eTop && sLeft < eLeft ? 45 : (sTop < eTop && sLeft > eLeft ? 315 : (sTop < eTop && sLeft === eLeft ? 90 : 0));
-    const top = (sTop < eTop ? sTop : eTop) + 0.5*buttonSize - 0.5*$(line).height();
-    const left = (sLeft < eLeft ? sLeft : eLeft) + 0.5*buttonSize - 0.5*$(line).height();
-    const width = sTop === eTop || sLeft === eLeft ? 2*buttonSize : 4*Math.sqrt(buttonSize*buttonSize*0.5);
-    const height = buttonSize / 10;
+    let rotation = 0;//sTop < eTop && sLeft < eLeft ? 45 : (sTop < eTop && sLeft > eLeft ? 315 : (sTop < eTop && sLeft === eLeft ? 90 : 0));
+    let top = 0;//(sTop < eTop ? sTop : eTop) + 0.5*buttonSize - 0.5*$(line).height();
+    let left = 0;//(sLeft < eLeft ? sLeft : (sLeft > eLeft ? eLeft : (sLeft+eLeft)/2)) + 0.5*buttonSize - 0.5*$(line).height();
+    let width = 0;//sTop === eTop || sLeft === eLeft ? 2*buttonSize : 4*Math.sqrt(buttonSize*buttonSize*0.5);
+    let height = buttonSize / 10;
     const borderRadius = buttonSize / 4;
 
+    if (start === 0 && end === 2 || start === 3 && end === 5 || start === 6 && end === 8) {
+        top = sTop + 0.5*buttonSize;
+        left = sLeft + 0.5*buttonSize;
+        width = 2*buttonSize;
+    }
+    else if (start === 0 && end === 6 || start === 1 && end === 7 || start === 2 && end === 8) {
+        top = sTop + 0.5*buttonSize;
+        left = sLeft + 0.5*buttonSize;
+        width = height;
+        height = 2*buttonSize;
+    }
+    else if (start === 0 && end === 8) {
+        top = $("#btn4").position().top + 0.5*buttonSize;
+        left = sLeft + 0.5*buttonSize;
+        width = 4*Math.sqrt(buttonSize*buttonSize*0.5);
+        rotation = 45;
+    }
+    else if (start === 2 && end === 6) {
+        top = $("#btn4").position().top + 0.5*buttonSize;
+        left = eLeft + 0.5*buttonSize;
+        width = 4*Math.sqrt(buttonSize*buttonSize*0.5);
+        rotation = 315;
+    }
+
+    $(line).css("top",top);
+    $(line).css("left",left);
     $(line).css("width",width);
     $(line).css("height",height);
     $(line).css("border-radius",borderRadius);
-
-    if (rotation !== 0) {
-        $(line).css("transform","rotate("+rotation+"deg)");
-        $(line).css("-webkit-transform","rotate("+rotation+"deg)");
-        $(line).css("top", $("#btn4").position().top + 0.5*buttonSize - 0.5*height);
-        $(line).css("left", $("#btn3").position().left + (3*buttonSize - width) / 2);
-    }
-    else {
-        $(line).css("top",top);
-        $(line).css("left",left);
-    }
+    $(line).css("transform","rotate("+rotation+"deg)");
+    $(line).css("-webkit-transform","rotate("+rotation+"deg)");
 }
