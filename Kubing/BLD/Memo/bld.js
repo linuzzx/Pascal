@@ -35,9 +35,6 @@ $(function() {
 });
 
 function scrambleCube() {
-    //cubeState = applyMoves("x R U' R' D R U R' D' R U R' D R U' R' D' x'");
-    //cubeState = applyMoves("M2 U M2 U2 M2 U M2");
-    //cubeState = applyMoves("U D2 R2 D2 L R U' B U' B' D L U R' L2 D F2 L2 F' U D'");
     cubeState = applyMoves(getScramble());
 }
 
@@ -77,22 +74,36 @@ function getEdgeSolution() {
         if (buffer === edges[bufferE] || buffer === edges[bufferOppE]) {
             cycleBreak = true;
 
-            edgeState[bufferE] = unsolved[0];
-            edgeState[bufferOppE] = getEdgeF(unsolved[0]);
+            let oldTarget1 = edgeState[edges.indexOf(unsolved[0])];
+            let oldTarget2 = edgeState[edges.indexOf(getEdgeF(unsolved[0]))];
 
-            edgeState[edgeState.indexOf(unsolved[0])] = buffer;
+            edgeState[edges.indexOf(unsolved[0])] = buffer;
+            edgeState[edges.indexOf(getEdgeF(unsolved[0]))] = getEdgeF(buffer);
+
+            edgeState[bufferE] = oldTarget1;
+            edgeState[bufferOppE] = oldTarget2;
+
+            /*edgeState[edgeState.indexOf(unsolved[0])] = buffer;
             edgeState[edgeState.indexOf(getEdgeF(unsolved[0]))] = getEdgeF(buffer);
+
+            edgeState[bufferE] = unsolved[0];
+            edgeState[bufferOppE] = getEdgeF(unsolved[0]);*/
 
             buffer = edgeState[bufferE];
 
-            edgesToSolveAgain.push(buffer);
+            if (solution.length !== 0) {
+                edgesToSolveAgain.push(buffer);
+            }
+            solution.push(unsolved[0]);
         }
 
         //Make target
         target = edgeState[edges.indexOf(buffer)];
     
         //Add buffer to solution
-        solution.push(buffer);
+        if (!cycleBreak) {
+            solution.push(buffer);
+        }
         
         //Remove buffer from unsolved
         for (let e of edgesToSolveAgain) {
@@ -119,11 +130,13 @@ function getEdgeSolution() {
         }
 
         //Swap buffer and target
-        edgeState[bufferE] = target;
-        edgeState[bufferOppE] = getEdgeF(target);
+        if (!cycleBreak) {
+            edgeState[edges.indexOf(buffer)] = buffer;
+            edgeState[edges.indexOf(getEdgeF(buffer))] = getEdgeF(buffer);
 
-        edgeState[edges.indexOf(buffer)] = buffer;
-        edgeState[edges.indexOf(getEdgeF(buffer))] = getEdgeF(buffer);
+            edgeState[bufferE] = target;
+            edgeState[bufferOppE] = getEdgeF(target);
+        }
     }
     
     let sol = [];
@@ -142,7 +155,6 @@ function getEdgeSolution() {
     return sol;
 }
 
-//Fiks
 function getCornerSolution() {
     cornerState = getCornerStateBLD();
 
@@ -181,24 +193,41 @@ function getCornerSolution() {
         if (buffer === corners[bufferC] || buffer === corners[bufferCWC] || buffer === corners[bufferCCWC]) {            
             cycleBreak = true;
 
-            cornerState[bufferC] = unsolved[0];
-            cornerState[bufferCWC] = getCornerCW(unsolved[0]);
-            cornerState[bufferCCWC] = getCornerCCW(unsolved[0]);
+            let oldTarget1 = cornerState[corners.indexOf(unsolved[0])];
+            let oldTarget2 = cornerState[corners.indexOf(getCornerCW(unsolved[0]))];
+            let oldTarget3 = cornerState[corners.indexOf(getCornerCCW(unsolved[0]))];
+
+            cornerState[corners.indexOf(unsolved[0])] = buffer;
+            cornerState[corners.indexOf(getCornerCW(unsolved[0]))] = getCornerCW(buffer);
+            cornerState[corners.indexOf(getCornerCCW(unsolved[0]))] = getCornerCCW(buffer);
+
+            cornerState[bufferC] = oldTarget1;
+            cornerState[bufferCWC] = oldTarget2;
+            cornerState[bufferCCWC] = oldTarget3;
             
-            cornerState[cornerState.indexOf(unsolved[0])] = buffer;
+            /*cornerState[cornerState.indexOf(unsolved[0])] = buffer;
             cornerState[cornerState.indexOf(getCornerCW(unsolved[0]))] = getCornerCW(buffer);
             cornerState[cornerState.indexOf(getCornerCCW(unsolved[0]))] = getCornerCCW(buffer);
 
-            buffer = cornerState[bufferC];
+            cornerState[bufferC] = unsolved[0];
+            cornerState[bufferCWC] = getCornerCW(unsolved[0]);
+            cornerState[bufferCCWC] = getCornerCCW(unsolved[0]);*/
 
-            cornersToSolveAgain.push(buffer);
+            buffer = cornerState[bufferC];
+            
+            if (solution.length !== 0) {
+                cornersToSolveAgain.push(buffer);
+            }
+            solution.push(unsolved[0]);
         }
         
         //Make target
         target = cornerState[corners.indexOf(buffer)];
         
         //Add buffer to solution
-        solution.push(buffer);
+        if (!cycleBreak) {
+            solution.push(buffer);
+        }
         
         //Remove buffer from unsolved
         for (let c of cornersToSolveAgain) {
@@ -224,15 +253,16 @@ function getCornerSolution() {
             numOfCornersToSolveAgain = 0;
         }
         
-
         //Swap buffer and target
-        cornerState[bufferC] = target;
-        cornerState[bufferCWC] = getCornerCW(target);
-        cornerState[bufferCCWC] = getCornerCCW(target);
-        
-        cornerState[corners.indexOf(buffer)] = buffer;
-        cornerState[corners.indexOf(getCornerCW(buffer))] = getCornerCW(buffer);
-        cornerState[corners.indexOf(getCornerCCW(buffer))] = getCornerCCW(buffer);
+        if (!cycleBreak) {
+            cornerState[corners.indexOf(buffer)] = buffer;
+            cornerState[corners.indexOf(getCornerCW(buffer))] = getCornerCW(buffer);
+            cornerState[corners.indexOf(getCornerCCW(buffer))] = getCornerCCW(buffer);
+
+            cornerState[bufferC] = target;
+            cornerState[bufferCWC] = getCornerCW(target);
+            cornerState[bufferCCWC] = getCornerCCW(target);
+        }
     }
 
     let sol = [];
