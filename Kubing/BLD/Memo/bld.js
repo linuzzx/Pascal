@@ -83,12 +83,6 @@ function getEdgeSolution() {
             edgeState[bufferE] = oldTarget1;
             edgeState[bufferOppE] = oldTarget2;
 
-            /*edgeState[edgeState.indexOf(unsolved[0])] = buffer;
-            edgeState[edgeState.indexOf(getEdgeF(unsolved[0]))] = getEdgeF(buffer);
-
-            edgeState[bufferE] = unsolved[0];
-            edgeState[bufferOppE] = getEdgeF(unsolved[0]);*/
-
             buffer = edgeState[bufferE];
 
             if (solution.length !== 0) {
@@ -150,7 +144,7 @@ function getEdgeSolution() {
     }
 
     for (let f of flipped) {
-        sol.push("("+letterSchemeEdges[edges.indexOf(f)]+")");
+        sol.push(letterSchemeEdges[edges.indexOf(f)]+letterSchemeEdges[edges.indexOf(getEdgeF(f))]);
     }
     return sol;
 }
@@ -204,14 +198,6 @@ function getCornerSolution() {
             cornerState[bufferC] = oldTarget1;
             cornerState[bufferCWC] = oldTarget2;
             cornerState[bufferCCWC] = oldTarget3;
-            
-            /*cornerState[cornerState.indexOf(unsolved[0])] = buffer;
-            cornerState[cornerState.indexOf(getCornerCW(unsolved[0]))] = getCornerCW(buffer);
-            cornerState[cornerState.indexOf(getCornerCCW(unsolved[0]))] = getCornerCCW(buffer);
-
-            cornerState[bufferC] = unsolved[0];
-            cornerState[bufferCWC] = getCornerCW(unsolved[0]);
-            cornerState[bufferCCWC] = getCornerCCW(unsolved[0]);*/
 
             buffer = cornerState[bufferC];
             
@@ -276,7 +262,12 @@ function getCornerSolution() {
     }
 
     for (let t of twisted) {
-        sol.push("("+letterSchemeCorners[corners.indexOf(t)].toLowerCase()+")");
+        if (cornerState.indexOf(t) === corners.indexOf(getCornerCW(t))) {
+            sol.push(letterSchemeCorners[cornerState.indexOf(t)].toLowerCase()+letterSchemeCorners[cornerState.indexOf(getCornerCCW(t))].toLowerCase());
+        }
+        else {
+            sol.push(letterSchemeCorners[cornerState.indexOf(t)].toLowerCase()+letterSchemeCorners[cornerState.indexOf(getCornerCW(t))].toLowerCase());
+        }
     }
     return sol;
 }

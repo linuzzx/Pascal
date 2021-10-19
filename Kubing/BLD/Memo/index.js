@@ -11,6 +11,13 @@ let cubeType = localStorage.getItem("cubeType") || "3BLD";
 let grouping = localStorage.getItem("grouping") || "1";
 let checkable = false;
 
+let edgeSolution = [];
+let edgeSol = [];
+let edgesFlipped = [];
+let cornerSolution = [];
+let cornersSol = [];
+let cornersTwisted = [];
+
 $(function() {
     $("#inpMemo").on('keyup', function (e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
@@ -45,20 +52,20 @@ function getMemo() {
     //Fiks dette
     if (cubeType === "3BLD") {
         scrambleCube();
+        
+        edgeSolution = getEdgeSolution();
+        cornerSolution = getCornerSolution();
 
-        const edgeSolution = getEdgeSolution();
-        const cornerSolution = getCornerSolution();
+        edgeSol = edgeSolution.join(" ").split(";")[0].split(" ");
 
-        const edgeSol = edgeSolution.join(" ").split(";")[0].split(" ");
-
-        let edgesFlipped = [];
+        edgesFlipped = [];
         if (edgeSolution.join(" ").includes(";")) {
             edgesFlipped = edgeSolution.join(" ").split(";")[1].split(" ");
         }
 
-        const cornersSol = cornerSolution.join(" ").split(";")[0].split(" ");
+        cornersSol = cornerSolution.join(" ").split(";")[0].split(" ");
 
-        let cornersTwisted = [];
+        cornersTwisted = [];
         if (cornerSolution.join(" ").includes(";")) {
             cornersTwisted = cornerSolution.join(" ").split(";")[1].split(" ");
         }
@@ -68,7 +75,9 @@ function getMemo() {
         }
         memo = memo.trim() + " ";
         for (let e of edgesFlipped) {
-            memo += e;
+            if (e !== "") {
+                memo += "("+e+")";
+            }
         }
         memo = memo.trim() + " ";
         for (let i=0; i<cornersSol.length; i++) {
@@ -76,7 +85,9 @@ function getMemo() {
         }
         memo = memo.trim() + " ";
         for (let c of cornersTwisted) {
-            memo += c;
+            if (c !== "") {
+                memo += "("+c+")";
+            }
         }
         memo = memo.trim();
     }
@@ -123,32 +134,85 @@ function checkMemo() {
         const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","") === 
                         $("#memo").text().toUpperCase().split(" ").join("").replaceAll("(","").replaceAll(")","");
         let out = "<div><br>";
-        let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").split("");
-        let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").split("");
+        let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
+        let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
 
-        while (memo.length < inpMemo.length) {
-            memo.push("");
-        }
-
-        for (let i=0; i<memo.length; i++) {
+        /*let i = 0;
+        for (let e of edgeSol) {
             if (inpMemo[i]) {
-                if (inpMemo[i] === memo[i]) {
-                    
-                    out += "<e style='color: green'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                if (inpMemo[i] === e) {
+                    out += "<e style='color: green'>"+e + ((i+1) % grouping === 0 ? " ":"")+"</e>";
                 }
                 else {
-                    out += "<e style='color: red'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                    out += "<e style='color: red'>"+e + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                }
+            }
+            else {
+                out += "<e>"+e + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+            }
+            i++;
+        }
+        for (let e of edgesFlipped) {
+                    console.log(e);
+            if (inpMemo[i]) {
+                if (inpMemo[i] === e && e !== "") {
+                    out += "<e style='color: green'>("+e+")</e>";
+                }
+                else {
+                    out += "<e style='color: red'>("+e+")</e>";
+                }
+            }
+            else {
+                out += "<e>"+e + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+            }
+            i++;
+        }*/
+        let firstCorner = true;
+        for (let i=0; i<memo.length; i++) {
+            if (inpMemo[i]) {
+                if (memo[i] === edgeSolution[i]) {
+                    if (inpMemo[i] === memo[i]) {
+                        out += "<e style='color: green'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
+                    else {
+                        out += "<e style='color: red'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
+                }
+                else {
+                    if (firstCorner) {
+                        firstCorner = false;
+                        if (inpMemo[i] === memo[i]) {
+                            out += "<e style='color: green'> "+memo[i].toLowerCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                        }
+                        else {
+                            out += "<e style='color: red'> "+memo[i].toLowerCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                        }
+                    }
+                    else {
+                        if (inpMemo[i] === memo[i]) {
+                            out += "<e style='color: green'>"+memo[i].toLowerCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                        }
+                        else {
+                            out += "<e style='color: red'>"+memo[i].toLowerCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+                        }
+                    }
                 }
             }
             else {
                 out += "<e>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
             }
         }
+        
+        if (inpMemo.length > memo.length) {
+            for (let i=memo.length; i<inpMemo.length; i++) {
+                out += "<e style='color: orange; font-style: italic'>"+inpMemo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+            }
+        }
 
         out += "</div>";
 
         if (success) {
-            out += "<br><p style='color: green'>"+getTime(time)+"</p>";
+            out += "<br><p style='color: green'>Success!<br>"+getTime(time)+"</p>";
         }
         else {
             out += "<br><p style='color: red'>DNF<br>("+getTime(time)+")</p>";
