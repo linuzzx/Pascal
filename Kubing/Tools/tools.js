@@ -139,7 +139,7 @@ function getScramble() {
         scramble += scrambleArray[j] + tilleggArray[Math.floor(Math.random() * tilleggArray.length)] + " ";
     }
 
-    return scramble;
+    return scramble.trim();
 }
 
 function applyMoves(allMoves) {

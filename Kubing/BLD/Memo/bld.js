@@ -48,8 +48,8 @@ function getEdgeSolution() {
     let edgesToSolveAgain = [];
     let numOfEdgesToSolveAgain = 0;
 
-    bufferE = 20; //Setter buffer til DF //const bufferE = 2; //Setter buffer til UF
-    bufferOppE = 10; //Setter bufferOpp til FD //const bufferOppE = 8; //Setter bufferOpp til FU
+    /*bufferE = 20; //Setter buffer til DF //const bufferE = 2; //Setter buffer til UF
+    bufferOppE = 10; //Setter bufferOpp til FD //const bufferOppE = 8; //Setter bufferOpp til FU*/
 
     let buffer = edgeState[bufferE];//DF
     let target = "";
@@ -159,9 +159,9 @@ function getCornerSolution() {
     let cornersToSolveAgain = [];
     let numOfCornersToSolveAgain = 0;
 
-    bufferC = 0; //Setter bufferC til UBL //bufferC = 2; //Setter bufferC til UFR
+    /*bufferC = 0; //Setter bufferC til UBL //bufferC = 2; //Setter bufferC til UFR
     bufferCWC = 4; //Setter bufferCWC til LUB //bufferCWC = 12; //Setter bufferCWC til RUF
-    bufferCCWC = 17; //Setter bufferCCWC til BUL //bufferCCWC = 9; //Setter bufferCCWC til FUR
+    bufferCCWC = 17; //Setter bufferCCWC til BUL //bufferCCWC = 9; //Setter bufferCCWC til FUR*/
 
     let buffer = cornerState[bufferC];//UBL
     let target = "";
@@ -494,4 +494,46 @@ function getCornerCCW(c) {
         case "bdl":
             return "dbl";
     }
+}
+
+function changeEdgeBuffer(eb) {
+    if (eb === "UF") {
+        bufferE = 2;
+        bufferOppE = 8;
+    }
+    else if (eb === "DF") {
+        bufferE = 20;
+        bufferOppE = 10;
+    }
+}
+
+function changeCornerBuffer(cb) {
+    if (cb === "UFR") {
+        bufferC = 2;
+        bufferCWC = 12;
+        bufferCCWC = 9;
+    }
+    else if (cb === "UBL") {
+        bufferC = 0;
+        bufferCWC = 4;
+        bufferCCWC = 17;
+    }
+}
+
+function changeLetterScheme(ls) {
+    if (ls === "Speffz") {
+        ubl="A",ub="A",ubr="B",ur="B",ufr="C",uf="C",ufl="D",ul="D",lub="E",lu="E",luf="F",lf="F",ldf="G",ld="G",ldb="H",lb="H",
+        ful="I",fu="I",fur="J",fr="J",fdr="K",fd="K",fdl="L",fl="L",ruf="M",ru="M",rub="N",rb="N",rdb="O",rd="O",rdf="P",rf="P",
+        bur="Q",bu="Q",bul="R",bl="R",bdl="S",bd="S",bdr="T",br="T",dfl="U",df="U",dfr="V",dr="V",dbr="W",db="W",dbl="X",dl="X";
+    }
+    else if (ls === "Einar") {
+        ubl="A",ub="A",ubr="C",ur="C",ufr="E",uf="E",ufl="G",ul="G",lub="H",lu="H",luf="P",lf="P",ldf="W",ld="W",ldb="I",lb="I",
+        ful="F",fu="F",fur="N",fr="N",fdr="U",fd="U",fdl="O",fl="O",ruf="D",ru="D",rub="L",rb="L",rdb="S",rd="S",rdf="M",rf="M",
+        bur="B",bu="B",bul="J",bl="J",bdl="Q",bd="Q",bdr="K",br="K",dfl="V",df="V",dfr="T",dr="T",dbr="R",db="R",dbl="X",dl="X";
+    }
+
+    letterScheme = [ubl,ub,ubr,ur,ufr,uf,ufl,ul,lub,lu,luf,lf,ldf,ld,ldb,lb,ful,fu,fur,fr,fdr,fd,fdl,fl,
+                    ruf,ru,rub,rb,rdb,rd,rdf,rf,bur,bu,bul,bl,bdl,bd,bdr,br,dfl,df,dfr,dr,dbr,db,dbl,dl];
+    letterSchemeEdges = [ub,ur,uf,ul,lu,lf,ld,lb,fu,fr,fd,fl,ru,rb,rd,rf,bu,bl,bd,br,df,dr,db,dl];
+    letterSchemeCorners = [ubl,ubr,ufr,ufl,lub,luf,ldf,ldb,ful,fur,fdr,fdl,ruf,rub,rdb,rdf,bur,bul,bdl,bdr,dfl,dfr,dbr,dbl];
 }

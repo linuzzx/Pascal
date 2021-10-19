@@ -7,6 +7,9 @@ let first = false;
 let start = 0;
 let interval = null;
 let time = "00.00";
+let edgeBuffer = localStorage.getItem("edgeBuffer") || "UF";
+let cornerBuffer = localStorage.getItem("cornerBuffer") || "UFR";
+let letterSchemeOption = localStorage.getItem("letterSchemeOption") || "Speffz";
 let cubeType = localStorage.getItem("cubeType") || "3BLD";
 let grouping = localStorage.getItem("grouping") || "1";
 let checkable = false;
@@ -228,18 +231,49 @@ function checkMemo() {
 }
 
 function getOptions() {
-    const options = "<label for='selectCubeType'>Event&nbsp<select id='selectCubeType' onchange='setCubeType(this.value)'><option value='3BLD'>3BLD</option><option value='4BLD'>4BLD</option><option value='5BLD'>5BLD</option></select>&nbsp</label>"+
+    const options = "<label for='selectEdgeBuffer'>Edge buffer&nbsp<select id='selectEdgeBuffer' onchange='setEdgeBuffer(this.value)'><option value='UF'>UF</option><option value='DF'>DF</option></select>&nbsp</label>"+
+                    "<label for='selectCornerBuffer'>Corner buffer&nbsp<select id='selectCornerBuffer' onchange='setCornerBuffer(this.value)'><option value='UFR'>UFR</option><option value='UBL'>UBL</option></select>&nbsp</label>"+
+                    "<label for='selectLetterScheme'>Letter scheme&nbsp<select id='selectLetterScheme' onchange='setLetterScheme(this.value)'><option value='Speffz'>Speffz</option><option value='Einar'>Einar's scheme</option></select>&nbsp</label>"+
+                    "<label for='selectCubeType'>Event&nbsp<select id='selectCubeType' onchange='setCubeType(this.value)'><option value='3BLD'>3BLD</option><option value='4BLD'>4BLD (Not finished)</option><option value='5BLD'>5BLD (Not finished)</option></select>&nbsp</label>"+
                     "<label for='selectGrouping'>Grouping&nbsp</label><select id='selectGrouping' onchange='setGrouping(this.value)'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option></select>&nbsp</label>"+
                     "<button class='btn btn-secondary' onclick='getMemo()'>Start</button>";
     
     $("#memo").html(options);
 
+    $("#selectEdgeBuffer").val(edgeBuffer);
+    $("#selectCornerBuffer").val(cornerBuffer);
+    $("#selectLetterScheme").val(letterSchemeOption);
     $("#selectCubeType").val(cubeType);
     $("#selectGrouping").val(grouping);
+
+    changeEdgeBuffer(edgeBuffer);
+    changeCornerBuffer(cornerBuffer);
+    changeLetterScheme(letterSchemeOption);
 
     $("#btnCheck").prop("disabled", true);
 
     showMemo();
+}
+
+function setEdgeBuffer(eb) {
+    edgeBuffer = eb;
+    localStorage.setItem("edgeBuffer", edgeBuffer);
+
+    changeEdgeBuffer(eb);
+}
+
+function setCornerBuffer(cb) {
+    cornerBuffer = cb;
+    localStorage.setItem("cornerBuffer", cornerBuffer);
+
+    changeCornerBuffer(cb);
+}
+
+function setLetterScheme(ls) {
+    letterSchemeOption = ls;
+    localStorage.setItem("letterSchemeOption", letterSchemeOption);
+
+    changeLetterScheme(ls);
 }
 
 function setCubeType(ct) {
@@ -254,13 +288,6 @@ function setGrouping(g) {
 
 function adjustSize() {
     const inpFontSize = $("#btnCheck").css("font-size").split("px")[0]*1.5;
-    
-    /*if ($("#content").width() > $("#content").height()) {
-        $("#inpMemo").css("width", "50%");
-    }
-    else {
-        $("#inpMemo").css("width", "80%");
-    }*/
 
     $("#inpMemo").css("width", "80%");
     $("#selectCubeType").css("font-size", inpFontSize);
