@@ -1,5 +1,4 @@
 let letters = "abcdefghijklmnopqrstuvwx".toUpperCase().split("");
-let numOfCubes = 1;
 const numOfLetters3BLD = 20;
 const numOfLetters4BLD = 46;
 const numOfLetters5BLD = 86;
@@ -11,6 +10,7 @@ let edgeBuffer = localStorage.getItem("edgeBuffer") || "UF";
 let cornerBuffer = localStorage.getItem("cornerBuffer") || "UFR";
 let letterSchemeOption = localStorage.getItem("letterSchemeOption") || "Speffz";
 let cubeType = localStorage.getItem("cubeType") || "3BLD";
+let numOfCubes = localStorage.getItem("numOfCubes") || 1;
 let grouping = localStorage.getItem("grouping") || "1";
 let checkable = false;
 
@@ -41,16 +41,10 @@ $(window).resize(function(){
 
 function getMemo() {
     let memo = "";
-    let numOfLetters = 0;
-    if (cubeType === "3BLD") {
-        numOfLetters = numOfLetters3BLD;
-    }
-    else if (cubeType === "4BLD") {
-        numOfLetters = numOfLetters4BLD;
-    }
-    else if (cubeType === "5BLD") {
-        numOfLetters = numOfLetters5BLD;
-    }
+    edgesFlipped = [];
+    edgesSol = [];
+    cornersTwisted = [];
+    cornersSol = [];
 
     //Fiks dette
     if (cubeType === "3BLD") {
@@ -96,11 +90,65 @@ function getMemo() {
         }
         memo = memo.trim();
     }
-    else {
-        for (let i=0; i<numOfCubes; i++) {
+    else if (cubeType === "4BLD") {
+        for (let i=0; i<numOfLetters4BLD; i++) {
             for (let j=0; j<numOfLetters; j++) {
                 memo += letters[Math.floor(Math.random() * letters.length)] + ((j+1) % grouping === 0 ? " ":"");
             }
+        }
+    }
+    else if (cubeType === "5BLD") {
+        for (let i=0; i<numOfLetters5BLD; i++) {
+            for (let j=0; j<numOfLetters; j++) {
+                memo += letters[Math.floor(Math.random() * letters.length)] + ((j+1) % grouping === 0 ? " ":"");
+            }
+        }
+    }
+    else if (cubeType === "MBLD") {
+        for (let i=0; i<numOfCubes; i++) {
+            scrambleCube();
+            
+            edgeSolution = getEdgeSolution();
+            cornerSolution = getCornerSolution();
+
+            let eSol = edgeSolution.slice(0);
+            let eFlipped = [];
+            if (edgeSolution.join(" ").includes(";")) {
+                eSol = edgeSolution.slice(0, edgeSolution.indexOf(";"));
+                eFlipped = edgeSolution.slice(edgeSolution.indexOf(";")+1);
+            }
+            edgesSol.push(eSol);
+            edgesFlipped.push(eFlipped);
+
+            let cSol = cornerSolution.slice(0);
+            let cTwisted = [];
+            if (cornerSolution.join(" ").includes(";")) {
+                cSol = cornerSolution.slice(0, cornerSolution.indexOf(";"));
+                cTwisted = cornerSolution.slice(cornerSolution.indexOf(";")+1);
+            }
+            cornersSol.push(cSol);
+            cornersTwisted.push(cTwisted);
+
+            for (let j=0; j<edgesSol[i].length; j++) {
+                memo += edgesSol[i][j] + ((j+1) % grouping === 0 ? " ":"");
+            }
+            memo = memo.trim() + " ";
+            for (let e of edgesFlipped[i]) {
+                if (e !== "") {
+                    memo += "("+e+")";
+                }
+            }
+            memo = memo.trim() + " ";
+            for (let j=0; j<cornersSol[i].length; j++) {
+                memo += cornersSol[i][j] + ((j+1) % grouping === 0 ? " ":"");
+            }
+            memo = memo.trim() + " ";
+            for (let c of cornersTwisted[i]) {
+                if (c !== "") {
+                    memo += "("+c+")";
+                }
+            }
+            memo = memo.trim()+"<br>";
         }
     }
 
@@ -136,27 +184,165 @@ function startRecon() {
 //Fiks
 function checkMemo() {
     if (checkable) {
-        const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","") === 
+        if (cubeType === "MBLD") {
+            const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","") === 
                         $("#memo").text().toUpperCase().split(" ").join("").replaceAll("(","").replaceAll(")","");
-        let out = "<div><br>";
-        let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
-        let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
+            let out = "<div><br>";
+            let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
+            let memos = ($("#memo").html().replaceAll("<br>","/").toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","")+"_").replaceAll("/_"," ").trim().split("/");
+            
+            console.log($("#inpMemo").val());
 
-        edgesFlipped = edgesFlipped.join("").split("");
-        cornersTwisted = cornersTwisted.join("").split("");
-        console.log(inpMemo);
-        console.log(cornersSol);
-        let i = 0;
-        let ie = 0;
-        let ief = 0;
-        let ic = 0;
-        let ict = 0;
+            //edgesFlipped = edgesFlipped.join("").split("");
+            //cornersTwisted = cornersTwisted.join("").split("");
 
-        let firstEF = true;
-        let firstC = true;
-        let firstCT = true;
+            let firstMemo = true;
+            let i = 0;
+            
+            for (let j=0; j<numOfCubes; j++) {
+                if (!firstMemo) {
+                    out += "<br>";
+                }
 
-        for (let m of memo) {
+                let ii = 0;
+
+                let ie = 0;
+                let ief = 0;
+                let ic = 0;
+                let ict = 0;
+    
+                let firstEF = true;
+                let firstC = true;
+                let firstCT = true;
+
+                let memo = memos[j].split("");
+
+                console.log(memo);
+
+                for (let m of memo) {
+                    if (edgesSol[j] && ie<edgesSol[j].length) {
+                        if (inpMemo[i]) {
+                            if (inpMemo[i] === edgesSol[j][ie]) {
+                                out += "<e style='color: green'>"+m + ((ie+1) % grouping === 0 ? " ":"")+"</e>";
+                            }
+                            else {
+                                out += "<e style='color: red'>"+m + ((ie+1) % grouping === 0 ? " ":"")+"</e>";
+                            }
+                        }
+                        else {
+                            out += "<e>"+m + ((ie+1) % grouping === 0 ? " ":"")+"</e>";
+                        }
+                        
+                        ie++;
+                    }
+                    else if (edgesFlipped[j].join("").split("") && ief<edgesFlipped[j].join("").split("").length) {
+                        if (firstEF) {
+                            ii % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+                            firstEF = false;
+                        }
+                        if (inpMemo[i]) {
+                            if (inpMemo[i] === edgesFlipped[j].join("").split("")[ief]) {
+                                out += "<e style='color: green'>"+m + ((ief+1) % grouping === 0 ? " ":"")+"</e>";
+                            }
+                            else {
+                                out += "<e style='color: red'>"+m + ((ief+1) % grouping === 0 ? " ":"")+"</e>";
+                            }
+                        }
+                        else {
+                            out += "<e>"+m + ((ief+1) % grouping === 0 ? " ":"")+"</e>";
+                        }
+                        
+                        ief++;
+                    }
+                    else if (cornersSol[j].join("").split("") && ic<cornersSol[j].join("").split("").length) {
+                        if (firstC) {
+                            ii % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+                            firstC = false;
+                        }
+                        if (inpMemo[i]) {
+                            if (inpMemo[i].toLowerCase() === cornersSol[j].join("").split("")[ic]) {
+                                out += "<e style='color: green'>"+m.toLowerCase() + ((ic+1) % grouping === 0 ? " ":"")+"</e>";
+                            }
+                            else {
+                                out += "<e style='color: red'>"+m.toLowerCase() + ((ic+1) % grouping === 0 ? " ":"")+"</e>";
+                            }
+                        }
+                        else {
+                            out += "<e>"+m.toLowerCase() + ((ic+1) % grouping === 0 ? " ":"")+"</e>";
+                        }
+                        
+                        ic++;
+                    }
+                    else if (cornersTwisted[j].join("").split("") && ict<cornersTwisted[j].join("").split("").length) {
+                        if (firstCT) {
+                            ii % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+                            firstCT = false;
+                        }
+                        if (inpMemo[i]) {
+                            if (inpMemo[i].toLowerCase() === cornersTwisted[j].join("").split("")[ict]) {
+                                out += "<e style='color: green'>"+m.toLowerCase() + ((ict+1) % grouping === 0 ? " ":"")+"</e>";
+                            }
+                            else {
+                                out += "<e style='color: red'>"+m.toLowerCase() + ((ict+1) % grouping === 0 ? " ":"")+"</e>";
+                            }
+                        }
+                        else {
+                            out += "<e>"+m.toLowerCase() + ((ict+1) % grouping === 0 ? " ":"")+"</e>";
+                        }
+                        
+                        ict++;
+                    }
+
+                    i++;
+                    ii++;
+                }
+                firstMemo = false;
+            }
+            let fullMemo = ($("#memo").html().replaceAll("<br>","").toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")",""));
+            if (inpMemo.length > fullMemo.length) {
+                i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+                for (let j=fullMemo.length; j<inpMemo.length; j++) {
+                    out += "<e style='color: orange; font-style: italic'>"+inpMemo[j] + ((j+1) % grouping === 0 ? " ":"")+"</e>";
+                }
+            }
+
+            out += "</div>";
+
+            if (success) {
+                out += "<br><p style='color: green'>Success!<br>"+getTime(time)+"</p>";
+            }
+            else {
+                out += "<br><p style='color: red'>DNF<br>("+getTime(time)+")</p>";
+            }
+
+            $("#result").html(out);
+
+            $("#inpMemo").val("");
+
+            getOptions();
+            checkable = false;
+        }
+        else {
+            const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","") === 
+                        $("#memo").text().toUpperCase().split(" ").join("").replaceAll("(","").replaceAll(")","");
+            let out = "<div><br>";
+            let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
+            let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
+
+            edgesFlipped = edgesFlipped.join("").split("");
+            cornersTwisted = cornersTwisted.join("").split("");
+            
+            let i = 0;
+            let ie = 0;
+            let ief = 0;
+            let ic = 0;
+            let ict = 0;
+
+            let firstEF = true;
+            let firstC = true;
+            let firstCT = true;
+
+            for (let m of memo) {
             if (ie<edgesSol.length) {
                 if (inpMemo[i]) {
                     if (inpMemo[i] === edgesSol[ie]) {
@@ -229,42 +415,48 @@ function checkMemo() {
                 
                 ict++;
             }
-            
+
             i++;
-        }
-        
-        if (inpMemo.length > memo.length) {
+            }
+
+            if (inpMemo.length > memo.length) {
             i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
             for (let j=memo.length; j<inpMemo.length; j++) {
                 out += "<e style='color: orange; font-style: italic'>"+inpMemo[j] + ((j+1) % grouping === 0 ? " ":"")+"</e>";
             }
-        }
+            }
 
-        out += "</div>";
+            out += "</div>";
 
-        if (success) {
+            if (success) {
             out += "<br><p style='color: green'>Success!<br>"+getTime(time)+"</p>";
-        }
-        else {
+            }
+            else {
             out += "<br><p style='color: red'>DNF<br>("+getTime(time)+")</p>";
+            }
+
+            $("#result").html(out);
+
+            $("#inpMemo").val("");
+
+            getOptions();
+            checkable = false;
         }
-
-        $("#result").html(out);
-
-        $("#inpMemo").val("");
-
-        getOptions();
-        checkable = false;
     }
 }
 
 function getOptions() {
+    let numOfCubesOption = "";
+    for (let i=2; i<= 100; i++) {
+        numOfCubesOption += "<option value='"+i+"'>"+i+"</option>";
+    }
     const options = "<label for='selectEdgeBuffer'>Edge buffer&nbsp<select id='selectEdgeBuffer' onchange='setEdgeBuffer(this.value)'><option value='UF'>UF</option><option value='DF'>DF</option></select>&nbsp</label>"+
                     "<label for='selectCornerBuffer'>Corner buffer&nbsp<select id='selectCornerBuffer' onchange='setCornerBuffer(this.value)'><option value='UFR'>UFR</option><option value='UBL'>UBL</option></select>&nbsp</label>"+
                     "<label for='selectLetterScheme'>Letter scheme&nbsp<select id='selectLetterScheme' onchange='setLetterScheme(this.value)'><option value='Speffz'>Speffz</option><option value='Einar'>Einar's scheme</option></select>&nbsp</label>"+
-                    "<label for='selectCubeType'>Event&nbsp<select id='selectCubeType' onchange='setCubeType(this.value)'><option value='3BLD'>3BLD</option><option value='4BLD'>4BLD (Not finished)</option><option value='5BLD'>5BLD (Not finished)</option></select>&nbsp</label>"+
+                    "<label for='selectCubeType'>Event&nbsp<select id='selectCubeType' onchange='setCubeType(this.value)'><option value='3BLD'>3BLD</option><option value='4BLD'>4BLD (Not finished)</option><option value='5BLD'>5BLD (Not finished)</option><option>MBLD</option></select>&nbsp</label>"+
+                    "<label for='selectNumOfCubes'>Cubes (MBLD)&nbsp<select id='selectNumOfCubes' onchange='setNumOfCubes(this.value)'>"+numOfCubesOption+"</select>&nbsp</label>"+
                     "<label for='selectGrouping'>Grouping&nbsp</label><select id='selectGrouping' onchange='setGrouping(this.value)'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option></select>&nbsp</label>"+
-                    "<button class='btn btn-secondary' onclick='getMemo()'>Start</button>";
+                    "<br><button class='btn btn-secondary' onclick='getMemo()'>Start</button>";
     
     $("#memo").html(options);
 
@@ -272,6 +464,7 @@ function getOptions() {
     $("#selectCornerBuffer").val(cornerBuffer);
     $("#selectLetterScheme").val(letterSchemeOption);
     $("#selectCubeType").val(cubeType);
+    $("#selectNumOfCubes").val(numOfCubes);
     $("#selectGrouping").val(grouping);
 
     changeEdgeBuffer(edgeBuffer);
@@ -307,6 +500,11 @@ function setLetterScheme(ls) {
 function setCubeType(ct) {
     cubeType = ct;
     localStorage.setItem("cubeType", cubeType);
+}
+
+function setNumOfCubes(noc) {
+    numOfCubes = noc;
+    localStorage.setItem("numOfCubes", numOfCubes);
 }
 
 function setGrouping(g) {
