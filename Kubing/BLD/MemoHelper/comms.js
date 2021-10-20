@@ -466,7 +466,8 @@ const m2 = {
     "UB" : "M2",
     "UF" : "U2 M' U2 M'",
     "UL" : "L U' L' U M2 U' L U L'",
-    "UR" : "R' U R U' M2 U R' U' R"
+    "UR" : "R' U R U' M2 U R' U' R",
+    "Parity" : "D' L2 D M2 D' L2 D"
 };
 const op = {
     "BDL" : "[D' R: [R U' R' U' R U R' F' R U R' U' R' F R]",

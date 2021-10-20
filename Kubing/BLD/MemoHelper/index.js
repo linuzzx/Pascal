@@ -89,6 +89,13 @@ function getMemo() {
     }
 
     $("#memo").html(memo);
+
+    if (edgeBuffer === "DF" && cornerBuffer === "UBL") {
+        getM2OP();
+    }
+    else if (edgeBuffer === "UF" && cornerBuffer === "UFR") {
+        get3style();
+    }
 }
 
 function getOptions() {
@@ -142,4 +149,27 @@ function adjustSize() {
     $("#selectCubeType").css("font-size", inpFontSize);
     $("#selectGrouping").css("font-size", inpFontSize);
     $("label").css("font-size", inpFontSize);
+}
+
+function getM2OP() {
+    let solution = [];
+    let out = "";
+
+    let m2keys = Object.keys(m2);
+    let m2values = Object.values(m2);
+    console.log(m2keys);
+    console.log(m2values);
+
+    for (let e of edgesSol.join("")) {
+        solution.push(edges[letterSchemeEdges.indexOf(e)]);
+    }
+    for (let s of solution) {
+        out += m2values[m2keys.indexOf(s.toUpperCase())]+"<br>";
+    }
+
+    $("#solution").html(out);
+}
+
+function get3style() {
+    let out = "";
 }
