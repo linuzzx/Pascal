@@ -38,6 +38,15 @@ body {
     -webkit-transition: color 0.5s linear;
 }
 
+#content {
+    height: 90%;
+    padding: 1% 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
 /* Style the tab content */
 .tabContent {
     width: 100%;
@@ -45,6 +54,11 @@ body {
     display: none;
     -webkit-animation: fadeEffect 1s;
     animation: fadeEffect 1s;
+}
+
+#tabHome {
+    height: 20%;
+    display: block;
 }
 
 #tabProjects {
@@ -66,15 +80,6 @@ body {
 
 .tabAppsImg {
     vertical-align: middle;
-}
-
-#content {
-    height: 90%;
-    padding: 1% 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
 }
 
 h1 {
@@ -168,7 +173,8 @@ einar:hover {
    
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #888888; 
+    background: #888888;
+    border-radius: 100px;
   }
   
   /* Handle on hover */
