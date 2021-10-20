@@ -35,8 +35,7 @@ $(function() {
 });
 
 function scrambleCube() {
-    cubeState = applyMoves("R");
-    //cubeState = applyMoves(getScramble());
+    cubeState = applyMoves(getScramble());
 }
 
 function getEdgeSolution() {
