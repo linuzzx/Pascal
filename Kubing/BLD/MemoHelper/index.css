@@ -18,7 +18,7 @@ body {
     height: 100%;
 }
 
-#memo, #result {
+#options, #memo, #solution {
     color: #aaaaaa;
 }
 

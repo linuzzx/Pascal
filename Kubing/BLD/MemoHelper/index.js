@@ -27,7 +27,7 @@ $(function() {
             getMemo();
         }
     });
-    const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75)
+    const fontSize = ($("#options").css("font-size").split("px")[0] * 0.75)
 
     $("#inpScramble").css("font-size", fontSize);
 
@@ -88,7 +88,7 @@ function getMemo() {
         memo = "Illegal scramble";
     }
 
-    $("#result").html(memo);
+    $("#memo").html(memo);
 }
 
 function getOptions() {
@@ -97,7 +97,7 @@ function getOptions() {
                     "<label for='selectLetterScheme'>Letter scheme&nbsp<select id='selectLetterScheme' onchange='setLetterScheme(this.value)'><option value='Speffz'>Speffz</option><option value='Einar'>Einar's scheme</option></select>&nbsp</label>"+
                     "<label for='selectGrouping'>Grouping&nbsp</label><select id='selectGrouping' onchange='setGrouping(this.value)'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option></select>&nbsp</label>";
     
-    $("#memo").html(options);
+    $("#options").html(options);
 
     $("#selectEdgeBuffer").val(edgeBuffer);
     $("#selectCornerBuffer").val(cornerBuffer);
