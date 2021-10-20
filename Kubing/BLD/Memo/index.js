@@ -59,17 +59,19 @@ function getMemo() {
         edgeSolution = getEdgeSolution();
         cornerSolution = getCornerSolution();
 
-        edgesSol = edgeSolution.slice(0, edgeSolution.indexOf(";"));
+        edgesSol = edgeSolution.slice(0);
 
         edgesFlipped = [];
         if (edgeSolution.join(" ").includes(";")) {
+            edgesSol = edgeSolution.slice(0, edgeSolution.indexOf(";"));
             edgesFlipped = edgeSolution.slice(edgeSolution.indexOf(";")+1);
         }
 
-        cornersSol = cornerSolution.slice(0, cornerSolution.indexOf(";"));
+        cornersSol = cornerSolution.slice(0);
 
         cornersTwisted = [];
         if (cornerSolution.join(" ").includes(";")) {
+            cornersSol = cornerSolution.slice(0, cornerSolution.indexOf(";"));
             cornersTwisted = cornerSolution.slice(cornerSolution.indexOf(";")+1);
         }
 
