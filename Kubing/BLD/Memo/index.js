@@ -59,18 +59,18 @@ function getMemo() {
         edgeSolution = getEdgeSolution();
         cornerSolution = getCornerSolution();
 
-        edgesSol = edgeSolution.join(" ").split(";")[0].split(" ");
+        edgesSol = edgeSolution.slice(0, edgeSolution.indexOf(";"));
 
         edgesFlipped = [];
         if (edgeSolution.join(" ").includes(";")) {
-            edgesFlipped = edgeSolution.join(" ").split(";")[1].split(" ");
+            edgesFlipped = edgeSolution.slice(edgeSolution.indexOf(";")+1);
         }
 
-        cornersSol = cornerSolution.join(" ").split(";")[0].split(" ");
+        cornersSol = cornerSolution.slice(0, cornerSolution.indexOf(";"));
 
         cornersTwisted = [];
         if (cornerSolution.join(" ").includes(";")) {
-            cornersTwisted = cornerSolution.join(" ").split(";")[1].split(" ");
+            cornersTwisted = cornerSolution.slice(cornerSolution.indexOf(";")+1);
         }
 
         for (let i=0; i<edgesSol.length; i++) {
@@ -139,132 +139,102 @@ function checkMemo() {
         let out = "<div><br>";
         let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
         let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
-console.log(memo);
-        
+
+        edgesFlipped = edgesFlipped.join("").split("");
+        cornersTwisted = cornersTwisted.join("").split("");
+        console.log(inpMemo);
+        console.log(cornersSol);
         let i = 0;
         let ie = 0;
         let ief = 0;
         let ic = 0;
         let ict = 0;
-        /*for (let m of memo) {
-            if (m === " ") {
-                continue;
-            }
+
+        let firstEF = true;
+        let firstC = true;
+        let firstCT = true;
+
+        for (let m of memo) {
             if (ie<edgesSol.length) {
-                if (inpMemo[i] === edgesSol[ie]) {
-                    out += "<e style='color: green'>"+m + ((ie+1) % grouping === 0 ? " ":"")+"</e>";
+                if (inpMemo[i]) {
+                    if (inpMemo[i] === edgesSol[ie]) {
+                        out += "<e style='color: green'>"+m + ((ie+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
+                    else {
+                        out += "<e style='color: red'>"+m + ((ie+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
                 }
                 else {
-                    out += "<e style='color: red'>"+m + ((ie+1) % grouping === 0 ? " ":"")+"</e>";
+                    out += "<e>"+m + ((ie+1) % grouping === 0 ? " ":"")+"</e>";
                 }
+                
                 ie++;
             }
             else if (ief<edgesFlipped.length) {
-                if (inpMemo[i] === edgesFlipped[ief]) {
-                    out += "<e style='color: green'>"+m + ((ief+1) % grouping === 0 ? " ":"")+"</e>";
+                if (firstEF) {
+                    i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+                    firstEF = false;
+                }
+                if (inpMemo[i]) {
+                    if (inpMemo[i] === edgesFlipped[ief]) {
+                        out += "<e style='color: green'>"+m + ((ief+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
+                    else {
+                        out += "<e style='color: red'>"+m + ((ief+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
                 }
                 else {
-                    out += "<e style='color: red'>"+m + ((ief+1) % grouping === 0 ? " ":"")+"</e>";
+                    out += "<e>"+m + ((ief+1) % grouping === 0 ? " ":"")+"</e>";
                 }
+                
                 ief++;
             }
             else if (ic<cornersSol.length) {
-                if (inpMemo[i] === cornersSol[ic]) {
-                    out += "<e style='color: green'>"+m.toLowerCase() + ((ic+1) % grouping === 0 ? " ":"")+"</e>";
+                if (firstC) {
+                    i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+                    firstC = false;
+                }
+                if (inpMemo[i]) {
+                    if (inpMemo[i].toLowerCase() === cornersSol[ic]) {
+                        out += "<e style='color: green'>"+m.toLowerCase() + ((ic+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
+                    else {
+                        out += "<e style='color: red'>"+m.toLowerCase() + ((ic+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
                 }
                 else {
-                    out += "<e style='color: red'>"+m.toLowerCase() + ((ic+1) % grouping === 0 ? " ":"")+"</e>";
+                    out += "<e>"+m.toLowerCase() + ((ic+1) % grouping === 0 ? " ":"")+"</e>";
                 }
+                
                 ic++;
             }
             else if (ict<cornersTwisted.length) {
-                if (inpMemo[i] === cornersTwisted[ict]) {
-                    out += "<e style='color: green'>"+m.toLowerCase() + ((ict+1) % grouping === 0 ? " ":"")+"</e>";
+                if (firstCT) {
+                    i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+                    firstCT = false;
+                }
+                if (inpMemo[i]) {
+                    if (inpMemo[i].toLowerCase() === cornersTwisted[ict]) {
+                        out += "<e style='color: green'>"+m.toLowerCase() + ((ict+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
+                    else {
+                        out += "<e style='color: red'>"+m.toLowerCase() + ((ict+1) % grouping === 0 ? " ":"")+"</e>";
+                    }
                 }
                 else {
-                    out += "<e style='color: red'>"+m.toLowerCase() + ((ict+1) % grouping === 0 ? " ":"")+"</e>";
+                    out += "<e>"+m.toLowerCase() + ((ict+1) % grouping === 0 ? " ":"")+"</e>";
                 }
+                
                 ict++;
             }
-            else {
-                out += "<e>"+m + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-            }
-            i++;
-        }*/
-        /*let i = 0;
-        for (let e of edgeSol) {
-            if (inpMemo[i]) {
-                if (inpMemo[i] === e) {
-                    out += "<e style='color: green'>"+e + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-                }
-                else {
-                    out += "<e style='color: red'>"+e + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-                }
-            }
-            else {
-                out += "<e>"+e + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-            }
-            i++;
-        }
-        for (let e of edgesFlipped) {
-            if (inpMemo[i]) {
-                if (inpMemo[i] === e && e !== "") {
-                    out += "<e style='color: green'>("+e+")</e>";
-                }
-                else {
-                    out += "<e style='color: red'>("+e+")</e>";
-                }
-            }
-            else {
-                out += "<e>"+e + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-            }
-            i++;
-        }
-        for (let c of cornersSol) {
             
-        }
-        for (let c of cornersTwisted) {
-            
-        }*/
-        let firstCorner = true;
-        for (let i=0; i<memo.length; i++) {
-            if (inpMemo[i]) {
-                if (memo[i] === edgeSolution[i]) {
-                    if (inpMemo[i] === memo[i]) {
-                        out += "<e style='color: green'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-                    }
-                    else {
-                        out += "<e style='color: red'>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-                    }
-                }
-                else {
-                    if (firstCorner) {
-                        firstCorner = false;
-                        if (inpMemo[i] === memo[i]) {
-                            out += "<e style='color: green'> "+memo[i].toLowerCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-                        }
-                        else {
-                            out += "<e style='color: red'> "+memo[i].toLowerCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-                        }
-                    }
-                    else {
-                        if (inpMemo[i] === memo[i]) {
-                            out += "<e style='color: green'>"+memo[i].toLowerCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-                        }
-                        else {
-                            out += "<e style='color: red'>"+memo[i].toLowerCase() + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-                        }
-                    }
-                }
-            }
-            else {
-                out += "<e>"+memo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
-            }
+            i++;
         }
         
         if (inpMemo.length > memo.length) {
-            for (let i=memo.length; i<inpMemo.length; i++) {
-                out += "<e style='color: orange; font-style: italic'>"+inpMemo[i] + ((i+1) % grouping === 0 ? " ":"")+"</e>";
+            i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+            for (let j=memo.length; j<inpMemo.length; j++) {
+                out += "<e style='color: orange; font-style: italic'>"+inpMemo[j] + ((j+1) % grouping === 0 ? " ":"")+"</e>";
             }
         }
 
