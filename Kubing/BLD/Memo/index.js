@@ -10,7 +10,7 @@ let edgeBuffer = localStorage.getItem("edgeBuffer") || "UF";
 let cornerBuffer = localStorage.getItem("cornerBuffer") || "UFR";
 let letterSchemeOption = localStorage.getItem("letterSchemeOption") || "Speffz";
 let cubeType = localStorage.getItem("cubeType") || "3BLD";
-let numOfCubes = localStorage.getItem("numOfCubes") || 1;
+let numOfCubes = localStorage.getItem("numOfCubes") || 2;
 let grouping = localStorage.getItem("grouping") || "1";
 let checkable = false;
 
@@ -46,7 +46,6 @@ function getMemo() {
     cornersTwisted = [];
     cornersSol = [];
 
-    //Fiks dette
     if (cubeType === "3BLD") {
         scrambleCube();
         
@@ -181,7 +180,6 @@ function startRecon() {
     }
 }
 
-//Fiks
 function checkMemo() {
     if (checkable) {
         if (cubeType === "MBLD") {
