@@ -161,7 +161,7 @@ function getM2OP() {
     let fSol = [];
     let cSol = [];
     let tSol = [];
-    let out = "<br>Solution:<br>";
+    let out = "";
 
     let eKeys = Object.keys(m2);
     let eValues = Object.values(m2);
@@ -172,11 +172,17 @@ function getM2OP() {
     let tKeys = Object.keys(twistedCommsOP);
     let tValues = Object.values(twistedCommsOP);
 
+    if (edgesSol.length !== 0) {
+        out += "<br>Edges:<br>";
+    }
     for (let e of edgesSol.join("").split("")) {
         eSol.push(edges[letterSchemeEdges.indexOf(e)]);
     }
     for (let s of eSol) {
         out += eValues[eKeys.indexOf(s.toUpperCase())]+"<br>";
+    }
+    if (cornersSol.length !== 0) {
+        out += "<br>Corners:<br>";
     }
     for (let c of cornersSol.join("").split("")) {
         cSol.push(corners[letterSchemeCorners.indexOf(c.toUpperCase())]);
@@ -186,14 +192,20 @@ function getM2OP() {
     }
     //Parity
     if (edgesSol.length % 2 === 1) {
-        out += eValues[eKeys.indexOf("Parity")]+"<br>";
+        out += "<br>Parity:<br>" + eValues[eKeys.indexOf("Parity")]+"<br>";
     }
     
+    if (edgesFlipped.length !== 0) {
+        out += "<br>Edge flips:<br>";
+    }
     for (let f of edgesFlipped) {
         fSol.push(edges[letterSchemeEdges.indexOf(f.split("")[0])]);
     }
     for (let s of fSol) {
         out += fValues[fKeys.indexOf(s.toUpperCase())]+"<br>";
+    }
+    if (cornersTwisted.length !== 0) {
+        out += "<br>Corner twists:<br>";
     }
     for (let t of cornersTwisted) {
         tSol.push(corners[letterSchemeCorners.indexOf(t.toUpperCase().split("")[0])]);
@@ -201,6 +213,8 @@ function getM2OP() {
     for (let s of tSol) {
         out += tValues[tKeys.indexOf(s.toUpperCase())]+"<br>";
     }
+
+    out += "<br>";
 
     $("#solution").html(out);
 }
