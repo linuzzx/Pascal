@@ -1,9 +1,9 @@
 let showing = "corners";
 let showingLetters = false;
 let selectedButton = null;
-let selectedTopBtn = localStorage.getItem("selectedTopBtn") || $("#btnTopW");
+let selectedTopBtn = localStorage.getItem("selectedTopBtn") || "btnTopW";
 let selectedTopColor = localStorage.getItem("selectedTopColor") || "white";
-let selectedFrontBtn = localStorage.getItem("selectedFrontBtn") || $("#btnFrontG");
+let selectedFrontBtn = localStorage.getItem("selectedFrontBtn") || "btnFrontG";
 let selectedFrontColor = localStorage.getItem("selectedFrontColor") || "green";
 
 const edges = ["UB", "UR", "UL", "LU", "LF", "LD", "LB", "FR", "FD", "FL", "RU", "RB",
