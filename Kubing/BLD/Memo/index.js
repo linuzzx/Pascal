@@ -27,7 +27,7 @@ $(function() {
             checkMemo();
         }
     });
-    const fontSize = ($("#options").css("font-size").split("px")[0] * 0.75)
+    const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75)
 
     $("#inpMemo").css("font-size", fontSize);
 
@@ -151,8 +151,8 @@ function getMemo() {
         }
     }
 
-    $("#options").html(memo);
-    $("#memo").html("");
+    $("#memo").html(memo);
+    $("#result").html("");
 
     first = true;
     startTimer();
@@ -160,13 +160,13 @@ function getMemo() {
 }
 
 function showMemo() {
-    $("#options").css("visibility","visible");
+    $("#memo").css("visibility","visible");
     adjustSize();
 }
 
 function hideMemo() {
-    $("#options").css("visibility","hidden");
-        $("#memo").html("");
+    $("#memo").css("visibility","hidden");
+        $("#result").html("");
 }
 
 function startRecon() {
@@ -184,10 +184,10 @@ function checkMemo() {
     if (checkable) {
         if (cubeType === "MBLD") {
             const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","") === 
-                        $("#options").text().toUpperCase().split(" ").join("").replaceAll("(","").replaceAll(")","");
+                        $("#memo").text().toUpperCase().split(" ").join("").replaceAll("(","").replaceAll(")","");
             let out = "<div><br>";
             let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
-            let memos = ($("#options").html().replaceAll("<br>","/").toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","")+"_").replaceAll("/_"," ").trim().split("/");
+            let memos = ($("#memo").html().replaceAll("<br>","/").toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","")+"_").replaceAll("/_"," ").trim().split("/");
             
             console.log($("#inpMemo").val());
 
@@ -296,7 +296,7 @@ function checkMemo() {
                 }
                 firstMemo = false;
             }
-            let fullMemo = ($("#options").html().replaceAll("<br>","").toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")",""));
+            let fullMemo = ($("#memo").html().replaceAll("<br>","").toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")",""));
             if (inpMemo.length > fullMemo.length) {
                 i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
                 for (let j=fullMemo.length; j<inpMemo.length; j++) {
@@ -313,7 +313,7 @@ function checkMemo() {
                 out += "<br><p style='color: red'>DNF<br>("+getTime(time)+")</p>";
             }
 
-            $("#memo").html(out);
+            $("#result").html(out);
 
             $("#inpMemo").val("");
 
@@ -322,10 +322,10 @@ function checkMemo() {
         }
         else {
             const success = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","") === 
-                        $("#options").text().toUpperCase().split(" ").join("").replaceAll("(","").replaceAll(")","");
+                        $("#memo").text().toUpperCase().split(" ").join("").replaceAll("(","").replaceAll(")","");
             let out = "<div><br>";
             let inpMemo = $("#inpMemo").val().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
-            let memo = $("#options").text().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
+            let memo = $("#memo").text().toUpperCase().trim().split(" ").join("").replaceAll("(","").replaceAll(")","").split("");
 
             edgesFlipped = edgesFlipped.join("").split("");
             cornersTwisted = cornersTwisted.join("").split("");
@@ -396,7 +396,7 @@ function checkMemo() {
             }
             else if (ict<cornersTwisted.length) {
                 if (firstCT) {
-                    i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
+                    i % 2 === 0 ? out += "<e>&nbsp</e>": out += "";
                     firstCT = false;
                 }
                 if (inpMemo[i]) {
@@ -418,10 +418,15 @@ function checkMemo() {
             }
 
             if (inpMemo.length > memo.length) {
-            i % 2 === 1 ? out += "<e>&nbsp</e>": out += "";
-            for (let j=memo.length; j<inpMemo.length; j++) {
-                out += "<e style='color: orange; font-style: italic'>"+inpMemo[j] + ((j+1) % grouping === 0 ? " ":"")+"</e>";
-            }
+                if (ict !== 0 && ict % 2 === 1) {
+                    out += "<e>&nbsp</e>";
+                }
+                else if (ic % 2 !== 0) {
+                    out += "<e>&nbsp</e>";
+                }
+                for (let j=memo.length; j<inpMemo.length; j++) {
+                    out += "<e style='color: orange; font-style: italic'>"+inpMemo[j] + ((j+1) % grouping === 0 ? " ":"")+"</e>";
+                }
             }
 
             out += "</div>";
@@ -433,7 +438,7 @@ function checkMemo() {
             out += "<br><p style='color: red'>DNF<br>("+getTime(time)+")</p>";
             }
 
-            $("#memo").html(out);
+            $("#result").html(out);
 
             $("#inpMemo").val("");
 
@@ -456,7 +461,7 @@ function getOptions() {
                     "<label for='selectGrouping'>Grouping&nbsp</label><select id='selectGrouping' onchange='setGrouping(this.value)'><option value='1'>1</option><option value='2'>2</option><option value='3'>3</option><option value='4'>4</option><option value='5'>5</option><option value='6'>6</option><option value='7'>7</option><option value='8'>8</option><option value='9'>9</option><option value='10'>10</option></select>&nbsp</label>"+
                     "<br><button class='btn btn-secondary' onclick='getMemo()'>Start</button>";
     
-    $("#options").html(options);
+    $("#memo").html(options);
 
     $("#selectEdgeBuffer").val(edgeBuffer);
     $("#selectCornerBuffer").val(cornerBuffer);
