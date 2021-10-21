@@ -152,19 +152,26 @@ function adjustSize() {
 }
 
 function getM2OP() {
-    let solution = [];
+    let m2Solution = [];
+    let opSolution = [];
     let out = "";
 
     let m2keys = Object.keys(m2);
     let m2values = Object.values(m2);
-    console.log(m2keys);
-    console.log(m2values);
+    let opkeys = Object.keys(op);
+    let opvalues = Object.values(op);
 
     for (let e of edgesSol.join("")) {
-        solution.push(edges[letterSchemeEdges.indexOf(e)]);
+        m2Solution.push(edges[letterSchemeEdges.indexOf(e)]);
     }
-    for (let s of solution) {
+    for (let s of m2Solution) {
         out += m2values[m2keys.indexOf(s.toUpperCase())]+"<br>";
+    }
+    for (let c of cornersSol.join("")) {
+        opSolution.push(corners[letterSchemeCorners.indexOf(c.toUpperCase())]);
+    }
+    for (let s of opSolution) {
+        out += opvalues[opkeys.indexOf(s.toUpperCase())]+"<br>";
     }
 
     $("#solution").html(out);
