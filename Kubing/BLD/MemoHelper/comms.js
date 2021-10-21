@@ -428,7 +428,33 @@ const flippedComms = {
     "ULLU" : "U' [URRU alg]",
     "URRU" : "R' E2 R2 E' R' U' R E R2 E2 R U"
 };
-const twistedComms = {
+const flippedComms3style = {
+    "UB-BU" : "M U' M U' M U2' M' U' M' U' M' U2'",
+    "UR-RU" : "Rw U R' U' Rw' U2' R U R U' R2' U2' R",
+    "UL-LU" : "[U': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "FL-LF" : "[L' U': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "FR-RF" : "[R: Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "BL-LB" : "[L U': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "BR-RB" : "[R': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "DF-FD" : "[D R2: Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "DL-LD" : "[L2 U': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "DR-RD" : "[R2: Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "DB-BD" : "[D' R2: Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+};
+const flippedCommsM2 = {
+    "UB" : "[F2: M U' M U' M U2' M' U' M' U' M' U2']",
+    "UR" : "[M': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "UF" : "[M': M U' M U' M U2' M' U' M' U' M' U2']",
+    "UL" : "[M' U': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "FL" : "[Lw' U': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "FR" : "[Rw: Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "BL" : "[L M' U': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "BR" : "[R' M': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "DL" : "[L2 M' U': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "DR" : "[R2 M': Rw U R' U' Rw' U2' R U R U' R2' U2' R]",
+    "DB" : "[M2: M U' M U' M U2' M' U' M' U' M' U2']",
+};
+const twistedComms3style = {
     "BDL" : "(R U' R' U) (R D' R' U') (R U R' U') (R D R' U)",
     "BDR" : "U (R U' R' D') (R U R' U') (R U R' D) (R U' R')",
     "BUL" : "[U2, R' D R D' R' D R]",
@@ -443,6 +469,22 @@ const twistedComms = {
     "RDB" : "(R U R' D') (R U' R' U) (R U' R' D) (R U R' U')",
     "RDF" : "(R' D' R U) (R' U' R U) (R' D R U') (R' U R U')",
     "RUB" : "[U, R' D R D' R' D R]"
+};
+const twistedCommsOP = {
+    "BDL" : "[D F': R U R' U R U2 R' L' U' L U' L' U2 L]",
+    "BDR" : "[R2 F': L' U2 L U L' U L R U2 R' U' R U' R']",
+    "BUR" : "[R' F': R U R' U R U2 R' L' U' L U' L' U2 L]",
+    "FDL" : "[F: L' U2 L U L' U L R U2 R' U' R U' R']",
+    "FDR" : "[F2: R U R' U R U2 R' L' U' L U' L' U2 L]",
+    "FUL" : "R U R' U R U2 R' L' U' L U' L' U2 L",//ccw
+    "FUR" : "[F': L' U2 L U L' U L R U2 R' U' R U' R']",
+    "LDF" : "[F: R U R' U R U2 R' L' U' L U' L' U2 L]",
+    "LDB" : "[D F: L' U2 L U L' U L R U2 R' U' R U' R']",
+    "LUF" : "L' U2 L U L' U L R U2 R' U' R U' R'",//cw
+    "RDB" : "[R2 F': R U R' U R U2 R' L' U' L U' L' U2 L]",
+    "RDF" : "[F2: L' U2 L U L' U L R U2 R' U' R U' R']",
+    "RUF" : "[F': R U R' U R U2 R' L' U' L U' L' U2 L]",
+    "RUB" : "[R' F': L' U2 L U L' U L R U2 R' U' R U' R']"
 };
 const m2 = {
     "BD" : "M2 D U R2 U' M' U R2 U' M D'",
@@ -472,7 +514,7 @@ const m2 = {
 const op = {
     "BDL" : "[D' R: R U' R' U' R U R' F' R U R' U' R' F R]",
     "BDR" : "[D': R U' R' U' R U R' F' R U R' U' R' F R]",
-    "BUR" : "[R F: R U' R' U' R U R' F' R U R' U' R' F R]",
+    "BUR" : "[R' F: R U' R' U' R U R' F' R U R' U' R' F R]",
     "DBL" : "[D F': R U' R' U' R U R' F' R U R' U' R' F R]",
     "DBR" : "[R2 F: R U' R' U' R U R' F' R U R' U' R' F R]",
     "DFL" : "[F': R U' R' U' R U R' F' R U R' U' R' F R]",
@@ -485,9 +527,9 @@ const op = {
     "LDF" : "[D2 R: R U' R' U' R U R' F' R U R' U' R' F R]",
     "LUF" : "[F2: R U' R' U' R U R' F' R U R' U' R' F R]",
     "RDB" : "[R: R U' R' U' R U R' F' R U R' U' R' F R]",
-    "RDF" : "[R U' R' U' R U R' F' R U R' U' R' F R]",
-    "RUB" : "[R': R U' R' U' R U R' F' R U R' U' R' F R]",
-    "RUF" : "[R2: R U' R' U' R U R' F' R U R' U' R' F R]",
+    "RDF" : "R U' R' U' R U R' F' R U R' U' R' F R",
+    "RUB" : "[R2: R U' R' U' R U R' F' R U R' U' R' F R]",
+    "RUF" : "[R': R U' R' U' R U R' F' R U R' U' R' F R]",
     "UBR" : "[R D': R U' R' U' R U R' F' R U R' U' R' F R]",
     "UFL" : "[F R': R U' R' U' R U R' F' R U R' U' R' F R]",
     "UFR" : "[F: R U' R' U' R U R' F' R U R' U' R' F R]"
