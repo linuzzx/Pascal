@@ -174,9 +174,23 @@ function getM2OP() {
 
     if (edgesSol.length !== 0) {
         out += "<br>Edges:<br>";
-    }
+    }console.log(edgesSol);
     for (let e of edgesSol.join("").split("")) {
-        eSol.push(edges[letterSchemeEdges.indexOf(e)]);
+        if (edgesSol.indexOf(e) % 2 === 1 && e === letterSchemeEdges[edges.indexOf("uf")]) {
+            eSol.push(edges[edges.indexOf("db")]);
+        }
+        else if (edgesSol.indexOf(e) % 2 === 1 && e === letterSchemeEdges[edges.indexOf("fu")]) {
+            eSol.push(edges[edges.indexOf("bd")]);
+        }
+        else if (edgesSol.indexOf(e) % 2 === 1 && e === letterSchemeEdges[edges.indexOf("db")]) {
+            eSol.push(edges[edges.indexOf("uf")]);
+        }
+        else if (edgesSol.indexOf(e) % 2 === 1 && e === letterSchemeEdges[edges.indexOf("bd")]) {
+            eSol.push(edges[edges.indexOf("fu")]);
+        }
+        else {
+            eSol.push(edges[letterSchemeEdges.indexOf(e)]);
+        }
     }
     for (let s of eSol) {
         out += eValues[eKeys.indexOf(s.toUpperCase())]+"<br>";
