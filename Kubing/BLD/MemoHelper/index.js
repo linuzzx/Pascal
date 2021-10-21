@@ -196,7 +196,7 @@ function getM2OP() {
         out += fValues[fKeys.indexOf(s.toUpperCase())]+"<br>";
     }
     for (let t of cornersTwisted) {
-        tSol.push(corners[letterSchemeCorners.indexOf(t.split("")[0])]);
+        tSol.push(corners[letterSchemeCorners.indexOf(t.toUpperCase().split("")[0])]);
     }
     for (let s of tSol) {
         out += tValues[tKeys.indexOf(s.toUpperCase())]+"<br>";
