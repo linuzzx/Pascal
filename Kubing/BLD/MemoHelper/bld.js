@@ -5,19 +5,20 @@ let ubl="A",ub="A",ubr="C",ur="C",ufr="E",uf="E",ufl="G",ul="G",lub="H",lu="H",l
     ful="I",fu="I",fur="J",fr="J",fdr="K",fd="K",fdl="L",fl="L",ruf="M",ru="M",rub="N",rb="N",rdb="O",rd="O",rdf="P",rf="P",
     bur="Q",bu="Q",bul="R",bl="R",bdl="S",bd="S",bdr="T",br="T",dfl="U",df="U",dfr="V",dr="V",dbr="W",db="W",dbl="X",dl="X";*/
 
-let letterScheme = [ubl,ub,ubr,ur,ufr,uf,ufl,ul,lub,lu,luf,lf,ldf,ld,ldb,lb,ful,fu,fur,fr,fdr,fd,fdl,fl,
-                    ruf,ru,rub,rb,rdb,rd,rdf,rf,bur,bu,bul,bl,bdl,bd,bdr,br,dfl,df,dfr,dr,dbr,db,dbl,dl];
+/*let letterScheme = [ubl,ub,ubr,ur,ufr,uf,ufl,ul,lub,lu,luf,lf,ldf,ld,ldb,lb,ful,fu,fur,fr,fdr,fd,fdl,fl,
+                    ruf,ru,rub,rb,rdb,rd,rdf,rf,bur,bu,bul,bl,bdl,bd,bdr,br,dfl,df,dfr,dr,dbr,db,dbl,dl];*/
                     
 let letterSchemeEdges = [ub,ur,uf,ul,lu,lf,ld,lb,fu,fr,fd,fl,ru,rb,rd,rf,bu,bl,bd,br,df,dr,db,dl];
                     
 let letterSchemeCorners = [ubl,ubr,ufr,ufl,lub,luf,ldf,ldb,ful,fur,fdr,fdl,ruf,rub,rdb,rdf,bur,bul,bdl,bdr,dfl,dfr,dbr,dbl];
 
-let pieces = ["ubl","ub","ubr","ur","ufr","uf","ufl","ul","lub","lu","luf","lf","ldf","ld","ldb","lb","ful","fu","fur","fr","fdr","fd","fdl","fl",
-                "ruf","ru","rub","rb","rdb","rd","rdf","rf","bur","bu","bul","bl","bdl","bd","bdr","br","dfl","df","dfr","dr","dbr","db","dbl","dl"];
-
+const edgesOriginal = ["ub","ur","uf","ul","lu","lf","ld","lb","fu","fr","fd","fl","ru","rb","rd","rf","bu","bl","bd","br","df","dr","db","dl"];
 let edges = ["ub","ur","uf","ul","lu","lf","ld","lb","fu","fr","fd","fl","ru","rb","rd","rf","bu","bl","bd","br","df","dr","db","dl"];
 
+const cornersOriginal = ["ubl","ubr","ufr","ufl","lub","luf","ldf","ldb","ful","fur","fdr","fdl","ruf","rub","rdb","rdf","bur","bul","bdl","bdr","dfl","dfr","dbr","dbl"];
 let corners = ["ubl","ubr","ufr","ufl","lub","luf","ldf","ldb","ful","fur","fdr","fdl","ruf","rub","rdb","rdf","bur","bul","bdl","bdr","dfl","dfr","dbr","dbl"];
+
+let centers = ["u","l","f","r","b","d"];
 
 let cubeState = [];
 let edgeState = [];
@@ -35,7 +36,7 @@ $(function() {
 });
 
 function scrambleCube(s) {
-    cubeState = applyMoves(s);
+    cubeState = getOrientation(s);
 }
 
 function getEdgeSolution() {
@@ -47,9 +48,6 @@ function getEdgeSolution() {
 
     let edgesToSolveAgain = [];
     let numOfEdgesToSolveAgain = 0;
-
-    /*bufferE = 20; //Setter buffer til DF //const bufferE = 2; //Setter buffer til UF
-    bufferOppE = 10; //Setter bufferOpp til FD //const bufferOppE = 8; //Setter bufferOpp til FU*/
 
     let buffer = edgeState[bufferE];//DF
     let target = "";
@@ -532,8 +530,89 @@ function changeLetterScheme(ls) {
         bur="B",bu="B",bul="J",bl="J",bdl="Q",bd="Q",bdr="K",br="K",dfl="V",df="V",dfr="T",dr="T",dbr="R",db="R",dbl="X",dl="X";
     }
 
-    letterScheme = [ubl,ub,ubr,ur,ufr,uf,ufl,ul,lub,lu,luf,lf,ldf,ld,ldb,lb,ful,fu,fur,fr,fdr,fd,fdl,fl,
-                    ruf,ru,rub,rb,rdb,rd,rdf,rf,bur,bu,bul,bl,bdl,bd,bdr,br,dfl,df,dfr,dr,dbr,db,dbl,dl];
     letterSchemeEdges = [ub,ur,uf,ul,lu,lf,ld,lb,fu,fr,fd,fl,ru,rb,rd,rf,bu,bl,bd,br,df,dr,db,dl];
     letterSchemeCorners = [ubl,ubr,ufr,ufl,lub,luf,ldf,ldb,ful,fur,fdr,fdl,ruf,rub,rdb,rdf,bur,bul,bdl,bdr,dfl,dfr,dbr,dbl];
+}
+
+function getOrientation(s) {
+    applyMoves(s);
+    centers = getCenters();
+
+    let out = [];
+
+    resetCubeState();
+
+    if (centers[0] === "u") {
+        if (centers[2] === "l") {
+            out.push("y'");
+        }
+        else if (centers[2] === "r") {
+            out.push("y");
+        }
+        else if (centers[2] === "b") {
+            out.push("y2");
+        }
+    }
+    else if (centers[0] === "l") {
+        out.push("z");
+        if (centers[2] === "d") {
+            out.push("y'");
+        }
+        else if (centers[2] === "u") {
+            out.push("y");
+        }
+        else if (centers[2] === "b") {
+            out.push("y2");
+        }
+    }
+    else if (centers[0] === "f") {
+        out.push("x");
+        if (centers[2] === "l") {
+            out.push("y'");
+        }
+        else if (centers[2] === "r") {
+            out.push("y");
+        }
+        else if (centers[2] === "u") {
+            out.push("y2");
+        }
+    }
+    else if (centers[0] === "r") {
+        out.push("z'");
+        if (centers[2] === "u") {
+            out.push("y'");
+        }
+        else if (centers[2] === "d") {
+            out.push("y");
+        }
+        else if (centers[2] === "b") {
+            out.push("y2");
+        }
+    }
+    else if (centers[0] === "b") {
+        out.push("x'");
+        if (centers[2] === "l") {
+            out.push("y'");
+        }
+        else if (centers[2] === "r") {
+            out.push("y");
+        }
+        else if (centers[2] === "d") {
+            out.push("y2");
+        }
+    }
+    else if (centers[0] === "d") {
+        out.push("z2");
+        if (centers[2] === "r") {
+            out.push("y'");
+        }
+        else if (centers[2] === "l") {
+            out.push("y");
+        }
+        else if (centers[2] === "b") {
+            out.push("y2");
+        }
+    }
+    
+    applyMoves((out.length !== 0 ? out.join(" ")+" " : "")+s);
 }

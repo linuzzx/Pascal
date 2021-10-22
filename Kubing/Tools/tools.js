@@ -142,16 +142,20 @@ function getScramble() {
     return scramble.trim();
 }
 
+function resetCubeState() {
+    u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr",
+    l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf",
+    f1 = "ful", f2 = "fu", f3 = "fur", f4 = "fl", f5 = "f", f6 = "fr", f7 = "fdl", f8 = "fd", f9 = "fdr",
+    r1 = "ruf", r2 = "ru", r3 = "rub", r4 = "rf", r5 = "r", r6 = "rb", r7 = "rdf", r8 = "rd", r9 = "rdb",
+    b1 = "bur", b2 = "bu", b3 = "bul", b4 = "br", b5 = "b", b6 = "bl", b7 = "bdr", b8 = "bd", b9 = "bdl",
+    d1 = "dfl", d2 = "df", d3 = "dfr", d4 = "dl", d5 = "d", d6 = "dr", d7 = "dbl", d8 = "db", d9 = "dbr";
+}
+
 function applyMoves(allMoves) {
     console.log(allMoves);
     scrambleArray = allMoves.split(" ");
 
-    u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr";
-    l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf";
-    f1 = "ful", f2 = "fu", f3 = "fur", f4 = "fl", f5 = "f", f6 = "fr", f7 = "fdl", f8 = "fd", f9 = "fdr";
-    r1 = "ruf", r2 = "ru", r3 = "rub", r4 = "rf", r5 = "r", r6 = "rb", r7 = "rdf", r8 = "rd", r9 = "rdb";
-    b1 = "bur", b2 = "bu", b3 = "bul", b4 = "br", b5 = "b", b6 = "bl", b7 = "bdr", b8 = "bd", b9 = "bdl";
-    d1 = "dfl", d2 = "df", d3 = "dfr", d4 = "dl", d5 = "d", d6 = "dr", d7 = "dbl", d8 = "db", d9 = "dbr";
+    resetCubeState();
 
     for (var i = 0; i < scrambleArray.length; i++) {
         switch (scrambleArray[i]) {
@@ -338,7 +342,7 @@ function applyMoves(allMoves) {
         }
     }
 
-    return getCubeStateWoCenters();
+    return getCubeState();
 }
 
 function getCubeState() {
@@ -404,6 +408,12 @@ function getCornerStateBLD() {
         r1,r3,r9,r7,
         b1,b3,b9,b7,
         d1,d3,d9,d7
+    ];
+}
+
+function getCenters() {
+    return [
+        u5,l5,f5,r5,b5,d5
     ];
 }
 

@@ -43,7 +43,7 @@ function getMemo() {
     let memo = "";
         
     scrambleCube($("#inpScramble").val());
-        
+    
     edgeSolution = getEdgeSolution();
     cornerSolution = getCornerSolution();
 
@@ -62,7 +62,7 @@ function getMemo() {
         cornersSol = cornerSolution.slice(0, cornerSolution.indexOf(";"));
         cornersTwisted = cornerSolution.slice(cornerSolution.indexOf(";")+1);
     }
-
+    
     for (let i=0; i<edgesSol.length; i++) {
         memo += edgesSol[i] + ((i+1) % grouping === 0 ? " ":"");
     }
@@ -92,6 +92,7 @@ function getMemo() {
     }
 
     $("#memo").html(memo);
+    $("#solution").html("");
 
     if (memo !== "Illegal scramble") {
         if (edgeBuffer === "DF" && cornerBuffer === "UBL") {
@@ -174,7 +175,7 @@ function getM2OP() {
 
     if (edgesSol.length !== 0) {
         out += "<br>Edges:<br>";
-    }console.log(edgesSol);
+    }
     for (let e of edgesSol.join("").split("")) {
         if (edgesSol.indexOf(e) % 2 === 1 && e === letterSchemeEdges[edges.indexOf("uf")]) {
             eSol.push(edges[edges.indexOf("db")]);

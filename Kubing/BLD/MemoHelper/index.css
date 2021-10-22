@@ -35,7 +35,7 @@ body {
   
 /* Track */
 ::-webkit-scrollbar-track {
-    background: transparent; 
+    background-image: linear-gradient(to bottom, #181818, #464646);
 }
 
 /* Handle */
