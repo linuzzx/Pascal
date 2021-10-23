@@ -417,6 +417,68 @@ function getCenters() {
     ];
 }
 
+function mirror(alg) {
+    let newAlg = alg;
+
+    //U
+    newAlg.replaceAll("U2","/")
+    newAlg.replaceAll("U'","i")
+    newAlg.replaceAll("U","U'")
+    newAlg.replaceAll("/","U2")
+    newAlg.replaceAll("i","U")
+
+    //D
+    newAlg.replaceAll("D2","/")
+    newAlg.replaceAll("D'","i")
+    newAlg.replaceAll("D","D'")
+    newAlg.replaceAll("/","D2")
+    newAlg.replaceAll("i","D")
+
+    //F
+    newAlg.replaceAll("F2","/")
+    newAlg.replaceAll("F'","i")
+    newAlg.replaceAll("F","F'")
+    newAlg.replaceAll("/","F2")
+    newAlg.replaceAll("i","F")
+
+    //B
+    newAlg.replaceAll("B2","/")
+    newAlg.replaceAll("B'","i")
+    newAlg.replaceAll("B","B'")
+    newAlg.replaceAll("/","B2")
+    newAlg.replaceAll("i","B")
+
+    //L
+    newAlg.replaceAll("L2","/")
+    newAlg.replaceAll("L'","i")
+    newAlg.replaceAll("L","R'")
+    newAlg.replaceAll("/","R2")
+    newAlg.replaceAll("i","R")
+
+    //R
+    newAlg.replaceAll("R2","/")
+    newAlg.replaceAll("R'","i")
+    newAlg.replaceAll("R","L'")
+    newAlg.replaceAll("/","L2")
+    newAlg.replaceAll("i","L")
+
+    //S
+    newAlg.replaceAll("S2","/")
+    newAlg.replaceAll("S'","i")
+    newAlg.replaceAll("S","S'")
+    newAlg.replaceAll("/","S2")
+    newAlg.replaceAll("i","S")
+
+    //E
+    newAlg.replaceAll("E2","/")
+    newAlg.replaceAll("E'","i")
+    newAlg.replaceAll("E","E'")
+    newAlg.replaceAll("/","E2")
+    newAlg.replaceAll("i","E")
+
+    return newAlg;
+}
+
 function _r() {
     nf1 = f1; nf2 = f2; nf3 = f3; nf4 = f4; nf6=f6; nf7=f7; nf8=f8; nf9=f9;
     nb1 = b1; nb2 = b2; nb3 = b3; nb4 = b4; nb6=b6; nb7=b7; nb8=b8; nb9=b9;

@@ -235,5 +235,81 @@ function getM2OP() {
 }
 
 function get3style() {
+    let eSol = [];
+    let fSol = [];
+    let cSol = [];
+    let tSol = [];
     let out = "";
+
+    let eKeys = Object.keys(edgeComms);
+    let eValues = Object.values(edgeComms);
+    let fKeys = Object.keys(flippedComms3style);
+    let fValues = Object.values(flippedComms3style);
+    let cKeys = Object.keys(cornerComms);
+    let cValues = Object.values(cornerComms);
+    let tKeys = Object.keys(twistedComms3style);
+    let tValues = Object.values(twistedComms3style);
+
+    let parity = false;
+
+    //Edges
+    if (edgesSol.length !== 0) {
+        out += "<br>Edges:<br>";
+    }
+    for (let e of edgesSol.join("").split("")) {
+        eSol.push(edges[letterSchemeEdges.indexOf(e)]);
+    }
+    if (edgesSol.length % 2 === 1) {
+        eSol.push(edges[edges.indexOf("ur")]);
+        parity = true;
+    }
+    for (let i=0; i<eSol.length; i+=2) {
+        out += eValues[eKeys.indexOf(eSol[i].toUpperCase()+"-"+eSol[i+1].toUpperCase())]+"<br>";
+    }
+
+    //Corners
+    if (cornersSol.length !== 0) {
+        out += "<br>Corners:<br>";
+    }
+    for (let c of cornersSol.join("").split("")) {
+        cSol.push(corners[letterSchemeCorners.indexOf(c.toUpperCase())]);
+    }
+    if (cornersSol.length % 2 === 1) {
+        cSol.push(corners[corners.indexOf("ubr")]);
+        parity = true;
+    }
+    for (let i=0; i<cSol.length; i+=2) {
+        out += cValues[cKeys.indexOf(cSol[i].toUpperCase()+"-"+cSol[i+1].toUpperCase())]+"<br>";
+    }
+
+    //Parity
+    if (parity) {
+        out += "<br>Parity:<br>"+jperm+"<br>";
+    }
+    
+    //Flipped edges
+    if (edgesFlipped.length !== 0) {
+        out += "<br>Edge flips:<br>";
+    }
+    for (let f of edgesFlipped) {
+        fSol.push(edges[letterSchemeEdges.indexOf(f.split("")[0])]);
+    }
+    for (let s of fSol) {
+        out += fValues[fKeys.indexOf(s.toUpperCase())]+"<br>";
+    }
+
+    //Twisted corners
+    if (cornersTwisted.length !== 0) {
+        out += "<br>Corner twists:<br>";
+    }
+    for (let t of cornersTwisted) {
+        tSol.push(corners[letterSchemeCorners.indexOf(t.toUpperCase().split("")[0])]);
+    }
+    for (let s of tSol) {
+        out += tValues[tKeys.indexOf(s.toUpperCase())]+"<br>";
+    }
+
+    out += "<br>";
+
+    $("#solution").html(out);
 }
