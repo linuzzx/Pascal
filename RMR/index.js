@@ -126,7 +126,7 @@ function reset() {
     document.getElementById("rmr").innerText = "";
 }
 
-function lesData(files) {
+function lesData(files=document.getElementById("input").files) {
     reset();
     tblData  = document.getElementById("tblData");
     readXlsxFile(files[0]).then(function (data) {
