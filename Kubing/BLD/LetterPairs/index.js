@@ -40,6 +40,13 @@ function skrivData(data) {
     tblData.innerHTML = table;
 }
 
+function downloadExample() {
+    const a = document.createElement("a");
+    a.href = "./";
+    a.setAttribute("download", "./LetterPairs_Example.xlsx");
+    a.click();
+}
+
 function adjustSize() {
 
 }

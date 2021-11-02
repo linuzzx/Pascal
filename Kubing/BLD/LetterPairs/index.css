@@ -13,3 +13,14 @@ body {
     margin: 0;
     padding: 0;
 }
+
+input[type="file"] {
+    display: none;
+}
+
+.customButtons {
+    background: #EFEFEF;;
+    padding: 3px;
+    border: none;
+    cursor: pointer;
+}
