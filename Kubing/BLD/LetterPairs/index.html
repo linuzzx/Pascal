@@ -23,22 +23,22 @@
             <a class="customButtons" href="vertical.xlsx" download>Download vertical sheet</a>
         </div>
     </div>
-    <div id="toolbar">
+    <h1 id="toolbar">
         <select id="tableType" onchange="toggleImport(this.value)">
             <option value="select">Select format</option>
             <option value="horizontal">Horizontal</option>
             <option value="vertical">Vertical</option>
         </select>
-        <button class='btn btn-secondary' onclick="showLetterPairEdit()">Help?</button>
+        <button id="btnHelp" class='btn btn-secondary' onclick="showLetterPairEdit()">Help?</button>
         <label for="fileInput" class="btn btn-secondary" onclick="if ($('#tableType').val() === 'select'){alert('Select format before importing sheet!')}">
             <i class="fa fa-cloud-upload"></i>Upload custom letter pairs
         </label>
         <input id="fileInput" type="file" onchange="lesData(this.files)" accept=".xlsx" disabled>
-    </div>
+    </h1>
     <div id="content">
         <h1 id="letterPair"></h1>
-        <input id="inputImage" type="text" placeholder="Image..."><br><br>
-        <button class='btn btn-secondary' onclick="checkImage()">Check</button><br><br>
+        <input id="inputImage" class="form-control" type="text" placeholder="Image..."><br><br>
+        <button id="btnCheck" class='btn btn-secondary' onclick="checkImage()">Check</button><br><br>
         <h1 id="result"></h1>
     </div>
 </body>

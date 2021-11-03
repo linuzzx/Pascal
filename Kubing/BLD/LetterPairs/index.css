@@ -18,6 +18,10 @@ input[type="file"] {
     display: none;
 }
 
+#inputImage {
+    margin: auto;
+}
+
 .customButtons {
     background: #EFEFEF;;
     padding: 3px;

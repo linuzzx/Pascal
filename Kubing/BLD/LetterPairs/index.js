@@ -50,6 +50,8 @@ function getLetterPair() {
     if (pressedBtnNext) {
         $("#result").html("");
     }
+    
+    $("#inputImage").val("");
 }
 
 function checkImage() {
@@ -86,7 +88,6 @@ function showAnswer() {
     $("#result").html(img+"&nbsp;<button id='btnNext' class='btn btn-secondary' onclick='pressedBtnNext = true;getLetterPair()'>Next</button>");
     $("#result").css("color","#aaaaaa");
     $("#btnNext").focus();
-
 }
 
 function lesData(files) {
@@ -102,6 +103,9 @@ function lesData(files) {
 
         letterPairs = localStorage.getItem("letterPairs").split(";");
         images = localStorage.getItem("images").split(";");
+
+        alert("Successfully imported excel sheet!");
+        $("#tableType").val("select");
     });
     reset();
 }
@@ -188,5 +192,10 @@ function toggleImport(val) {
 }
 
 function adjustSize() {
+    const inpFontSize = $("#btnHelp").css("font-size").split("px")[0];
 
+    $("img").css("width", "80%");
+    $("#inputImage").css("width", "30%");
+    $("#tableType").css("font-size", inpFontSize*1.5);
+    $("label").css("font-size", inpFontSize);
 }
