@@ -267,7 +267,8 @@ function standardavvik(input) {
 
     mean = sum/(n-1);
     const deviation = Math.sqrt(mean);
-    return Math.round(deviation);
+    return deviation;
+    //return Math.round(deviation);
 }
 
 function beregnStdAvvikVo2() {
@@ -306,7 +307,8 @@ function beregnGjennomsnitt(vList, vSnitt) {
         for (let j=i; j<i+5; j++) {
             sum += vList[j];
         }
-        vSnitt.push(Math.round(sum/5.0));
+        vSnitt.push(sum/5.0);
+        //vSnitt.push(Math.round(sum/5.0));
     }
 }
 
