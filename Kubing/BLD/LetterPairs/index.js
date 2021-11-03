@@ -193,6 +193,9 @@ function toggleImport(val) {
 
 function adjustSize() {
     const inpFontSize = $("#btnHelp").css("font-size").split("px")[0];
+    const fontSize = ($("#toolbar").css("font-size").split("px")[0] * 0.75)
+
+    $("#inputImage").css("font-size", fontSize);
 
     $("img").css("width", "80%");
     $("#inputImage").css("width", "30%");

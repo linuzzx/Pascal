@@ -27,9 +27,6 @@ $(function() {
             checkMemo();
         }
     });
-    const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75)
-
-    $("#inpMemo").css("font-size", fontSize);
 
     getOptions();
     adjustSize();
@@ -517,6 +514,9 @@ function setGrouping(g) {
 
 function adjustSize() {
     const inpFontSize = $("#btnCheck").css("font-size").split("px")[0]*1.5;
+    const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75)
+
+    $("#inpMemo").css("font-size", fontSize);
 
     $("#inpMemo").css("width", "80%");
     $("#selectCubeType").css("font-size", inpFontSize);
