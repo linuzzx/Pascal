@@ -10,14 +10,36 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="index.css">
+    <script src="readExcel.js"></script>
 </head>
 <body>
-    <div id="content">
-        <a class="customButtons" href="example.xlsx" download>Download excel sheet</a>
-        <label for="fileInput" class="customButtons">
-            <i class="fa fa-cloud-upload"></i>Upload letter pairs
+    <div id="letterPairEdit" onclick="closeLetterPairEdit()">
+        <div id="innerLetterPairEdit">
+            <h1>Horizontal</h1>
+            <img src="./crossTable_horizontal.png" alt="Horizontal table"><br><br>
+            <a class="customButtons" href="horizontal.xlsx" download>Download horizontal sheet</a>
+            <h1>Vertical</h1>
+            <img src="./crossTable_vertical.png" alt="Vertical table"><br><br>
+            <a class="customButtons" href="vertical.xlsx" download>Download vertical sheet</a>
+        </div>
+    </div>
+    <div id="toolbar">
+        <select id="tableType" onchange="toggleImport(this.value)">
+            <option value="select">Select format</option>
+            <option value="horizontal">Horizontal</option>
+            <option value="vertical">Vertical</option>
+        </select>
+        <button onclick="showLetterPairEdit()">Help?</button>
+        <label for="fileInput" class="customButtons" onclick="if ($('#tableType').val() === 'select'){alert('Select format before importing sheet!')}">
+            <i class="fa fa-cloud-upload"></i>Upload custom letter pairs
         </label>
-        <input id="fileInput" type="file" onchange="openDrawing(this.files)" accept="image/*">
+        <input id="fileInput" type="file" onchange="lesData(this.files)" accept=".xlsx" disabled>
+    </div>
+    <div id="content">
+        <h1 id="letterPair"></h1>
+        <button onclick="checkImage()">Check</button><br>
+        <input id="inputImage" type="text" placeholder="Image..."><br>
+        <h1 id="result"></h1>
     </div>
 </body>
 <script src="index.js"></script>
