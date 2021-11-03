@@ -1,6 +1,7 @@
 html {
     background-image: linear-gradient(to bottom, #181818, #464646);
     background-attachment: fixed;
+    width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -9,6 +10,7 @@ html {
 body {
     text-align: center;
     background: transparent;
+    width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
