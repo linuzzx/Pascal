@@ -196,6 +196,7 @@ function adjustSize() {
 
     $("img").css("width", "80%");
     $("#inputImage").css("width", "30%");
+    $("#inputImage").css("margin", "auto");
     $("#tableType").css("font-size", inpFontSize*1.5);
     $("label").css("font-size", inpFontSize);
 }
