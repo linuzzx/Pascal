@@ -22,6 +22,12 @@ else {
 $(function() {
     $("#letterPair").html("<button class='btn btn-secondary' onclick='start()'>Start</button>");
     adjustSize();
+    
+    $("#inputImage").on('keyup', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            checkImage();
+        }
+    });
 });
         
 $(window).resize(function(){
@@ -31,21 +37,53 @@ $(window).resize(function(){
 function start() {
     $("#letterPair").html("");
     getLetterPair();
+    $("#inputImage").focus();
 }
 
 function getLetterPair() {
-    let letterPair = letterPairs[Math.floor(Math.random * letterPairs.length)];
+    let letterPair = letterPairs[Math.floor(Math.random() * letterPairs.length)];
 
     $("#letterPair").text(letterPair);
 }
 
 function checkImage() {
     let letterPair = $("#letterPair").text();
-    let image = $("#inputImage").val();
+    let image = $("#inputImage").val().toUpperCase();
 
-    if (images.indexOf(image) === letterPairs.indexOf(letterPair)) {
-        $("#result").text("Correct!")
+    console.log(letterPair);
+    console.log(image);
+    console.log(letterPairs.indexOf(letterPair));
+    console.log(images[letterPairs.indexOf(letterPair)]);
+    if (image === images[letterPairs.indexOf(letterPair)]) {
+        $("#result").text("Correct!");
+        $("#result").css("color", "green");
+
+        $("#inputImage").val("");
+        getLetterPair();
     }
+    else {
+        console.log(images[letterPairs.indexOf(letterPair)]);
+        $("#result").html("Incorrect!<br><button class='btn btn-secondary' onclick='showAnswer("+letterPair+")'>Show answer</button>");
+        $("#result").css("color", "red");
+
+        $("#inputImage").val("");
+
+    }
+    $("#inputImage").focus();
+}
+
+function reset() {
+    $("#letterPair").html("<button class='btn btn-secondary' onclick='start()'>Start</button>");
+    $("#inputImage").val("");
+    $("#result").text("");
+    $("#fileInput").val(null);
+}
+
+function showAnswer(lp) {
+console.log(lp);
+    let img = images[letterPairs.indexOf(lp)];
+    $("#result").html(img+"&nbsp;<button class='btn btn-secondary' onclick='getLetterPair()'>Next</button>");
+    $("#result").css("color","#aaaaaa");
 }
 
 function lesData(files) {
@@ -62,7 +100,7 @@ function lesData(files) {
         letterPairs = localStorage.getItem("letterPairs").split(";");
         images = localStorage.getItem("images").split(";");
     });
-    $("#fileInput").val(null);
+    reset();
 }
 
 function skrivDataHorizontal(data) {

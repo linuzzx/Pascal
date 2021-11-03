@@ -29,16 +29,16 @@
             <option value="horizontal">Horizontal</option>
             <option value="vertical">Vertical</option>
         </select>
-        <button onclick="showLetterPairEdit()">Help?</button>
-        <label for="fileInput" class="customButtons" onclick="if ($('#tableType').val() === 'select'){alert('Select format before importing sheet!')}">
+        <button class='btn btn-secondary' onclick="showLetterPairEdit()">Help?</button>
+        <label for="fileInput" class="btn btn-secondary" onclick="if ($('#tableType').val() === 'select'){alert('Select format before importing sheet!')}">
             <i class="fa fa-cloud-upload"></i>Upload custom letter pairs
         </label>
         <input id="fileInput" type="file" onchange="lesData(this.files)" accept=".xlsx" disabled>
     </div>
     <div id="content">
         <h1 id="letterPair"></h1>
-        <button onclick="checkImage()">Check</button><br>
-        <input id="inputImage" type="text" placeholder="Image..."><br>
+        <input id="inputImage" type="text" placeholder="Image..."><br><br>
+        <button class='btn btn-secondary' onclick="checkImage()">Check</button><br><br>
         <h1 id="result"></h1>
     </div>
 </body>
