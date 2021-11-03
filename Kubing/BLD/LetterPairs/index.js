@@ -1,6 +1,8 @@
 let letterPairs = [];
 let images = [];
 
+let pressedBtnNext = false;
+
 if (localStorage.getItem("letterPairs")) {
     letterPairs = localStorage.getItem("letterPairs").split(";");
 }
@@ -44,17 +46,17 @@ function getLetterPair() {
     let letterPair = letterPairs[Math.floor(Math.random() * letterPairs.length)];
 
     $("#letterPair").text(letterPair);
+
+    if (pressedBtnNext) {
+        $("#result").html("");
+    }
 }
 
 function checkImage() {
     let letterPair = $("#letterPair").text();
     let image = $("#inputImage").val().toUpperCase();
-
-    console.log(letterPair);
-    console.log(image);
-    console.log(letterPairs.indexOf(letterPair));
-    console.log(images[letterPairs.indexOf(letterPair)]);
-    if (image === images[letterPairs.indexOf(letterPair)]) {
+    
+    if (image === images[letterPairs.indexOf(letterPair)].toUpperCase()) {
         $("#result").text("Correct!");
         $("#result").css("color", "green");
 
@@ -62,8 +64,7 @@ function checkImage() {
         getLetterPair();
     }
     else {
-        console.log(images[letterPairs.indexOf(letterPair)]);
-        $("#result").html("Incorrect!<br><button class='btn btn-secondary' onclick='showAnswer("+letterPair+")'>Show answer</button>");
+        $("#result").html("Incorrect!<br><button class='btn btn-secondary' onclick='showAnswer()'>Show answer</button>");
         $("#result").css("color", "red");
 
         $("#inputImage").val("");
@@ -79,11 +80,13 @@ function reset() {
     $("#fileInput").val(null);
 }
 
-function showAnswer(lp) {
-console.log(lp);
-    let img = images[letterPairs.indexOf(lp)];
-    $("#result").html(img+"&nbsp;<button class='btn btn-secondary' onclick='getLetterPair()'>Next</button>");
+function showAnswer() {
+    let letterPair = $("#letterPair").text();
+    let img = images[letterPairs.indexOf(letterPair)];
+    $("#result").html(img+"&nbsp;<button id='btnNext' class='btn btn-secondary' onclick='pressedBtnNext = true;getLetterPair()'>Next</button>");
     $("#result").css("color","#aaaaaa");
+    $("#btnNext").focus();
+
 }
 
 function lesData(files) {
@@ -176,7 +179,6 @@ function closeLetterPairEdit() {
 }
 
 function toggleImport(val) {
-    console.log(val);
     if (val !== "select") {
         $("#fileInput").prop('disabled', false);
     }
