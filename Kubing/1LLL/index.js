@@ -84,7 +84,7 @@ function listImages() {
         i++;
     }
 
-    $("#selectAlgset").css("visibility","hidden");
+    $("#selectAlgset").remove();
 }
 
 function setAlgset(algset) {
