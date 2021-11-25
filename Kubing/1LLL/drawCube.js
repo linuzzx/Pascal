@@ -780,42 +780,49 @@ function updateCube() {
 }
 
 function updateBnW(context, contextSize) {
+    const ctxSize = (contextSize/1.2)/5;
+    const ctxGap = ctxSize/10;
+
     const up = [u1,u2,u3,u4,u5,u6,u7,u8,u9];
     const left = [l1,l2,l3];
     const right = [r1,r2,r3];
     const front = [f1,f2,f3];
     const back = [b1,b2,b3];
 
+    context.fillStyle = "#414141";
+    context.fillRect(ctxSize+ctxGap, 0, 3*ctxSize+4*ctxGap, 5*ctxSize+6*ctxGap);
+    context.fillRect(0, ctxSize+ctxGap, 5*ctxSize+6*ctxGap, 3*ctxSize+4*ctxGap);
+
     let index = 0;
-    for (let j = size+2*gap; j < 4*(size+gap); j += size+gap) {
-        for (let i = size+2*gap; i < 4*(size+gap); i += size+gap) {
+    for (let j = ctxSize+2*ctxGap; j < 4*(ctxSize+ctxGap); j += ctxSize+ctxGap) {
+        for (let i = ctxSize+2*ctxGap; i < 4*(ctxSize+ctxGap); i += ctxSize+ctxGap) {
             context.fillStyle = up[index];
-            context.fillRect(i, j, size, size);
+            context.fillRect(i, j, ctxSize, ctxSize);
             index++;
         }
     }
     index = back.length-1;
-    for (let i = size+2*gap; i < 4*(size+gap); i += size+gap) {
+    for (let i = ctxSize+2*ctxGap; i < 4*(ctxSize+ctxGap); i += ctxSize+ctxGap) {
         context.fillStyle = back[index];
-        context.fillRect(i, gap, size, size);
+        context.fillRect(i, ctxGap, ctxSize, ctxSize);
         index--;
     }
     index = 0;
-    for (let i = size+2*gap; i < 4*(size+gap); i += size+gap) {
+    for (let i = ctxSize+2*ctxGap; i < 4*(ctxSize+ctxGap); i += ctxSize+ctxGap) {
         context.fillStyle = front[index];
-        context.fillRect(i, 4*size+5*gap, size, size);
+        context.fillRect(i, 4*ctxSize+5*ctxGap, ctxSize, ctxSize);
         index++;
     }
     index = 0;
-    for (let j = size+2*gap; j < 4*(size+gap); j += size+gap) {
+    for (let j = ctxSize+2*ctxGap; j < 4*(ctxSize+ctxGap); j += ctxSize+ctxGap) {
         context.fillStyle = left[index];
-        context.fillRect(gap, j, size, size);
+        context.fillRect(ctxGap, j, ctxSize, ctxSize);
         index++;
     }
     index = right.length-1;
-    for (let j = size+2*gap; j < 4*(size+gap); j += size+gap) {
+    for (let j = ctxSize+2*ctxGap; j < 4*(ctxSize+ctxGap); j += ctxSize+ctxGap) {
         context.fillStyle = right[index];
-        context.fillRect(4*size+5*gap, j, size, size);
+        context.fillRect(4*ctxSize+5*ctxGap, j, ctxSize, ctxSize);
         index--;
     }
 }

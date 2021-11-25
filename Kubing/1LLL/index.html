@@ -14,22 +14,16 @@
 <body>
     <div id="content">
         <div id="selectDiv">
-            <label for='selectAlgset'>Choose algset</label>
-            <select id='selectAlgset' data-show-content="true" onchange='setAlgset(this.value)'></select>
+            <label for='dropdown-toggle'>Choose algset</label>
+            <button id="btnDropdown" class="dropdown-toggle" href="#" id="drop" data-bs-toggle="dropdown">
+                Dropdown menu
+            </button>
+            <div id="dropdownAlgset" class="dropdown-menu"></div>
             <div id="cbSubsetDiv"></div>
+            <select id='selectAlgset' onchange='setAlgset(this.value)'></select>
         </div>
-        <!--div>
-            <span class="dropdown">
-                <a class="dropdown-toggle" href="#" id="drop" data-bs-toggle="dropdown">
-                    Dropdown menu
-                </a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#"><img id="drImg1" src="" alt="">&nbsp;Oll1</a>
-                    <a class="dropdown-item" href="#">Oll2</a>
-                    <a class="dropdown-item" href="#">Oll3</a>
-                </div>
-            </span>
-        </div-->
+        <div>
+        </div>
         <div id='cubeDisplay'>
             <div></div>
             <h1 id='setupAlg'></h1>

@@ -84,3 +84,30 @@ h1 {
 ::-webkit-scrollbar-thumb:hover {
     background: #555555; 
 }
+
+#dropdownAlgset {
+    height: 50%;
+    overflow: scroll;
+}
+
+/*Scrollbar*/
+/* width */
+#dropdownAlgset::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+#dropdownAlgset::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+
+/* Handle */
+#dropdownAlgset::-webkit-scrollbar-thumb {
+    background: #888888;
+    border-radius: 100px;
+}
+
+/* Handle on hover */
+#dropdownAlgset::-webkit-scrollbar-thumb:hover {
+    background: #555555; 
+}

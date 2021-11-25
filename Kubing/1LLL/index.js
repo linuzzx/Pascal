@@ -40,49 +40,66 @@ function showContent() {
 function listCases() {
 
     let out = "";
+    let dOut = "";
 
     const canvasSize = $("#selectAlgset").height() * 2;
     
     let i = 0;
     for (let a of algs) {
-        out += "<option id='algOpt"+i+"' value='"+i+"'><tr><td><img id='algImg"+i+"' src='./image.png'></img></td><td>"+a.name+"</td></tr><canvas id='canvas"+i+"' width='"+canvasSize+"' height='"+canvasSize+"'></canvas></option>";
+        out += "<option id='algOpt"+i+"' value='"+i+"'>"+a.name+"<canvas id='canvas"+i+"' width='"+canvasSize+"' height='"+canvasSize+"'></canvas></option>";
         i++;
     }
 
     $("#selectAlgset").append(out);
-
     $("#selectAlgset").val(currentAlgset);
+
+
+    let j = 0;
+    for (let a of algs) {
+        dOut += "<span value='"+j+"' class='dropdown-item'' onclick='setAlgset("+j+")'><img id='algImg"+j+"' src='' alt=''>&nbsp;&nbsp;"+a.name+"</span>";
+        j++;
+    }
+    
+    $("#dropdownAlgset").append(dOut);
+    $("#dropdownAlgset").val(currentAlgset);
 
     listImages();
 }
 
 function listImages() {
+    const canvasSize = $("#selectAlgset").height() * 2;
+
     let i = 0;
     for (let a of algs) {
         let algorithm = Object.values(a)[0][0];
-        console.log(inverse(algorithm));
 
         let c = $("#canvas"+i)[0];
         let ctx = c.getContext("2d");
 
-        //ctx.fillStyle = "red";
-        //ctx.fillRect(0, 0, 100, 100);
-
-        drawBnW(ctx, size, inverse(algorithm));
-
-        //let img = "<img src='"+c.toDataURL("image/png")+"'></img>";
+        drawBnW(ctx, canvasSize, inverse(algorithm));
         let img = c.toDataURL("image/png");
 
-        $("#algImg"+i).attr("data-icon", img);
-        $("#drImg1").attr("src", img);
+        $("#algImg"+i).attr("src", img);
 
         i++;
     }
+
+    $("#selectAlgset").css("visibility","hidden");
 }
 
 function setAlgset(algset) {
     localStorage.setItem("currentAlgset", algset);
     currentAlgset = algset;
+
+    if (currentAlgset === 57) {
+        $("#btnDropdown").text("Pll");
+    }
+    else if (currentAlgset === 58) {
+        $("#btnDropdown").text("Custom");
+    }
+    else {
+        $("#btnDropdown").text("Oll"+(parseInt(currentAlgset)+1));
+    }
     
     if (algs[algset].name !== "Custom") {
         const cbCount = Object.keys(algs[algset]).length;
