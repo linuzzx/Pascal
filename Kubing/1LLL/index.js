@@ -41,15 +41,43 @@ function listCases() {
 
     let out = "";
 
+    const canvasSize = $("#selectAlgset").height() * 2;
+    
     let i = 0;
     for (let a of algs) {
-        out += "<option value='"+i+"'><canvas id='canvas"+i+"'></canvas>"+a.name+"</option>";
+        out += "<option id='algOpt"+i+"' value='"+i+"'><tr><td><img id='algImg"+i+"' src='./image.png'></img></td><td>"+a.name+"</td></tr><canvas id='canvas"+i+"' width='"+canvasSize+"' height='"+canvasSize+"'></canvas></option>";
         i++;
     }
 
     $("#selectAlgset").append(out);
 
     $("#selectAlgset").val(currentAlgset);
+
+    listImages();
+}
+
+function listImages() {
+    let i = 0;
+    for (let a of algs) {
+        let algorithm = Object.values(a)[0][0];
+        console.log(inverse(algorithm));
+
+        let c = $("#canvas"+i)[0];
+        let ctx = c.getContext("2d");
+
+        //ctx.fillStyle = "red";
+        //ctx.fillRect(0, 0, 100, 100);
+
+        drawBnW(ctx, size, inverse(algorithm));
+
+        //let img = "<img src='"+c.toDataURL("image/png")+"'></img>";
+        let img = c.toDataURL("image/png");
+
+        $("#algImg"+i).attr("data-icon", img);
+        $("#drImg1").attr("src", img);
+
+        i++;
+    }
 }
 
 function setAlgset(algset) {
@@ -207,15 +235,17 @@ function hideSolution() {
 function inverse(alg) {
     let newAlg = "";
 
-    for (let m of alg.split(" ").slice().reverse()) {
-        if (m.includes("'")) {
-            newAlg += m.replace("'"," ");
-        }
-        else if (m.includes("2")) {
-            newAlg += m.replace("2","2 ");
-        }
-        else {
-            newAlg += m + "' ";
+    if (alg) {
+        for (let m of alg.split(" ").slice().reverse()) {
+            if (m.includes("'")) {
+                newAlg += m.replace("'"," ");
+            }
+            else if (m.includes("2")) {
+                newAlg += m.replace("2","2 ");
+            }
+            else {
+                newAlg += m + "' ";
+            }
         }
     }
 
