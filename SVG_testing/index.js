@@ -1,10 +1,10 @@
 let draw = false;
-let x1 = 250;
-let y1 = 250;
-const colors = ["black","white","red","green","blue","yellow","orange","purple","pink","gray"];
 let btnHeight = $("#btnTable").height();
 let svgWidth = $("body").width();
 let svgHeight = $("body").height()-2*btnHeight;
+let x1 = svgWidth/2;
+let y1 = svgHeight/2;
+const colors = ["black","white","red","green","blue","yellow","orange","purple","pink","gray"];
 
 let drawInterval = null;
 
