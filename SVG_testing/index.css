@@ -13,3 +13,8 @@ body {
     padding: 0;
     overflow: hidden;
 }
+
+#btnTable {
+    width: fit-content;
+    margin: auto;
+}
