@@ -1,17 +1,14 @@
-let sq1 = [];
+let sq1 = ["a2","b","c1","c2","d","e1","e2","f","g1","g2","h","a1","i2","j","k1","k2","l","m1","m2","n","o1","o2","p","i1"];
 let sq1T = [];
 let sq1B = [];
 let eFlipped = false;
 
 $(function() {
     reset();
-    let out = "";
-
-    out = "sq1T: "+sq1T.length+", Bottom: "+sq1B.length;
-    $("body").html(out);
+    
     u(0);
     d(0);
-    slice()
+    //slice()
 });
 
 function u(number) {
@@ -79,16 +76,16 @@ function slice() {
 
         sq1T = arrT;
         sq1B = arrB;
+        drawTest()
     }
 }
 
 function canSlice() {
-    console.log((sq1T[1] !== sq1T[2] && sq1T[7] !== sq1T[8] && sq1B[0] !== sq1B[1] && sq1B[6] !== sq1B[7]));
-    return (sq1T[1] !== sq1T[2] && sq1T[7] !== sq1T[8] && sq1B[0] !== sq1B[1] && sq1B[6] !== sq1B[7]);
+    return (sq1T[1].split("")[0] !== sq1T[2].split("")[0] && sq1T[7].split("")[0] !== sq1T[8].split("")[0] && 
+            sq1B[0].split("")[0] !== sq1B[1].split("")[0] && sq1B[6].split("")[0] !== sq1B[7].split("")[0]);
 }
 
 function reset() {
-    sq1 = ["a","b","c","c","d","e","e","f","g","g","h","a","i","j","k","k","l","m","m","n","o","o","p","i"];
     sq1T = sq1.slice(0,12);
     sq1B = sq1.slice(12,24);
 }
