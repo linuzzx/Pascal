@@ -12,7 +12,7 @@ let colorBorder = "black";
 
 $(function() {
     adjustSize();
-    drawSq1("");
+    drawSq1();
 });
 
 $(window).resize(function() {
@@ -191,17 +191,17 @@ function drawSq1() {
     }
 
     let rectE1 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-    $(rectE1).attr("x", 0);
+    $(rectE1).attr("x", cp0[0]);
     $(rectE1).attr("y", (svgHeight/3 - svgHeight/5)/2);
-    $(rectE1).attr("width", svgWidth/3);
+    $(rectE1).attr("width", ep1[0]-cp0[0]);
     $(rectE1).attr("height", svgHeight/5);
     $(rectE1).attr("style", "fill:"+colorE+";stroke:"+colorBorder+";stroke-width:1");
     $("#sq1E").append(rectE1);
 
-    let eW = eFlipped? svgWidth/3: (svgWidth/3)*2;
+    let eW = eFlipped? ep1[0]-cp0[0]: cp3[0]-cp1[0];
     let eC = eFlipped? colorEF: colorE;
     let rectE2 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-    $(rectE2).attr("x", svgWidth/3);
+    $(rectE2).attr("x", ep1[0]);
     $(rectE2).attr("y", (svgHeight/3 - svgHeight/5)/2);
     $(rectE2).attr("width", eW);
     $(rectE2).attr("height", svgHeight/5);
@@ -213,14 +213,14 @@ function adjustSize() {
     svgHeight = ($("body").height() / 7) * 2;
     svgWidth = svgHeight;
 
-    $("#sq1T").attr("width", svgWidth*1.5);
-    $("#sq1T").attr("height", svgHeight*1.5);
+    $("#sq1T").attr("width", svgWidth);
+    $("#sq1T").attr("height", svgHeight);
 
-    $("#sq1E").attr("width", svgWidth*1.5);
-    $("#sq1E").attr("height", svgHeight / 3);
+    $("#sq1E").attr("width", svgWidth);
+    $("#sq1E").attr("height", svgHeight / 5);
 
-    $("#sq1B").attr("width", svgWidth*1.5);
-    $("#sq1B").attr("height", svgHeight*1.5);
+    $("#sq1B").attr("width", svgWidth);
+    $("#sq1B").attr("height", svgHeight);
 }
 
 function rotate(cx, cy, x, y, angle) {

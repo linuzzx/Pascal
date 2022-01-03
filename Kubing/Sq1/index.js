@@ -70,9 +70,6 @@ function slice() {
             arrB[i] = temp[i+1];
         }
 
-        console.log("arrT",arrT)
-        console.log("arrB",arrB)
-
         sq1T = arrT;
         sq1B = arrB;
 
@@ -88,4 +85,5 @@ function canSlice() {
 function reset() {
     sq1T = sq1.slice(0,12);
     sq1B = sq1.slice(12,24);
+    eFlipped = false;
 }
