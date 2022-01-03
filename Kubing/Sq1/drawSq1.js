@@ -275,8 +275,6 @@ function adjustSize() {
     else {
 
     }
-    
-    $("label").css("font-size", $("#content").height() / 25);
 
     svgHeight = ($("body").height() / 7) * 2;
     svgWidth = svgHeight;
