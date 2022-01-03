@@ -7,6 +7,45 @@ $(function() {
     reset();
 });
 
+function turn() {
+    reset();
+    const scramble = $("#inpScramble").val();
+    let us = [];
+    let ds = [];
+    let slices = 0;
+    let scr = scramble.replaceAll(" ","");
+
+    for (let s of scr.split("")) {
+        if (s === "/") {
+            slices++;
+        }
+    }
+
+    scr = scr.replaceAll("(","");
+    scr = scr.replaceAll(")","");
+
+    for (let t of scr.split("/")) {
+        if (t.split(",").length === 2) {
+            us.push(parseInt(t.split(",")[0]));
+            ds.push(parseInt(t.split(",")[1]));
+        }
+    }
+
+    console.log(scr);
+    console.log(us);
+    console.log(ds);
+    console.log(slices);
+
+    for (let i=0; i<us.length; i++) {
+        u(us[i]);
+        d(ds[i]);
+        if (slices !== 0) {
+            slice();
+            slices--;
+        }
+    }
+}
+
 function u(number) {
     let arr = [];
     let temp = sq1T;
