@@ -268,27 +268,6 @@ function drawSq1() {
     $("#sq1E").append(rectE2);
 }
 
-function adjustSize() {
-    if ($("#content").height() >= $("#content").width()) {
-        
-    }
-    else {
-
-    }
-
-    svgHeight = ($("body").height() / 7) * 2;
-    svgWidth = svgHeight;
-    
-    $("#sq1T").attr("width", svgWidth);
-    $("#sq1T").attr("height", svgHeight);
-
-    $("#sq1E").attr("width", svgWidth);
-    $("#sq1E").attr("height", svgHeight / 5);
-
-    $("#sq1B").attr("width", svgWidth);
-    $("#sq1B").attr("height", svgHeight);
-}
-
 function rotate(cx, cy, x, y, angle) {
     let radians = (Math.PI / 180) * angle,
         cos = Math.cos(radians),
@@ -325,4 +304,27 @@ function intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
       let y = y1 + ua * (y2 - y1)
   
       return [x,y]
-  }
+}
+
+function adjustSize() {
+    if (!$("inpScramble").is(":focus")) {
+        if ($("#content").height() >= $("#content").width()) {
+            
+        }
+        else {
+
+        }
+
+        svgHeight = ($("body").height() / 7) * 2;
+        svgWidth = svgHeight;
+        
+        $("#sq1T").attr("width", svgWidth);
+        $("#sq1T").attr("height", svgHeight);
+
+        $("#sq1E").attr("width", svgWidth);
+        $("#sq1E").attr("height", svgHeight / 5);
+
+        $("#sq1B").attr("width", svgWidth);
+        $("#sq1B").attr("height", svgHeight);
+    }
+}
