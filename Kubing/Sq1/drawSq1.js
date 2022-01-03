@@ -309,15 +309,14 @@ function intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
 function adjustSize() {
     if (!$("inpScramble").is(":focus")) {
         if ($("#content").height() >= $("#content").width()) {
-            
+            svgWidth = ($("body").width() / 5) * 2;
+            svgHeight = svgWidth;
         }
         else {
-
+            svgHeight = ($("body").height() / 7) * 2;
+            svgWidth = svgHeight;
         }
 
-        svgHeight = ($("body").height() / 7) * 2;
-        svgWidth = svgHeight;
-        
         $("#sq1T").attr("width", svgWidth);
         $("#sq1T").attr("height", svgHeight);
 
