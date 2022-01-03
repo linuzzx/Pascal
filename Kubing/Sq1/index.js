@@ -72,7 +72,11 @@ function u(number) {
 
     sq1T = arr;
         
-    drawSq1();
+    try {
+        drawSq1();
+    } catch (error) {
+        reset();
+    }
 }
 
 function d(number) {
@@ -83,7 +87,11 @@ function d(number) {
 
     sq1B = arr;
         
-    drawSq1();
+    try {
+        drawSq1();
+    } catch (error) {
+        reset();
+    }
 }
 
 function turnFace(arr, temp, number) {
@@ -130,7 +138,11 @@ function slice() {
         sq1T = arrT;
         sq1B = arrB;
 
-        drawSq1();
+        try {
+            drawSq1();
+        } catch (error) {
+            reset();
+        }
     }
 }
 
