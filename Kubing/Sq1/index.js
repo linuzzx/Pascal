@@ -30,7 +30,6 @@ function d(number) {
 }
 
 function turnFace(arr, temp, number) {
-    console.log(temp);
     for (let i=0; i<temp.length; i++) {
         if (number === 0) {
             arr = temp;
@@ -50,11 +49,9 @@ function turnFace(arr, temp, number) {
             }
             else {
                 arr[i] = temp[i-number];
-                console.log(i,i-number);
             }
         }
     }
-    console.log(arr);
 
     return arr;
 }
