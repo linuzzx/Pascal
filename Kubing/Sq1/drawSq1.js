@@ -312,7 +312,7 @@ function adjustSize() {
             
         }
         else {
-            
+
         }
         svgHeight = ($("body").height() / 7) * 2;
         svgWidth = svgHeight;
