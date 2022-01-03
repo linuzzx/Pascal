@@ -269,9 +269,18 @@ function drawSq1() {
 }
 
 function adjustSize() {
+    if ($("#content").height() >= $("#content").width()) {
+        
+    }
+    else {
+
+    }
+    
+    $("label").css("font-size", $("#content").height() / 25);
+
     svgHeight = ($("body").height() / 7) * 2;
     svgWidth = svgHeight;
-
+    
     $("#sq1T").attr("width", svgWidth);
     $("#sq1T").attr("height", svgHeight);
 
