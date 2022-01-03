@@ -5,10 +5,6 @@ let eFlipped = false;
 
 $(function() {
     reset();
-    
-    u(0);
-    d(0);
-    //slice()
 });
 
 function u(number) {
@@ -17,8 +13,9 @@ function u(number) {
 
     arr = turnFace(arr, temp, number);
 
-    console.log(arr);
     sq1T = arr;
+        
+    drawSq1();
 }
 
 function d(number) {
@@ -27,22 +24,16 @@ function d(number) {
 
     arr = turnFace(arr, temp, number);
 
-    console.log(arr);
     sq1B = arr;
+        
+    drawSq1();
 }
 
 function turnFace(arr, temp, number) {
+    console.log(temp);
     for (let i=0; i<temp.length; i++) {
         if (number === 0) {
             arr = temp;
-        }
-        else if (number < 0) {
-            if (i-number > temp.length) {
-                arr[i] = temp[i+number-temp.length];
-            }
-            else {
-                arr[i] = temp[i+number];
-            }
         }
         else if (number > 0) {
             if (i-number < 0) {
@@ -52,7 +43,18 @@ function turnFace(arr, temp, number) {
                 arr[i] = temp[i-number];
             }
         }
+        //negative
+        else if (number < 0) {
+            if (i-number >= temp.length) {
+                arr[i] = temp[i-number-temp.length];
+            }
+            else {
+                arr[i] = temp[i-number];
+                console.log(i,i-number);
+            }
+        }
     }
+    console.log(arr);
 
     return arr;
 }
@@ -76,7 +78,8 @@ function slice() {
 
         sq1T = arrT;
         sq1B = arrB;
-        drawTest()
+
+        drawSq1();
     }
 }
 

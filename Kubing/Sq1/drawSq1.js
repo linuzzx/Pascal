@@ -83,94 +83,105 @@ function drawSq1() {
 
     let w = svgWidth;
 
-    let p0 = 0.1830127*w;
-    let p1 = p0+0.1339746*w;
-    let p2 = p0+0.3660254*w;
-    let p3 = w-p2;
-    let p4 = w-p1;
-    let p5 = w-p0;
+    let cp0 = [0.2*w,0.2*w];
+    let cp1 = rotate(cx, cy, cp0[0], cp0[1], 330);
+    let cp2 = rotate(cx, cy, cp1[0], cp1[1], 330);
+    let cp3 = rotate(cx, cy, cp2[0], cp2[1], 330);
+    let cp4 = rotate(cx, cy, cp3[0], cp3[1], 330);
+    let cp5 = rotate(cx, cy, cp4[0], cp4[1], 330);
+    let cp6 = rotate(cx, cy, cp5[0], cp5[1], 330);
+    let cp7 = rotate(cx, cy, cp6[0], cp6[1], 330);
+    let cp8 = rotate(cx, cy, cp7[0], cp7[1], 330);
+    let cp9 = rotate(cx, cy, cp8[0], cp8[1], 330);
+    let cp10 = rotate(cx, cy, cp9[0], cp9[1], 330);
+    let cp11 = rotate(cx, cy, cp10[0], cp10[1], 330);
 
-    let c0 = 0;
-    let c1 = 0.1830127*w;
-    let c2 = c1+0.3169873*w;
-    let c3 = w-c2;
-    let c4 = w-c1;
-    let c5 = w;
+    let cps = [
+        cp0,cp1,cp2,cp3,cp4,cp5,cp6,cp7,cp8,cp9,cp10,cp11
+    ];
+    
+    let ep1 = intersect(cx,cy,cp1[0],cp1[1],cp0[0],cp0[1],cp3[0],cp3[1]);
+    let ep2 = rotate(cx, cy, ep1[0], ep1[1], 330);
+    let ep3 = rotate(cx, cy, ep2[0], ep2[1], 330);
+    let ep4 = rotate(cx, cy, ep3[0], ep3[1], 330);
+    let ep5 = rotate(cx, cy, ep4[0], ep4[1], 330);
+    let ep6 = rotate(cx, cy, ep5[0], ep5[1], 330);
+    let ep7 = rotate(cx, cy, ep6[0], ep6[1], 330);
+    let ep8 = rotate(cx, cy, ep7[0], ep7[1], 330);
+    let ep9 = rotate(cx, cy, ep8[0], ep8[1], 330);
+    let ep10 = rotate(cx, cy, ep9[0], ep9[1], 330);
+    let ep11 = rotate(cx, cy, ep10[0], ep10[1], 330);
+    let ep0 = rotate(cx, cy, ep11[0], ep11[1], 330);
 
-    /*
-    let p0 = 0;
-    let p1 = 0.1339746*w;
-    let p2 = 0.3660254*w;
-    let p3 = 0.6339746*w;
-    let p4 = w-0.1339746*w;
-    let p5 = w;
-    */
-
-    let cp = 0.3169873*w;
-    let feil = cp;
-
-    let xs = [p1,p2,p3,p4,p5,p5,p4,p3,p2,p1,p0,p0];
-    let ys = [p1,p0,p0,p1,p2,p3,p4,p5,p5,p4,p3,p2];
-    let cxs = [c1,c2,c3,c4,c5,c5,c4,c3,c2,c1,c0,c0];
-    let cys = [c1,c0,c0,c1,c2,c3,c4,c5,c5,c4,c3,c2];
-    /*let cxs = [0, cp, w-cp, w, w+feil, w+feil, w, w-cp, cp, 0, -feil, -feil];
-    let cys = [0, -feil, -feil, 0, cp, w-cp, w, w+feil, w+feil, w, w-cp, cp];*/
+    let eps = [
+        ep0,ep1,ep2,ep3,ep4,ep5,ep6,ep7,ep8,ep9,ep10,ep11
+    ];
 
     $("#sq1T").empty();
     $("#sq1B").empty();
     $("#sq1E").empty();
 
-    for (let i=0; i<xs.length; i++) {
+    for (let i=0; i<cps.length; i++) {
         let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
         let color = colors[sq1.indexOf(sq1T[i])];
         if (sq1T[i].split("").length === 2) {
             if (sq1T[i].split("")[1] === "1") {
-                if (i === xs.length-1) {
-                    let nX = cxs[i];
-                    let nY = cys[i];
-                    $(poly).attr("points", nX+","+nY+" "+cx+","+cy+" "+xs[i]+","+ys[i]);
+                if (i === cps.length-1) {
+                    $(poly).attr("points", cps[0][0]+","+cps[0][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
                 }
                 else {
-                    let nX = cxs[i];
-                    let nY = cys[i];
-                    $(poly).attr("points", nX+","+nY+" "+cx+","+cy+" "+xs[i]+","+ys[i]);
+                    $(poly).attr("points", cps[i+1][0]+","+cps[i+1][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
                 }
             }
             else {
-                if (i === xs.length-1) {
-                    
+                if (i === cps.length-1) {
+                    $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
                 }
                 else {
-                    
+                    $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
                 }
             }
         }
         else {
-            if (i === xs.length-1) {
-                $(poly).attr("points", xs[i]+","+ys[i]+" "+cx+","+cy+" "+xs[0]+","+ys[0]);
+            if (i === cps.length-1) {
+                $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
             }
             else {
-                $(poly).attr("points", xs[i]+","+ys[i]+" "+cx+","+cy+" "+xs[i+1]+","+ys[i+1]);
+                $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
             }
         }
-        
         $(poly).attr("style", "fill:"+color+";stroke:black;stroke-width:1");
 
         $("#sq1T").append(poly);
     }
 
-    for (let i=0; i<xs.length; i++) {
+    for (let i=0; i<cps.length; i++) {
         let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
         let color = colors[sq1.indexOf(sq1B[i])];
         if (sq1B[i].split("").length === 2) {
-
-        }
-        else {
-            if (i === xs.length-1) {
-                $(poly).attr("points", xs[i]+","+ys[i]+" "+cx+","+cy+" "+xs[0]+","+ys[0]);
+            if (sq1B[i].split("")[1] === "1") {
+                if (i === cps.length-1) {
+                    $(poly).attr("points", cps[0][0]+","+cps[0][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
+                }
+                else {
+                    $(poly).attr("points", cps[i+1][0]+","+cps[i+1][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
+                }
             }
             else {
-                $(poly).attr("points", xs[i]+","+ys[i]+" "+cx+","+cy+" "+xs[i+1]+","+ys[i+1]);
+                if (i === cps.length-1) {
+                    $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
+                }
+                else {
+                    $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
+                }
+            }
+        }
+        else {
+            if (i === cps.length-1) {
+                $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
+            }
+            else {
+                $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
             }
         }
 
@@ -196,16 +207,6 @@ function drawSq1() {
     $(rectE2).attr("height", svgHeight/5);
     $(rectE2).attr("style", "fill:"+eC+";stroke:"+colorBorder+";stroke-width:1");
     $("#sq1E").append(rectE2);
-
-    // FJERN DENNE
-    for (let i=0; i<cxs.length; i++) {
-        let circ = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-        $(circ).attr("cx", cxs[i]);
-        $(circ).attr("cy", cys[i]);
-        $(circ).attr("r", svgWidth/50);
-        $(circ).attr("fill", "black");
-        $("#sq1T").append(circ);
-    }
 }
 
 function adjustSize() {
@@ -221,3 +222,41 @@ function adjustSize() {
     $("#sq1B").attr("width", svgWidth*1.5);
     $("#sq1B").attr("height", svgHeight*1.5);
 }
+
+function rotate(cx, cy, x, y, angle) {
+    let radians = (Math.PI / 180) * angle,
+        cos = Math.cos(radians),
+        sin = Math.sin(radians),
+        nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
+        ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
+    return [nx, ny];
+}
+
+function intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
+
+    // Check if none of the lines are of length 0
+      if ((x1 === x2 && y1 === y2) || (x3 === x4 && y3 === y4)) {
+          return false
+      }
+  
+      denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
+  
+    // Lines are parallel
+      if (denominator === 0) {
+          return false
+      }
+  
+      let ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator
+      let ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator
+  
+    // is the intersection along the segments
+      if (ua < 0 || ua > 1 || ub < 0 || ub > 1) {
+          return false
+      }
+  
+    // Return a object with the x and y coordinates of the intersection
+      let x = x1 + ua * (x2 - x1)
+      let y = y1 + ua * (y2 - y1)
+  
+      return [x,y]
+  }
