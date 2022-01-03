@@ -38,6 +38,11 @@ function turn() {
         scr = scr.replaceAll("(","");
         scr = scr.replaceAll(")","");
 
+        if (scr.split("")[0] === "/") {
+            slice();
+            slices--;
+        }
+
         for (let t of scr.split("/")) {
             if (t.split(",").length === 2) {
                 us.push(parseInt(t.split(",")[0]));
