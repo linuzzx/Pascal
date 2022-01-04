@@ -21,11 +21,15 @@ function turn() {
         let us = [];
         let ds = [];
         let slices = 0;
+        let commas = 0;
         let scr = scramble.replaceAll(" ","");
 
         for (let s of scr.split("")) {
             if (s === "/") {
                 slices++;
+            }
+            else if (s === ",") {
+                commas++;
             }
         }
 
@@ -50,7 +54,7 @@ function turn() {
         let scrambleOk = (
             scramble.replaceAll(" ","").replaceAll("(","").replaceAll(")","").replaceAll("-","").replaceAll("/","").replaceAll(",","")
             .replaceAll("0","").replaceAll("1","").replaceAll("2","").replaceAll("3","").replaceAll("4","").replaceAll("5","").replaceAll("6","")) === "" 
-            && us.length === ds.length && !us.includes(NaN) && !ds.includes(NaN) && (slices === us.length || slices === us.length + 1 || slices === us.length - 1);
+            && us.length === ds.length && !us.includes(NaN) && !ds.includes(NaN) && commas === us.length && (slices === us.length || slices === us.length + 1 || slices === us.length - 1);
 
         if (scrambleOk) {
             for (let i=0; i<us.length; i++) {
