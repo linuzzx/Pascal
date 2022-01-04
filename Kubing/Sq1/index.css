@@ -28,3 +28,7 @@ body {
 label {
     color: #aaaaaa;
 }
+
+#inpScramble {
+    width: 80%;
+}

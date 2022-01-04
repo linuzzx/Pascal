@@ -18,40 +18,41 @@ function turn() {
     drawSq1();
     try {
         const scramble = $("#inpScramble").val();
+        let us = [];
+        let ds = [];
+        let slices = 0;
+        let scr = scramble.replaceAll(" ","");
+
+        for (let s of scr.split("")) {
+            if (s === "/") {
+                slices++;
+            }
+        }
+
+        scr = scr.replaceAll("(","");
+        scr = scr.replaceAll(")","");
+
+        if (scr.split("")[0] === "/") {
+            slice();
+            slices--;
+        }
+
+        for (let t of scr.split("/")) {
+            if (t.split(",").length === 2) {
+                us.push(parseInt(t.split(",")[0]));
+                ds.push(parseInt(t.split(",")[1]));
+            }
+        }
+        console.log("us",us);
+        console.log("ds",ds);
+        console.log("slices",slices);
+
         let scrambleOk = (
             scramble.replaceAll(" ","").replaceAll("(","").replaceAll(")","").replaceAll("-","").replaceAll("/","").replaceAll(",","")
-            .replaceAll("0","").replaceAll("1","").replaceAll("2","").replaceAll("3","").replaceAll("4","")
-            .replaceAll("5","").replaceAll("6","").replaceAll("7","").replaceAll("8","").replaceAll("9","")
-        ) === ""? true: false;
+            .replaceAll("0","").replaceAll("1","").replaceAll("2","").replaceAll("3","").replaceAll("4","").replaceAll("5","").replaceAll("6","")) === "" 
+            && us.length === ds.length && !us.includes(NaN) && !ds.includes(NaN) && (slices === us.length || slices === us.length + 1 || slices === us.length - 1);
 
-        
         if (scrambleOk) {
-            let us = [];
-            let ds = [];
-            let slices = 0;
-            let scr = scramble.replaceAll(" ","");
-
-            for (let s of scr.split("")) {
-                if (s === "/") {
-                    slices++;
-                }
-            }
-
-            scr = scr.replaceAll("(","");
-            scr = scr.replaceAll(")","");
-
-            if (scr.split("")[0] === "/") {
-                slice();
-                slices--;
-            }
-
-            for (let t of scr.split("/")) {
-                if (t.split(",").length === 2) {
-                    us.push(parseInt(t.split(",")[0]));
-                    ds.push(parseInt(t.split(",")[1]));
-                }
-            }
-
             for (let i=0; i<us.length; i++) {
                 u(us[i]);
                 d(ds[i]);

@@ -17,7 +17,6 @@ let iColors = [
 
 $(function() {
     adjustSize();
-    drawSq1();
 });
 
 $(window).resize(function() {
@@ -308,7 +307,7 @@ function drawSq1() {
     $(rectE1).attr("style", "fill:"+colorE+";stroke:"+colorBorder+";stroke-width:1");
     $("#sq1E").append(rectE1);
 
-    let eW = eFlipped? ep1[0]-cp0[0]: cp3[0]-cp1[0];
+    let eW = eFlipped? ep1[0]-cp0[0]: cp3[0]-ep1[0];
     let eC = eFlipped? colorEF: colorE;
     let rectE2 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
     $(rectE2).attr("x", ep1[0]);
@@ -365,7 +364,7 @@ function adjustSize() {
         else {
 
         }
-        svgHeight = ($("body").height() / 7) * 2;
+        svgHeight = ($("body").height() / 7) * 3;
         svgWidth = svgHeight;
 
         $("#sq1T").attr("width", svgWidth);
@@ -377,4 +376,5 @@ function adjustSize() {
         $("#sq1B").attr("width", svgWidth);
         $("#sq1B").attr("height", svgHeight);
     }
+    drawSq1();
 }
