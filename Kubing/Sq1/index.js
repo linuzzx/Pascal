@@ -14,8 +14,9 @@ $(function() {
 });
 
 function turn() {
+    reset();
+    drawSq1();
     try {
-        reset();
         const scramble = $("#inpScramble").val();
         let scrambleOk = (
             scramble.replaceAll(" ","").replaceAll("(","").replaceAll(")","").replaceAll("-","").replaceAll("/","").replaceAll(",","")

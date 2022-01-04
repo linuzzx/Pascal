@@ -160,6 +160,7 @@ function drawSq1() {
     $("#sq1B").empty();
     $("#sq1E").empty();
 
+    //OuterColors
     for (let i=0; i<cps.length; i++) {
         let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
         let polyT = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
@@ -169,21 +170,21 @@ function drawSq1() {
             if (sq1T[i].split("")[1] === "1") {
                 if (i === cps.length-1) {
                     $(poly).attr("points", cps[0][0]+","+cps[0][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
-                    $(polyT).attr("points", icps[0][0]+","+icps[0][1]+" "+cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]);
+                    //$(polyT).attr("points", cx+","+cy+" "+icps[0][0]+","+icps[0][1]+" "+ieps[i][0]+","+ieps[i][1]);
                 }
                 else {
                     $(poly).attr("points", cps[i+1][0]+","+cps[i+1][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
-                    $(polyT).attr("points", icps[i+1][0]+","+icps[i+1][1]+" "+cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]);
+                    //$(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[i+2][0]+","+ieps[i+2][1]);
                 }
             }
             else {
                 if (i === cps.length-1) {
                     $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
-                    $(polyT).attr("points", icps[i][0]+","+icps[i][1]+" "+cx+","+cy+" "+ieps[0][0]+","+ieps[0][1]);
+                    //$(polyT).attr("points", icps[i][0]+","+icps[i][1]+" "+cx+","+cy+" "+ieps[0][0]+","+ieps[0][1]);
                 }
                 else {
                     $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
-                    $(polyT).attr("points", icps[i][0]+","+icps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
+                    //$(polyT).attr("points", icps[i][0]+","+icps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
                 }
             }
         }
@@ -197,6 +198,7 @@ function drawSq1() {
                 $(polyT).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
             }
         }
+
         $(poly).attr("style", "fill:"+color+";stroke:black;stroke-width:1");
         $(polyT).attr("style", "fill:"+iColor+";stroke:black;stroke-width:1");
 
@@ -204,6 +206,31 @@ function drawSq1() {
         $("#sq1T").append(polyT);
     }
 
+    //InnerColors
+    for (let i=0; i<icps.length; i++) {
+        let polyT = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+        let iColor = iColors[sq1.indexOf(sq1T[i])];
+
+        if (sq1T[i].split("").length === 2) {
+            if (sq1T[i].split("")[1] === "1") {
+                if (i === cps.length-1) {
+                    $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[0][0]+","+icps[0][1]+" "+ieps[1][0]+","+ieps[1][1]);
+                }
+                else if (i === cps.length-2) {
+                    $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[0][0]+","+ieps[0][1]);
+                }
+                else {
+                    $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[i+2][0]+","+ieps[i+2][1]);
+                }
+            }
+        }
+
+        $(polyT).attr("style", "fill:"+iColor+";stroke:black;stroke-width:1");
+
+        $("#sq1T").append(polyT);
+    }
+
+    //OuterColors
     for (let i=0; i<cps.length; i++) {
         let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
         let polyB = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
@@ -213,21 +240,21 @@ function drawSq1() {
             if (sq1B[i].split("")[1] === "1") {
                 if (i === cps.length-1) {
                     $(poly).attr("points", cps[0][0]+","+cps[0][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
-                    $(polyB).attr("points", icps[0][0]+","+icps[0][1]+" "+cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]);
+                    //$(polyB).attr("points", icps[0][0]+","+icps[0][1]+" "+cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]);
                 }
                 else {
                     $(poly).attr("points", cps[i+1][0]+","+cps[i+1][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
-                    $(polyB).attr("points", icps[i+1][0]+","+icps[i+1][1]+" "+cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]);
+                    //$(polyB).attr("points", icps[i+1][0]+","+icps[i+1][1]+" "+cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]);
                 }
             }
             else {
                 if (i === cps.length-1) {
                     $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
-                    $(polyB).attr("points", icps[i][0]+","+icps[i][1]+" "+cx+","+cy+" "+ieps[0][0]+","+ieps[0][1]);
+                    //$(polyB).attr("points", icps[i][0]+","+icps[i][1]+" "+cx+","+cy+" "+ieps[0][0]+","+ieps[0][1]);
                 }
                 else {
                     $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
-                    $(polyB).attr("points", icps[i][0]+","+icps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
+                    //$(polyB).attr("points", icps[i][0]+","+icps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
                 }
             }
         }
@@ -249,9 +276,33 @@ function drawSq1() {
         $("#sq1B").append(polyB);
     }
 
+    //InnerColors
+    for (let i=0; i<icps.length; i++) {
+        let polyB = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+        let iColor = iColors[sq1.indexOf(sq1B[i])];
+
+        if (sq1B[i].split("").length === 2) {
+            if (sq1B[i].split("")[1] === "1") {
+                if (i === icps.length-1) {
+                    $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[0][0]+","+icps[0][1]+" "+ieps[1][0]+","+ieps[1][1]);
+                }
+                else if (i === icps.length-2) {
+                    $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[0][0]+","+ieps[0][1]);
+                }
+                else {
+                    $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[i+2][0]+","+ieps[i+2][1]);
+                }
+            }
+        }
+
+        $(polyB).attr("style", "fill:"+iColor+";stroke:black;stroke-width:1");
+
+        $("#sq1B").append(polyB);
+    }
+
     let rectE1 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
     $(rectE1).attr("x", cp0[0]);
-    $(rectE1).attr("y", (svgHeight/3 - svgHeight/5)/2);
+    $(rectE1).attr("y", 0);
     $(rectE1).attr("width", ep1[0]-cp0[0]);
     $(rectE1).attr("height", svgHeight/5);
     $(rectE1).attr("style", "fill:"+colorE+";stroke:"+colorBorder+";stroke-width:1");
@@ -261,7 +312,7 @@ function drawSq1() {
     let eC = eFlipped? colorEF: colorE;
     let rectE2 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
     $(rectE2).attr("x", ep1[0]);
-    $(rectE2).attr("y", (svgHeight/3 - svgHeight/5)/2);
+    $(rectE2).attr("y", 0);
     $(rectE2).attr("width", eW);
     $(rectE2).attr("height", svgHeight/5);
     $(rectE2).attr("style", "fill:"+eC+";stroke:"+colorBorder+";stroke-width:1");
