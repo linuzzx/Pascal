@@ -47,9 +47,6 @@ function turn() {
                 ds.push(parseInt(t.split(",")[1]));
             }
         }
-        console.log("us",us);
-        console.log("ds",ds);
-        console.log("slices",slices);
 
         let scrambleOk = (
             scramble.replaceAll(" ","").replaceAll("(","").replaceAll(")","").replaceAll("-","").replaceAll("/","").replaceAll(",","")

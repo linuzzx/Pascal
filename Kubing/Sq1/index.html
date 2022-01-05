@@ -15,8 +15,8 @@
 <body>
     <div id="content">
         <label for="inpScramble">Scramble</label>
-        <input id="inpScramble" type="text" oninput="turn()"/>
-        <button onclick="turn()">Scramble</button>
+        <input id="inpScramble" type="text" oninput="turn()"/><br/><br/>
+        <button class="btn btn-secondary" onclick="scrambleSq1()">Generate scramble</button><br/>
         <div id="drawing">
             <svg id="sq1T"></svg><br/>
             <svg id="sq1E"></svg><br/>
@@ -26,4 +26,5 @@
 </body>
 <script src="index.js"></script>
 <script src="drawSq1.js"></script>
+<script src="scramble.js"></script>
 </html>
