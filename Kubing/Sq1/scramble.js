@@ -44,6 +44,9 @@ function scrambleSq1() {
                     i--;
                     continue outerloop;
                 }
+                else {
+                    movesBeforeShapeShift--;
+                }
             }
         }
         else {
