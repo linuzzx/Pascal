@@ -106,7 +106,6 @@ function turnFace(arr, temp, number) {
                 arr[i] = temp[i-number];
             }
         }
-        //negative
         else if (number < 0) {
             if (i-number >= temp.length) {
                 arr[i] = temp[i-number-temp.length];
