@@ -18,29 +18,22 @@ function scrambleSq1() {
     for (let i=0; i<numberOfMoves; i++) {
         doReset();
         let curMoves = "";
-        let moveU = moves[Math.floor(Math.random() * (moves.length-1))];
-        let moveD = moves[Math.floor(Math.random() * (moves.length-1))];
+        let moveU = Math.floor(Math.random() * 12);
+        let moveD = Math.floor(Math.random() * 12);
 
         if (moveU === 0 && moveD === 0) {
             i--;
             continue outerloop;
         }
         if (movesBeforeShapeShift > 0) {
-            nU += moveU;
-            nD += moveD;
-            
-            if (Math.abs(Math.abs(nU) % 3 - Math.abs(nD) % 3) !== 1) {
-                nU -= moveU;
-                nD -= moveD;
+            if ((i === 0 && moveU % 3 === moveD % 3) || (i > 0 && moveU % 3 !== moveD % 3)) {
                 i--;
                 continue outerloop;
             }
             else {
-                curMoves += "("+moveU+","+moveD+")";
+                curMoves += "("+makeMove(moveU)+","+makeMove(moveD)+")";
                 doTurns(scramble + curMoves);
                 if (!canDoSlice()) {
-                    nU -= moveU;
-                    nD -= moveD;
                     i--;
                     continue outerloop;
                 }
@@ -50,13 +43,14 @@ function scrambleSq1() {
             }
         }
         else {
-            curMoves += "("+moveU+","+moveD+")";
+            curMoves += "("+makeMove(moveU)+","+makeMove(moveD)+")";
             doTurns(scramble + curMoves);
             if (!canDoSlice()) {
                 i--;
                 continue outerloop;
             }
         }
+
         if (i !== numberOfMoves-1) {
             curMoves += " / ";
         }
@@ -183,4 +177,12 @@ function canDoSlice() {
 function doReset() {
     currentTop = currentSq1.slice(0,12);
     currentBottom = currentSq1.slice(12,24);
+}
+
+function makeMove (move) {
+    if (move > 6) {
+        move = 6-move;
+    }
+
+    return move;
 }

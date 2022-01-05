@@ -25,64 +25,6 @@ $(window).resize(function() {
     adjustSize();
 });
 
-function draw() {
-    
-}
-
-function drawTest() {
-    $("#sq1T").empty();
-    $("#sq1E").empty();
-    $("#sq1B").empty();
-    
-    let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-    $(rect).attr("x", 0);
-    $(rect).attr("y", 0);
-    $(rect).attr("width", svgWidth);
-    $(rect).attr("height", svgHeight);
-    $(rect).attr("style", "fill:"+colorT+";stroke:"+colorBorder+";stroke-width:1");
-    $("#sq1T").append(rect);
-
-    let rectE1 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-    $(rectE1).attr("x", 0);
-    $(rectE1).attr("y", 0);
-    $(rectE1).attr("width", svgWidth/3);
-    $(rectE1).attr("height", svgHeight/3);
-    $(rectE1).attr("style", "fill:"+colorE+";stroke:"+colorBorder+";stroke-width:1");
-
-    $("#sq1E").append(rectE1);
-    let eW = eFlipped? svgWidth/3: (svgWidth/3)*2;
-    let eC = eFlipped? colorEF: colorE;
-    let rectE2 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-    $(rectE2).attr("x", svgWidth/3);
-    $(rectE2).attr("y", 0);
-    $(rectE2).attr("width", eW);
-    $(rectE2).attr("height", svgHeight/3);
-    $(rectE2).attr("style", "fill:"+eC+";stroke:"+colorBorder+";stroke-width:1");
-    $("#sq1E").append(rectE2);
-
-    let rect2 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-    $(rect2).attr("x", 0);
-    $(rect2).attr("y", 0);
-    $(rect2).attr("width", svgWidth);
-    $(rect2).attr("height", svgHeight);
-    $(rect2).attr("style", "fill:"+colorB+";stroke:"+colorBorder+";stroke-width:1");
-    $("#sq1B").append(rect2);
-
-    let circ = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-    $(circ).attr("cx", svgWidth/2);
-    $(circ).attr("cy", svgHeight/2);
-    $(circ).attr("r", svgWidth/50);
-    $(circ).attr("fill", "black");
-    $("#sq1T").append(circ);
-
-    let circ2 = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-    $(circ2).attr("cx", svgWidth/2);
-    $(circ2).attr("cy", svgHeight/2);
-    $(circ2).attr("r", svgWidth/50);
-    $(circ2).attr("fill", "black");
-    $("#sq1B").append(circ2);
-}
-
 function drawSq1() {
     let cx = svgWidth/2;
     let cy = svgWidth/2;
