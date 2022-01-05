@@ -28,8 +28,8 @@ function scrambleSq1() {
         if (movesBeforeShapeShift > 0) {
             nU += moveU;
             nD += moveD;
-
-            if (Math.abs(nU) % 3 === Math.abs(nD) % 3) {
+            
+            if (Math.abs(Math.abs(nU) % 3 - Math.abs(nD) % 3) !== 1) {
                 nU -= moveU;
                 nD -= moveD;
                 i--;

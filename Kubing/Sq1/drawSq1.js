@@ -351,7 +351,13 @@ function intersect(x1, y1, x2, y2, x3, y3, x4, y4) {
 }
 
 function getColors() {
-    colVal = localStorage.getItem("colVal") || "Y | W";
+    if (localStorage.getItem("colVal")) {
+        colVal = localStorage.getItem("colVal");
+    }
+    else {
+        colVal = "Y | W";
+    }
+    
     $("#selColor").val(colVal);
 
     changeColor();
