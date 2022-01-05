@@ -21,7 +21,7 @@ function scrambleSq1() {
         let moveU = moves[Math.floor(Math.random() * (moves.length-1))];
         let moveD = moves[Math.floor(Math.random() * (moves.length-1))];
 
-        if (moveU === "0" && moveD === "0") {
+        if (moveU === 0 && moveD === 0) {
             i--;
             continue outerloop;
         }
