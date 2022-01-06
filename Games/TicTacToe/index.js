@@ -52,7 +52,7 @@ function chooseTile(tf, b) {
             $(b).text(moves[index % 2]);
     
             index++;
-            checkIfWon();
+            checkIfWon(boardTiles);
         
             if (players === 1 && tf) {
                 waiting = true;
@@ -118,54 +118,123 @@ function cpuRandom() {
 
 function cpuMiniMax() {
     //Fjern denne
-    cpuRandom();
+    //cpuRandom();
+    let possibleMoves = [];
+    let tempBoard = $("#board button");
+    let ai = first === 0? "X": "O";
+    let i = 0;
+    let score = 0;
+    let bestScore = 0;
+    let nextMove;
+
+    for (let b of tempBoard) {
+        if ($(b).text() === "") {
+            $(b).text() = ai;
+            //minimax
+            score = minimax(tempBoard, 0, false);
+            $(b).text() = "";
+        }
+        i++;
+    }
+    console.log(possibleMoves);
+    for (let p of possibleMoves) {
+
+    }
 }
 
-function checkIfWon() {
+function minimax(board, depth, isMaximizing) {
+    let score = 0;
+
+    return score;
+}
+
+function isGameOver(b) {
+    let winner = "";
+
+    if (b[0] === b[1] && b[0] === b[2] && b[0] !== 2) {
+        winner = moves[b[0]];
+        startEnd = [0,2];
+    }
+    else if (b[3] === b[4] && b[3] === b[5] && b[3] !== 2) {
+        winner = moves[b[3]];
+        startEnd = [3,5];
+    }
+    else if (b[6] === b[7] && b[6] === b[8] && b[6] !== 2) {
+        winner = moves[b[6]];
+        startEnd = [6,8];
+    }
+    else if (b[0] === b[3] && b[0] === b[6] && b[0] !== 2) {
+        winner = moves[b[0]];
+        startEnd = [0,6];
+    }
+    else if (b[1] === b[4] && b[1] === b[7] && b[1] !== 2) {
+        winner = moves[b[1]];
+        startEnd = [1,7];
+    }
+    else if (b[2] === b[5] && b[2] === b[8] && b[2] !== 2) {
+        winner = moves[b[2]];
+        startEnd = [2,8];
+    }
+    else if (b[0] === b[4] && b[0] === b[8] && b[0] !== 2) {
+        winner = moves[b[0]];
+        startEnd = [0,8];
+    }
+    else if (b[2] === b[4] && b[2] === b[6] && b[2] !== 2) {
+        winner = moves[b[2]];
+        startEnd = [2,6];
+    }
+    else if (!b.includes("")) {
+        winner = "Draw";
+    }
+
+    return winner !== "";
+}
+
+function checkIfWon(b) {
     getBoardValues();
     
     let winner = "";
 
-    if (boardTiles[0] === boardTiles[1] && boardTiles[0] === boardTiles[2] && boardTiles[0] !== 2) {
-        winner = moves[boardTiles[0]] + " won!";
+    if (b[0] === b[1] && b[0] === b[2] && b[0] !== 2) {
+        winner = moves[b[0]];
         startEnd = [0,2];
     }
-    else if (boardTiles[3] === boardTiles[4] && boardTiles[3] === boardTiles[5] && boardTiles[3] !== 2) {
-        winner = moves[boardTiles[3]] + " won!";
+    else if (b[3] === b[4] && b[3] === b[5] && b[3] !== 2) {
+        winner = moves[b[3]];
         startEnd = [3,5];
     }
-    else if (boardTiles[6] === boardTiles[7] && boardTiles[6] === boardTiles[8] && boardTiles[6] !== 2) {
-        winner = moves[boardTiles[6]] + " won!";
+    else if (b[6] === b[7] && b[6] === b[8] && b[6] !== 2) {
+        winner = moves[b[6]];
         startEnd = [6,8];
     }
-    else if (boardTiles[0] === boardTiles[3] && boardTiles[0] === boardTiles[6] && boardTiles[0] !== 2) {
-        winner = moves[boardTiles[0]] + " won!";
+    else if (b[0] === b[3] && b[0] === b[6] && b[0] !== 2) {
+        winner = moves[b[0]];
         startEnd = [0,6];
     }
-    else if (boardTiles[1] === boardTiles[4] && boardTiles[1] === boardTiles[7] && boardTiles[1] !== 2) {
-        winner = moves[boardTiles[1]] + " won!";
+    else if (b[1] === b[4] && b[1] === b[7] && b[1] !== 2) {
+        winner = moves[b[1]];
         startEnd = [1,7];
     }
-    else if (boardTiles[2] === boardTiles[5] && boardTiles[2] === boardTiles[8] && boardTiles[2] !== 2) {
-        winner = moves[boardTiles[2]] + " won!";
+    else if (b[2] === b[5] && b[2] === b[8] && b[2] !== 2) {
+        winner = moves[b[2]];
         startEnd = [2,8];
     }
-    else if (boardTiles[0] === boardTiles[4] && boardTiles[0] === boardTiles[8] && boardTiles[0] !== 2) {
-        winner = moves[boardTiles[0]] + " won!";
+    else if (b[0] === b[4] && b[0] === b[8] && b[0] !== 2) {
+        winner = moves[b[0]];
         startEnd = [0,8];
     }
-    else if (boardTiles[2] === boardTiles[4] && boardTiles[2] === boardTiles[6] && boardTiles[2] !== 2) {
-        winner = moves[boardTiles[2]] + " won!";
+    else if (b[2] === b[4] && b[2] === b[6] && b[2] !== 2) {
+        winner = moves[b[2]];
         startEnd = [2,6];
     }
     else if (index === 9) {
         winner = "Draw";
+        $("#winner").text(winner);
     }
-
-    $("#winner").text(winner);
 
     if (winner !== "" || winner === "Draw") {
         if (winner !== "Draw") {
+            $("#winner").text(winner + " won!");
             drawLine(startEnd);
         }
         finish();
