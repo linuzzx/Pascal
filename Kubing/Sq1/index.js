@@ -2,6 +2,7 @@ let sq1 = ["a2","b","c1","c2","d","e1","e2","f","g1","g2","h","a1","i2","j","k1"
 let sq1T = [];
 let sq1B = [];
 let eFlipped = false;
+let impossible = false;
 
 $(function() {
     reset();
@@ -14,6 +15,8 @@ $(function() {
 });
 
 function turn() {
+    $("#inpScramble").css("color","black");
+    impossible = false;
     reset();
     drawSq1();
     try {
@@ -65,6 +68,12 @@ function turn() {
         }
         else {
             reset()
+        }
+
+        if (impossible) {
+            $("#inpScramble").css("color","red");
+            reset();
+            drawSq1();
         }
     } catch (error) {
         reset();
@@ -135,9 +144,11 @@ function slice() {
 
         sq1T = arrT;
         sq1B = arrB;
-
-        drawSq1();
     }
+    else {
+        impossible = true;
+    }
+    drawSq1();
 }
 
 function canSlice() {
