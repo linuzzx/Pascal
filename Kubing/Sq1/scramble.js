@@ -30,7 +30,9 @@ function scrambleSq1() {
             else {
                 curMoves += "("+makeMove(moveU)+","+makeMove(moveD)+")";
                 doTurns(scramble + curMoves);
-                if (!canDoSlice()) {
+                if (!canDoSlice() 
+                    || (currentTop[1].split("").length === 1 && currentBottom[0].split("").length === 2) 
+                    || (currentTop[1].split("").length === 2 && currentBottom[0].split("").length === 1)) {
                     i--;
                     continue outerloop;
                 }
