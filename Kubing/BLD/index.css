@@ -204,5 +204,6 @@ td {
 }
 
 #hiddenInput {
-    
+    position: fixed;
+    left: 120%;
 }

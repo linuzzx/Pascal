@@ -162,7 +162,7 @@ $(function () {
             $(selectedButton).html(String.fromCharCode(e.keyCode).toUpperCase());
             $("#btnGrid :button").css("font-weight", "normal");
 
-            alert(String.fromCharCode(e.keyCode).toUpperCase())
+            alert("Hei")
             saveLetters();
             makeAlgs();
         }
