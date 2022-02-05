@@ -238,6 +238,7 @@ function chooseEdge(val) {
 }
 
 function changeLetter(button) {
+    $("#hiddenInput").focus();
     $("#btnGrid :button").css("font-weight", "normal");
     $(button).css("font-weight", "bold");
     selectedButton = button;

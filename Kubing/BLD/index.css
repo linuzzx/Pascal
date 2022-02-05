@@ -202,3 +202,8 @@ td {
         font-size: 3vh;
     }
 }
+
+#hiddenInput {
+    position: fixed;
+    left: 120%;
+}
