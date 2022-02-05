@@ -156,11 +156,13 @@ $(function () {
     $("#btnColors :button").width(size);
     $("#btnColors :button").height(size);
 
-    $(window).keypress(function(e) {
+    $("#hiddenInput").keypress(function(e) {
+        $("#hiddenInput").val("");
         if (selectedButton !== null) {
             $(selectedButton).html(String.fromCharCode(e.keyCode).toUpperCase());
             $("#btnGrid :button").css("font-weight", "normal");
 
+            alert(String.fromCharCode(e.keyCode).toUpperCase())
             saveLetters();
             makeAlgs();
         }
@@ -251,6 +253,7 @@ function speffz() {
         i++;
     }
     saveLetters();
+    updateLetters();
 }
 
 function saveLetters() {
