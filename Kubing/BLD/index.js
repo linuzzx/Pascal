@@ -156,17 +156,9 @@ $(function () {
     $("#btnColors :button").width(size);
     $("#btnColors :button").height(size);
 
-    $("#hiddenInput").keypress(function(e) {
-        $("#hiddenInput").val("");
-        if (selectedButton !== null) {
-            $(selectedButton).html(String.fromCharCode(e.keyCode).toUpperCase());
-            $("#btnGrid :button").css("font-weight", "normal");
-
-            alert("Hei")
-            saveLetters();
-            makeAlgs();
-        }
-    });
+    /*$("#hiddenInput").keypress(function() {
+        getKeyFromInput();
+    });*/
     updateLetters();
 
     selectTopColor(selectedTopBtn, selectedTopColor);
@@ -176,6 +168,19 @@ $(function () {
 
 
 });
+
+function getKeyFromInput() {
+    if ($("#hiddenInput").val() !== "" && selectedButton !== null) {
+        $(selectedButton).html($("#hiddenInput").val().toUpperCase());
+        $("#btnGrid :button").css("font-weight", "normal");
+
+        saveLetters();
+        makeAlgs();
+        $("#hiddenInput").val("");
+        $("#hiddenInput").blur();
+        selectedButton == null;
+    }
+}
 
 function showLetterScheme() {
     showingLetters = true;
@@ -254,6 +259,7 @@ function speffz() {
     }
     saveLetters();
     updateLetters();
+    makeAlgs();
 }
 
 function saveLetters() {
