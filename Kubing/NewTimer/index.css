@@ -1,0 +1,26 @@
+html {
+    background: #1E1E1E;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: transparent;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#display {
+    height: 100%;
+    text-align: center;
+}
+
+#display > h1 {
+    height: 50vh;
+    margin: auto;
+    color: #FFFFFF;
+    font-size: 10vh;
+}
