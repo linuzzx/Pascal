@@ -13,14 +13,18 @@ body {
     overflow: hidden;
 }
 
-#display {
-    height: 100%;
-    text-align: center;
+#content {
+    width: 100vw;
+    height: 100vh;
 }
 
-#display > h1 {
-    height: 50vh;
-    margin: auto;
+#display {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+}
+
+#display h1 {
     color: #FFFFFF;
     font-size: 10vh;
 }
