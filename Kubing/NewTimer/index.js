@@ -12,12 +12,16 @@ let yellow = "#F5E801";
 
 let customMessage = "Timing";
 
+let svgWidth, svgHeight;
+
 $(function () {
     initKeyActions();
+    adjustSize();
     getScramble();
 });
 
 function waitForTimer() {
+    $("#cube").empty();
     $("#scramble h1").text("");
     if (wait055) {
         //Fiks denne
@@ -72,6 +76,7 @@ function stopTimer() {
     clearInterval(interval);
     timing = false;
     $("#display h1").css("color", "white");
+
     // Save time and scramble
     saveStats();
 
@@ -79,14 +84,22 @@ function stopTimer() {
 }
 
 function resetTimer() {
+    clearInterval(interval);
+    timing = false;
     $("#scramble h1").text(scramble);
     $("#display h1").css("color", "white");
     $("#display h1").text("0.00");
+    drawScramble();
 }
 
 function getScramble() {
     scramble = getScramble333();
     $("#scramble h1").text(scramble);
+    drawScramble();
+}
+
+function drawScramble() {
+    draw333svg($("#cube"),scramble);
 }
 
 function saveStats() {
@@ -103,6 +116,9 @@ function initKeyActions() {
                 stopTimer();
             }
         }
+        else if (e.key === 'Escape' || e.keyCode === 27) {
+            resetTimer();
+        }
     })
     .on('keyup', function (e) {
         if (e.key === 'Space' || e.keyCode === 32) {
@@ -115,15 +131,20 @@ function initKeyActions() {
         }
     })
     .on('keypress', function (e) {
-        if (e.key === 'Space' || e.keyCode === 32) {
+        if (e.keyCode !== 27) {
             if (timing) {
                 stopTimer();
             }
         }
-        else if (e.key === 'Escape' || e.keyCode === 27) {
-            if (timing) {
-                resetTimer();
-            }
-        }
     });
+}
+
+function adjustSize() {
+    let svgWidth = $("#right").width() * 0.75;
+    let svgHeight = svgWidth * 3/4;
+    console.log(svgWidth);
+    console.log(svgHeight);
+
+    $("#cube").attr("width", svgWidth);
+    $("#cube").attr("height", svgHeight);
 }
