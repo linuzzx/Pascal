@@ -18,13 +18,25 @@ body {
     height: 100vh;
 }
 
+#scramble {
+    height: 10vh;
+    margin: 0;
+    display: grid;
+    place-items: center;
+}
+
+#scramble h1 {
+    color: #FFFFFF;
+    font-size: 4vh;
+}
+
 #display {
-    height: 100vh;
+    height: 80vh;
     display: grid;
     place-items: center;
 }
 
 #display h1 {
     color: #FFFFFF;
-    font-size: 10vh;
+    font-size: 14vh;
 }

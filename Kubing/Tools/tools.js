@@ -142,6 +142,10 @@ function getScramble333() {
     return scramble.trim();
 }
 
+function getHHmmsshh(ms) {
+
+}
+
 function resetCubeState() {
     u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr",
     l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf",
