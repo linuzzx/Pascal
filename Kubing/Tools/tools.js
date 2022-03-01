@@ -143,7 +143,43 @@ function getScramble333() {
 }
 
 function getHHmmsshh(ms) {
+    let timeStr = "";
+    let cs = Math.floor((ms % 1000) / 10);
+    let s = Math.floor((ms / 1000) % 60);
+    let m = Math.floor((ms / 60000) % 60);
+    let h = Math.floor((ms / 3600000) % 24);
 
+    if (h !== 0) {
+        if (m < 10) {
+            m = "0" + m;
+        }
+        if (s < 10) {
+            s = "0" + s;
+        }
+        if (cs < 10) {
+            cs = "0" + cs;
+        }
+        timeStr = h + ":" + m + ":" + s + "." + cs;
+    }
+    else {
+        if (m !==0) {
+            if (s < 10) {
+                s = "0" + s;
+            }
+            if (cs < 10) {
+                cs = "0" + cs;
+            }
+            timeStr = m + ":" + s + "." + cs;
+        }
+        else {
+            if (cs < 10) {
+                cs = "0" + cs;
+            }
+            timeStr = s + "." + cs;
+        }
+    }
+
+    return timeStr;
 }
 
 function resetCubeState() {
