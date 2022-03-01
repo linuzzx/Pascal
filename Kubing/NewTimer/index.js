@@ -58,7 +58,7 @@ function stopTimer() {
     // Save time and scramble
     saveStats();
 
-    getScramble333();
+    getScramble();
 }
 
 function resetTimer() {
@@ -66,7 +66,7 @@ function resetTimer() {
     $("#display h1").css("color", "white");
 }
 
-function getScramble333() {
+function getScramble() {
     scramble = getScramble333();
     $("#scramble h1").text(scramble);
 }
