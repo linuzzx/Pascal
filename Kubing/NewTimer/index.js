@@ -11,7 +11,7 @@ let yellow = "#F5E801";
 
 $(function () {
     initKeyActions();
-    getScramble333();
+    getScramble();
 });
 
 function waitForTimer() {
