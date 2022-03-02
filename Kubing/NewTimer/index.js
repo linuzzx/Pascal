@@ -1,8 +1,6 @@
 let timing, ready = false;
 let stopped = true;
-let wait055 = false;
-let showTime = true;
-let scramble, time;
+let scramble;
 let curScrType;
 
 let waitingInterval;
@@ -11,13 +9,21 @@ let start;
 
 let green = "#00FF00";
 let yellow = "#F5E801";
+let red = "#FF0000";
+
+let wait055 = false;
+let showTime = true;
 
 let customMessage = "Timing";
 
 let svgWidth, svgHeight;
 
-let currentTime;
-let bestTime;
+let rawTime = -1;
+let curSingle = -1;
+let bestSingle = -1;
+
+let sessions = [];
+let solutions = [];
 
 $(function () {
     initActions();
@@ -34,20 +40,18 @@ function waitForTimer() {
     $("#scramble").css("visibility","hidden");
     if (wait055) {
         //Fiks denne
-        /*$("#scramble h1").css("color", yellow);
-        $("#display h1").css("color", yellow);
+        /*$("#display h1").css("color", red);
         const waitStart = new Date().getTime();
         let waitingTime = 0;
 
         waitingInterval = setInterval(function() {
             waitingTime = new Date().getTime() - waitStart;
-        }, 10);
-
-        while (!ready) {
             if (waitingTime >= 550) {
                 readyTimer();
+                clearInterval(waitingInterval);
             }
-        }*/
+        }, 1);*/
+        readyTimer();
     }
     else {
         readyTimer();
@@ -58,7 +62,6 @@ function readyTimer() {
     if (!ready) {
         ready = true;
         $("#display h1").css("color", green);
-        clearInterval(waitingInterval);
     }
 }
 
@@ -70,9 +73,9 @@ function startTimer() {
 
     start = new Date().getTime();
     interval = setInterval(function() {
-        time = new Date().getTime() - start;
+        rawTime = new Date().getTime() - start;
         if (showTime) {
-            $("#display h1").text(getHHmmsshh(time));
+            $("#display h1").text(getHHmmsshh(rawTime));
         }
         else {
             $("#display h1").text(customMessage);
@@ -84,7 +87,7 @@ function startTimer() {
 function stopTimer() {
     if (!stopped) {
         stopped = true;
-        $("#display h1").text(getHHmmsshh(time));
+        $("#display h1").text(getHHmmsshh(rawTime));
         clearInterval(interval);
         setTimeout(
             function() {
@@ -92,7 +95,7 @@ function stopTimer() {
             }, 100);
 
         // Save time and scramble
-        saveStats();
+        saveSolution();
 
         getScramble();
     }
@@ -193,8 +196,26 @@ function drawScramble() {
     }
 }
 
-function saveStats() {
+function saveSolution() {
+    //Add solution to solutions
+    const date = Date.now().toString().split("").slice(0, 10).join("");
+    const newSolution = new Solution(0, rawTime, scramble,"",date);
+    solutions.push(newSolution);
 
+    updateStats();
+}
+
+function updateStats() {
+    let arr = solutions.map(s => s.time);
+    
+    let rArr = arr.reverse();
+    curSingle = rArr[0];
+
+    let sArr = arr.sort(function(a, b){return a-b});
+    bestSingle = sArr[0];
+
+    $("#curSingle").text(getHHmmsshh(curSingle));
+    $("#bestSingle").text(getHHmmsshh(bestSingle));
 }
 
 function renameSession() {
