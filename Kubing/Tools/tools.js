@@ -265,16 +265,201 @@ let sq1ColorB = "white";
     }
 
     function getScramblePyra() {
-        //l r b u Tips
+        //7-8 trekk
+        //l r b u tips
         return "Under production";
     }
 
     function getScrambleSkewb() {
+        //8-9 trekk
+        //U R L B
         return "Under production";
     }
 
+    let currentSq1 = ["a2","b","c1","c2","d","e1","e2","f","g1","g2","h","a1","i2","j","k1","k2","l","m1","m2","n","o1","o2","p","i1"];
+    let currentTop = ["a2","b","c1","c2","d","e1","e2","f","g1","g2","h","a1"];
+    let currentBottom = ["i2","j","k1","k2","l","m1","m2","n","o1","o2","p","i1"];
     function getScrambleSq1() {
-        return "Under production";
+        
+        let movesBeforeShapeShift = 5;
+        let numberOfMoves = 12;
+        let scrambleSq1 = "";
+
+        outerloop:
+        for (let i=0; i<numberOfMoves; i++) {
+            doResetSq1();
+            let curMoves = "";
+            let moveU = Math.floor(Math.random() * 12);
+            let moveD = Math.floor(Math.random() * 12);
+
+            if (moveU === 0 && moveD === 0) {
+                i--;
+                continue outerloop;
+            }
+            if (movesBeforeShapeShift > 0) {
+                if ((i === 0 && moveU % 3 === moveD % 3) || (i > 0 && moveU % 3 !== moveD % 3)) {
+                    i--;
+                    continue outerloop;
+                }
+                else {
+                    curMoves += "("+makeMoveSq1(moveU)+","+makeMoveSq1(moveD)+")";
+                    doTurnsSq1(scrambleSq1 + curMoves);
+                    if (!canDoSliceSq1() 
+                        || (currentTop[1].split("").length === 1 && currentBottom[0].split("").length === 2) 
+                        || (currentTop[1].split("").length === 2 && currentBottom[0].split("").length === 1)) {
+                        i--;
+                        continue outerloop;
+                    }
+                    else {
+                        movesBeforeShapeShift--;
+                    }
+                }
+            }
+            else {
+                curMoves += "("+makeMoveSq1(moveU)+","+makeMoveSq1(moveD)+")";
+                doTurnsSq1(scrambleSq1 + curMoves);
+                if (!canDoSliceSq1()) {
+                    i--;
+                    continue outerloop;
+                }
+            }
+
+            if (i !== numberOfMoves-1) {
+                curMoves += " / ";
+            }
+            else {
+                if (canDoSliceSq1() && Math.random() < 0.5) {
+                    curMoves += " / ";
+                    if (Math.random() < 0.25) {
+                        numberOfMoves++;
+                    }
+                }
+            }
+            scrambleSq1 += curMoves;
+        }
+
+        return scrambleSq1;
+    }
+
+    {
+
+        function doTurnsSq1(scrambleToDo) {
+            let us = [];
+            let ds = [];
+            let slices = 0;
+            let scr = scrambleToDo.replaceAll(" ","");
+
+            for (let s of scr.split("")) {
+                if (s === "/") {
+                    slices++;
+                }
+            }
+
+            scr = scr.replaceAll("(","");
+            scr = scr.replaceAll(")","");
+
+            if (scr.split("")[0] === "/") {
+                doSliceSq1();
+                slices--;
+            }
+
+            for (let t of scr.split("/")) {
+                if (t.split(",").length === 2) {
+                    us.push(parseInt(t.split(",")[0]));
+                    ds.push(parseInt(t.split(",")[1]));
+                }
+            }
+            
+            for (let i=0; i<us.length; i++) {
+                doUSq1(us[i]);
+                doDSq1(ds[i]);
+                if (slices !== 0) {
+                    doSliceSq1();
+                    slices--;
+                }
+            }
+        }
+
+        function doUSq1(number) {
+            let arr = [];
+            let temp = currentTop;
+
+            arr = doTurnFaceSq1(arr, temp, number);
+
+            currentTop = arr;
+        }
+
+        function doDSq1(number) {
+            let arr = [];
+            let temp = currentBottom;
+
+            arr = doTurnFaceSq1(arr, temp, number);
+
+            currentBottom = arr;
+        }
+
+        function doSliceSq1() {
+            if (canDoSliceSq1()) {
+                let arrT = currentTop;
+                let arrB = currentBottom;
+                let temp = arrT.concat();
+
+                for (let i=2; i<8; i++) {
+                    arrT[i] = arrB[i-1];
+                }
+                for (let i=1; i<7; i++) {
+                    arrB[i] = temp[i+1];
+                }
+
+                currentTop = arrT;
+                currentBottom = arrB;
+            }
+        }
+
+        function doTurnFaceSq1(arr, temp, number) {
+            for (let i=0; i<temp.length; i++) {
+                if (number === 0) {
+                    arr = temp;
+                }
+                else if (number > 0) {
+                    if (i-number < 0) {
+                        arr[i] = temp[i-number+temp.length];
+                    }
+                    else {
+                        arr[i] = temp[i-number];
+                    }
+                }
+                else if (number < 0) {
+                    if (i-number >= temp.length) {
+                        arr[i] = temp[i-number-temp.length];
+                    }
+                    else {
+                        arr[i] = temp[i-number];
+                    }
+                }
+            }
+
+            return arr;
+        }
+
+        function canDoSliceSq1() {
+            return currentTop[1].split("")[0] !== currentTop[2].split("")[0] && currentTop[7].split("")[0] !== currentTop[8].split("")[0] && 
+                currentBottom[0].split("")[0] !== currentBottom[1].split("")[0] && currentBottom[6].split("")[0] !== currentBottom[7].split("")[0];
+        }
+
+
+        function doResetSq1() {
+            currentTop = currentSq1.slice(0,12);
+            currentBottom = currentSq1.slice(12,24);
+        }
+
+        function makeMoveSq1 (move) {
+            if (move > 6) {
+                move = 6-move;
+            }
+
+            return move;
+        }
     }
 }
 
