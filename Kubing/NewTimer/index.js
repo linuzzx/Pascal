@@ -1,4 +1,5 @@
 let timing, ready = false;
+let stopped = true;
 let wait055 = false;
 let showTime = true;
 let scramble, time;
@@ -64,6 +65,7 @@ function readyTimer() {
 function startTimer() {
     timing = true;
     ready = false;
+    stopped = false;
     $("#display h1").css("color", "white");
 
     start = new Date().getTime();
@@ -80,23 +82,26 @@ function startTimer() {
 }
 
 function stopTimer() {
-    $("#display h1").text(getHHmmsshh(time));
-    clearInterval(interval);
-    setTimeout(
-        function() {
-            timing = false;
-        }, 100);
-    $("#display h1").css("color", "white");
+    if (!stopped) {
+        stopped = true;
+        $("#display h1").text(getHHmmsshh(time));
+        clearInterval(interval);
+        setTimeout(
+            function() {
+                timing = false;
+            }, 100);
 
-    // Save time and scramble
-    saveStats();
+        // Save time and scramble
+        saveStats();
 
-    getScramble();
+        getScramble();
+    }
 }
 
 function resetTimer() {
     clearInterval(interval);
     timing = false;
+    stopped = true;
     $("#scramble").css("visibility","visible");
     $("#display h1").css("color", "white");
     $("#display h1").text("0.00");
@@ -241,20 +246,22 @@ function checkSessions() {
 
 function keyActions() {
     $("html").on('keydown', function (e) {
-        if (e.keyCode !== 27 && timing) {
-            stopTimer();
-        }
-        else if (e.keyCode === 32) {
-            if (!ready && !timing) {
-                waitForTimer();
-            }
-            else if (timing) {
+        if (timing) {
+            if (e.keyCode !== 27) {
                 stopTimer();
             }
         }
-        else if (e.keyCode === 27) {
+        else {
+            if (e.keyCode === 27) {
                 resetTimer();
+            }
+            if (e.keyCode === 32) {
+                if (!ready) {
+                    waitForTimer();
+                }
+            }
         }
+        
     })
     .on('keyup', function (e) {
         if (e.keyCode === 32) {

@@ -173,7 +173,10 @@ let sq1ColorB = "white";
         let scr = "";
         var moves = ["R", "F", "U"];
         var movesExtra = ["", "'", "2"];
-        var numOfMoves = [19, 20, 21];
+        var numOfMoves = [9, 10];
+
+        
+
         return "Under production";
     }
 
