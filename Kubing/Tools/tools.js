@@ -14,6 +14,15 @@ const solvedState333 = [
     d1,d2,d3,d4,d5,d6,d7,d8,d9
 ];
 
+const solvedState222 = [
+    u1,u3,u7,u9,
+    l1,l3,l7,l9,
+    f1,f3,f7,f9,
+    r1,r3,r7,r9,
+    b1,b3,b7,b9,
+    d1,d3,d7,d9
+];
+
 let colors333 = [
     "white", "white", "white", "white", "white", "white", "white", "white", "white",
     "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange",
@@ -21,6 +30,15 @@ let colors333 = [
     "red", "red", "red", "red", "red", "red", "red", "red", "red",
     "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue",
     "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow"
+];
+
+let colors222 = [
+    "white", "white", "white", "white",
+    "orange", "orange", "orange", "orange",
+    "green", "green", "green", "green",
+    "red", "red", "red", "red",
+    "blue", "blue", "blue", "blue",
+    "yellow", "yellow", "yellow", "yellow"
 ];
 
 let colorsSq1 = [
@@ -169,15 +187,33 @@ let sq1ColorB = "white";
         return scr.trim();
     }
 
+    function getScramble333NEW() {
+        return "Under production";
+    }
+
     function getScramble222() {
         let scr = "";
-        var moves = ["R", "F", "U"];
-        var movesExtra = ["", "'", "2"];
-        var numOfMoves = [9, 10];
+        let moves = ["R", "F", "U"];
+        let movesExtra = ["", "'", "2"];
+        let numOfMoves = [9, 10];
+        let prevMove = "";
 
-        
+        let num = numOfMoves[Math.floor(Math.random() * numOfMoves.length)];
 
-        return "Under production";
+        for (let i=0; i<num; i++) {
+            let move = moves[Math.floor(Math.random() * moves.length)];
+            let extra = movesExtra[Math.floor(Math.random() * movesExtra.length)];
+            
+            if (prevMove !== move) {
+                prevMove = move;
+                scr += move+extra+" ";
+            }
+            else {
+                i--;
+            }
+        }
+
+        return scr.trim();
     }
 
     function getScramble444() {
@@ -229,6 +265,7 @@ let sq1ColorB = "white";
     }
 
     function getScramblePyra() {
+        //l r b u Tips
         return "Under production";
     }
 
@@ -245,13 +282,15 @@ let sq1ColorB = "white";
 {
     function draw333Svg(svgID, scr) {
         $(svgID).empty();
-        let arr = applyMoves(scr);
+        applyMoves(scr);
+        let arr = getCubeState333();
+
         
         //let w = $(svgID).width() / 12;
         let w = $(svgID).width() / 13;
         let h = w;
         let space = w/3;
-        let fill = "red";
+        let fill = "";
         let stroke = "black";
         let strokeWidth = 1;
 
@@ -356,7 +395,114 @@ let sq1ColorB = "white";
 
     function draw222Svg(svgID, scr) {
         $(svgID).empty();
-        drawMissingSvg(svgID);
+        applyMoves(scr);
+        let arr = getCubeState222();
+        
+        //let w = $(svgID).width() / 12;
+        let w = ($(svgID).width() / 13) * (3/2);
+        let h = w;
+        let space = ($(svgID).width() / 13) / 3;
+        let fill = "";
+        let stroke = "black";
+        let strokeWidth = 1;
+
+        let num = 0;
+        for (var y = 0*h; y < 2*h; y += h) {
+            for (let x = 2*w+space; x < 4*w; x += w) {
+                fill = colors222[solvedState222.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 2*h+space; y < 4*h; y += h) {
+            for (let x = 0*w; x < 2*w; x += w) {
+                fill = colors222[solvedState222.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 2*h+space; y < 4*h; y += h) {
+            for (let x = 2*w+space; x < 4*w; x += w) {
+                fill = colors222[solvedState222.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 2*h+space; y < 4*h; y += h) {
+            for (let x = 4*w+2*space; x < 6*w; x += w) {
+                fill = colors222[solvedState222.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 2*h+space; y < 4*h; y += h) {
+            for (let x = 6*w+3*space; x < 8*w+space; x += w) {
+                fill = colors222[solvedState222.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 4*h+2*space; y < 6*h; y += h) {
+            for (let x = 2*w+space; x < 4*w; x += w) {
+                fill = colors222[solvedState222.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
     }
 
     function draw444Svg(svgID, scr) {
@@ -669,10 +815,10 @@ function applyMoves(allMoves) {
         }
     }
 
-    return getCubeState();
+    return getCubeState333();
 }
 
-function getCubeState() {
+function getCubeState333() {
     return [
         u1,u2,u3,u4,u5,u6,u7,u8,u9,
         l1,l2,l3,l4,l5,l6,l7,l8,l9,
@@ -680,6 +826,17 @@ function getCubeState() {
         r1,r2,r3,r4,r5,r6,r7,r8,r9,
         b1,b2,b3,b4,b5,b6,b7,b8,b9,
         d1,d2,d3,d4,d5,d6,d7,d8,d9
+    ];
+}
+
+function getCubeState222() {
+    return [
+        u1,u3,u7,u9,
+        l1,l3,l7,l9,
+        f1,f3,f7,f9,
+        r1,r3,r7,r9,
+        b1,b3,b7,b9,
+        d1,d3,d7,d9
     ];
 }
 
