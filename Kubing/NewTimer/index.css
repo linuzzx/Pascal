@@ -13,7 +13,20 @@ body {
     overflow: hidden;
 }
 
+#pbList table {
+    width: 50%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    color: white;
+    text-align: center;
+}
+
+#pbList table, tr, th, td {
+    border-spacing: 1vh;
+}
+
 #content {
+    padding: 1vh;
     width: 100vw;
     height: 100vh;
     display: grid;
@@ -29,7 +42,8 @@ body {
 
 #scramble h1 {
     color: #FFFFFF;
-    font-size: 4vh;
+    font-size: 3vh;
+    font-family: monospace;
 }
 
 #display {
@@ -48,4 +62,35 @@ body {
     position: absolute;
     bottom: 5vh;
     right: 5vh;
+}
+
+#btnOptions {
+    margin-bottom: 1vh;
+    width: 12%;
+    height: auto;
+}
+
+#btnOptions:hover {
+    opacity: 0.75;
+}
+
+#outerOptions {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+#innerOptions {
+    position: fixed;
+    width: 60%;
+    height: 60%;
+    top: 20%;
+    left: 20%;
+    border-radius: 10px;
+    background-color: #1E1E1E;
+    border: 1px solid black;
+    padding: 1%;
 }

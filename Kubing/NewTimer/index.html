@@ -13,12 +13,48 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
+    <div id="outerOptions" onclick="closeOptions()">
+        <div id="innerOptions">
+            
+        </div>
+    </div>
+    
     <div id="content">
         <div id="left">
+            <img id="btnOptions" src="./resources/settings.png" onclick="showOptions()">
+            <div>
+                <select id="sessionList">
+                    <option>Session1</option>
+                </select>
+                <button id="btnRename" onclick="renameSession()">Rename</button>
+                <button id="btnNew" onclick="newSession()">New</button>
+                <button id="btnDelete" onclick="deleteSession()">Delete</button>
+            </div><br/>
+            <div id="pbList">
+                <table>
+                    <tr><th></th><th>Current</th><th>Best</th></tr>
+                    <tr><th>Single</th><td>-</td><td>-</td></tr>
+                </table>
+            </div>
+            <div id="timeList">
 
+            </div>
         </div>
         <div id="middle">
             <div id="scramble">
+                <select id="scrambleType">
+                    <option id="333">3x3</option>
+                    <option id="222">2x2</option>
+                    <option id="444">4x4</option>
+                    <option id="555">5x5</option>
+                    <option id="666">6x6</option>
+                    <option id="777">7x7</option>
+                    <option id="clock">Clock</option>
+                    <option id="mega">Megaminx</option>
+                    <option id="pyra">Pyraminx</option>
+                    <option id="skewb">Skewb</option>
+                    <option id="sq1">Square-1</option>
+                </select>
                 <h1>Scramble</h1>
             </div>
             <div id="display">

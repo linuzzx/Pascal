@@ -23,250 +23,408 @@ let colors333 = [
     "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow"
 ];
 
-function getScramble333() {
-    let scramble = "";
-    var trekkArray = ["R", "L", "F", "B", "U", "D"];
-    var tilleggArray = ["", "'", "2"];
-    var antallTrekkArray = [19, 20, 21];
-    var antallTrekk = antallTrekkArray[Math.floor(Math.random() * antallTrekkArray.length)];
-    var scrambleArray = [];
+let colorsSq1 = [
+    "orange","orange","orange","green","green","green","red","red","red","blue","blue","blue",
+    "red","red","red","green","green","green","orange","orange","orange","blue","blue","blue"
+];
+let sq1ColorT = "yellow";
+let sq1ColorB = "white";
 
-    for (var i=0; i<antallTrekk; i++) {
-        if (scrambleArray.length < 1) { //Sjekker om array er tomt
-            scrambleArray[i] = trekkArray[Math.floor(Math.random() * trekkArray.length)];
-        }
-        else if (scrambleArray.length >= 1) {
-            var like = true;
-            while (like === true) {
-                var trekk1 = trekkArray[Math.floor(Math.random() * trekkArray.length)];
-                scrambleArray[i] = trekk1;
+// Get scramble
+{
+    function getScramble333() {
+        let scr = "";
+        var moves = ["R", "L", "F", "B", "U", "D"];
+        var movesExtra = ["", "'", "2"];
+        var numOfMoves = [19, 20, 21];
+        var num = numOfMoves[Math.floor(Math.random() * numOfMoves.length)];
+        var scrambleArray = [];
 
-                if (scrambleArray[i] === trekkArray[0]) {        //R
-                    if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
-                        i--;
-                        scrambleArray[i] = trekk1;
-                    }
-                    else if (scrambleArray[i-1] === trekkArray[1]) {   //Sjekker om trekket er motsatt av forrige
-                        if (scrambleArray[i-2] === trekkArray[0]) {  //Sjekker om trekket er det samme som forrige forrige
+        for (var i=0; i<num; i++) {
+            if (scrambleArray.length < 1) { //Sjekker om array er tomt
+                scrambleArray[i] = moves[Math.floor(Math.random() * moves.length)];
+            }
+            else if (scrambleArray.length >= 1) {
+                var like = true;
+                while (like === true) {
+                    var trekk1 = moves[Math.floor(Math.random() * moves.length)];
+                    scrambleArray[i] = trekk1;
+
+                    if (scrambleArray[i] === moves[0]) {        //R
+                        if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
                             i--;
                             scrambleArray[i] = trekk1;
+                        }
+                        else if (scrambleArray[i-1] === moves[1]) {   //Sjekker om trekket er motsatt av forrige
+                            if (scrambleArray[i-2] === moves[0]) {  //Sjekker om trekket er det samme som forrige forrige
+                                i--;
+                                scrambleArray[i] = trekk1;
+                            }
+                            else {
+                                like = false;
+                            }
                         }
                         else {
                             like = false;
                         }
                     }
-                    else {
-                        like = false;
-                    }
-                }
-                else if (scrambleArray[i] === trekkArray[1]) {   //L
-                    if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
-                        i--;
-                        scrambleArray[i] = trekk1;
-                    }
-                    else if (scrambleArray[i-1] === trekkArray[0]) {   //Sjekker om trekket er motsatt av forrige
-                        if (scrambleArray[i-2] === trekkArray[1]) {  //Sjekker om trekket er det samme som forrige forrige
+                    else if (scrambleArray[i] === moves[1]) {   //L
+                        if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
                             i--;
                             scrambleArray[i] = trekk1;
+                        }
+                        else if (scrambleArray[i-1] === moves[0]) {   //Sjekker om trekket er motsatt av forrige
+                            if (scrambleArray[i-2] === moves[1]) {  //Sjekker om trekket er det samme som forrige forrige
+                                i--;
+                                scrambleArray[i] = trekk1;
+                            }
+                            else {
+                                like = false;
+                            }
                         }
                         else {
                             like = false;
                         }
                     }
-                    else {
-                        like = false;
-                    }
-                }
-                else if (scrambleArray[i] === trekkArray[2]) {   //F
-                    if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
-                        i--;
-                        scrambleArray[i] = trekk1;
-                    }
-                    else if (scrambleArray[i-1] === trekkArray[3]) {   //Sjekker om trekket er motsatt av forrige
-                        if (scrambleArray[i-2] === trekkArray[2]) {  //Sjekker om trekket er det samme som forrige forrige
+                    else if (scrambleArray[i] === moves[2]) {   //F
+                        if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
                             i--;
                             scrambleArray[i] = trekk1;
+                        }
+                        else if (scrambleArray[i-1] === moves[3]) {   //Sjekker om trekket er motsatt av forrige
+                            if (scrambleArray[i-2] === moves[2]) {  //Sjekker om trekket er det samme som forrige forrige
+                                i--;
+                                scrambleArray[i] = trekk1;
+                            }
+                            else {
+                                like = false;
+                            }
                         }
                         else {
                             like = false;
                         }
                     }
-                    else {
-                        like = false;
-                    }
-                }
-                else if (scrambleArray[i] === trekkArray[3]) {   //B
-                    if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
-                        i--;
-                        scrambleArray[i] = trekk1;
-                    }
-                    else if (scrambleArray[i-1] === trekkArray[2]) {   //Sjekker om trekket er motsatt av forrige
-                        if (scrambleArray[i-2] === trekkArray[3]) {  //Sjekker om trekket er det samme som forrige forrige
+                    else if (scrambleArray[i] === moves[3]) {   //B
+                        if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
                             i--;
                             scrambleArray[i] = trekk1;
+                        }
+                        else if (scrambleArray[i-1] === moves[2]) {   //Sjekker om trekket er motsatt av forrige
+                            if (scrambleArray[i-2] === moves[3]) {  //Sjekker om trekket er det samme som forrige forrige
+                                i--;
+                                scrambleArray[i] = trekk1;
+                            }
+                            else {
+                                like = false;
+                            }
                         }
                         else {
                             like = false;
                         }
                     }
-                    else {
-                        like = false;
-                    }
-                }
-                else if (scrambleArray[i] === trekkArray[4]) {   //U
-                    if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
-                        i--;
-                        scrambleArray[i] = trekk1;
-                    }
-                    else if (scrambleArray[i-1] === trekkArray[5]) {   //Sjekker om trekket er motsatt av forrige
-                        if (scrambleArray[i-2] === trekkArray[4]) {  //Sjekker om trekket er det samme som forrige forrige
+                    else if (scrambleArray[i] === moves[4]) {   //U
+                        if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
                             i--;
                             scrambleArray[i] = trekk1;
+                        }
+                        else if (scrambleArray[i-1] === moves[5]) {   //Sjekker om trekket er motsatt av forrige
+                            if (scrambleArray[i-2] === moves[4]) {  //Sjekker om trekket er det samme som forrige forrige
+                                i--;
+                                scrambleArray[i] = trekk1;
+                            }
+                            else {
+                                like = false;
+                            }
                         }
                         else {
                             like = false;
                         }
                     }
-                    else {
-                        like = false;
-                    }
-                }
-                else if (scrambleArray[i] === trekkArray[5]) {   //D
-                    if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
-                        i--;
-                        scrambleArray[i] = trekk1;
-                    }
-                    else if (scrambleArray[i-1] === trekkArray[4]) {   //Sjekker om trekket er motsatt av forrige
-                        if (scrambleArray[i-2] === trekkArray[5]) {  //Sjekker om trekket er det samme som forrige forrige
+                    else if (scrambleArray[i] === moves[5]) {   //D
+                        if (scrambleArray[i] === scrambleArray[i-1]) {   //Sjekker om trekket er likt det forrige
                             i--;
                             scrambleArray[i] = trekk1;
+                        }
+                        else if (scrambleArray[i-1] === moves[4]) {   //Sjekker om trekket er motsatt av forrige
+                            if (scrambleArray[i-2] === moves[5]) {  //Sjekker om trekket er det samme som forrige forrige
+                                i--;
+                                scrambleArray[i] = trekk1;
+                            }
+                            else {
+                                like = false;
+                            }
                         }
                         else {
                             like = false;
                         }
-                    }
-                    else {
-                        like = false;
                     }
                 }
             }
         }
+
+        for (var j=0; j<scrambleArray.length; j++) {
+            scr += scrambleArray[j] + movesExtra[Math.floor(Math.random() * movesExtra.length)] + " ";
+        }
+
+        return scr.trim();
     }
 
-    for (var j=0; j<scrambleArray.length; j++) {
-        scramble += scrambleArray[j] + tilleggArray[Math.floor(Math.random() * tilleggArray.length)] + " ";
+    function getScramble222() {
+        let scr = "";
+        var moves = ["R", "F", "U"];
+        var movesExtra = ["", "'", "2"];
+        var numOfMoves = [19, 20, 21];
+        return "Under production";
     }
 
-    return scramble.trim();
+    function getScramble444() {
+        return "Under production";
+    }
+
+    function getScramble555() {
+        return "Under production";
+    }
+
+    function getScramble666() {
+        return "Under production";
+    }
+
+    function getScramble777() {
+        return "Under production";
+    }
+
+    function getScrambleClock() {
+        return "Under production";
+    }
+
+    function getScrambleMega() {
+        let movesExtra = ["++", "--"];
+        let uExtra = ["U", "U'"];
+        let scr = "";
+
+        for (let j=0; j<7; j++) {
+            scr += "<span>";
+            for (let i=0; i<11; i++) {
+                if (i === 10) {
+                    scr += uExtra[Math.floor(Math.random() * uExtra.length)];
+                }
+                else {
+                    if (i % 2 === 0) {
+                        scr += "R"+movesExtra[Math.floor(Math.random() * movesExtra.length)]+" ";
+                    }
+                    else {
+                        scr += "D"+movesExtra[Math.floor(Math.random() * movesExtra.length)]+" ";
+                    }
+                }
+            }
+            if (j < 6) {
+                scr += "</span><br/>";
+            }
+        }
+        
+        return scr;
+    }
+
+    function getScramblePyra() {
+        return "Under production";
+    }
+
+    function getScrambleSkewb() {
+        return "Under production";
+    }
+
+    function getScrambleSq1() {
+        return "Under production";
+    }
 }
 
-function draw333svg(svgID, scr) {
-    let arr = applyMoves(scr);
+// Draw scramble
+{
+    function draw333Svg(svgID, scr) {
+        $(svgID).empty();
+        let arr = applyMoves(scr);
+        
+        //let w = $(svgID).width() / 12;
+        let w = $(svgID).width() / 13;
+        let h = w;
+        let space = w/3;
+        let fill = "red";
+        let stroke = "black";
+        let strokeWidth = 1;
+
+        let num = 0;
+        for (var y = 0*h; y < 3*h; y += h) {
+            for (let x = 3*w+space; x < 6*w; x += w) {
+                fill = colors333[solvedState333.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 3*h+space; y < 6*h; y += h) {
+            for (let x = 0*w; x < 3*w; x += w) {
+                fill = colors333[solvedState333.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 3*h+space; y < 6*h; y += h) {
+            for (let x = 3*w+space; x < 6*w; x += w) {
+                fill = colors333[solvedState333.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 3*h+space; y < 6*h; y += h) {
+            for (let x = 6*w+2*space; x < 9*w; x += w) {
+                fill = colors333[solvedState333.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 3*h+space; y < 6*h; y += h) {
+            for (let x = 9*w+3*space; x < 12*w+space; x += w) {
+                fill = colors333[solvedState333.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+        for (var y = 6*h+2*space; y < 9*h; y += h) {
+            for (let x = 3*w+space; x < 6*w; x += w) {
+                fill = colors333[solvedState333.indexOf(arr[num])];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", w);
+                $(rect).attr("height", h);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(rect);
+
+                num++;
+            }
+        }
+    }
+
+    function draw222Svg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function draw444Svg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function draw555Svg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function draw666Svg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function draw777Svg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function drawClockSvg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function drawMegaSvg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function drawPyraSvg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function drawSkewbSvg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function drawSq1Svg(svgID, scr) {
+        $(svgID).empty();
+        drawMissingSvg(svgID);
+    }
+
+    function drawMissingSvg(svgID) {
+        let x = "50%";
+        let y = "90%";
+        
+        let text = document.createElementNS('http://www.w3.org/2000/svg', "text");
+        $(text).attr("x", x);
+        $(text).attr("y", y);
+        $(text).attr("font-size", "2vh");
+        $(text).attr("fill", "white");
+        $(text).attr("text-anchor", "middle");
+        $(text).attr("dominant-baseline", "middle");
+        let textNode = document.createTextNode("Unavailable for this scramble type");
+        text.appendChild(textNode);
+
+        $(svgID).append(text);
+    }
+}
+
+function importToTimer() {
     
-    let w = $(svgID).width() / 12;
-    console.log($(svgID).width()+"###");
-    let h = w;
-    let fill = "red";
-    let stroke = "black";
-    let strokeWidth = 1;
+}
 
-    let num = 0;
-    for (var y = 0*h; y < 3*h; y += h) {
-        for (let x = 3*w; x < 6*w; x += w) {
-            fill = colors333[solvedState333.indexOf(arr[num])];
-            
-            let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(rect).attr("x", x);
-            $(rect).attr("y", y);
-            $(rect).attr("width", w);
-            $(rect).attr("height", h);
-            $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
-            
-            $(svgID).append(rect);
-
-            num++;
-        }
-    }
-    for (var y = 3*h; y < 6*h; y += h) {
-        for (let x = 0*w; x < 3*w; x += w) {
-            fill = colors333[solvedState333.indexOf(arr[num])];
-            
-            let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(rect).attr("x", x);
-            $(rect).attr("y", y);
-            $(rect).attr("width", w);
-            $(rect).attr("height", h);
-            $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
-            
-            $(svgID).append(rect);
-
-            num++;
-        }
-    }
-    for (var y = 3*h; y < 6*h; y += h) {
-        for (let x = 3*w; x < 6*w; x += w) {
-            fill = colors333[solvedState333.indexOf(arr[num])];
-            
-            let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(rect).attr("x", x);
-            $(rect).attr("y", y);
-            $(rect).attr("width", w);
-            $(rect).attr("height", h);
-            $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
-            
-            $(svgID).append(rect);
-
-            num++;
-        }
-    }
-    for (var y = 3*h; y < 6*h; y += h) {
-        for (let x = 6*w; x < 9*w; x += w) {
-            fill = colors333[solvedState333.indexOf(arr[num])];
-            
-            let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(rect).attr("x", x);
-            $(rect).attr("y", y);
-            $(rect).attr("width", w);
-            $(rect).attr("height", h);
-            $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
-            
-            $(svgID).append(rect);
-
-            num++;
-        }
-    }
-    for (var y = 3*h; y < 6*h; y += h) {
-        for (let x = 9*w; x < 12*w; x += w) {
-            fill = colors333[solvedState333.indexOf(arr[num])];
-            
-            let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(rect).attr("x", x);
-            $(rect).attr("y", y);
-            $(rect).attr("width", w);
-            $(rect).attr("height", h);
-            $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
-            
-            $(svgID).append(rect);
-
-            num++;
-        }
-    }
-    for (var y = 6*h; y < 9*h; y += h) {
-        for (let x = 3*w; x < 6*w; x += w) {
-            fill = colors333[solvedState333.indexOf(arr[num])];
-            
-            let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(rect).attr("x", x);
-            $(rect).attr("y", y);
-            $(rect).attr("width", w);
-            $(rect).attr("height", h);
-            $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
-            
-            $(svgID).append(rect);
-
-            num++;
-        }
-    }
+function exportFromTimer() {
+    
 }
 
 function getHHmmsshh(ms) {
@@ -319,7 +477,6 @@ function resetCubeState() {
 }
 
 function applyMoves(allMoves) {
-    console.log(allMoves);
     scrambleArray = allMoves.split(" ");
 
     resetCubeState();
