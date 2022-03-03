@@ -238,6 +238,7 @@ function closeOptions() {
 }
 
 function initActions() {
+    connectToDB();
     checkSessions();
     keyActions();
 
@@ -253,6 +254,10 @@ function initActions() {
         curScrType = $("#scrambleType").children(":selected").attr("id");
         getScramble();
     });
+}
+
+function connectToDB() {
+    openDB(getAllFromDB);
 }
 
 function checkSessions() {
@@ -272,16 +277,15 @@ function keyActions() {
             }
         }
         else {
-            if (e.keyCode === 27) {
-                resetTimer();
-            }
             if (e.keyCode === 32) {
                 if (!ready) {
                     waitForTimer();
                 }
             }
         }
-        
+        if (e.keyCode === 27) {
+            resetTimer();
+        }
     })
     .on('keyup', function (e) {
         if (e.keyCode === 32) {
