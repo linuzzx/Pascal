@@ -6,8 +6,7 @@ const readonly = "readonly";
 
 let db = null;
 
-function openDB(func) {
-    console.log(func);
+function openDB(func, arg1 = null, arg2 = null) {
     const request = indexedDB.open(dbName);
 
     request.onupgradeneeded = e => {
@@ -19,7 +18,15 @@ function openDB(func) {
     request.onsuccess = e => {
         db = e.target.result;
         if (func) {
-            func();
+            if (arg2) {
+                func(arg1,arg2);
+            }
+            else if (arg1) {
+                func(arg1);
+            }
+            else {
+                func();
+            }
         }
     }
     
@@ -36,7 +43,6 @@ function editDB(key, val) {
 
         const store = db.createObjectStore(storeName);
     } */
-    openDB();
 
     const tx = db.transaction(storeName, readwrite);
     const store = tx.objectStore(storeName);
@@ -78,24 +84,14 @@ function getFromDB(key) {
 }
 
 function getAllFromDB() {
-    console.log("HER ER JEG");
     const tx = db.transaction(storeName, readonly);
     const store = tx.objectStore(storeName);
-    const request = store.openCursor();
-    request.onsuccess = e => {
-        const cursor = e.target.result;
-
-        if (cursor) {
-            console.log(cursor.key,cursor.value);
-            return cursor.value;
-            // Do something with the cursor
-            cursor.continue();
-        }
-    }
+    const request = store.getAll();
     
-    request.onerror = e => {
-        console.log(e);
-    };
+    request.onsuccess = e => {
+        console.log(e.target.result);
+        // List opp data
+    }
 }
 
 function removeFromDB(key) {

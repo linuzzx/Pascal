@@ -11,6 +11,8 @@ let green = "#00FF00";
 let yellow = "#F5E801";
 let red = "#FF0000";
 
+const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "mega", "pyra", "skewb", "sq1"];
+
 let wait055 = false;
 let showTime = true;
 
@@ -24,6 +26,9 @@ let bestSingle = -1;
 
 let sessions = [];
 let solutions = [];
+
+let numberOfSessions = 0;
+let curSession = 0;
 
 $(function () {
     initActions();
@@ -198,9 +203,13 @@ function drawScramble() {
 function saveSolution() {
     //Add solution to solutions
     const date = Date.now().toString().split("").slice(0, 10).join("");
-    const newSolution = new Solution(0, rawTime, scramble,"",date);
+    const newSolution = new Solution(rawTime, 0, scramble, "", date);
     solutions.push(newSolution);
 
+    sessions[curSession].solutions = solutions.slice();
+
+    openDB(editDB(sessions[curSession].id, sessions));
+    
     updateStats();
 }
 
@@ -257,7 +266,39 @@ function initActions() {
 }
 
 function connectToDB() {
-    openDB(getAllFromDB);
+    const arr = openDB(getAllFromDB);
+    console.log(arr);
+    if (arr) {
+        sessions = arr.slice();
+    }
+    else {
+        numberOfSessions = 0;
+        createSession();
+    }
+}
+
+function createSession() {
+    let sessionId = "session_"+formatSessionID(numberOfSessions + 1);
+    let sessionName = "Session "+(numberOfSessions + 1);
+    let sessionRank = numberOfSessions;
+    let sessionScrType = scrTypes[0];
+    let sessionSolutions = [];
+    const nSession = new Session(sessionId, sessionName,sessionRank,sessionScrType, sessionSolutions);
+    sessions.push(nSession);
+
+    // ???
+    $("#sessionList").append("<option id='"+sessionId+"'>Session1</option>")
+}
+
+function formatSessionID(id) {
+    let f = "";
+    if (id < 10) {
+        f = "0"+id;
+    }
+    else {
+        f = id;
+    }
+    return f;
 }
 
 function checkSessions() {
@@ -266,6 +307,13 @@ function checkSessions() {
     }
     else {
         $("#btnDelete").prop('disabled', false);
+    }
+
+    if ($("#sessionList").length === 99) {
+        $("#btnNew").prop('disabled', true);
+    }
+    else {
+        $("#btnNew").prop('disabled', false);
     }
 }
 

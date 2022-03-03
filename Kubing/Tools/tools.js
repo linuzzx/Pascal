@@ -25,8 +25,8 @@ const solvedState222 = [
 
 let colors333 = [
     "white", "white", "white", "white", "white", "white", "white", "white", "white",
-    "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange", "orange",
-    "green", "green", "green", "green", "green", "green", "green", "green", "green",
+    "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00",
+    "#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00", "#00FF00",
     "red", "red", "red", "red", "red", "red", "red", "red", "red",
     "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue",
     "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow", "yellow"
@@ -34,8 +34,8 @@ let colors333 = [
 
 let colors222 = [
     "white", "white", "white", "white",
-    "orange", "orange", "orange", "orange",
-    "green", "green", "green", "green",
+    "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00",
+    "#00FF00", "#00FF00", "#00FF00", "#00FF00",
     "red", "red", "red", "red",
     "blue", "blue", "blue", "blue",
     "yellow", "yellow", "yellow", "yellow"
@@ -732,14 +732,14 @@ let colors222 = [
         let colorT = "yellow";
         let colorB = "white";
         let colorE = "red";
-        let colorEF = "orange";
+        let colorEF = "#FFAA00";
         let colorBorder = "black";
 
         let sSq1 = "";
 
         let colorsSq1 = [
-            "orange","orange","orange","green","green","green","red","red","red","blue","blue","blue",
-            "red","red","red","green","green","green","orange","orange","orange","blue","blue","blue"
+            "#FFAA00","#FFAA00","#FFAA00","#00FF00","#00FF00","#00FF00","red","red","red","blue","blue","blue",
+            "red","red","red","#00FF00","#00FF00","#00FF00","#FFAA00","#FFAA00","#FFAA00","blue","blue","blue"
         ];
         
         let iColorsSq1 = [

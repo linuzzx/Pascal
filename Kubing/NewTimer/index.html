@@ -25,9 +25,7 @@
         <div id="left">
             <img id="btnOptions" src="./resources/settings.png" onclick="showOptions()">
             <div>
-                <select id="sessionList">
-                    <option>Session1</option>
-                </select>
+                <select id="sessionList"></select>
                 <button id="btnRename" onclick="renameSession()">Rename</button>
                 <button id="btnNew" onclick="newSession()">New</button>
                 <button id="btnDelete" onclick="deleteSession()">Delete</button>
@@ -69,6 +67,7 @@
             </div>
         </div>
     </div>
+    <div id="hiddenDiv" hidden></div>
 </body>
 <script src="index.js"></script>
     <script src="db.js"></script>
