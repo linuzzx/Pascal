@@ -458,7 +458,7 @@ let colors222 = [
 
 // Draw scramble
 {
-    let stroke = "#333333";
+    let stroke = "#1E1E1E";
     function draw333Svg(svgID, scr) {
         resetDrawSvg(svgID);
         applyMoves(scr);
