@@ -7,11 +7,11 @@ let colorE = "red";
 let colorEF = "orange";
 let colorBorder = "black";
 
-let colors = [
+let colorsSq1 = [
     "orange","orange","orange","green","green","green","red","red","red","blue","blue","blue",
     "red","red","red","green","green","green","orange","orange","orange","blue","blue","blue"
 ];
-let iColors = [
+let iColorsSq1 = [
     colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,
     colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB
 ];
@@ -107,8 +107,8 @@ function drawSq1() {
     for (let i=0; i<cps.length; i++) {
         let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
         let polyT = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-        let color = colors[sq1.indexOf(sq1T[i])];
-        let iColor = iColors[sq1.indexOf(sq1T[i])];
+        let color = colorsSq1[sq1.indexOf(sq1T[i])];
+        let iColor = iColorsSq1[sq1.indexOf(sq1T[i])];
         if (sq1T[i].split("").length === 2) {
             if (sq1T[i].split("")[1] === "1") {
                 if (i === cps.length-1) {
@@ -148,7 +148,7 @@ function drawSq1() {
     //InnerColors
     for (let i=0; i<icps.length; i++) {
         let polyT = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-        let iColor = iColors[sq1.indexOf(sq1T[i])];
+        let iColor = iColorsSq1[sq1.indexOf(sq1T[i])];
 
         if (sq1T[i].split("").length === 2) {
             if (sq1T[i].split("")[1] === "1") {
@@ -173,8 +173,8 @@ function drawSq1() {
     for (let i=0; i<cps.length; i++) {
         let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
         let polyB = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-        let color = colors[sq1.indexOf(sq1B[i])];
-        let iColor = iColors[sq1.indexOf(sq1B[i])];
+        let color = colorsSq1[sq1.indexOf(sq1B[i])];
+        let iColor = iColorsSq1[sq1.indexOf(sq1B[i])];
         if (sq1B[i].split("").length === 2) {
             if (sq1B[i].split("")[1] === "1") {
                 if (i === cps.length-1) {
@@ -214,7 +214,7 @@ function drawSq1() {
     //InnerColors
     for (let i=0; i<icps.length; i++) {
         let polyB = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-        let iColor = iColors[sq1.indexOf(sq1B[i])];
+        let iColor = iColorsSq1[sq1.indexOf(sq1B[i])];
 
         if (sq1B[i].split("").length === 2) {
             if (sq1B[i].split("")[1] === "1") {
@@ -339,7 +339,7 @@ function changeColor() {
 
     colorT = tc;
     colorB = bc;
-    iColors = [
+    iColorsSq1 = [
         colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,
         colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB
     ];
