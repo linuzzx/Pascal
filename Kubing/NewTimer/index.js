@@ -32,7 +32,6 @@ $(function () {
 
 $(window).resize(function(){
     adjustSize();
-    drawScramble();
 });
 
 function waitForTimer() {
@@ -300,6 +299,8 @@ function adjustSize() {
     let svgWidth = $("#right").width() * 0.75;
     let svgHeight = svgWidth * 3/4;
 
-    $("#cube").attr("width", svgWidth);
-    $("#cube").attr("height", svgHeight);
+    $(".svgScramble").attr("width", svgWidth);
+    $(".svgScramble").attr("height", svgHeight);
+    
+    drawScramble();
 }

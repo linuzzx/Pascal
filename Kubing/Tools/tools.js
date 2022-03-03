@@ -458,6 +458,7 @@ let colors222 = [
 
 // Draw scramble
 {
+    let stroke = "#333333";
     function draw333Svg(svgID, scr) {
         resetDrawSvg(svgID);
         applyMoves(scr);
@@ -469,7 +470,6 @@ let colors222 = [
         let h = w;
         let space = w/3;
         let fill = "";
-        let stroke = "black";
         let strokeWidth = 1;
 
         let num = 0;
@@ -581,7 +581,6 @@ let colors222 = [
         let h = w;
         let space = ($(svgID).width() / 13) / 3;
         let fill = "";
-        let stroke = "black";
         let strokeWidth = 1;
 
         let num = 0;
@@ -1063,8 +1062,8 @@ let colors222 = [
                     }
                 }
 
-                $(poly).attr("style", "fill:"+color+";stroke:gray;stroke-width:1");
-                $(polyT).attr("style", "fill:"+iColor+";stroke:gray;stroke-width:1");
+                $(poly).attr("style", "fill:"+color+";stroke:"+stroke+";stroke-width:1");
+                $(polyT).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
 
                 $("#sq1T").append(poly);
                 $("#sq1T").append(polyT);
@@ -1089,7 +1088,7 @@ let colors222 = [
                     }
                 }
 
-                $(polyT).attr("style", "fill:"+iColor+";stroke:gray;stroke-width:1");
+                $(polyT).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
 
                 $("#sq1T").append(polyT);
             }
@@ -1129,8 +1128,8 @@ let colors222 = [
                     }
                 }
 
-                $(poly).attr("style", "fill:"+color+";stroke:gray;stroke-width:1");
-                $(polyB).attr("style", "fill:"+iColor+";stroke:gray;stroke-width:1");
+                $(poly).attr("style", "fill:"+color+";stroke:"+stroke+";stroke-width:1");
+                $(polyB).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
 
                 $("#sq1B").append(poly);
                 $("#sq1B").append(polyB);
@@ -1155,7 +1154,7 @@ let colors222 = [
                     }
                 }
 
-                $(polyB).attr("style", "fill:"+iColor+";stroke:gray;stroke-width:1");
+                $(polyB).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
 
                 $("#sq1B").append(polyB);
             }
@@ -1168,7 +1167,7 @@ let colors222 = [
             $(rectE1).attr("y", 0);
             $(rectE1).attr("width", sq1EW/3);
             $(rectE1).attr("height", sq1EH);
-            $(rectE1).attr("style", "fill:"+colorE+";stroke:"+colorBorder+";stroke-width:1");
+            $(rectE1).attr("style", "fill:"+colorE+";stroke:"+stroke+";stroke-width:1");
             $("#sq1E").append(rectE1);
 
             let eW = eFlipped? sq1EW/3: 2*sq1EW/3;
@@ -1178,7 +1177,7 @@ let colors222 = [
             $(rectE2).attr("y", 0);
             $(rectE2).attr("width", eW);
             $(rectE2).attr("height", sq1EH);
-            $(rectE2).attr("style", "fill:"+eC+";stroke:"+colorBorder+";stroke-width:1");
+            $(rectE2).attr("style", "fill:"+eC+";stroke:"+stroke+";stroke-width:1");
             $("#sq1E").append(rectE2);
         }
     }
