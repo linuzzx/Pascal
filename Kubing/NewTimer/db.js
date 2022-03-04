@@ -36,32 +36,17 @@ function openDB(func, arg1 = null, arg2 = null) {
 }
 
 function editDB(key, val) {
-    /* const request = indexedDB.open(dbName);
-
-    request.onupgradeneeded = e => {
-        db = e.target.result;
-
-        const store = db.createObjectStore(storeName);
-    } */
-
     const tx = db.transaction(storeName, readwrite);
     const store = tx.objectStore(storeName);
     store.put(val, key);
+    getAllFromDB();
 }
 
 function addToDB(key, val) {
-    /* const request = indexedDB.open(dbName);
-
-    request.onupgradeneeded = e => {
-        db = e.target.result;
-
-        const store = db.createObjectStore(storeName);
-    } */
-    openDB();
-
     const tx = db.transaction(storeName, readwrite);
     const store = tx.objectStore(storeName);
     store.add(val, key);
+    getAllFromDB();
 }
 
 function getFromDB(key) {
@@ -87,10 +72,12 @@ function getAllFromDB() {
     const tx = db.transaction(storeName, readonly);
     const store = tx.objectStore(storeName);
     const request = store.getAll();
+    let data = null;
     
     request.onsuccess = e => {
-        console.log(e.target.result);
+        data = e.target.result;
         // List opp data
+        getData(data);
     }
 }
 
@@ -107,27 +94,3 @@ function removeFromDB(key) {
         console.log(e);
     };
 }
-
-/*function getFromDB(key) {
-    const tx = db.transaction(storeName, readonly);
-    const store = tx.objectStore(storeName);
-    const item = store.get(key);
-
-    return item;
-}
-
-function getAllKeysFromDB() {
-    const tx = db.transaction(storeName, readonly);
-    const store = tx.objectStore(storeName);
-    const items = store.getAllKeys();
-
-    return items.source.name;
-}
-
-function getAllValuesFromDB() {
-    const tx = db.transaction(storeName, readonly);
-    const store = tx.objectStore(storeName);
-    const items = store.getAll();
-
-    return items.result;
-}*/

@@ -24,10 +24,9 @@ let rawTime = -1;
 let curSingle = -1;
 let bestSingle = -1;
 
-let sessions = [];
-let solutions = [];
+let sessionList = [];
+let solutionList = [];
 
-let numberOfSessions = 0;
 let curSession = 0;
 
 $(function () {
@@ -40,8 +39,11 @@ $(window).resize(function(){
 });
 
 function waitForTimer() {
-    $("#cube").empty();
     $("#scramble").css("visibility","hidden");
+    $("#left").css("visibility","hidden");
+    $("#right").css("visibility","hidden");
+    $("#scramble h1").text("");
+
     if (wait055) {
         //Fiks denne
         /*$("#display h1").css("color", red);
@@ -91,6 +93,9 @@ function startTimer() {
 function stopTimer() {
     if (!stopped) {
         stopped = true;
+        $("#scramble").css("visibility","visible");
+        $("#left").css("visibility","visible");
+        $("#right").css("visibility","visible");
         $("#display h1").text(getHHmmsshh(rawTime));
         clearInterval(interval);
         setTimeout(
@@ -100,8 +105,6 @@ function stopTimer() {
 
         // Save time and scramble
         saveSolution();
-
-        getScramble();
     }
 }
 
@@ -110,8 +113,11 @@ function resetTimer() {
     timing = false;
     stopped = true;
     $("#scramble").css("visibility","visible");
+    $("#left").css("visibility","visible");
+    $("#right").css("visibility","visible");
     $("#display h1").css("color", "white");
     $("#display h1").text("0.00");
+    $("#scramble h1").text(scramble);
     drawScramble();
 }
 
@@ -155,7 +161,6 @@ function getScramble() {
     }
 
     $("#scramble h1").html(scramble);
-    $("#scramble").css("visibility","visible");
 
     drawScramble();
 }
@@ -204,38 +209,39 @@ function saveSolution() {
     //Add solution to solutions
     const date = Date.now().toString().split("").slice(0, 10).join("");
     const newSolution = new Solution(rawTime, 0, scramble, "", date);
-    solutions.push(newSolution);
-
-    sessions[curSession].solutions = solutions.slice();
-
-    openDB(editDB(sessions[curSession].id, sessions));
+    sessionList[curSession].solutions.push(newSolution);
     
-    updateStats();
+    openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
 }
 
 function updateStats() {
-    let arr = solutions.map(s => s.time);
+    let arr = sessionList[curSession].solutions.map(s => s.time);
     
-    let rArr = arr.reverse();
-    curSingle = rArr[0];
+        // pbList
+    $("#curSingle").text("-");
+    $("#bestSingle").text("-");
 
-    let sArr = arr.sort(function(a, b){return a-b});
-    bestSingle = sArr[0];
+    // timeList
+    $("#timeList").empty();
+    $("#timeList").append("<tr><th>#</th><th>Time</th><th>Ao5</th><th>Ao12</th></tr>");
 
-    $("#curSingle").text(getHHmmsshh(curSingle));
-    $("#bestSingle").text(getHHmmsshh(bestSingle));
-}
+    if (arr.length !== 0) {
+        // pbList
+        let rArr = arr.reverse();
+        curSingle = rArr[0];
 
-function renameSession() {
-    
-}
+        let sArr = arr.sort(function(a, b){return a-b});
+        bestSingle = sArr[0];
 
-function newSession() {
-    checkSessions();
-}
+        $("#curSingle").text(getHHmmsshh(curSingle));
+        $("#bestSingle").text(getHHmmsshh(bestSingle));
 
-function deleteSession() {
-    checkSessions();
+        // timeList
+        for (let s of sessionList[curSession].solutions) {
+            let i = sessionList[curSession].solutions.indexOf(s) + 1;
+            $("#timeList").append("<tr><td>"+i+"</td><td>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+        }
+    }
 }
 
 function showOptions() {
@@ -246,62 +252,72 @@ function closeOptions() {
     $("#outerOptions").css("display", "none");
 }
 
-function initActions() {
-    connectToDB();
-    checkSessions();
-    keyActions();
-
-    curScrType = $("#scrambleType").children(":selected").attr("id");
-
-    getScramble();
-
-    $("#innerOptions").on("click", function (e) {
-        e.stopPropagation();
-    });
-
-    $("#scrambleType").on("change", function () {
-        curScrType = $("#scrambleType").children(":selected").attr("id");
-        getScramble();
-    });
+function connectAndGetDataFromDB() {
+    openDB(getAllFromDB);
 }
 
-function connectToDB() {
-    const arr = openDB(getAllFromDB);
-    console.log(arr);
-    if (arr) {
-        sessions = arr.slice();
+function getData(data) {
+    let arr = data;
+    if (arr.length !== 0) {
+        sessionList = arr.slice();
+
+        checkSessions();
     }
     else {
-        numberOfSessions = 0;
         createSession();
     }
 }
 
 function createSession() {
-    let sessionId = "session_"+formatSessionID(numberOfSessions + 1);
-    let sessionName = "Session "+(numberOfSessions + 1);
-    let sessionRank = numberOfSessions;
+    $("#btnNew").blur();
+    let num = sessionList.length + 1;
+    let sessionId = formatSessionID(num);
+    let sessionName = "Session "+num;
+    let sessionRank = sessionList.length;
     let sessionScrType = scrTypes[0];
     let sessionSolutions = [];
+    curSession = sessionList.length;
+    curScrType = sessionScrType;
+    
     const nSession = new Session(sessionId, sessionName,sessionRank,sessionScrType, sessionSolutions);
-    sessions.push(nSession);
 
-    // ???
-    $("#sessionList").append("<option id='"+sessionId+"'>Session1</option>")
+    openDB(editDB, sessionId, nSession);
+    resetTimer();
+}
+
+function renameSession() {
+    
+}
+
+function deleteSession() {
+    checkSessions();
 }
 
 function formatSessionID(id) {
-    let f = "";
+    let f = "session_";
     if (id < 10) {
-        f = "0"+id;
+        f += "0"+id;
     }
     else {
-        f = id;
+        f += id;
     }
     return f;
 }
 
 function checkSessions() {
+    // Clear sessionList
+    $("#sessionList").empty();
+    // List sessions
+    for (let s of sessionList) {
+        if (sessionList.indexOf(s) === curSession) {
+            $("#sessionList").append("<option id='"+s.id+"' value='"+s.rank+"' data-rank='"+s.rank+"' selected>"+s.name+"</option>");
+        }
+        else {
+            $("#sessionList").append("<option id='"+s.id+"' value='"+s.rank+"' data-rank='"+s.rank+"'>"+s.name+"</option>");
+        }
+    }
+
+    // Session buttons
     if ($("#sessionList").length === 1) {
         $("#btnDelete").prop('disabled', true);
     }
@@ -315,6 +331,171 @@ function checkSessions() {
     else {
         $("#btnNew").prop('disabled', false);
     }
+
+    updateSession();
+}
+
+function changeSession() {
+    curSession = $("#sessionList").val();
+    $("#sessionList").val(curSession).change();
+    //curSession = $("#sessionList").children(":selected").attr("data-rank");
+    resetTimer();
+    
+    updateSession();
+    $("#sessionList").blur();
+}
+
+function updateSession() {
+    updateScrType();
+    updateStats();
+}
+
+function changeScrType() {
+    curScrType = $("#scrambleType").children(":selected").attr("id");
+    $("#scrambleType").blur();
+    getScramble();
+
+    sessionList[curSession].scrType = curScrType;
+
+    openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
+}
+
+function updateScrType() {
+    curScrType = sessionList[curSession].scrType;
+    $("#scrambleType").val(curScrType);
+    getScramble();
+}
+
+function getMo3(s, i) {
+    const num = 3;
+    if (i >= num) {
+        let avg = 0;
+        let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
+            let pA = a.penalty === -1 ? -Infinity : a.penalty;
+            let pB = b.penalty === -1 ? -Infinity : b.penalty;
+            return (a.time+pA)-(b.time+pB);});
+
+        for (let a of arr) {
+            avg += Math.floor(a.time/10);
+        }
+        
+        avg /= arr.length;
+
+        if (avg === -Infinity) {
+            return ("DNF");
+        }
+        else {
+            return getHHmmsshh(avg*10);
+        }
+    }
+    else {
+        return "-";
+    }
+}
+
+function getAo5(s, i) {
+    const num = 5;
+    if (i >= num) {
+        let avg = 0;
+        let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
+            let pA = a.penalty === -1 ? -Infinity : a.penalty;
+            let pB = b.penalty === -1 ? -Infinity : b.penalty;
+            return (a.time+pA)-(b.time+pB);});
+        let nArr = arr.slice(1,(num-1));
+
+        for (let a of nArr) {
+            avg += Math.floor(a.time/10);
+        }
+        
+        avg /= nArr.length;
+
+        if (avg === -Infinity) {
+            return ("DNF");
+        }
+        else {
+            return getHHmmsshh(avg*10);
+        }
+    }
+    else {
+        return "-";
+    }
+}
+
+function getAo12(s, i) {
+    const num = 12;
+    if (i >= num) {
+        let avg = 0;
+        let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
+            let pA = a.penalty === -1 ? -Infinity : a.penalty;
+            let pB = b.penalty === -1 ? -Infinity : b.penalty;
+            return (a.time+pA)-(b.time+pB);});
+        let nArr = arr.slice(1,(num-1));
+
+        for (let a of nArr) {
+            avg += Math.floor(a.time/10);
+        }
+        
+        avg /= nArr.length;
+
+        if (avg === -Infinity) {
+            return ("DNF");
+        }
+        else {
+            return getHHmmsshh(avg*10);
+        }
+    }
+    else {
+        return "-";
+    }
+}
+
+function getAo25(s, i) {
+    
+}
+
+function getAo50(s, i) {
+    
+}
+
+function getAo100(s, i) {
+    
+}
+
+function getAo200(s, i) {
+    
+}
+
+function getAo500(s, i) {
+    
+}
+
+function getAo1000(s, i) {
+    
+}
+
+function getAo2000(s, i) {
+    
+}
+
+function getAo5000(s, i) {
+    
+}
+
+function getAo10000(s, i) {
+    
+}
+
+function initActions() {
+    connectAndGetDataFromDB();
+    keyActions();
+
+    curScrType = $("#scrambleType").children(":selected").attr("id");
+
+    getScramble();
+
+    $("#innerOptions").on("click", function (e) {
+        e.stopPropagation();
+    });
 }
 
 function keyActions() {

@@ -17,7 +17,7 @@
 <body>
     <div id="outerOptions" onclick="closeOptions()">
         <div id="innerOptions">
-            
+            <h1 style="color: white; text-align: center">Settings is under production!</h1>
         </div>
     </div>
     
@@ -25,35 +25,37 @@
         <div id="left">
             <img id="btnOptions" src="./resources/settings.png" onclick="showOptions()">
             <div>
-                <select id="sessionList"></select>
-                <button id="btnRename" onclick="renameSession()">Rename</button>
-                <button id="btnNew" onclick="newSession()">New</button>
-                <button id="btnDelete" onclick="deleteSession()">Delete</button>
+                <select id="sessionList" onchange="changeSession()"></select>
+                <button id="btnNew" onclick="createSession()">New</button>
+                <button id="btnRename" onclick="renameSession()" disabled>Rename</button>
+                <button id="btnDelete" onclick="deleteSession()" disabled>Delete</button>
             </div><br/>
-            <div id="pbList">
-                <table>
+            <div>
+                <table id="pbList">
                     <tr><th></th><th>Current</th><th>Best</th></tr>
                     <tr><th>Single</th><td id="curSingle">-</td><td id="bestSingle">-</td></tr>
                 </table>
-            </div>
-            <div id="timeList">
-
+            </div><br/>
+            <div>
+                <table id="timeList">
+                    <tr><th>#</th><th>Time</th><th>Ao5</th><th>Ao12</th></tr>
+                </table>
             </div>
         </div>
         <div id="middle">
             <div id="scramble">
-                <select id="scrambleType">
-                    <option id="333">3x3</option>
-                    <option id="222">2x2</option>
-                    <option id="444">4x4</option>
-                    <option id="555">5x5</option>
-                    <option id="666">6x6</option>
-                    <option id="777">7x7</option>
-                    <option id="clock">Clock</option>
-                    <option id="mega">Megaminx</option>
-                    <option id="pyra">Pyraminx</option>
-                    <option id="skewb">Skewb</option>
-                    <option id="sq1">Square-1</option>
+                <select id="scrambleType" onchange="changeScrType()">
+                    <option id="333" value="333">3x3</option>
+                    <option id="222" value="222">2x2</option>
+                    <option id="444" value="444">4x4</option>
+                    <option id="555" value="555">5x5</option>
+                    <option id="666" value="666">6x6</option>
+                    <option id="777" value="777">7x7</option>
+                    <option id="clock" value="clock">Clock</option>
+                    <option id="mega" value="mega">Megaminx</option>
+                    <option id="pyra" value="pyra">Pyraminx</option>
+                    <option id="skewb" value="skewb">Skewb</option>
+                    <option id="sq1" value="sq1">Square-1</option>
                 </select>
                 <h1>Scramble</h1>
             </div>

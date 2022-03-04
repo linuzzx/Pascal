@@ -13,16 +13,22 @@ body {
     overflow: hidden;
 }
 
-#pbList table {
-    width: 50%;
+#pbList, #timeList {
+    width: 75%;
     table-layout: fixed;
     border-collapse: collapse;
     color: white;
     text-align: center;
 }
 
-#pbList table, tr, th, td {
+#pbList, #timeList, tr, th, td {
     border-spacing: 1vh;
+}
+
+#timeList {
+    border-collapse: separate;
+    border-spacing: 0 1vh;
+    border-top: solid 1px white;
 }
 
 #content {
@@ -72,6 +78,7 @@ body {
 
 #btnOptions:hover {
     opacity: 0.75;
+    cursor: pointer;
 }
 
 #outerOptions {
