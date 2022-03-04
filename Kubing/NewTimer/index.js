@@ -308,9 +308,10 @@ function checkSessions() {
 function changeSession() {
     curSession = $("#sessionList").children(":selected").attr("data-rank");
     console.log("curSession",curSession);
+    //$("#sessionList option[id='1']")
     resetTimer();
     
-    updateSession();
+    checkSessions();
     $("#sessionList").blur();
 }
 
