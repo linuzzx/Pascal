@@ -214,36 +214,6 @@ function saveSolution() {
     openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
 }
 
-function updateStats() {
-    let arr = sessionList[curSession].solutions.map(s => s.time);
-    
-        // pbList
-    $("#curSingle").text("-");
-    $("#bestSingle").text("-");
-
-    // timeList
-    $("#timeList").empty();
-    $("#timeList").append("<tr><th>#</th><th>Time</th><th>Ao5</th><th>Ao12</th></tr>");
-
-    if (arr.length !== 0) {
-        // pbList
-        let rArr = arr.reverse();
-        curSingle = rArr[0];
-
-        let sArr = arr.sort(function(a, b){return a-b});
-        bestSingle = sArr[0];
-
-        $("#curSingle").text(getHHmmsshh(curSingle));
-        $("#bestSingle").text(getHHmmsshh(bestSingle));
-
-        // timeList
-        for (let s of sessionList[curSession].solutions) {
-            let i = sessionList[curSession].solutions.indexOf(s) + 1;
-            $("#timeList").append("<tr><td>"+i+"</td><td>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
-        }
-    }
-}
-
 function showOptions() {
     $("#outerOptions").css("display", "block");
 }
@@ -363,6 +333,36 @@ function updateScrType() {
     curScrType = sessionList[curSession].scrType;
     $("#scrambleType").val(curScrType);
     getScramble();
+}
+
+function updateStats() {
+    let arr = sessionList[curSession].solutions.map(s => s.time);
+    
+        // pbList
+    $("#curSingle").text("-");
+    $("#bestSingle").text("-");
+
+    // timeList
+    $("#timeList").empty();
+    $("#timeList").append("<tr><th>#</th><th>Time</th><th>Ao5</th><th>Ao12</th></tr>");
+
+    if (arr.length !== 0) {
+        // pbList
+        let rArr = arr.reverse();
+        curSingle = rArr[0];
+
+        let sArr = arr.sort(function(a, b){return a-b});
+        bestSingle = sArr[0];
+
+        $("#curSingle").text(getHHmmsshh(curSingle));
+        $("#bestSingle").text(getHHmmsshh(bestSingle));
+
+        // timeList
+        for (let s of sessionList[curSession].solutions) {
+            let i = sessionList[curSession].solutions.indexOf(s) + 1;
+            $("#timeList").append("<tr><td>"+i+"</td><td>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+        }
+    }
 }
 
 function getMo3(s, i) {
