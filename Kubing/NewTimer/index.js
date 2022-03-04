@@ -302,7 +302,7 @@ function checkSessions() {
         $("#btnNew").prop('disabled', false);
     }
 
-    changeSession();
+    updateSession();
 }
 
 function changeSession() {
