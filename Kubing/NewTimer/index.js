@@ -309,7 +309,7 @@ function checkSessions() {
     $("#sessionList").empty();
     // List sessions
     for (let s of sessionList) {
-        if (sessionList.indexOf(s) === curSession) {
+        if (s.rank === curSession) {
             $("#sessionList").append("<option id='"+s.id+"' value='"+s.rank+"' data-rank='"+s.rank+"' selected>"+s.name+"</option>");
         }
         else {
@@ -332,13 +332,12 @@ function checkSessions() {
         $("#btnNew").prop('disabled', false);
     }
 
-    updateSession();
+    changeSession();
 }
 
 function changeSession() {
-    curSession = $("#sessionList").val();
-    $("#sessionList").val(curSession).change();
-    //curSession = $("#sessionList").children(":selected").attr("data-rank");
+    curSession = $("#sessionList").children(":selected").attr("data-rank");
+    console.log("curSession",curSession);
     resetTimer();
     
     updateSession();
