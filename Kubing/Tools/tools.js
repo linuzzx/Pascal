@@ -237,15 +237,23 @@ let colors222 = [
         for (let j=0; j<7; j++) {
             scr += "<span>";
             for (let i=0; i<11; i++) {
+                let last = "";
                 if (i === 10) {
-                    scr += uExtra[Math.floor(Math.random() * uExtra.length)];
+                    if (last === "++") {
+                        scr += "U";
+                    }
+                    else {
+                        scr += "U'";
+                    }
                 }
                 else {
                     if (i % 2 === 0) {
                         scr += "R"+movesExtra[Math.floor(Math.random() * movesExtra.length)]+" ";
                     }
                     else {
-                        scr += "D"+movesExtra[Math.floor(Math.random() * movesExtra.length)]+" ";
+                        const e = movesExtra[Math.floor(Math.random() * movesExtra.length)];
+                        scr += "D"+e+" ";
+                        last = e;
                     }
                 }
             }

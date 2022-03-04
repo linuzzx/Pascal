@@ -26,6 +26,7 @@ body {
 }
 
 #timeList {
+    overflow-y: scroll;
     border-collapse: separate;
     border-spacing: 0 1vh;
     border-top: solid 1px white;
