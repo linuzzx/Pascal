@@ -236,8 +236,8 @@ let colors222 = [
 
         for (let j=0; j<7; j++) {
             scr += "<span>";
+            let last = "";
             for (let i=0; i<11; i++) {
-                let last = "";
                 if (i === 10) {
                     if (last === "++") {
                         scr += "U";
