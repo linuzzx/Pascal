@@ -493,7 +493,7 @@ function initActions() {
     getScramble();
 
     $("#timeList").parent().css("overflow-y", "scroll");
-    $("#timeList").parent().css("max-height", "55%");
+    $("#timeList").parent().css("max-height", "70vh");
 
     $("#innerOptions").on("click", function (e) {
         e.stopPropagation();
