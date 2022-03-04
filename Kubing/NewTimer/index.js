@@ -306,9 +306,10 @@ function checkSessions() {
 }
 
 function changeSession() {
-    curSession = $("#sessionList").children(":selected").attr("data-rank");
+    //curSession = $("#sessionList").children(":selected").attr("data-rank");
+    curSession = parseInt($("#sessionList").val());
     console.log("curSession",curSession);
-    //$("#sessionList option[id='1']")
+    
     resetTimer();
     
     checkSessions();
