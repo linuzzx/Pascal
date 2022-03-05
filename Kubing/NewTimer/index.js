@@ -359,8 +359,8 @@ function updateStats() {
 
         // timeList
         for (let s of sessionList[curSession].solutions) {
-            let i = sessionList[curSession].solutions.indexOf(s) + 1;
-            $("#timeList").append("<tr><td>"+i+"</td><td>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+            let i = sessionList[curSession].solutions.indexOf(s);
+            $("#timeList").append("<tr><td>"+(i + 1)+"</td><td>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
         }
     }
 }
@@ -394,58 +394,12 @@ function getMo3(s, i) {
 
 function getAo5(s, i) {
     const num = 5;
-    if (i >= num) {
-        let avg = 0;
-        let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
-            let pA = a.penalty === -1 ? -Infinity : a.penalty;
-            let pB = b.penalty === -1 ? -Infinity : b.penalty;
-            return (a.time+pA)-(b.time+pB);});
-        let nArr = arr.slice(1,(num-1));
-
-        for (let a of nArr) {
-            avg += Math.floor(a.time/10);
-        }
-        
-        avg /= nArr.length;
-
-        if (avg === -Infinity) {
-            return ("DNF");
-        }
-        else {
-            return getHHmmsshh(avg*10);
-        }
-    }
-    else {
-        return "-";
-    }
+    return getAvg(s, i, num);
 }
 
 function getAo12(s, i) {
     const num = 12;
-    if (i >= num) {
-        let avg = 0;
-        let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
-            let pA = a.penalty === -1 ? -Infinity : a.penalty;
-            let pB = b.penalty === -1 ? -Infinity : b.penalty;
-            return (a.time+pA)-(b.time+pB);});
-        let nArr = arr.slice(1,(num-1));
-
-        for (let a of nArr) {
-            avg += Math.floor(a.time/10);
-        }
-        
-        avg /= nArr.length;
-
-        if (avg === -Infinity) {
-            return ("DNF");
-        }
-        else {
-            return getHHmmsshh(avg*10);
-        }
-    }
-    else {
-        return "-";
-    }
+    return getAvg(s, i, num);
 }
 
 function getAo25(s, i) {
@@ -482,6 +436,35 @@ function getAo5000(s, i) {
 
 function getAo10000(s, i) {
     
+}
+
+function getAvg(s, i, num) {
+    if (i >= (num-1)) {
+        let avg = 0;
+        let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
+            let pA = a.penalty === -1 ? -Infinity : a.penalty;
+            let pB = b.penalty === -1 ? -Infinity : b.penalty;
+            return (a.time+pA)-(b.time+pB);});
+        let nArr = arr.slice(1,(num-1));
+        console.log(arr);
+        console.log(nArr);
+
+        for (let a of nArr) {
+            avg += Math.floor(a.time/10);
+        }
+        
+        avg /= nArr.length;
+
+        if (avg === -Infinity) {
+            return ("DNF");
+        }
+        else {
+            return getHHmmsshh(avg*10);
+        }
+    }
+    else {
+        return "-";
+    }
 }
 
 function initActions() {

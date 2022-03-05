@@ -25,10 +25,10 @@ body {
     border-spacing: 1vh;
 }
 
-#timeList {
+#pbList {
     border-collapse: separate;
     border-spacing: 0 1vh;
-    border-top: solid 1px white;
+    border-bottom: solid 1px white;
 }
 
 #content {
@@ -100,4 +100,24 @@ body {
     background-color: #1E1E1E;
     border: 1px solid black;
     padding: 1%;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: transparent; 
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: transparent; 
 }
