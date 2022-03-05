@@ -267,14 +267,64 @@ let colors222 = [
 
     function getScramblePyra() {
         //7-8 trekk
-        //l r b u tips
-        return "Under production";
+        //u r l b tips
+        let scr = "";
+        let moves = ["U", "R", "L", "B"];
+        let tips = ["u", "r", "l", "b"];
+        let movesExtra = ["", "'"];
+        let numOfMoves = [7, 8];
+        let prevMove = "";
+
+        let num = numOfMoves[Math.floor(Math.random() * numOfMoves.length)];
+
+        for (let i=0; i<num; i++) {
+            let move = moves[Math.floor(Math.random() * moves.length)];
+            let extra = movesExtra[Math.floor(Math.random() * movesExtra.length)];
+            
+            if (prevMove !== move) {
+                prevMove = move;
+                scr += move+extra+" ";
+            }
+            else {
+                i--;
+            }
+        }
+
+        for (let t of tips) {
+            let r = Math.round(Math.random() * 1);
+            if (r === 1) {
+                scr += " " + t + movesExtra[Math.floor(Math.random() * movesExtra.length)];
+            }
+        }
+
+        return scr.trim();
     }
 
     function getScrambleSkewb() {
         //8-9 trekk
         //U R L B
-        return "Under production";
+        let scr = "";
+        let moves = ["U", "R", "L", "B"];
+        let movesExtra = ["", "'"];
+        let numOfMoves = [8, 9];
+        let prevMove = "";
+
+        let num = numOfMoves[Math.floor(Math.random() * numOfMoves.length)];
+
+        for (let i=0; i<num; i++) {
+            let move = moves[Math.floor(Math.random() * moves.length)];
+            let extra = movesExtra[Math.floor(Math.random() * movesExtra.length)];
+            
+            if (prevMove !== move) {
+                prevMove = move;
+                scr += move+extra+" ";
+            }
+            else {
+                i--;
+            }
+        }
+
+        return scr.trim();
     }
 
     let currentSq1 = ["a2","b","c1","c2","d","e1","e2","f","g1","g2","h","a1","i2","j","k1","k2","l","m1","m2","n","o1","o2","p","i1"];
