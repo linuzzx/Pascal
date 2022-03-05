@@ -519,6 +519,10 @@ function adjustSize() {
 
     $(".svgScramble").attr("width", svgWidth);
     $(".svgScramble").attr("height", svgHeight);
+
+    let pad = $("#content").outerHeight()-$("#content").height();
+
+    $("#timeList").attr("height", $("#left").height()-($("#btnOptions").outerHeight()+$("#sessionOptions").outerHeight()+$("#pbList").outerHeight()));
     
     drawScramble();
 }
