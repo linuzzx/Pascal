@@ -322,7 +322,6 @@ function updateSession() {
 function changeScrType() {
     curScrType = $("#scrambleType").children(":selected").attr("id");
     $("#scrambleType").blur();
-    getScramble();
 
     sessionList[curSession].scrType = curScrType;
 
