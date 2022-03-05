@@ -445,8 +445,6 @@ function getAvg(s, i, num) {
             let pB = b.penalty === -1 ? -Infinity : b.penalty;
             return (a.time+pA)-(b.time+pB);});
         let nArr = arr.slice(1,(num-1));
-        console.log(arr);
-        console.log(nArr);
 
         for (let a of nArr) {
             avg += Math.floor(a.time/10);
@@ -521,7 +519,7 @@ function adjustSize() {
 
     let pad = $("#content").outerHeight()-$("#content").height();
 
-    $("#timeList").attr("height", $("#left").height()-($("#btnOptions").outerHeight()+$("#sessionOptions").outerHeight()+$("#pbList").outerHeight()));
+    //$("#timeList").attr("height", $("#left").height()-($("#btnOptions").outerHeight()+$("#sessionOptions").outerHeight()+$("#pbList").outerHeight()));
     
     drawScramble();
 }
