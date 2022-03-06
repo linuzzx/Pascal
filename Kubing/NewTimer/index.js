@@ -322,6 +322,13 @@ function updateSession() {
 function changeScrType() {
     curScrType = $("#scrambleType").children(":selected").attr("id");
     $("#scrambleType").blur();
+    
+    if (curScrType === "mega") {
+        $("#scramble h1").css("text-align", "left");
+    }
+    else {
+        $("#scramble h1").css("text-align", "center");
+    }
 
     sessionList[curSession].scrType = curScrType;
 

@@ -188,7 +188,7 @@ let colors222 = [
         let scr = "";
         let moves = ["R", "F", "U"];
         let movesExtra = ["", "'", "2"];
-        let numOfMoves = [9, 10];
+        let numOfMoves = [9, 10, 11];
         let prevMove = "";
 
         let num = numOfMoves[Math.floor(Math.random() * numOfMoves.length)];
