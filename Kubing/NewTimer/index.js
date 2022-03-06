@@ -256,7 +256,11 @@ function createSession() {
 }
 
 function renameSession() {
-    
+    let sName = prompt("Enter session name:", sessionList[curSession].name);
+    if (sName) {
+        sessionList[curSession].name = sName;
+        openDB(editDB, sessionList[curSession].id, sessionList[curSession])
+    }
 }
 
 function deleteSession() {
@@ -322,7 +326,7 @@ function updateSession() {
 function changeScrType() {
     curScrType = $("#scrambleType").children(":selected").attr("id");
     $("#scrambleType").blur();
-    
+
     if (curScrType === "mega") {
         $("#scramble h1").css("text-align", "left");
     }
