@@ -414,7 +414,7 @@ function updateStats() {
         if (arr.length >= 3) {
             let curMo3 = getMo3(sessionList[curSession], sessionList[curSession].solutions.length-1);
             let bestMo3 = getBestAvg(3);
-            $("#pbList").append("<tr><th>Mo3</th><td id='curMo3' class='cellToClick' onclick='showInfo("+i+", 5)>"+curMo3+"</td><td id='bestMo3' class='cellToClick'>"+bestMo3+"</td></tr>");
+            $("#pbList").append("<tr><th>Mo3</th><td id='curMo3' class='cellToClick'>"+curMo3+"</td><td id='bestMo3' class='cellToClick'>"+bestMo3+"</td></tr>");
         }
         if (arr.length >= 5) {
             let curAo5 = getAo5(sessionList[curSession], sessionList[curSession].solutions.length-1);
