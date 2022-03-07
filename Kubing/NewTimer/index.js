@@ -516,6 +516,14 @@ function changeListingOrder() {
     updateStats();
 }
 
+function importFromCSTimer() {
+    
+}
+
+function exportToCSTimer() {
+    
+}
+
 function initActions() {
     connectAndGetDataFromDB();
     keyActions();

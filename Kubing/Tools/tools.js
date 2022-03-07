@@ -44,7 +44,7 @@ let colors222 = [
 // Get scramble
 {
     function getScrambleNxN(n) {
-        
+
     }
 
     function getScramble333() {
@@ -1269,14 +1269,6 @@ let colors222 = [
 
         $(svgID).parent().html(svg);
     }
-}
-
-function importToTimer() {
-    
-}
-
-function exportFromTimer() {
-    
 }
 
 function getHHmmsshh(ms) {
