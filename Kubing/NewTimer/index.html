@@ -15,9 +15,14 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div id="outerOptions" onclick="closeOptions()">
+    <div id="outerOptions" onmousedown="closeOptions()">
         <div id="innerOptions">
             <h1 style="color: white; text-align: center">Settings is under production!</h1>
+            <div>
+                <label>Show time <input type="radio" name="showTime" value="1" onclick="toggleShowTime(value)"></label>
+                <label>Hide time <input type="radio" name="showTime" value="0" onclick="toggleShowTime(value)"></label><br/>
+                <label>Custom text <input id="inpCustomPlaceholder" type="text" name="showTime" onchange="changeCustomPlaceholder(value)"></label>
+            </div><br/>
             <button onclick="importFromCSTimer()" disabled>Import from CSTimer</button>
         </div>
     </div>

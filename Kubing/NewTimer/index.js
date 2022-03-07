@@ -17,7 +17,7 @@ let wait055 = false;
 let showTime = true;
 let listLatestFirst = true;
 
-let customMessage = "Timing";
+let customPlaceholder = "Timing";
 
 let svgWidth, svgHeight;
 
@@ -29,6 +29,8 @@ let sessionList = [];
 let solutionList = [];
 
 let curSession = 0;
+
+let changingOptions = false;
 
 $(function () {
     initActions();
@@ -85,7 +87,7 @@ function startTimer() {
             $("#display h1").text(getHHmmsshh(rawTime));
         }
         else {
-            $("#display h1").text(customMessage);
+            $("#display h1").text(customPlaceholder);
         }
     }, 10);
     
@@ -216,10 +218,12 @@ function saveSolution() {
 }
 
 function showOptions() {
+    changingOptions = true;
     $("#outerOptions").css("display", "block");
 }
 
 function closeOptions() {
+    changingOptions = false;
     $("#outerOptions").css("display", "none");
 }
 
@@ -516,6 +520,26 @@ function changeListingOrder() {
     updateStats();
 }
 
+function toggleShowTime(val) {
+    if (val === "1") {
+        showTime = true;
+        $("#inpCustomPlaceholder").prop("disabled",true);
+    }
+    else {
+        showTime = false;
+        $("#inpCustomPlaceholder").prop("disabled",false);
+    }
+}
+
+function changeCustomPlaceholder(val) {
+    if (val.trim() !== "") {
+        customPlaceholder = val.trim();
+    }
+    else {
+        $("#inpCustomPlaceholder").val(customPlaceholder);
+    }
+}
+
 function importFromCSTimer() {
     
 }
@@ -541,36 +565,50 @@ function initActions() {
 
     $("#timeList").parent().css("overflow-y", "scroll");
 
-    $("#innerOptions").on("click", function (e) {
+    if (showTime) {
+        $("input:radio[name=showTime]").filter("[value=1]").prop('checked', true);
+        $("#inpCustomPlaceholder").prop("disabled",true);
+    }
+    else {
+        $("input:radio[name=showTime]").filter("[value=0]").prop('checked', true);
+        $("#inpCustomPlaceholder").prop("disabled",false);
+    }
+    $("#inpCustomPlaceholder").val(customPlaceholder);
+
+    $("#innerOptions").on("mousedown", function (e) {
         e.stopPropagation();
     });
 }
 
 function keyActions() {
     $("html").on('keydown', function (e) {
-        if (timing) {
-            if (e.keyCode !== 27) {
-                stopTimer();
-            }
-        }
-        else {
-            if (e.keyCode === 32) {
-                if (!ready) {
-                    waitForTimer();
+        if (!changingOptions) {
+            if (timing) {
+                if (e.keyCode !== 27) {
+                    stopTimer();
                 }
             }
-        }
-        if (e.keyCode === 27) {
-            resetTimer();
+            else {
+                if (e.keyCode === 32) {
+                    if (!ready) {
+                        waitForTimer();
+                    }
+                }
+            }
+            if (e.keyCode === 27) {
+                resetTimer();
+            }
         }
     })
     .on('keyup', function (e) {
-        if (e.keyCode === 32) {
-            if (ready && !timing) {
-                startTimer();
-            }
-            else if (wait055 && !ready && !timing) {
-                resetTimer();
+        if (!changingOptions) {
+            if (e.keyCode === 32) {
+                if (ready && !timing) {
+                    startTimer();
+                }
+                else if (wait055 && !ready && !timing) {
+                    resetTimer();
+                }
             }
         }
     });

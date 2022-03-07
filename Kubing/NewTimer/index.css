@@ -13,6 +13,10 @@ body {
     overflow: hidden;
 }
 
+label {
+    color: white;
+}
+
 #left {
     height: 100vh;
 }
