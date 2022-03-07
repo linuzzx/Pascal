@@ -415,18 +415,50 @@ function updateStats() {
             let curMo3 = getMo3(sessionList[curSession], sessionList[curSession].solutions.length-1);
             let bestMo3 = getBestAvg(3);
             $("#pbList").append("<tr><th>Mo3</th><td id='curMo3' class='cellToClick'>"+curMo3+"</td><td id='bestMo3' class='cellToClick'>"+bestMo3+"</td></tr>");
+        
+            $("#curMo3").on("click", function() {
+                console.log(mo3s);
+                let i = mo3s.indexOf(curMo3) + 2;
+                showInfo(i, 3);
+            });
+            
+            $("#bestMo3").on("click", function() {
+                let i = mo3s.indexOf(bestMo3) + 2;
+                showInfo(i, 3);
+            });
         }
         if (arr.length >= 5) {
             let curAo5 = getAo5(sessionList[curSession], sessionList[curSession].solutions.length-1);
             let bestAo5 = getBestAvg(5);
             $("#pbList").append("<tr><th>Ao5</th><td id='curAo5' class='cellToClick'>"+curAo5+"</td><td id='bestAo5' class='cellToClick'>"+bestAo5+"</td></tr>");
+        
+            $("#curAo5").on("click", function() {
+                let i = ao5s.indexOf(curAo5) + 4;
+                showInfo(i, 5);
+            });
+            
+            $("#bestAo5").on("click", function() {
+                let i = ao5s.indexOf(bestAo5) + 4;
+                showInfo(i, 5);
+            });
         }
         if (arr.length >= 12) {
             let curAo12 = getAo12(sessionList[curSession], sessionList[curSession].solutions.length-1);
             let bestAo12 = getBestAvg(12);
             $("#pbList").append("<tr><th>Ao12</th><td id='curAo12' class='cellToClick'>"+curAo12+"</td><td id='bestAo12' class='cellToClick'>"+bestAo12+"</td></tr>");
+        
+            $("#curAo12").on("click", function() {
+                let i = ao12s.indexOf(curAo12) + 11;
+                showInfo(i, 12);
+            });
+            
+            $("#bestAo12").on("click", function() {
+                let i = ao12s.indexOf(bestAo12) + 11;
+                showInfo(i, 12);
+            });
         }
     }
+    adjustSize();
 }
 
 function showInfo(i, num) {
@@ -440,9 +472,9 @@ function showInfo(i, num) {
             info = "Mo3: \n\n"
         }
         info = "Ao" + num + ": \n\n";
-        for (let n = 1; n <= num; n++) {
+        for (let n = 0; n < num; n++) {
             let s = sessionList[curSession].solutions[i-(num-n)];
-            info += n + ". " + getHHmmsshh(s.time) + "   " + s.scramble + "\n";
+            info += (n + 1) + ". " + getHHmmsshh(s.time) + "   " + s.scramble + "\n";
         }
     }
     alert(info);
@@ -695,6 +727,15 @@ function adjustSize() {
 
     let h = $("#content").height() - $("#notTimeList").height();
     $("#timeList").parent().css("max-height", h);
+    
+    if (!listLatestFirst) {
+        let d = $('#timeList').parent();
+        d.scrollTop(d.prop("scrollHeight"));
+    }
+    else {
+        let d = $('#timeList').parent();
+        d.scrollTop(0);
+    }
 
     drawScramble();
 }
