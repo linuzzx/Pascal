@@ -349,7 +349,7 @@ function updateScrType() {
 function updateStats() {
     let arr = sessionList[curSession].solutions.map(s => s.time);
     
-        // pbList
+    // pbList
     $("#curSingle").text("-");
     $("#bestSingle").text("-");
 
@@ -366,17 +366,28 @@ function updateStats() {
 
         $("#curSingle").text(getHHmmsshh(curSingle));
         $("#bestSingle").text(getHHmmsshh(bestSingle));
+        
+        $("#curSingle").on("click", function() {
+            console.log(sessionList[curSession].solutions[arr.indexOf(curSingle)]);
+            let s = sessionList[curSession].solutions[arr.indexOf(curSingle)];
+            showInfo(s);
+        });
+        
+        $("#bestSingle").on("click", function() {
+            let s = sessionList[curSession].solutions[arr.indexOf(bestSingle)];
+            showInfo(s);
+        });
 
         // timeList
         if (listLastestFirst) {
-            for (let s of sessionList[curSession].solutions) {
-                let i = sessionList[curSession].solutions.indexOf(s);
+            for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
+                let s = sessionList[curSession].solutions[i];
                 $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='tdToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='tdToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='tdToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
             }
         }
         else {
-            for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
-                let s = sessionList[curSession].solutions[i];
+            for (let s of sessionList[curSession].solutions) {
+                let i = sessionList[curSession].solutions.indexOf(s);
                 $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='tdToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='tdToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='tdToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
             }
         }
