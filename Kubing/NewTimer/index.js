@@ -28,6 +28,11 @@ let bestSingle = -1;
 let sessionList = [];
 let solutionList = [];
 
+//Average arrays
+let mo3s = [];
+let ao5s = [];
+let ao12s = [];
+
 let curSession = 0;
 
 let changingOptions = false;
@@ -355,13 +360,37 @@ function updateStats() {
     let arr = solArr.slice();
     
     // pbList
-    $("#curSingle").text("-");
-    $("#bestSingle").text("-");
+    $("#pbList").empty();
+    $("#pbList").append("<tr><th>Single</th><td id='curSingle' class='cellToClick'>-</td><td id='bestSingle' class='cellToClick'>-</td></tr>");
 
     // timeList
     $("#timeList").empty();
 
+    emptyAvgArrays();
+
     if (arr.length !== 0) {
+        // timeList
+        if (listLatestFirst) {
+            for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
+                let s = sessionList[curSession].solutions[i];
+                let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
+                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getAo5(sessionList[curSession], i)+"</td>";
+                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getAo12(sessionList[curSession], i)+"</td>";
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
+                getMo3(sessionList[curSession], i);
+            }
+        }
+        else {
+            for (let s of sessionList[curSession].solutions) {
+                let i = sessionList[curSession].solutions.indexOf(s);
+                let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
+                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getAo5(sessionList[curSession], i)+"</td>";
+                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getAo12(sessionList[curSession], i)+"</td>";
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
+                getMo3(sessionList[curSession], i);
+            }
+        }
+
         // pbList
         let rArr = arr.reverse();
         curSingle = rArr[0];
@@ -382,64 +411,46 @@ function updateStats() {
             showInfo(i);
         });
 
-        // timeList
-        if (listLatestFirst) {
-            for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
-                let s = sessionList[curSession].solutions[i];
-                let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
-                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getAo5(sessionList[curSession], i)+"</td>";
-                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getAo12(sessionList[curSession], i)+"</td>";
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
-            }
+        if (arr.length >= 3) {
+            let curMo3 = getMo3(sessionList[curSession], sessionList[curSession].solutions.length-1);
+            let bestMo3 = getBestAvg(3);
+            $("#pbList").append("<tr><th>Mo3</th><td id='curMo3' class='cellToClick' onclick='showInfo("+i+", 5)>"+curMo3+"</td><td id='bestMo3' class='cellToClick'>"+bestMo3+"</td></tr>");
         }
-        else {
-            for (let s of sessionList[curSession].solutions) {
-                let i = sessionList[curSession].solutions.indexOf(s);
-                let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
-                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getAo5(sessionList[curSession], i)+"</td>";
-                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getAo12(sessionList[curSession], i)+"</td>";
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
-            }
+        if (arr.length >= 5) {
+            let curAo5 = getAo5(sessionList[curSession], sessionList[curSession].solutions.length-1);
+            let bestAo5 = getBestAvg(5);
+            $("#pbList").append("<tr><th>Ao5</th><td id='curAo5' class='cellToClick'>"+curAo5+"</td><td id='bestAo5' class='cellToClick'>"+bestAo5+"</td></tr>");
+        }
+        if (arr.length >= 12) {
+            let curAo12 = getAo12(sessionList[curSession], sessionList[curSession].solutions.length-1);
+            let bestAo12 = getBestAvg(12);
+            $("#pbList").append("<tr><th>Ao12</th><td id='curAo12' class='cellToClick'>"+curAo12+"</td><td id='bestAo12' class='cellToClick'>"+bestAo12+"</td></tr>");
         }
     }
 }
 
 function showInfo(i, num) {
+    let info = "";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];
-        let info = getHHmmsshh(s.time) + "   " + s.scramble;
-        alert(info);
+        info = getHHmmsshh(s.time) + "   " + s.scramble;
     }
     else {
-
+        if (num === 3) {
+            info = "Mo3: \n\n"
+        }
+        info = "Ao" + num + ": \n\n";
+        for (let n = 1; n <= num; n++) {
+            let s = sessionList[curSession].solutions[i-(num-n)];
+            info += n + ". " + getHHmmsshh(s.time) + "   " + s.scramble + "\n";
+        }
     }
+    alert(info);
 }
 
 function getMo3(s, i) {
     const num = 3;
-    if (i >= num) {
-        let avg = 0;
-        let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
-            let pA = a.penalty === -1 ? -Infinity : a.penalty;
-            let pB = b.penalty === -1 ? -Infinity : b.penalty;
-            return (a.time+pA)-(b.time+pB);});
-
-        for (let a of arr) {
-            avg += Math.floor(a.time/10);
-        }
-        
-        avg /= arr.length;
-
-        if (avg === -Infinity) {
-            return ("DNF");
-        }
-        else {
-            return getHHmmsshh(avg*10);
-        }
-    }
-    else {
-        return "-";
-    }
+    return getAvg(s, i, num);
 }
 
 function getAo5(s, i) {
@@ -489,13 +500,31 @@ function getAo10000(s, i) {
 }
 
 function getAvg(s, i, num) {
+    let avgArr;
+
+    if (num === 3) {
+        avgArr = mo3s;
+    }
+    else if (num === 5) {
+        avgArr = ao5s;
+    }
+    else if (num === 12) {
+        avgArr = ao12s;
+    }
+
     if (i >= (num-1)) {
         let avg = 0;
         let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
             let pA = a.penalty === -1 ? -Infinity : a.penalty;
             let pB = b.penalty === -1 ? -Infinity : b.penalty;
             return (a.time+pA)-(b.time+pB);});
-        let nArr = arr.slice(1,(num-1));
+        let nArr;
+        if (num === 3) {
+            nArr = arr.slice();
+        }
+        else {
+            nArr = arr.slice(1,(num-1));
+        }
 
         for (let a of nArr) {
             avg += Math.floor(a.time/10);
@@ -504,15 +533,57 @@ function getAvg(s, i, num) {
         avg /= nArr.length;
 
         if (avg === -Infinity) {
+            avgArr.push("DNF");
             return ("DNF");
         }
         else {
+            avgArr.push(avg*10);
             return getHHmmsshh(avg*10);
         }
     }
     else {
         return "-";
     }
+}
+
+function getBestAvg(num) {
+    let arr;
+
+    if (num === 3) {
+        arr = mo3s.slice();
+    }
+    else if (num === 5) {
+        arr = ao5s.slice();
+    }
+    else if (num === 12) {
+        arr = ao12s.slice();
+    }
+
+    let bAvg = Infinity;
+    
+    if (listLatestFirst) {
+        for (let i = arr.length -1; i >= 0; i--) {
+            let a = arr[i];
+            if (a < bAvg) {
+                bAvg = a;
+            }
+        }
+    }
+    else {
+        for (let a of arr) {
+            if (a < bAvg) {
+                bAvg = a;
+            }
+        }
+    }
+
+    return getHHmmsshh(bAvg);
+}
+
+function emptyAvgArrays() {
+    mo3s = [];
+    ao5s = [];
+    ao12s = [];
 }
 
 function changeListingOrder() {

@@ -1272,6 +1272,10 @@ let colors222 = [
 }
 
 function getHHmmsshh(ms) {
+    if (ms === "DNF") {
+        return "DNF";
+    }
+
     let timeStr = "";
     let cs = Math.floor((ms % 1000) / 10);
     let s = Math.floor((ms / 1000) % 60);

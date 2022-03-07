@@ -22,13 +22,10 @@ label {
 }
 
 #pbList {
-    height: 10vh;
-    border-collapse: separate;
-    border-spacing: 0 1vh;
     border-bottom: solid 1px white;
 }
 
-#pbList, #timeList, #timeListHeading {
+#pbList, #pbListHeading, #timeList, #timeListHeading {
     width: 75%;
     table-layout: fixed;
     border-collapse: collapse;
@@ -36,7 +33,7 @@ label {
     text-align: center;
 }
 
-#pbList, #timeList, #timeListHeading, tr, th, td {
+#pbList, #pbListHeading, #timeList, #timeListHeading, tr, th, td {
     border-spacing: 1vh;
 }
 
