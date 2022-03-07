@@ -23,22 +23,28 @@
     
     <div id="content">
         <div id="left">
-            <img id="btnOptions" src="./resources/settings.png" onclick="showOptions()">
-            <div id="sessionOptions">
-                <select id="sessionList" onchange="changeSession()"></select>
-                <button id="btnNew" onclick="createSession()">New</button>
-                <button id="btnRename" onclick="renameSession()">Rename</button>
-                <button id="btnDelete" onclick="deleteSession()" disabled>Delete</button>
-            </div><br/>
-            <div>
-                <table id="pbList">
-                    <tr><th></th><th>Current</th><th>Best</th></tr>
-                    <tr><th>Single</th><td id="curSingle">-</td><td id="bestSingle">-</td></tr>
-                </table>
-            </div><br/>
+            <div id="notTimeList">
+                <img id="btnOptions" src="./resources/settings.png" onclick="showOptions()">
+                <div id="sessionOptions">
+                    <select id="sessionList" onchange="changeSession()"></select>
+                    <button id="btnNew" onclick="createSession()">New</button>
+                    <button id="btnRename" onclick="renameSession()">Rename</button>
+                    <button id="btnDelete" onclick="deleteSession()" disabled>Delete</button>
+                </div><br/>
+                <div>
+                    <table id="pbList">
+                        <tr><th></th><th>Current</th><th>Best</th></tr>
+                        <tr><th>Single</th><td id="curSingle">-</td><td id="bestSingle">-</td></tr>
+                    </table>
+                </div><br/>
+                <div>
+                    <table id="timeListHeading">
+                        <tr><th>#</th><th>Time</th><th>Ao5</th><th>Ao12</th></tr>
+                    </table>
+                </div>
+            </div>
             <div>
                 <table id="timeList">
-                    <tr><th>#</th><th>Time</th><th>Ao5</th><th>Ao12</th></tr>
                 </table>
             </div>
         </div>

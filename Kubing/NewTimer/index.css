@@ -24,7 +24,7 @@ body {
     border-bottom: solid 1px white;
 }
 
-#pbList, #timeList {
+#pbList, #timeList, #timeListHeading {
     width: 75%;
     table-layout: fixed;
     border-collapse: collapse;
@@ -32,7 +32,7 @@ body {
     text-align: center;
 }
 
-#pbList, #timeList, tr, th, td {
+#pbList, #timeList, #timeListHeading, tr, th, td {
     border-spacing: 1vh;
 }
 

@@ -354,7 +354,6 @@ function updateStats() {
 
     // timeList
     $("#timeList").empty();
-    $("#timeList").append("<tr><th>#</th><th>Time</th><th>Ao5</th><th>Ao12</th></tr>");
 
     if (arr.length !== 0) {
         // pbList
@@ -484,7 +483,6 @@ function initActions() {
     getScramble();
 
     $("#timeList").parent().css("overflow-y", "scroll");
-    $("#timeList").parent().css("max-height", "70vh");
 
     $("#innerOptions").on("click", function (e) {
         e.stopPropagation();
@@ -528,9 +526,9 @@ function adjustSize() {
     $(".svgScramble").attr("width", svgWidth);
     $(".svgScramble").attr("height", svgHeight);
 
-    let pad = $("#content").outerHeight()-$("#content").height();
 
-    //$("#timeList").attr("height", $("#left").height()-($("#btnOptions").outerHeight()+$("#sessionOptions").outerHeight()+$("#pbList").outerHeight()));
-    
+    let h = $("#content").height() - $("#notTimeList").height();
+    $("#timeList").parent().css("max-height", h);
+
     drawScramble();
 }
