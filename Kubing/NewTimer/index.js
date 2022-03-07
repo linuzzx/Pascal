@@ -403,12 +403,12 @@ function updateStats() {
         
         $("#curSingle").on("click", function() {
             let i = solArr.indexOf(curSingle);
-            showInfo(i);
+            showInfo(i, 1);
         });
         
         $("#bestSingle").on("click", function() {
             let i = solArr.indexOf(bestSingle);
-            showInfo(i);
+            showInfo(i, 1);
         });
 
         if (arr.length >= 3) {
