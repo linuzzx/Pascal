@@ -36,6 +36,11 @@ body {
     border-spacing: 1vh;
 }
 
+.tdToClick:hover {
+    opacity: 0.75;
+    cursor: pointer;
+}
+
 #content {
     padding: 1vh;
     width: 100vw;

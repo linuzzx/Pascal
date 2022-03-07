@@ -329,10 +329,10 @@ function changeScrType() {
     $("#scrambleType").blur();
 
     if (curScrType === "mega") {
-        $("#scramble h1").css("text-align", "left");
+        $("#scramble").css("text-align", "left");
     }
     else {
-        $("#scramble h1").css("text-align", "center");
+        $("#scramble").css("text-align", "center");
     }
 
     sessionList[curSession].scrType = curScrType;
@@ -371,18 +371,22 @@ function updateStats() {
         if (listLastestFirst) {
             for (let s of sessionList[curSession].solutions) {
                 let i = sessionList[curSession].solutions.indexOf(s);
-                let info = getHHmmsshh(s.time) + "   " + s.scramble;
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td onclick='alert("+info+")'>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='tdToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='tdToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='tdToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
             }
         }
         else {
             for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
                 let s = sessionList[curSession].solutions[i];
-                let info = getHHmmsshh(s.time) + "   " + s.scramble;
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td onclick='alert("+info+")'>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='tdToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='tdToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='tdToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
             }
         }
     }
+}
+
+function showInfo(i) {
+    let s = sessionList[curSession].solutions[i];
+    let info = getHHmmsshh(s.time) + "   " + s.scramble;
+    alert(info);
 }
 
 function getMo3(s, i) {
@@ -490,6 +494,13 @@ function initActions() {
     keyActions();
 
     curScrType = $("#scrambleType").children(":selected").attr("id");
+
+    if (curScrType === "mega") {
+        $("#scramble").css("text-align", "left");
+    }
+    else {
+        $("#scramble").css("text-align", "center");
+    }
 
     getScramble();
 
