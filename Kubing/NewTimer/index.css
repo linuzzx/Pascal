@@ -36,7 +36,7 @@ body {
     border-spacing: 1vh;
 }
 
-.tdToClick:hover {
+.cellToClick:hover {
     opacity: 0.75;
     cursor: pointer;
 }

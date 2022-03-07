@@ -15,7 +15,7 @@ const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "mega", "py
 
 let wait055 = false;
 let showTime = true;
-let listLastestFirst = true;
+let listLatestFirst = true;
 
 let customMessage = "Timing";
 
@@ -379,16 +379,16 @@ function updateStats() {
         });
 
         // timeList
-        if (listLastestFirst) {
+        if (listLatestFirst) {
             for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
                 let s = sessionList[curSession].solutions[i];
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='tdToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='tdToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='tdToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='cellToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='cellToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='cellToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
             }
         }
         else {
             for (let s of sessionList[curSession].solutions) {
                 let i = sessionList[curSession].solutions.indexOf(s);
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='tdToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='tdToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='tdToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='cellToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='cellToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='cellToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
             }
         }
     }
@@ -498,6 +498,11 @@ function getAvg(s, i, num) {
     else {
         return "-";
     }
+}
+
+function changeListingOrder() {
+    listLatestFirst = !listLatestFirst;
+    updateStats();
 }
 
 function initActions() {
