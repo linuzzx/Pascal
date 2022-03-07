@@ -347,7 +347,8 @@ function updateScrType() {
 }
 
 function updateStats() {
-    let arr = sessionList[curSession].solutions.map(s => s.time);
+    let solArr = sessionList[curSession].solutions.map(s => s.time);
+    let arr = solArr.slice();
     
     // pbList
     $("#curSingle").text("-");
@@ -368,14 +369,13 @@ function updateStats() {
         $("#bestSingle").text(getHHmmsshh(bestSingle));
         
         $("#curSingle").on("click", function() {
-            console.log(sessionList[curSession].solutions[arr.indexOf(curSingle)]);
-            let s = sessionList[curSession].solutions[arr.indexOf(curSingle)];
-            showInfo(s);
+            let i = solArr.indexOf(curSingle);
+            showInfo(i);
         });
         
         $("#bestSingle").on("click", function() {
-            let s = sessionList[curSession].solutions[arr.indexOf(bestSingle)];
-            showInfo(s);
+            let i = solArr.indexOf(bestSingle);
+            showInfo(i);
         });
 
         // timeList
