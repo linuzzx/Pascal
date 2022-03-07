@@ -43,6 +43,10 @@ let colors222 = [
 
 // Get scramble
 {
+    function getScrambleNxN(n) {
+        
+    }
+
     function getScramble333() {
         let scr = "";
         var moves = ["R", "L", "F", "B", "U", "D"];
