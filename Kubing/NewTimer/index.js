@@ -382,22 +382,33 @@ function updateStats() {
         if (listLatestFirst) {
             for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
                 let s = sessionList[curSession].solutions[i];
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='cellToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='cellToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='cellToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+                let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
+                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getAo5(sessionList[curSession], i)+"</td>";
+                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getAo12(sessionList[curSession], i)+"</td>";
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
             }
         }
         else {
             for (let s of sessionList[curSession].solutions) {
                 let i = sessionList[curSession].solutions.indexOf(s);
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td class='cellToClick' onclick='showInfo("+i+")'>"+getHHmmsshh(s.time)+"</td><td class='cellToClick'>"+getAo5(sessionList[curSession], i)+"</td><td class='cellToClick'>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+                let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
+                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getAo5(sessionList[curSession], i)+"</td>";
+                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getAo12(sessionList[curSession], i)+"</td>";
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
             }
         }
     }
 }
 
-function showInfo(i) {
-    let s = sessionList[curSession].solutions[i];
-    let info = getHHmmsshh(s.time) + "   " + s.scramble;
-    alert(info);
+function showInfo(i, num) {
+    if (num === 1) {
+        let s = sessionList[curSession].solutions[i];
+        let info = getHHmmsshh(s.time) + "   " + s.scramble;
+        alert(info);
+    }
+    else {
+
+    }
 }
 
 function getMo3(s, i) {
