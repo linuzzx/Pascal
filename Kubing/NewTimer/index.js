@@ -374,8 +374,8 @@ function updateStats() {
             for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
                 let s = sessionList[curSession].solutions[i];
                 let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
-                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getAo5(sessionList[curSession], i)+"</td>";
-                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getAo12(sessionList[curSession], i)+"</td>";
+                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
+                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
                 $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
                 getMo3(sessionList[curSession], i);
             }
@@ -384,8 +384,8 @@ function updateStats() {
             for (let s of sessionList[curSession].solutions) {
                 let i = sessionList[curSession].solutions.indexOf(s);
                 let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
-                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getAo5(sessionList[curSession], i)+"</td>";
-                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getAo12(sessionList[curSession], i)+"</td>";
+                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
+                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
                 $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
                 getMo3(sessionList[curSession], i);
             }
@@ -410,10 +410,11 @@ function updateStats() {
             let i = solArr.indexOf(bestSingle);
             showInfo(i, 1);
         });
-
+        
         if (arr.length >= 3) {
             let curMo3 = mo3s[mo3s.length-1];
             let bestMo3 = getBestAvg(3);
+            
             $("#pbList").append("<tr><th>Mo3</th><td id='curMo3' class='cellToClick'>"+getHHmmsshh(curMo3)+"</td><td id='bestMo3' class='cellToClick'>"+getHHmmsshh(bestMo3)+"</td></tr>");
         
             $("#curMo3").on("click", function() {
@@ -579,7 +580,7 @@ function getAvg(s, i, num) {
         }
         else {
             avgArr.push(avg*10);
-            return getHHmmsshh(avg*10);
+            return avg*10;
         }
     }
     else {

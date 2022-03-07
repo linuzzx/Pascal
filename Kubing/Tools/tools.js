@@ -1272,8 +1272,11 @@ let colors222 = [
 }
 
 function getHHmmsshh(ms) {
-    if (ms === "DNF") {
-        return "DNF";
+    if (ms === "DNF" || ms === "-") {
+        return ms;
+    }
+    else if (ms === undefined) {
+        return "-";
     }
 
     let timeStr = "";
