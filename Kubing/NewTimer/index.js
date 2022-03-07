@@ -15,6 +15,7 @@ const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "mega", "py
 
 let wait055 = false;
 let showTime = true;
+let listLastestFirst = true;
 
 let customMessage = "Timing";
 
@@ -367,9 +368,19 @@ function updateStats() {
         $("#bestSingle").text(getHHmmsshh(bestSingle));
 
         // timeList
-        for (let s of sessionList[curSession].solutions) {
-            let i = sessionList[curSession].solutions.indexOf(s);
-            $("#timeList").append("<tr><td>"+(i + 1)+"</td><td>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+        if (listLastestFirst) {
+            for (let s of sessionList[curSession].solutions) {
+                let i = sessionList[curSession].solutions.indexOf(s);
+                let info = getHHmmsshh(s.time) + "   " + s.scramble;
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td onclick='alert("+info+")'>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+            }
+        }
+        else {
+            for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
+                let s = sessionList[curSession].solutions[i];
+                let info = getHHmmsshh(s.time) + "   " + s.scramble;
+                $("#timeList").append("<tr><td>"+(i + 1)+"</td><td onclick='alert("+info+")'>"+getHHmmsshh(s.time)+"</td><td>"+getAo5(sessionList[curSession], i)+"</td><td>"+getAo12(sessionList[curSession], i)+"</td></tr>");
+            }
         }
     }
 }
