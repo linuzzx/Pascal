@@ -1271,12 +1271,21 @@ let colors222 = [
     }
 }
 
-function getHHmmsshh(ms) {
+function getHHmmsshh(ms, penalty = 0, stats = false) {
     if (ms === "DNF" || ms === "-") {
         return ms;
     }
     else if (ms === undefined) {
         return "-";
+    }
+    else if (penalty === -1 && !stats) {
+        return "DNF";
+    }
+    else if (penalty === 2000) {
+        ms += 2000;
+    }
+    else if (ms === Infinity) {
+        return "DNF";
     }
 
     let timeStr = "";
@@ -1314,7 +1323,14 @@ function getHHmmsshh(ms) {
             timeStr = s + "." + cs;
         }
     }
-
+    
+    if (penalty === 2000) {
+        timeStr += "+";
+    }
+    else if (penalty === -1 && stats) {
+        timeStr = "DNF (" + timeStr + ")";
+    }
+    
     return timeStr;
 }
 

@@ -26,7 +26,8 @@ let curSingle = -1;
 let bestSingle = -1;
 
 let sessionList = [];
-let solutionList = [];
+
+let doNotScramble = false;
 
 //Average arrays
 let mo3s = [];
@@ -139,47 +140,51 @@ function resetTimer() {
 }
 
 function getScramble() {
-    switch (curScrType) {
-        case "333":
-            scramble = getScramble333();
-            break;
-        case "222":
-            scramble = getScramble222();
-            break;
-        case "444":
-            scramble = getScramble444();
-            break;
-        case "555":
-            scramble = getScramble555();
-            break;
-        case "666":
-            scramble = getScramble666();
-            break;
-        case "777":
-            scramble = getScramble777();
-            break;
-        case "clock":
-            scramble = getScrambleClock();
-            break;
-        case "mega":
-            scramble = getScrambleMega();
-            break;
-        case "pyra":
-            scramble = getScramblePyra();
-            break;
-        case "skewb":
-            scramble = getScrambleSkewb();
-            break;
-        case "sq1":
-            scramble = getScrambleSq1();
-            break;
-        default:
-            break;
+    if (!doNotScramble) {
+        switch (curScrType) {
+            case "333":
+                scramble = getScramble333();
+                break;
+            case "222":
+                scramble = getScramble222();
+                break;
+            case "444":
+                scramble = getScramble444();
+                break;
+            case "555":
+                scramble = getScramble555();
+                break;
+            case "666":
+                scramble = getScramble666();
+                break;
+            case "777":
+                scramble = getScramble777();
+                break;
+            case "clock":
+                scramble = getScrambleClock();
+                break;
+            case "mega":
+                scramble = getScrambleMega();
+                break;
+            case "pyra":
+                scramble = getScramblePyra();
+                break;
+            case "skewb":
+                scramble = getScrambleSkewb();
+                break;
+            case "sq1":
+                scramble = getScrambleSq1();
+                break;
+            default:
+                break;
+        }
+    
+        $("#scramble h1").html(scramble);
+    
+        drawScramble();
     }
 
-    $("#scramble h1").html(scramble);
-
-    drawScramble();
+    doNotScramble = false;
 }
 
 function drawScramble() {
@@ -401,8 +406,8 @@ function updateStats() {
             let i = sessionList[curSession].solutions.indexOf(s);
             let i5 = i - 4;
             let i12 = i - 11;
-
-            let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
+            
+            let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time, s.penalty)+"</td>";
             let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
             let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
             $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
@@ -434,12 +439,12 @@ function updateStats() {
         
         $("#curSingle").on("click", function() {
             let i = solArr.indexOf(curSingle);
-            showInfo(i, 1);
+            showInfo(i, 1, true);
         });
         
         $("#bestSingle").on("click", function() {
             let i = solArr.indexOf(bestSingle);
-            showInfo(i, 1);
+            showInfo(i, 1, true);
         });
         
         if (arr.length >= 3) {
@@ -470,12 +475,12 @@ function addToPBList(num, arr) {
 
     $("#"+curAvgID).on("click", function() {
         let i = arr.length-1;
-        showInfo(i, num);
+        showInfo(i, num, true);
     });
     
     $("#"+bestAvgID).on("click", function() {
         let i = arr.indexOf(bestAvg);
-        showInfo(i, num);
+        showInfo(i, num, true);
     });
 }
 
@@ -483,14 +488,14 @@ function reverseTable(table) {
     $(table).each(function(){
         let list = $(this).children('tr');
         $(this).html(list.get().reverse());
-    })
-  }
+    });
+}
 
-function showInfo(i, num) {
+function showInfo(i, num, pb = null) {
     let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];
-        info += getHHmmsshh(s.time) + "&nbsp;&nbsp;&nbsp;" + s.scramble;
+        info += getHHmmsshh(s.time, s.penalty, true) + "&nbsp;&nbsp;&nbsp;" + s.scramble;
     }
     else {
         if (num === 3) {
@@ -539,7 +544,9 @@ function showInfo(i, num) {
         let nRemove = num === 1 || num === 3 ? 0 : Math.ceil(0.05 * num);
 
         for (let j = 0; j < num; j++) {
-            arr.push(sessionList[curSession].solutions[i+j].time);
+            let s = sessionList[curSession].solutions[i+j];
+            let p = s.penalty === -1 ? Infinity : s.penalty;
+            arr.push(s.time + p);
         }
         arr.sort(function (a, b) {
             return a-b;
@@ -553,17 +560,50 @@ function showInfo(i, num) {
         
         for (let n = 0; n < num; n++) {
             let s = sessionList[curSession].solutions[i+n];
+            let p = s.penalty === -1 ? Infinity : s.penalty;
             
-            if (sArr.indexOf(s.time) !== -1) {
-                info += (n + 1) + ". (" + getHHmmsshh(s.time) + ")&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
+            if (sArr.indexOf(s.time + p) !== -1) {
+                info += (n + 1) + ". (" + getHHmmsshh(s.time, s.penalty, true) + ")&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
             }
             else {
-                info += (n + 1) + ". " + getHHmmsshh(s.time) + "&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
+                info += (n + 1) + ". " + getHHmmsshh(s.time, s.penalty, true) + "&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
             }
         }
     }
+
     $("#innerTimeStats div").html(info);
+
+    let buttons;
+    if (num === 1 && !pb) {
+        buttons = "<br/><br/><div id='penaltyOptions'>Penalty:<br/>"
+                +"<label>OK <input id='radioPenaltyOK' type='radio' name='penalty' value='0' onclick='changePenalty("+i+")'></label>&nbsp;&nbsp;"
+                +"<label>+2 <input id='radioPenalty2' type='radio' name='penalty' value='2000' onclick='changePenalty("+i+")'></label>&nbsp;&nbsp;"
+                +"<label>DNF <input id='radioPenaltyDNF' type='radio' name='penalty' value='-1' onclick='changePenalty("+i+")'></label><br/><br/>"
+                +"<button onclick='deleteSolve("+i+")'>Delete</button>"
+                +"</div>";
+        $("#innerTimeStats div").append(buttons);
+
+        let p = sessionList[curSession].solutions[i].penalty;
+        $("input:radio[name=penalty]").filter("[value="+p+"]").prop('checked', true);
+    }
     showTimeStats();
+}
+
+function changePenalty(i) {
+    sessionList[curSession].solutions[i].penalty = parseInt($('input[name="penalty"]:checked').val());
+
+    doNotScramble = true;
+
+    openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
+}
+
+function deleteSolve(i) {
+    if (confirm("Are you sure you want do delete the time?")) {
+        sessionList[curSession].solutions.splice(i, 1);
+
+        openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
+        closeTimeStats();
+    }
 }
 
 function getDDMMYYYY(ms) {
@@ -661,10 +701,8 @@ function getAvg(s, i, num) {
 
     if (i >= (num-1)) {
         let avg = 0;
-        let arr = s.solutions.map(s => s).slice(i-(num-1),i+1).sort(function(a, b) {
-            let pA = a.penalty === -1 ? -Infinity : a.penalty;
-            let pB = b.penalty === -1 ? -Infinity : b.penalty;
-            return (a.time+pA)-(b.time+pB);});
+        let arr = s.solutions.map(s => s.time + (s.penalty === -1 ? Infinity : s.penalty)).slice(i-(num-1),i+1).sort(function(a, b) {return a-b;});
+
         let nArr;
         if (num === 3) {
             nArr = arr.slice();
@@ -674,12 +712,12 @@ function getAvg(s, i, num) {
         }
 
         for (let a of nArr) {
-            avg += Math.floor(a.time/10);
+            avg += Math.floor(a/10);
         }
         
         avg /= nArr.length;
-
-        if (avg === -Infinity) {
+        
+        if (avg === Infinity) {
             avgArr.push("DNF");
             return ("DNF");
         }
