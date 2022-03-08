@@ -370,25 +370,20 @@ function updateStats() {
 
     if (arr.length !== 0) {
         // timeList
-        if (listLatestFirst) {
-            for (let i = sessionList[curSession].solutions.length -1; i >= 0; i--) {
-                let s = sessionList[curSession].solutions[i];
-                let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
-                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
-                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
-                getMo3(sessionList[curSession], i);
-            }
+        for (let s of sessionList[curSession].solutions) {
+            let i = sessionList[curSession].solutions.indexOf(s);
+            let i3 = i - 2;
+            let i5 = i - 4;
+            let i12 = i - 11;
+            let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
+            let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
+            let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
+            $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
+            getMo3(sessionList[curSession], i3);
         }
-        else {
-            for (let s of sessionList[curSession].solutions) {
-                let i = sessionList[curSession].solutions.indexOf(s);
-                let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
-                let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
-                let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
-                $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
-                getMo3(sessionList[curSession], i);
-            }
+
+        if (listLatestFirst) {
+            reverseTable("#timeList");
         }
 
         // pbList
@@ -461,6 +456,13 @@ function updateStats() {
     adjustSize();
 }
 
+function reverseTable(table) {
+    $(table).each(function(){
+        let list = $(this).children('tr');
+        $(this).html(list.get().reverse());
+    })
+  }
+
 function showInfo(i, num) {
     let info = "";
     if (num === 1) {
@@ -474,10 +476,10 @@ function showInfo(i, num) {
         else {
             let ao;
             if (num === 5) {
-                ao = ao5s[ao5s.length-1];
+                ao = ao5s[i];
             }
             else if (num === 12) {
-                ao = ao12s[ao12s.length-1];
+                ao = ao12s[i];
             }
             info = "Ao" + num + ": " + getHHmmsshh(ao) + "\n\n";
         }
