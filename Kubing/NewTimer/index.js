@@ -483,10 +483,33 @@ function showInfo(i, num) {
             }
             info = "Ao" + num + ": " + getHHmmsshh(ao) + "\n\n";
         }
+
+        let arr = [];
+        let sArr = [];
+        let nRemove = num === 1 || num === 3 ? 0 : Math.ceil(0.05 * num);
+
+        for (let j = 0; j < num; j++) {
+            arr.push(sessionList[curSession].solutions[i+j].time);
+        }
+        arr.sort(function (a, b) {
+            return a-b;
+        });
+        for (let j = 0; j < nRemove; j++) {
+            sArr.push(arr[j]);
+        }
+        for (let j = arr.length-nRemove; j < arr.length; j++) {
+            sArr.push(arr[j]);
+        }
         
         for (let n = 0; n < num; n++) {
             let s = sessionList[curSession].solutions[i+n];
-            info += (n + 1) + ". " + getHHmmsshh(s.time) + "   " + s.scramble + "\n";
+            
+            if (sArr.indexOf(s.time) !== -1) {
+                info += (n + 1) + ". (" + getHHmmsshh(s.time) + ")   " + s.scramble + "\n";
+            }
+            else {
+                info += (n + 1) + ". " + getHHmmsshh(s.time) + "   " + s.scramble + "\n";
+            }
         }
     }
     alert(info);
@@ -545,6 +568,7 @@ function getAo10000(s, i) {
 
 function getAvg(s, i, num) {
     let avgArr;
+    let toRemove = Math.ceil(0.05 * num);
 
     if (num === 3) {
         avgArr = mo3s;
@@ -567,7 +591,7 @@ function getAvg(s, i, num) {
             nArr = arr.slice();
         }
         else {
-            nArr = arr.slice(1,(num-1));
+            nArr = arr.slice(toRemove,(num-toRemove));
         }
 
         for (let a of nArr) {
