@@ -478,6 +478,10 @@ function addToPBList(num, arr) {
         showInfo(i, num, true);
     });
     
+    if (bestAvg === Infinity) {
+        bestAvg = "DNF";
+    }
+
     $("#"+bestAvgID).on("click", function() {
         let i = arr.indexOf(bestAvg);
         showInfo(i, num, true);
@@ -541,6 +545,7 @@ function showInfo(i, num, pb = null) {
 
         let arr = [];
         let sArr = [];
+        let iArr = [];
         let nRemove = num === 1 || num === 3 ? 0 : Math.ceil(0.05 * num);
 
         for (let j = 0; j < num; j++) {
@@ -553,21 +558,30 @@ function showInfo(i, num, pb = null) {
         });
         for (let j = 0; j < nRemove; j++) {
             sArr.push(arr[j]);
+            iArr.push(j);
         }
         for (let j = arr.length-nRemove; j < arr.length; j++) {
             sArr.push(arr[j]);
+            iArr.push(j);
         }
         
         for (let n = 0; n < num; n++) {
             let s = sessionList[curSession].solutions[i+n];
             let p = s.penalty === -1 ? Infinity : s.penalty;
             
-            if (sArr.indexOf(s.time + p) !== -1) {
+            if (iArr.indexOf(n) !== -1) {
                 info += (n + 1) + ". (" + getHHmmsshh(s.time, s.penalty, true) + ")&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
             }
             else {
                 info += (n + 1) + ". " + getHHmmsshh(s.time, s.penalty, true) + "&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
             }
+            
+            /*if (sArr.indexOf(s.time + p) !== -1) {
+                info += (n + 1) + ". (" + getHHmmsshh(s.time, s.penalty, true) + ")&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
+            }
+            else {
+                info += (n + 1) + ". " + getHHmmsshh(s.time, s.penalty, true) + "&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
+            }*/
         }
     }
 
