@@ -371,7 +371,16 @@ function changeScrType() {
 function updateScrType() {
     curScrType = sessionList[curSession].scrType;
     $("#scrambleType").val(curScrType);
+
+    if (curScrType === "mega") {
+        $("#scramble").css("text-align", "left");
+    }
+    else {
+        $("#scramble").css("text-align", "center");
+    }
+    
     getScramble();
+    adjustSize();
 }
 
 function updateStats() {
@@ -760,13 +769,6 @@ function initActions() {
 
     curScrType = $("#scrambleType").children(":selected").attr("id");
 
-    if (curScrType === "mega") {
-        $("#scramble").css("text-align", "left");
-    }
-    else {
-        $("#scramble").css("text-align", "center");
-    }
-
     getScramble();
 
     $("#timeList").parent().css("overflow-y", "scroll");
@@ -826,7 +828,6 @@ function adjustSize() {
 
     $(".svgScramble").attr("width", svgWidth);
     $(".svgScramble").attr("height", svgHeight);
-
 
     let h = $("#content").height() - $("#notTimeList").height();
     $("#timeList").parent().css("max-height", h);
