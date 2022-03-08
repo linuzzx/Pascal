@@ -378,9 +378,8 @@ function updateScrType() {
     else {
         $("#scramble").css("text-align", "center");
     }
-    
+
     getScramble();
-    adjustSize();
 }
 
 function updateStats() {
