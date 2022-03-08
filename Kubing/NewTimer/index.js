@@ -487,14 +487,14 @@ function reverseTable(table) {
   }
 
 function showInfo(i, num) {
-    let info = "";
+    let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];
-        info = getHHmmsshh(s.time) + "&nbsp;&nbsp;&nbsp;" + s.scramble;
+        info += getHHmmsshh(s.time) + "&nbsp;&nbsp;&nbsp;" + s.scramble;
     }
     else {
         if (num === 3) {
-            info = "Mo3: " + getHHmmsshh(mo3s[i]) + "<br/><br/>"
+            info += "Mo3: " + getHHmmsshh(mo3s[i]) + "<br/><br/>"
         }
         else {
             let ao;
@@ -531,7 +531,7 @@ function showInfo(i, num) {
             else if (num === 10000) {
                 ao = ao10000s[i];
             }
-            info = "Ao" + num + ": " + getHHmmsshh(ao) + "<br/><br/>";
+            info += "Ao" + num + ": " + getHHmmsshh(ao) + "<br/><br/>";
         }
 
         let arr = [];
@@ -564,6 +564,22 @@ function showInfo(i, num) {
     }
     $("#innerTimeStats div").html(info);
     showTimeStats();
+}
+
+function getDDMMYYYY(ms) {
+    if (ms.toString().length === 10) {
+        ms *= 1000;
+    }
+
+    const d = new Date(ms);
+    const day = d.getDay().toString().length < 2 ? "0" + d.getDay() : d.getDay();
+    const month = d.getMonth().toString().length < 2 ? "0" + d.getMonth() : d.getMonth();
+    const year = d.getFullYear();
+    const hours = d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours();
+    const minutes = d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes();
+    const seconds = d.getSeconds().toString().length < 2 ? "0" + d.getSeconds() : d.getSeconds();
+
+    return day + "." + month + "." + year + " " + hours + ":" + minutes + "." + seconds;
 }
 
 function getMo3(s, i) {
@@ -782,7 +798,7 @@ function initActions() {
     }
     $("#inpCustomPlaceholder").val(customPlaceholder);
 
-    $("#innerOptions").on("mousedown", function (e) {
+    $(".inner").on("mousedown", function (e) {
         e.stopPropagation();
     });
 }
