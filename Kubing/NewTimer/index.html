@@ -15,9 +15,9 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <div id="outerOptions" onmousedown="closeOptions()">
-        <div id="innerOptions">
-            <h1 style="color: white; text-align: center">Settings is under production!</h1>
+    <div id="outerOptions" class="outer" onmousedown="closeOptions()">
+        <div id="innerOptions" class="inner">
+            <h1 style="text-align: center">Settings is under production!</h1>
             <div>
                 <label>Show time <input type="radio" name="showTime" value="1" onclick="toggleShowTime(value)"></label>
                 <label>Hide time <input type="radio" name="showTime" value="0" onclick="toggleShowTime(value)"></label><br/>
@@ -25,6 +25,9 @@
             </div><br/>
             <button onclick="importFromCSTimer()" disabled>Import from CSTimer</button>
         </div>
+    </div>
+    <div id="outerTimeStats" class="outer" onmousedown="closeTimeStats()">
+        <div id="innerTimeStats" class="inner"><div></div></div>
     </div>
     
     <div id="content">

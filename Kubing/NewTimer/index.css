@@ -92,7 +92,7 @@ label {
     cursor: pointer;
 }
 
-#outerOptions {
+.outer {
     position: fixed;
     display: none;
     width: 100%;
@@ -101,7 +101,8 @@ label {
     z-index: 2;
 }
 
-#innerOptions {
+.inner {
+    color: white;
     position: fixed;
     width: 60%;
     height: 60%;
@@ -110,7 +111,8 @@ label {
     border-radius: 10px;
     background-color: #1E1E1E;
     border: 1px solid black;
-    padding: 1%;
+    padding: 2%;
+    overflow-y: scroll;
 }
 
 /* width */

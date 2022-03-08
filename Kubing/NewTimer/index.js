@@ -32,10 +32,19 @@ let solutionList = [];
 let mo3s = [];
 let ao5s = [];
 let ao12s = [];
+let ao25s = [];
+let ao50s = [];
+let ao100s = [];
+let ao200s = [];
+let ao500s = [];
+let ao1000s = [];
+let ao2000s = [];
+let ao5000s = [];
+let ao10000s = [];
 
 let curSession = 0;
 
-let changingOptions = false;
+let showingOuterInner = false;
 
 $(function () {
     initActions();
@@ -223,13 +232,23 @@ function saveSolution() {
 }
 
 function showOptions() {
-    changingOptions = true;
+    showingOuterInner = true;
     $("#outerOptions").css("display", "block");
 }
 
 function closeOptions() {
-    changingOptions = false;
+    showingOuterInner = false;
     $("#outerOptions").css("display", "none");
+}
+
+function showTimeStats() {
+    showingOuterInner = true;
+    $("#outerTimeStats").css("display", "block");
+}
+
+function closeTimeStats() {
+    showingOuterInner = false;
+    $("#outerTimeStats").css("display", "none");
 }
 
 function connectAndGetDataFromDB() {
@@ -372,14 +391,23 @@ function updateStats() {
         // timeList
         for (let s of sessionList[curSession].solutions) {
             let i = sessionList[curSession].solutions.indexOf(s);
-            let i3 = i - 2;
             let i5 = i - 4;
             let i12 = i - 11;
+
             let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time)+"</td>";
             let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
             let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
             $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
-            getMo3(sessionList[curSession], i3);
+            getMo3(sessionList[curSession], i);
+            getAo25(sessionList[curSession], i);
+            getAo50(sessionList[curSession], i);
+            getAo100(sessionList[curSession], i);
+            getAo200(sessionList[curSession], i);
+            getAo500(sessionList[curSession], i);
+            getAo1000(sessionList[curSession], i);
+            getAo2000(sessionList[curSession], i);
+            getAo5000(sessionList[curSession], i);
+            getAo10000(sessionList[curSession], i);
         }
 
         if (listLatestFirst) {
@@ -407,53 +435,40 @@ function updateStats() {
         });
         
         if (arr.length >= 3) {
-            let curMo3 = mo3s[mo3s.length-1];
-            let bestMo3 = getBestAvg(3);
-            
-            $("#pbList").append("<tr><th>Mo3</th><td id='curMo3' class='cellToClick'>"+getHHmmsshh(curMo3)+"</td><td id='bestMo3' class='cellToClick'>"+getHHmmsshh(bestMo3)+"</td></tr>");
-        
-            $("#curMo3").on("click", function() {
-                let i = mo3s.length-1;
-                showInfo(i, 3);
-            });
-            
-            $("#bestMo3").on("click", function() {
-                let i = mo3s.indexOf(bestMo3);
-                showInfo(i, 3);
-            });
+            addToPBList(3, mo3s);
         }
         if (arr.length >= 5) {
-            let curAo5 = ao5s[ao5s.length-1];
-            let bestAo5 = getBestAvg(5);
-            $("#pbList").append("<tr><th>Ao5</th><td id='curAo5' class='cellToClick'>"+getHHmmsshh(curAo5)+"</td><td id='bestAo5' class='cellToClick'>"+getHHmmsshh(bestAo5)+"</td></tr>");
-        
-            $("#curAo5").on("click", function() {
-                let i = ao5s.length-1;
-                showInfo(i, 5);
-            });
-            
-            $("#bestAo5").on("click", function() {
-                let i = ao5s.indexOf(bestAo5);
-                showInfo(i, 5);
-            });
+            addToPBList(5, ao5s);
         }
         if (arr.length >= 12) {
-            let curAo12 = ao12s[ao12s.length-1];
-            let bestAo12 = getBestAvg(12);
-            $("#pbList").append("<tr><th>Ao12</th><td id='curAo12' class='cellToClick'>"+getHHmmsshh(curAo12)+"</td><td id='bestAo12' class='cellToClick'>"+getHHmmsshh(bestAo12)+"</td></tr>");
-        
-            $("#curAo12").on("click", function() {
-                let i = ao12s.length-1;
-                showInfo(i, 12);
-            });
-            
-            $("#bestAo12").on("click", function() {
-                let i = ao12s.indexOf(bestAo12);
-                showInfo(i, 12);
-            });
+            addToPBList(12, ao12s);
+        }
+        if (arr.length >= 25) {
+            addToPBList(25, ao25s);
         }
     }
     adjustSize();
+}
+
+function addToPBList(num, arr) {
+    let curAvg = arr[arr.length-1];
+    let bestAvg = getBestAvg(num);
+
+    let avgName = num === 3 ? "Mo3" : "Ao" + num;
+    let curAvgID = num === 3 ? "curMo3" : "curAo" + num;
+    let bestAvgID = num === 3 ? "bestMo3" : "bestAo" + num;
+
+    $("#pbList").append("<tr><th>"+avgName+"</th><td id='"+curAvgID+"' class='cellToClick'>"+getHHmmsshh(curAvg)+"</td><td id='"+bestAvgID+"' class='cellToClick'>"+getHHmmsshh(bestAvg)+"</td></tr>");
+
+    $("#"+curAvgID).on("click", function() {
+        let i = arr.length-1;
+        showInfo(i, num);
+    });
+    
+    $("#"+bestAvgID).on("click", function() {
+        let i = arr.indexOf(bestAvg);
+        showInfo(i, num);
+    });
 }
 
 function reverseTable(table) {
@@ -467,11 +482,11 @@ function showInfo(i, num) {
     let info = "";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];
-        info = getHHmmsshh(s.time) + "   " + s.scramble;
+        info = getHHmmsshh(s.time) + "&nbsp;&nbsp;&nbsp;" + s.scramble;
     }
     else {
         if (num === 3) {
-            info = "Mo3: " + getHHmmsshh(mo3s[i]) + "\n\n"
+            info = "Mo3: " + getHHmmsshh(mo3s[i]) + "<br/><br/>"
         }
         else {
             let ao;
@@ -481,7 +496,34 @@ function showInfo(i, num) {
             else if (num === 12) {
                 ao = ao12s[i];
             }
-            info = "Ao" + num + ": " + getHHmmsshh(ao) + "\n\n";
+            else if (num === 25) {
+                ao = ao25s[i];
+            }
+            else if (num === 50) {
+                ao = ao50s[i];
+            }
+            else if (num === 100) {
+                ao = ao100s[i];
+            }
+            else if (num === 200) {
+                ao = ao200s[i];
+            }
+            else if (num === 500) {
+                ao = ao500s[i];
+            }
+            else if (num === 1000) {
+                ao = ao1000s[i];
+            }
+            else if (num === 2000) {
+                ao = ao2000s[i];
+            }
+            else if (num === 5000) {
+                ao = ao25s[i];
+            }
+            else if (num === 10000) {
+                ao = ao10000s[i];
+            }
+            info = "Ao" + num + ": " + getHHmmsshh(ao) + "<br/><br/>";
         }
 
         let arr = [];
@@ -505,14 +547,15 @@ function showInfo(i, num) {
             let s = sessionList[curSession].solutions[i+n];
             
             if (sArr.indexOf(s.time) !== -1) {
-                info += (n + 1) + ". (" + getHHmmsshh(s.time) + ")   " + s.scramble + "\n";
+                info += (n + 1) + ". (" + getHHmmsshh(s.time) + ")&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
             }
             else {
-                info += (n + 1) + ". " + getHHmmsshh(s.time) + "   " + s.scramble + "\n";
+                info += (n + 1) + ". " + getHHmmsshh(s.time) + "&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
             }
         }
     }
-    alert(info);
+    $("#innerTimeStats div").html(info);
+    showTimeStats();
 }
 
 function getMo3(s, i) {
@@ -531,45 +574,54 @@ function getAo12(s, i) {
 }
 
 function getAo25(s, i) {
-    
+    const num = 25;
+    return getAvg(s, i, num);
 }
 
 function getAo50(s, i) {
-    
+    const num = 50;
+    return getAvg(s, i, num);
 }
 
 function getAo100(s, i) {
-    
+    const num = 100;
+    return getAvg(s, i, num);
 }
 
 function getAo200(s, i) {
-    
+    const num = 200;
+    return getAvg(s, i, num);
 }
 
 function getAo500(s, i) {
-    
+    const num = 500;
+    return getAvg(s, i, num);
 }
 
 function getAo1000(s, i) {
-    
+    const num = 1000;
+    return getAvg(s, i, num);
 }
 
 function getAo2000(s, i) {
-    
+    const num = 2000;
+    return getAvg(s, i, num);
 }
 
 function getAo5000(s, i) {
-    
+    const num = 5000;
+    return getAvg(s, i, num);
 }
 
 function getAo10000(s, i) {
-    
+    const num = 10000;
+    return getAvg(s, i, num);
 }
 
 function getAvg(s, i, num) {
     let avgArr;
     let toRemove = Math.ceil(0.05 * num);
-
+    
     if (num === 3) {
         avgArr = mo3s;
     }
@@ -578,6 +630,9 @@ function getAvg(s, i, num) {
     }
     else if (num === 12) {
         avgArr = ao12s;
+    }
+    else if (num === 25) {
+        avgArr = ao25s;
     }
 
     if (i >= (num-1)) {
@@ -626,6 +681,9 @@ function getBestAvg(num) {
     else if (num === 12) {
         arr = ao12s.slice();
     }
+    else if (num === 25) {
+        arr = ao25s.slice();
+    }
 
     let bAvg = Infinity;
     
@@ -652,6 +710,15 @@ function emptyAvgArrays() {
     mo3s = [];
     ao5s = [];
     ao12s = [];
+    ao25s = [];
+    ao50s = [];
+    ao100s = [];
+    ao200s = [];
+    ao500s = [];
+    ao1000s = [];
+    ao2000s = [];
+    ao5000s = [];
+    ao10000s = [];
 }
 
 function changeListingOrder() {
@@ -721,7 +788,7 @@ function initActions() {
 
 function keyActions() {
     $("html").on('keydown', function (e) {
-        if (!changingOptions) {
+        if (!showingOuterInner) {
             if (timing) {
                 if (e.keyCode !== 27) {
                     stopTimer();
@@ -740,7 +807,7 @@ function keyActions() {
         }
     })
     .on('keyup', function (e) {
-        if (!changingOptions) {
+        if (!showingOuterInner) {
             if (e.keyCode === 32) {
                 if (ready && !timing) {
                     startTimer();
@@ -763,6 +830,8 @@ function adjustSize() {
 
     let h = $("#content").height() - $("#notTimeList").height();
     $("#timeList").parent().css("max-height", h);
+    $("#innerTimeStats div").height("100%");
+    $("#innerTimeStats div").css("overflow-y", "scroll");
     
     if (!listLatestFirst) {
         let d = $('#timeList').parent();
