@@ -28,6 +28,7 @@ let bestSingle = -1;
 let sessionList = [];
 
 let doNotScramble = false;
+let doNotCreateNew = false;
 
 //Average arrays
 let mo3s = [];
@@ -268,7 +269,10 @@ function getData(data) {
         checkSessions();
     }
     else {
-        createSession();
+        if (!doNotCreateNew) {
+            createSession();
+        }
+        doNotCreateNew = false;
     }
 }
 
@@ -861,8 +865,96 @@ function changeCustomPlaceholder(val) {
     }
 }
 
-function importFromCSTimer() {
+async function importFromCSTimer() {
+    let fileHandle;
+    [fileHandle] = await window.showOpenFilePicker();
+    let file = await fileHandle.getFile();
+    let content = await file.text();
+
+    if (content) {
+        let json = $.parseJSON(content);
+
+        if (json) {
+            if (confirm("Importing will override current data. Do you still want to import?")) {
+                openDB(removeAllFromDB);
+                sessionList = [];
+
+                let numOfSessions = json.properties.session;
+                let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
+console.log(sessionData);
+console.log(json);
+
+                let i = 0;
+                $.each(json, function(key, sessions) {
+                    if (key.includes("session")) {
+                        // Add to current data
+                        let num = sessionList.length + 1;
+                        let sessionId = formatSessionID(num);
+                        let sessionName = sessionData[i].name || "Session " + num;
+                        let sessionRank = sessionData[i].rank-1;
+                        let sessionScrType = getScrType(Object.values(sessionData[i])[1]);
+                        let sessionSolutions = [];
+                        curSession = sessionList.length;
+                        curScrType = sessionScrType;
+
+                        $.each(sessions, function(k, solve){
+                            console.log(solve);
+                            const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3]);
+                            sessionSolutions.push(newSolution);
+                        });
+                        
+                        const nSession = new Session(sessionId, sessionName,sessionRank,sessionScrType, sessionSolutions);
+                        sessionList.push(nSession);
+
+                        resetTimer();
+                    }
+                    i++;
+                });
+
+                for (let s of sessionList) {
+                    openDB(editDB, s.id, s);
+                }
+            }
+        }
+    }
+}
+
+function getScrType(opt) {
+    let st = opt.scrType;
     
+    if (Object.keys(opt).length === 0) {
+        return "333";
+    }
+    else if (st.includes("222")) {
+        return "222";
+    }
+    else if (st.includes("444")) {
+        return "444";
+    }
+    else if (st.includes("555")) {
+        return "555";
+    }
+    else if (st.includes("666")) {
+        return "666";
+    }
+    else if (st.includes("777")) {
+        return "777";
+    }
+    else if (st.includes("clk")) {
+        return "clock";
+    }
+    else if (st.includes("mg")) {
+        return "mega";
+    }
+    else if (st.includes("pyr")) {
+        return "pyra";
+    }
+    else if (st.includes("skb")) {
+        return "skewb";
+    }
+    else if (st.includes("sq")) {
+        return "sq1";
+    }
 }
 
 function exportToCSTimer() {

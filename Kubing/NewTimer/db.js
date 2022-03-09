@@ -94,3 +94,18 @@ function removeFromDB(key) {
         console.log(e);
     };
 }
+
+function removeAllFromDB() {
+    doNotCreateNew = true;
+    const request = db.transaction(storeName, readwrite)
+    .objectStore(storeName)
+    .clear();
+    
+    request.onsuccess = e => {
+        
+    };
+    
+    request.onerror = e => {
+        console.log(e);
+    };
+}
