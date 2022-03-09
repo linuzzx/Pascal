@@ -1,10 +1,10 @@
-let timing, ready = false;
+let timing, waiting, ready = false;
 let stopped = true;
 let scramble;
 let curScrType;
 
-let waitingInterval;
 let interval;
+let waitingInterval;
 let start;
 
 let green = "#00FF00";
@@ -63,20 +63,20 @@ function waitForTimer() {
     $("#right").css("visibility","hidden");
     $("#scramble h1").text("");
 
-    if (wait055) {
+    if (wait055 && !waiting && stopped) {
+        waiting = true;
         //Fiks denne
-        /*$("#display h1").css("color", red);
+        $("#display h1").css("color", red);
         const waitStart = new Date().getTime();
         let waitingTime = 0;
 
         waitingInterval = setInterval(function() {
             waitingTime = new Date().getTime() - waitStart;
             if (waitingTime >= 550) {
-                readyTimer();
                 clearInterval(waitingInterval);
-            }
-        }, 1);*/
-        readyTimer();
+                readyTimer();
+            }            
+        }, 10);
     }
     else {
         readyTimer();
@@ -92,6 +92,7 @@ function readyTimer() {
 
 function startTimer() {
     timing = true;
+    waiting = false;
     ready = false;
     stopped = false;
     $("#display h1").css("color", "white");
@@ -111,16 +112,12 @@ function startTimer() {
 
 function stopTimer() {
     if (!stopped) {
-        stopped = true;
         $("#scramble").css("visibility","visible");
         $("#left").css("visibility","visible");
         $("#right").css("visibility","visible");
         $("#display h1").text(getHHmmsshh(rawTime));
         clearInterval(interval);
-        setTimeout(
-            function() {
-                timing = false;
-            }, 100);
+        stopped = true;
 
         // Save time and scramble
         saveSolution();
@@ -129,7 +126,10 @@ function stopTimer() {
 
 function resetTimer() {
     clearInterval(interval);
+    clearInterval(waitingInterval);
     timing = false;
+    ready = false;
+    waiting = false;
     stopped = true;
     $("#scramble").css("visibility","visible");
     $("#left").css("visibility","visible");
@@ -874,6 +874,15 @@ function toggleShowTime(val) {
     }
 }
 
+function toggleWaitingTime(val) {
+    if (val === "1") {
+        wait055 = true;
+    }
+    else {
+        wait055 = false;
+    }
+}
+
 function changeCustomPlaceholder(val) {
     if (val.trim() !== "") {
         customPlaceholder = val.trim();
@@ -996,6 +1005,13 @@ function initActions() {
     }
     $("#inpCustomPlaceholder").val(customPlaceholder);
 
+    if (wait055) {
+        $("input:radio[name=wait055]").filter("[value=1]").prop('checked', true);
+    }
+    else {
+        $("input:radio[name=wait055]").filter("[value=0]").prop('checked', true);
+    }
+
     $(".inner").on("mousedown", function (e) {
         e.stopPropagation();
     });
@@ -1028,7 +1044,15 @@ function keyActions() {
                     startTimer();
                 }
                 else if (wait055 && !ready && !timing) {
+                    waiting = false;
+                    clearInterval(waitingInterval);
                     resetTimer();
+                }
+                else if (timing) {
+                    setTimeout(
+                        function() {
+                            timing = false;
+                        }, 100);
                 }
             }
         }

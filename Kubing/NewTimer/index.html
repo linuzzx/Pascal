@@ -23,6 +23,11 @@
                 <label>Hide time <input type="radio" name="showTime" value="0" onclick="toggleShowTime(value)"></label><br/>
                 <label>Custom text <input id="inpCustomPlaceholder" type="text" name="showTime" onchange="changeCustomPlaceholder(value)"></label>
             </div><br/>
+            <div>
+                Waiting time before solving:<br/>
+                <label>0s <input type="radio" name="wait055" value="0" onclick="toggleWaitingTime(value)"></label>
+                <label>0.55s <input type="radio" name="wait055" value="1" onclick="toggleWaitingTime(value)"></label>
+            </div><br/>
             <button onclick="importFromCSTimer()">Import from CSTimer</button>
             <button onclick="exportToCSTimer()" disabled>Export to CSTimer</button>
         </div>
