@@ -455,11 +455,12 @@ function updateStats() {
             let i = sessionList[curSession].solutions.indexOf(s);
             let i5 = i - 4;
             let i12 = i - 11;
+            let c = s.comment !== "" ? "*" : "&nbsp;";
             
             let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time, s.penalty)+"</td>";
             let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
             let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
-            $("#timeList").append("<tr><td>"+(i + 1)+"</td>"+single+ao5+ao12+"</tr>");
+            $("#timeList").append("<tr><td>"+(i + 1) + c +"</td>"+single+ao5+ao12+"</tr>");
             getMo3(sessionList[curSession], i);
             getAo25(sessionList[curSession], i);
             getAo50(sessionList[curSession], i);
@@ -548,7 +549,8 @@ function showInfo(i, num, pb = null) {
     let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];
-        info += getHHmmsshh(s.time, s.penalty, true) + "&nbsp;&nbsp;&nbsp;" + s.scramble;
+        let c = s.comment !== "" ? " [" + s.comment + "]" : s.comment;
+        info += getHHmmsshh(s.time, s.penalty, true) + stripHTML(c) + "&nbsp;&nbsp;&nbsp;" + s.scramble;
     }
     else {
         if (num === 3) {
@@ -617,13 +619,14 @@ function showInfo(i, num, pb = null) {
         for (let n = 0; n < num; n++) {
             let s = sessionList[curSession].solutions[i+n];
             let p = s.penalty === -1 ? Infinity : s.penalty;
+            let c = s.comment !== "" ? "[" + s.comment + "]" : s.comment;
 
             if (sArr.indexOf(s.time + p) !== -1) {
-                info += (n + 1) + ". (" + getHHmmsshh(s.time, s.penalty, true) + ")&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
+                info += (n + 1) + ". (" + getHHmmsshh(s.time, s.penalty, true) + c + ")&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
                 sArr.splice(sArr.indexOf(s.time), 1);
             }
             else {
-                info += (n + 1) + ". " + getHHmmsshh(s.time, s.penalty, true) + "&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
+                info += (n + 1) + ". " + getHHmmsshh(s.time, s.penalty, true) + c + "&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
             }
         }
     }
@@ -635,7 +638,8 @@ function showInfo(i, num, pb = null) {
         buttons = "<br/><br/><div id='penaltyOptions'>Penalty:<br/>"
                 +"<label>OK <input id='radioPenaltyOK' type='radio' name='penalty' value='0' onclick='changePenalty("+i+")'></label>&nbsp;&nbsp;"
                 +"<label>+2 <input id='radioPenalty2' type='radio' name='penalty' value='2000' onclick='changePenalty("+i+")'></label>&nbsp;&nbsp;"
-                +"<label>DNF <input id='radioPenaltyDNF' type='radio' name='penalty' value='-1' onclick='changePenalty("+i+")'></label><br/><br/>"
+                +"<label>DNF <input id='radioPenaltyDNF' type='radio' name='penalty' value='-1' onclick='changePenalty("+i+")'></label>&nbsp;&nbsp;"
+                +"<button onclick='editComment("+i+")'>Comment</button><br/><br/>"
                 +"<button onclick='deleteSolve("+i+")'>Delete</button>"
                 +"</div>";
         $("#innerTimeStats div").append(buttons);
@@ -652,6 +656,20 @@ function changePenalty(i) {
     doNotScramble = true;
 
     openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
+    showInfo(i, 1);
+}
+
+function editComment(i) {
+    let c = prompt("Comment", sessionList[curSession].solutions[i].comment);
+    if (c || c === "") {
+        sessionList[curSession].solutions[i].comment = c;
+        openDB(editDB, sessionList[curSession].id, sessionList[curSession])
+    }
+    showInfo(i, 1);
+}
+
+function stripHTML(html){
+    return html.replaceAll("<","&lt;").replaceAll(">","&gt;");
 }
 
 function deleteSolve(i) {
@@ -881,8 +899,6 @@ async function importFromCSTimer() {
 
                 let numOfSessions = json.properties.session;
                 let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
-console.log(sessionData);
-console.log(json);
 
                 let i = 0;
                 $.each(json, function(key, sessions) {
@@ -898,7 +914,6 @@ console.log(json);
                         curScrType = sessionScrType;
 
                         $.each(sessions, function(k, solve){
-                            console.log(solve);
                             const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3]);
                             sessionSolutions.push(newSolution);
                         });
