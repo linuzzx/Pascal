@@ -315,32 +315,35 @@ function renameSession() {
 }
 
 function deleteSession() {
-    let lastSession = curSession === sessionList.length - 1;
-    for (let i = curSession; i < sessionList.length; i++) {
-        if (sessionList[i + 1]) {
-            sessionList[i].name = sessionList[i + 1].name;
-            sessionList[i].scrType = sessionList[i + 1].scrType;
-            sessionList[i].solutions = sessionList[i + 1].solutions;
+    if (confirm("Are you sure you want do delete the session?")) {
+        let lastSession = curSession === sessionList.length - 1;
+        for (let i = curSession; i < sessionList.length; i++) {
+            if (sessionList[i + 1]) {
+                sessionList[i].name = sessionList[i + 1].name;
+                sessionList[i].scrType = sessionList[i + 1].scrType;
+                sessionList[i].solutions = sessionList[i + 1].solutions;
+            }
         }
+        let lastID = sessionList.pop().id;
+        
+        for (let i = curSession; i < sessionList.length; i++) {
+            doNotScramble = true;
+            openDB(editDB, sessionList[i].id, sessionList[i]);
+        }
+
+        openDB(removeFromDB(lastID));
+
+        if (lastSession) {
+            let id = sessionList[sessionList.length - 1].id;
+            //$("#sessionList").val(name).change();
+            $("#sessionList option[id="+id+"]").attr("selected","selected");
+
+            curSession = sessionList.length - 1;
+        }
+
+        checkSessions();
+        resetTimer();
     }
-    let lastID = sessionList.pop().id;
-    
-    for (let i = curSession; i < sessionList.length; i++) {
-        doNotScramble = true;
-        openDB(editDB, sessionList[i].id, sessionList[i]);
-    }
-
-    openDB(removeFromDB(lastID));
-
-    if (lastSession) {
-        let id = sessionList[sessionList.length - 1].id;
-        //$("#sessionList").val(name).change();
-        $("#sessionList option[id="+id+"]").attr("selected","selected");
-
-        curSession = sessionList.length - 1;
-    }
-
-    checkSessions();
 }
 
 function formatSessionID(id) {
