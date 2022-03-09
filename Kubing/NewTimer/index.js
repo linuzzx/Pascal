@@ -567,9 +567,11 @@ function showInfo(i, num, pb = null) {
         
         for (let n = 0; n < num; n++) {
             let s = sessionList[curSession].solutions[i+n];
-            
-            if (iArr.indexOf(n) !== -1) {
+            let p = s.penalty === -1 ? Infinity : s.penalty;
+
+            if (sArr.indexOf(s.time + p) !== -1) {
                 info += (n + 1) + ". (" + getHHmmsshh(s.time, s.penalty, true) + ")&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
+                sArr.splice(sArr.indexOf(s.time), 1);
             }
             else {
                 info += (n + 1) + ". " + getHHmmsshh(s.time, s.penalty, true) + "&nbsp;&nbsp;&nbsp;" + s.scramble + "<br/>";
