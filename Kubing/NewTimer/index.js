@@ -282,6 +282,23 @@ function createSession() {
     let sessionSolutions = [];
     curSession = sessionList.length;
     curScrType = sessionScrType;
+
+    if (sessionList.some(e => e.name === sessionName)) {
+        let sNum = 1;
+
+        for (let s of sessionList) {
+            if (s.name.includes("_")) {
+                sNum++;
+            }
+        }
+
+        if (sNum < 10) {
+            sessionName += "_0" + sNum;
+        }
+        else {
+            sessionName += "_" + sNum;
+        }
+    }
     
     const nSession = new Session(sessionId, sessionName,sessionRank,sessionScrType, sessionSolutions);
 
@@ -298,6 +315,31 @@ function renameSession() {
 }
 
 function deleteSession() {
+    let lastSession = curSession === sessionList.length - 1;
+    for (let i = curSession; i < sessionList.length; i++) {
+        if (sessionList[i + 1]) {
+            sessionList[i].name = sessionList[i + 1].name;
+            sessionList[i].scrType = sessionList[i + 1].scrType;
+            sessionList[i].solutions = sessionList[i + 1].solutions;
+        }
+    }
+    let lastID = sessionList.pop().id;
+    
+    for (let i = curSession; i < sessionList.length; i++) {
+        doNotScramble = true;
+        openDB(editDB, sessionList[i].id, sessionList[i]);
+    }
+
+    openDB(removeFromDB(lastID));
+
+    if (lastSession) {
+        let id = sessionList[sessionList.length - 1].id;
+        //$("#sessionList").val(name).change();
+        $("#sessionList option[id="+id+"]").attr("selected","selected");
+
+        curSession = sessionList.length - 1;
+    }
+
     checkSessions();
 }
 
@@ -326,7 +368,7 @@ function checkSessions() {
     }
 
     // Session buttons
-    if ($("#sessionList").length === 1) {
+    if (sessionList.length === 1) {
         $("#btnDelete").prop('disabled', true);
     }
     else {
