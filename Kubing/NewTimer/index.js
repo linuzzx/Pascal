@@ -468,9 +468,9 @@ function updateStats() {
             getAo200(sessionList[curSession], i);
             getAo500(sessionList[curSession], i);
             getAo1000(sessionList[curSession], i);
-            getAo2000(sessionList[curSession], i);
+            /*getAo2000(sessionList[curSession], i);
             getAo5000(sessionList[curSession], i);
-            getAo10000(sessionList[curSession], i);
+            getAo10000(sessionList[curSession], i);*/
         }
 
         if (listLatestFirst) {
@@ -509,6 +509,32 @@ function updateStats() {
         if (arr.length >= 25) {
             addToPBList(25, ao25s);
         }
+        if (arr.length >= 50) {
+            addToPBList(50, ao50s);
+        }
+        if (arr.length >= 100) {
+            addToPBList(100, ao100s);
+        }
+        /*
+        if (arr.length >= 200) {
+            addToPBList(200, ao200s);
+        }
+        if (arr.length >= 500) {
+            addToPBList(500, ao500s);
+        }
+        if (arr.length >= 1000) {
+            addToPBList(1000, ao1000s);
+        }
+        if (arr.length >= 2000) {
+            addToPBList(2000, ao2000s);
+        }
+        if (arr.length >= 5000) {
+            addToPBList(5000, ao5000s);
+        }
+        if (arr.length >= 10000) {
+            addToPBList(10000, ao10000s);
+        }
+        */
     }
     adjustSize();
 }
@@ -773,6 +799,30 @@ function getAvg(s, i, num) {
     else if (num === 25) {
         avgArr = ao25s;
     }
+    else if (num === 50) {
+        avgArr = ao50s;
+    }
+    else if (num === 100) {
+        avgArr = ao100s;
+    }
+    else if (num === 200) {
+        avgArr = ao200s;
+    }
+    else if (num === 500) {
+        avgArr = ao500s;
+    }
+    else if (num === 1000) {
+        avgArr = ao1000s;
+    }
+    else if (num === 2000) {
+        avgArr = ao2000s;
+    }
+    else if (num === 5000) {
+        avgArr = ao5000s;
+    }
+    else if (num === 10000) {
+        avgArr = ao10000s;
+    }
 
     if (i >= (num-1)) {
         let avg = 0;
@@ -903,12 +953,11 @@ async function importFromCSTimer() {
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
-                openDB(removeAllFromDB);
                 sessionList = [];
 
-                let numOfSessions = json.properties.session;
+                let numOfSessions = json.properties.session || json.properties.sessionN;
                 let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
-
+                
                 let i = 0;
                 $.each(json, function(key, sessions) {
                     if (key.includes("session")) {
@@ -935,9 +984,14 @@ async function importFromCSTimer() {
                     i++;
                 });
 
+                doNotScramble = true; 
+                openDB(removeAllFromDB);
                 for (let s of sessionList) {
+                    doNotScramble = true;
                     openDB(editDB, s.id, s);
                 }
+                curSession = 0;
+                closeOptions();
             }
         }
     }
