@@ -367,10 +367,10 @@ function checkSessions() {
     // List sessions
     for (let s of sessionList) {
         if (s.rank - 1 === curSession) {
-            $("#sessionList").append("<option id='"+s.id+"' value='"+s.rank+"' data-rank='"+s.rank+"' selected>"+s.name+"</option>");
+            $("#sessionList").append("<option id='"+s.id+"' value='"+(s.rank - 1)+"' data-rank='"+s.rank+"' selected>"+s.name+"</option>");
         }
         else {
-            $("#sessionList").append("<option id='"+s.id+"' value='"+s.rank+"' data-rank='"+s.rank+"'>"+s.name+"</option>");
+            $("#sessionList").append("<option id='"+s.id+"' value='"+(s.rank - 1)+"' data-rank='"+s.rank+"'>"+s.name+"</option>");
         }
     }
 
