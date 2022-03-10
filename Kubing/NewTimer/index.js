@@ -262,7 +262,8 @@ function connectAndGetDataFromDB() {
 }
 
 function getData(data) {
-    let arr = data;
+    let arr = data.slice().sort(function(a,b){return a.rank-b.rank});
+    
     if (arr.length !== 0) {
         sessionList = arr.slice();
 
