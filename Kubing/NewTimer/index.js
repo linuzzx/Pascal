@@ -1073,8 +1073,17 @@ function getExportData(data) {
         let sType = keys.scrType;
         let rank = keys.rank;
         let stat = [solves,penalties,Math.round(mean/10)*10];
-        let fDate = json[keys.id][0][3];
-        let lDate = json[keys.id][json[keys.id].length-1][3];
+        let fDate = null;
+        let lDate = null;
+
+        if (json[keys.id]) {
+            if (json[keys.id][0]) {
+                fDate = json[keys.id][0][3];
+            }
+            if (json[keys.id][json[keys.id].length - 1]) {
+                lDate = json[keys.id][json[keys.id].length-1][3];
+            }
+        }
         
         sData[keys.id.split("session_0")[1]] = {
             "name":name,
