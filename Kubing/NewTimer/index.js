@@ -950,7 +950,6 @@ async function importFromCSTimer() {
     
     if (content) {
         let json = $.parseJSON(content);
-        console.log(json);
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
@@ -958,13 +957,13 @@ async function importFromCSTimer() {
 
                 let numOfSessions = json.properties.session || json.properties.sessionN;
                 let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
-                console.log(sessionData);
+                
                 let i = 0;
                 $.each(json, function(key, sessions) {
                     if (key.includes("session")) {
                         // Add to current data
                         let num = sessionList.length + 1;
-                        let sessionId = formatSessionID(num);console.log(sessionData[i],sessionData[i].name);
+                        let sessionId = formatSessionID(num);
                         let sessionName = sessionData[i].name || "Session " + num;
                         let sessionRank = sessionData[i].rank;
                         let sessionScrType = getScrType(Object.values(sessionData[i])[1]);
