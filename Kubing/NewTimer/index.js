@@ -30,6 +30,8 @@ let sessionList = [];
 let doNotScramble = false;
 let doNotCreateNew = false;
 
+let settings = localStorage.getItem("einarkl_timer_settings");//wait055,showTime,listLatestFirst,customPlaceholder
+
 //Average arrays
 let mo3s = [];
 let ao5s = [];
@@ -1105,6 +1107,12 @@ function getYYYYMMDD_HHmmss() {
     const seconds = d.getSeconds().toString().length < 2 ? "0" + d.getSeconds() : d.getSeconds();
 
     return year + month + day + "_" + hours + minutes + seconds;
+}
+
+function changeSettings() {
+    settings = "";
+
+    localStorage.setItem("einarkl_timer_settings", settings);
 }
 
 function initActions() {
