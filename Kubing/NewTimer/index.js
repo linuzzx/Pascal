@@ -1052,7 +1052,7 @@ function getExportData(data) {
         "sessionData": {}
     };
     let sessionN = 0;
-    let solves = 0;
+    let solvesN = 0;
     let penalties = 0;
     let mean = 0;
     let sData = {};
@@ -1065,14 +1065,14 @@ function getExportData(data) {
             if (s.penalty !== 0) {
                 penalties++;
             }
-            solves++;
+            solvesN++;
             mean += s;
         }
 
         let name = keys.name;
         let sType = keys.scrType;
         let rank = keys.rank;
-        let stat = [solves,penalties,Math.round(mean/10)*10];
+        let stat = [solvesN,penalties,Math.round(mean/10)*10];
         let fDate = null;
         let lDate = null;
 
