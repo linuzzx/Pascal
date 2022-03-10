@@ -279,7 +279,7 @@ function getData(data) {
 function createSession() {
     $("#btnNew").blur();
     let num = sessionList.length + 1;
-    let sessionId = formatSessionID(num);
+    let sessionId = "session"+num;
     let sessionName = "Session "+num;
     let sessionRank = sessionList.length + 1;
     let sessionScrType = scrTypes[0];
@@ -348,17 +348,6 @@ function deleteSession() {
         checkSessions();
         resetTimer();
     }
-}
-
-function formatSessionID(id) {
-    let f = "session_";
-    if (id < 10) {
-        f += "0"+id;
-    }
-    else {
-        f += id;
-    }
-    return f;
 }
 
 function checkSessions() {
