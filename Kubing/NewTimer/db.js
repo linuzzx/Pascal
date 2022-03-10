@@ -68,7 +68,7 @@ function getFromDB(key) {
     };
 }
 
-function getAllFromDB() {
+function getAllFromDB(exporting = false) {
     const tx = db.transaction(storeName, readonly);
     const store = tx.objectStore(storeName);
     const request = store.getAll();
@@ -77,7 +77,12 @@ function getAllFromDB() {
     request.onsuccess = e => {
         data = e.target.result;
         // List opp data
-        getData(data);
+        if (!exporting) {
+            getData(data);
+        }
+        else {
+            getExportData(data);
+        }
     }
 }
 

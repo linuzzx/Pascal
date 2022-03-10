@@ -281,7 +281,7 @@ function createSession() {
     let num = sessionList.length + 1;
     let sessionId = formatSessionID(num);
     let sessionName = "Session "+num;
-    let sessionRank = sessionList.length;
+    let sessionRank = sessionList.length + 1;
     let sessionScrType = scrTypes[0];
     let sessionSolutions = [];
     curSession = sessionList.length;
@@ -965,7 +965,7 @@ async function importFromCSTimer() {
                         let num = sessionList.length + 1;
                         let sessionId = formatSessionID(num);
                         let sessionName = sessionData[i].name || "Session " + num;
-                        let sessionRank = sessionData[i].rank-1;
+                        let sessionRank = sessionData[i].rank;
                         let sessionScrType = getScrType(Object.values(sessionData[i])[1]);
                         let sessionSolutions = [];
                         curSession = sessionList.length;
@@ -1036,7 +1036,29 @@ function getScrType(opt) {
 }
 
 function exportToCSTimer() {
-    
+    openDB(getAllFromDB, true);
+}
+
+function getExportData(data) {
+    const date = getYYYYMMDD_HHmmss();
+
+    let blob = new Blob([JSON.stringify(data)],{type:"application/json; utf-8"});
+    let a = document.createElement("a");
+    a.download = "einarkl_timer_"+date+".txt";
+    a.href = window.URL.createObjectURL(blob);
+    a.click();
+}
+
+function getYYYYMMDD_HHmmss() {
+    const d = new Date;
+    const year = d.getFullYear();
+    const month = d.getMonth().toString().length < 2 ? "0" + d.getMonth() : d.getMonth();
+    const day = d.getDay().toString().length < 2 ? "0" + d.getDay() : d.getDay();
+    const hours = d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours();
+    const minutes = d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes();
+    const seconds = d.getSeconds().toString().length < 2 ? "0" + d.getSeconds() : d.getSeconds();
+
+    return year + month + day + "_" + hours + minutes + seconds;
 }
 
 function initActions() {
