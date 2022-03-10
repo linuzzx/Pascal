@@ -1073,7 +1073,7 @@ function getExportData(data) {
             }
         }
         
-        sData[keys.id.split("session_0")[1]] = {
+        sData[keys.id.split("session")[1]] = {
             "name":name,
             "opt":{
                 "scrType":sType
