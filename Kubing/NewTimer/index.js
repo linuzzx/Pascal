@@ -366,7 +366,7 @@ function checkSessions() {
     $("#sessionList").empty();
     // List sessions
     for (let s of sessionList) {
-        if (s.rank === curSession) {
+        if (s.rank - 1 === curSession) {
             $("#sessionList").append("<option id='"+s.id+"' value='"+s.rank+"' data-rank='"+s.rank+"' selected>"+s.name+"</option>");
         }
         else {
@@ -947,9 +947,10 @@ async function importFromCSTimer() {
     [fileHandle] = await window.showOpenFilePicker();
     let file = await fileHandle.getFile();
     let content = await file.text();
-
+    
     if (content) {
         let json = $.parseJSON(content);
+        console.log(json);
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
@@ -957,13 +958,13 @@ async function importFromCSTimer() {
 
                 let numOfSessions = json.properties.session || json.properties.sessionN;
                 let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
-                
+                console.log(sessionData);
                 let i = 0;
                 $.each(json, function(key, sessions) {
                     if (key.includes("session")) {
                         // Add to current data
                         let num = sessionList.length + 1;
-                        let sessionId = formatSessionID(num);
+                        let sessionId = formatSessionID(num);console.log(sessionData[i],sessionData[i].name);
                         let sessionName = sessionData[i].name || "Session " + num;
                         let sessionRank = sessionData[i].rank;
                         let sessionScrType = getScrType(Object.values(sessionData[i])[1]);
@@ -980,8 +981,8 @@ async function importFromCSTimer() {
                         sessionList.push(nSession);
 
                         resetTimer();
+                        i++;
                     }
-                    i++;
                 });
 
                 doNotScramble = true; 
@@ -1001,6 +1002,9 @@ function getScrType(opt) {
     let st = opt.scrType;
     
     if (Object.keys(opt).length === 0) {
+        return "333";
+    }
+    else if (st.includes("333")) {
         return "333";
     }
     else if (st.includes("222")) {
@@ -1042,7 +1046,51 @@ function exportToCSTimer() {
 function getExportData(data) {
     const date = getYYYYMMDD_HHmmss();
 
-    let blob = new Blob([JSON.stringify(data)],{type:"application/json; utf-8"});
+    let json = {};
+    json["properties"] = {
+        "sessionN" : 0,
+        "sessionData": {}
+    };
+    let sessionN = 0;
+    let solves = 0;
+    let penalties = 0;
+    let mean = 0;
+    let sData = {};
+    $.each(data, function(index, keys) {
+        sessionN++;
+        json[keys.id] = [];
+        let solves = Object.values(keys)[4];
+        for (let s of solves) {
+            json[keys.id].push([[s.penalty, s.time], s.scramble, s.comment, s.date]);
+            if (s.penalty !== 0) {
+                penalties++;
+            }
+            solves++;
+            mean += s;
+        }
+
+        let name = keys.name;
+        let sType = keys.scrType;
+        let rank = keys.rank;
+        let stat = [solves,penalties,Math.round(mean/10)*10];
+        let fDate = json[keys.id][0][3];
+        let lDate = json[keys.id][json[keys.id].length-1][3];
+        
+        sData[keys.id.split("session_0")[1]] = {
+            "name":name,
+            "opt":{
+                "scrType":sType
+            },
+            "rank":rank,
+            "stat":stat,
+            "date":[fDate,lDate]
+        };
+    });
+
+    json["properties"].sessionN = sessionN;
+    json["properties"].sessionData = JSON.stringify(sData);
+    
+    let blob = new Blob([JSON.stringify(json)],{type:"application/json; utf-8"});
     let a = document.createElement("a");
     a.download = "einarkl_timer_"+date+".txt";
     a.href = window.URL.createObjectURL(blob);
