@@ -286,6 +286,11 @@ function createSession() {
     let sessionRank = sessionList.length + 1;
     let sessionScrType = scrTypes[0];
     let sessionSolutions = [];
+
+    if (sessionScrType === sessionList[curSession].scrType) {
+        doNotScramble = true;
+    }
+    
     curSession = sessionList.length;
     curScrType = sessionScrType;
 
@@ -316,6 +321,7 @@ function renameSession() {
     let sName = prompt("Enter session name:", sessionList[curSession].name);
     if (sName) {
         sessionList[curSession].name = sName;
+        doNotScramble = true;
         openDB(editDB, sessionList[curSession].id, sessionList[curSession])
     }
 }
@@ -323,6 +329,8 @@ function renameSession() {
 function deleteSession() {
     if (confirm("Are you sure you want do delete the session?")) {
         let lastSession = curSession === sessionList.length - 1;
+        let scr = sessionList[curSession].scrType;
+
         for (let i = curSession; i < sessionList.length; i++) {
             if (sessionList[i + 1]) {
                 sessionList[i].name = sessionList[i + 1].name;
@@ -345,6 +353,10 @@ function deleteSession() {
             $("#sessionList option[id="+id+"]").attr("selected","selected");
 
             curSession = sessionList.length - 1;
+        }
+
+        if (scr === sessionList[curSession].scrType) {
+            doNotScramble = true;
         }
 
         checkSessions();
@@ -384,7 +396,12 @@ function checkSessions() {
 }
 
 function changeSession() {
+    let scr = sessionList[curSession].scrType;
     curSession = parseInt($("#sessionList").val());
+    
+    if (scr === sessionList[curSession].scrType) {
+        doNotScramble = true;
+    }
     
     resetTimer();
     
