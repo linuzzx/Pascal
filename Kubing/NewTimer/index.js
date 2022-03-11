@@ -1224,14 +1224,17 @@ function keyActions() {
                         waitForTimer();
                     }
                 }
-                else {
-                    if (e.altKey && e.keyCode === 90 && !waiting && !ready && stopped) {
-                        deleteSolve(sessionList.length - 1);
-                    }
-                }
             }
             if (e.keyCode === 27) {
                 resetTimer();
+            }
+            if (!waiting && !ready && stopped) {
+                if (e.altKey && e.keyCode === 90) {
+                    deleteSolve(sessionList.length - 1);
+                }
+                else if (e.altKey && e.keyCode === 39) {
+                    getScramble();
+                }
             }
         }
     })
