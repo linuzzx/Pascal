@@ -698,7 +698,6 @@ function changePenalty(i) {
     sessionList[curSession].solutions[i].penalty = parseInt($('input[name="penalty"]:checked').val());
 
     doNotScramble = true;
-
     openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
     showInfo(i, 1);
 }
@@ -707,6 +706,7 @@ function editComment(i) {
     let c = prompt("Comment", sessionList[curSession].solutions[i].comment);
     if (c || c === "") {
         sessionList[curSession].solutions[i].comment = c;
+        doNotScramble = true;
         openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
     }
     showInfo(i, 1);
@@ -720,6 +720,7 @@ function deleteSolve(i) {
     if (confirm("Are you sure you want do delete the time?")) {
         sessionList[curSession].solutions.splice(i, 1);
 
+        doNotScramble = true;
         openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
         closeTimeStats();
     }
@@ -1221,6 +1222,11 @@ function keyActions() {
                 if (e.keyCode === 32) {
                     if (!ready) {
                         waitForTimer();
+                    }
+                }
+                else {
+                    if (e.altKey && e.keyCode === 90 && !waiting && !ready && stopped) {
+                        deleteSolve(sessionList.length - 1);
                     }
                 }
             }
