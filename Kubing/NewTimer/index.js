@@ -1242,22 +1242,22 @@ function keyActions() {
 }
 
 function touchActions() {
-    $("html").on('touchStart', function (e) {
+    $("html").on({'touchstart' : function() { 
         if (!showingOuterInner) {
             if (timing) {
                 stopTimer();
             }
         }
-    });
+    }});
     
-    $("#display").on('touchStart', function (e) {
+    $("#display").on({'touchstart' : function() { 
         if (!showingOuterInner) {
             if (!ready) {
                 waitForTimer();
             }
         }
-    })
-    .on('touchEnd', function (e) {
+    }})
+    .on({'touchend' : function() {
         if (!showingOuterInner) {
             if (ready && !timing) {
                 startTimer();
@@ -1274,7 +1274,7 @@ function touchActions() {
                     }, 100);
             }
         }
-    });
+    }});
 }
 
 function adjustSize() {
