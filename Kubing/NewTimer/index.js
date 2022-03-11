@@ -1197,6 +1197,10 @@ function initActions() {
     $(".inner").on("mousedown", function (e) {
         e.stopPropagation();
     });
+
+    $("#display").bind("contextmenu", function(e){
+        return false;
+    });
 }
 
 function keyActions() {
@@ -1243,20 +1247,21 @@ function keyActions() {
 
 function touchActions() {
     $("html").on({'touchstart' : function() {
-        alert("HTML")
         if (!showingOuterInner && timing) {
             stopTimer();
         }
     }});
     
-    $("#display").on({'touchstart' : function() {
-        alert("Display")
-        if (!showingOuterInner && !ready) {
+    $("#display").on({'touchstart' : function(e) {
+        if (!showingOuterInner && !ready && !timing) {
+            e.stopPropagation();
             waitForTimer();
+        }
+        else if (!showingOuterInner && timing) {
+            stopTimer();
         }
     }})
     .on({'touchend' : function() {
-        alert("Display")
         if (!showingOuterInner) {
             if (ready && !timing) {
                 startTimer();
