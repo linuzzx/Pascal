@@ -279,7 +279,6 @@ let colors222 = [
 
     function getScrambleMega() {
         let movesExtra = ["++", "--"];
-        let uExtra = ["U", "U'"];
         let scr = "";
 
         for (let j=0; j<7; j++) {
@@ -306,7 +305,7 @@ let colors222 = [
                 }
             }
             if (j < 6) {
-                scr += "</span><br/>";
+                scr += "</span></br>";
             }
         }
         

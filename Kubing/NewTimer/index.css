@@ -75,11 +75,12 @@ label {
     font-family: Verdana;
 }
 
-.svgScramble {
+#drawScramble {
     position: absolute;
     bottom: 5vh;
     right: 5vh;
 }
+
 
 #btnOptions {
     margin-bottom: 1vh;

@@ -11,7 +11,7 @@ let green = "#00FF00";
 let yellow = "#F5E801";
 let red = "#FF0000";
 
-const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "mega", "pyra", "skewb", "sq1"];
+const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "minx", "pyram", "skewb", "sq1"];
 
 let wait055;
 let showTime;
@@ -165,10 +165,10 @@ function getScramble() {
             case "clock":
                 scramble = getScrambleClock();
                 break;
-            case "mega":
+            case "minx":
                 scramble = getScrambleMega();
                 break;
-            case "pyra":
+            case "pyram":
                 scramble = getScramblePyra();
                 break;
             case "skewb":
@@ -197,7 +197,7 @@ function drawScramble() {
         case "222":
             draw222Svg($("#cube"),scramble);
             break;
-        case "444":
+        /*case "444":
             draw444Svg($("#cube"),scramble);
             break;
         case "555":
@@ -212,19 +212,22 @@ function drawScramble() {
         case "clock":
             drawClockSvg($("#cube"),scramble);
             break;
-        case "mega":
+        case "minx":
             drawMegaSvg($("#cube"),scramble);
             break;
-        case "pyra":
+        case "pyram":
             drawPyraSvg($("#cube"),scramble);
             break;
         case "skewb":
             drawSkewbSvg($("#cube"),scramble);
-            break;
+            break;*/
         case "sq1":
             drawSq1Svg($("#cube"),scramble);
             break;
         default:
+            $("#drawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='"+curScrType+"' scramble=\""+
+                scramble.replaceAll("<span>","").replaceAll("</span>","").replaceAll("</br>"," ")+
+                "\" checkered></scramble-display>");
             break;
     }
 }
@@ -264,7 +267,6 @@ function connectAndGetDataFromDB() {
 
 function getData(data) {
     let arr = data.slice().sort(function(a,b){return a.rank-b.rank});
-    
     if (arr.length !== 0) {
         sessionList = arr.slice();
 
@@ -287,7 +289,7 @@ function createSession() {
     let sessionScrType = scrTypes[0];
     let sessionSolutions = [];
 
-    if (sessionScrType === sessionList[curSession].scrType) {
+    if (sessionList[curSession] && sessionScrType === sessionList[curSession].scrType) {
         doNotScramble = true;
     }
     
@@ -418,7 +420,7 @@ function changeScrType() {
     curScrType = $("#scrambleType").children(":selected").attr("id");
     $("#scrambleType").blur();
 
-    if (curScrType === "mega") {
+    if (curScrType === "minx") {
         $("#scramble").css("text-align", "left");
     }
     else {
@@ -434,7 +436,7 @@ function updateScrType() {
     curScrType = sessionList[curSession].scrType;
     $("#scrambleType").val(curScrType);
 
-    if (curScrType === "mega") {
+    if (curScrType === "minx") {
         $("#scramble").css("text-align", "left");
     }
     else {
@@ -1039,7 +1041,7 @@ function getScrType(opt) {
         return "clock";
     }
     else if (st.includes("mg")) {
-        return "mega";
+        return "minx";
     }
     else if (st.includes("pyr")) {
         return "pyra";
@@ -1185,7 +1187,7 @@ function initActions() {
     connectAndGetDataFromDB();
     keyActions();
 
-    curScrType = $("#scrambleType").children(":selected").attr("id");
+    curScrType = $("#scrambleType").val();
 
     getScramble();
 
