@@ -979,9 +979,9 @@ async function importFromCSTimer() {
             if (confirm("Importing will override current data. Do you still want to import?")) {
                 sessionList = [];
 
-                let numOfSessions = json.properties.session || json.properties.sessionN;
+                let numOfSessions = json.properties.session || json.properties.sessionN || Object.keys(json.properties).length;
                 let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
-                
+
                 let i = 0;
                 $.each(json, function(key, sessions) {
                     if (key.includes("session")) {
