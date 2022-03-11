@@ -1242,22 +1242,21 @@ function keyActions() {
 }
 
 function touchActions() {
-    $("html").on({'touchstart' : function() { 
-        if (!showingOuterInner) {
-            if (timing) {
-                stopTimer();
-            }
+    $("html").on({'touchstart' : function() {
+        alert("HTML")
+        if (!showingOuterInner && timing) {
+            stopTimer();
         }
     }});
     
-    $("#display").on({'touchstart' : function() { 
-        if (!showingOuterInner) {
-            if (!ready) {
-                waitForTimer();
-            }
+    $("#display").on({'touchstart' : function() {
+        alert("Display")
+        if (!showingOuterInner && !ready) {
+            waitForTimer();
         }
     }})
     .on({'touchend' : function() {
+        alert("Display")
         if (!showingOuterInner) {
             if (ready && !timing) {
                 startTimer();
