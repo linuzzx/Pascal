@@ -1230,7 +1230,7 @@ function keyActions() {
             }
             if (!waiting && !ready && stopped) {
                 if (e.altKey && e.keyCode === 90) {
-                    deleteSolve(sessionList.length - 1);
+                    deleteSolve(sessionList[curSession].solutions.length - 1);
                 }
                 else if (e.altKey && e.keyCode === 39) {
                     getScramble();
