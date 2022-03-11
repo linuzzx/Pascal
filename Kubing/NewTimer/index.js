@@ -13,11 +13,10 @@ let red = "#FF0000";
 
 const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "mega", "pyra", "skewb", "sq1"];
 
-let wait055 = false;
-let showTime = true;
-let listLatestFirst = true;
-
-let customPlaceholder = "Timing";
+let wait055;
+let showTime;
+let listLatestFirst;
+let customPlaceholder;
 
 let svgWidth, svgHeight;
 
@@ -30,7 +29,7 @@ let sessionList = [];
 let doNotScramble = false;
 let doNotCreateNew = false;
 
-let settings = localStorage.getItem("einarkl_timer_settings");//wait055,showTime,listLatestFirst,customPlaceholder
+let settings;
 
 //Average arrays
 let mo3s = [];
@@ -903,6 +902,7 @@ function emptyAvgArrays() {
 function changeListingOrder() {
     listLatestFirst = !listLatestFirst;
     updateStats();
+    changeSettings();
 }
 
 function toggleShowTime(val) {
@@ -914,6 +914,7 @@ function toggleShowTime(val) {
         showTime = false;
         $("#inpCustomPlaceholder").prop("disabled",false);
     }
+    changeSettings();
 }
 
 function toggleWaitingTime(val) {
@@ -923,15 +924,19 @@ function toggleWaitingTime(val) {
     else {
         wait055 = false;
     }
+    changeSettings();
 }
 
 function changeCustomPlaceholder(val) {
     if (val.trim() !== "") {
         customPlaceholder = val.trim();
-    }
-    else {
         $("#inpCustomPlaceholder").val(customPlaceholder);
     }
+    else {
+        $("#inpCustomPlaceholder").val(settings.customPlaceholder);
+    }
+    console.log(val);
+    changeSettings();
 }
 
 async function importFromCSTimer() {
@@ -1110,12 +1115,40 @@ function getYYYYMMDD_HHmmss() {
 }
 
 function changeSettings() {
-    settings = "";
+    settings = {
+        "wait055":wait055,
+        "showTime":showTime,
+        "listLatestFirst":listLatestFirst,
+        "customPlaceholder":customPlaceholder
+    };
 
-    localStorage.setItem("einarkl_timer_settings", settings);
+    localStorage.setItem("einarkl_timer_settings", JSON.stringify(settings));
+}
+
+function getSettings() {
+    if (localStorage.getItem("einarkl_timer_settings")) {
+        console.log("Fant local storage");
+        settings = $.parseJSON(localStorage.getItem("einarkl_timer_settings"));
+    }
+    else {
+        settings = {
+            "wait055":false,
+            "showTime":true,
+            "listLatestFirst":true,
+            "customPlaceholder":"Timing"
+        };
+    }
+
+    wait055 = settings.wait055;
+    showTime = settings.showTime;
+    listLatestFirst = settings.listLatestFirst;
+    customPlaceholder = settings.customPlaceholder;
+    $("#inpCustomPlaceholder").val(customPlaceholder);
 }
 
 function initActions() {
+    getSettings();
+
     connectAndGetDataFromDB();
     keyActions();
 
