@@ -324,7 +324,15 @@ function renameSession() {
     if (sName) {
         sessionList[curSession].name = sName;
         doNotScramble = true;
-        openDB(editDB, sessionList[curSession].id, sessionList[curSession])
+        openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
+    }
+}
+
+function resetSession() {
+    if (confirm("Are you sure you want do reset the session?")) {
+        sessionList[curSession].solutions = [];
+        doNotScramble = true;
+        openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
     }
 }
 
@@ -699,7 +707,7 @@ function editComment(i) {
     let c = prompt("Comment", sessionList[curSession].solutions[i].comment);
     if (c || c === "") {
         sessionList[curSession].solutions[i].comment = c;
-        openDB(editDB, sessionList[curSession].id, sessionList[curSession])
+        openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
     }
     showInfo(i, 1);
 }
@@ -954,7 +962,6 @@ function changeCustomPlaceholder(val) {
     else {
         $("#inpCustomPlaceholder").val(settings.customPlaceholder);
     }
-    console.log(val);
     changeSettings();
 }
 
@@ -1146,7 +1153,6 @@ function changeSettings() {
 
 function getSettings() {
     if (localStorage.getItem("einarkl_timer_settings")) {
-        console.log("Fant local storage");
         settings = $.parseJSON(localStorage.getItem("einarkl_timer_settings"));
     }
     else {
