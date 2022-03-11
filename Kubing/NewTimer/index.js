@@ -1288,6 +1288,18 @@ function touchActions() {
 }
 
 function adjustSize() {
+    //Fix size for phone screen
+    /*if ($("#content").width() >= $("#content").height()) {
+        $("#left").css("display", "block");
+        $("#content").css("grid-template-columns", "1fr 2fr 1fr");
+        $("#content").css("grid-template-rows", "");
+    }
+    else {
+        $("#left").css("display", "none");
+        $("#content").css("grid-template-rows", "0fr 4fr 1fr");
+        $("#content").css("grid-template-columns", "");
+    }*/
+
     let svgWidth = $("#right").width() * 0.75;
     let svgHeight = svgWidth * 3/4;
 
