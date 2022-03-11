@@ -274,7 +274,26 @@ let colors222 = [
     }
 
     function getScrambleClock() {
-        return "Under production";
+        let c = ["UR","DR","DL","UL"];
+        let e = ["U","R","D","L"];
+        let x = ["ALL","y2 "];
+        let extra = ["0+ ","1+ ","2+ ","3+ ","4+ ","5+ ","6+ ","1- ","2- ","3- ","4- ","5- "];
+        let scr = c[0] + extra[Math.floor(Math.random() * extra.length)] + c[1] + extra[Math.floor(Math.random() * extra.length)] + 
+                    c[2] + extra[Math.floor(Math.random() * extra.length)] + c[3] + extra[Math.floor(Math.random() * extra.length)] + 
+                    e[0] + extra[Math.floor(Math.random() * extra.length)] + e[1] + extra[Math.floor(Math.random() * extra.length)] + 
+                    e[2] + extra[Math.floor(Math.random() * extra.length)] + e[3] + extra[Math.floor(Math.random() * extra.length)] + 
+                    x[0] + extra[Math.floor(Math.random() * extra.length)] + x[1] + 
+                    e[0] + extra[Math.floor(Math.random() * extra.length)] + e[1] + extra[Math.floor(Math.random() * extra.length)] + 
+                    e[2] + extra[Math.floor(Math.random() * extra.length)] + e[3] + extra[Math.floor(Math.random() * extra.length)] + 
+                    x[0] + extra[Math.floor(Math.random() * extra.length)];
+
+        for (let p of c) {
+            if (Math.round(Math.random() * 1) === 1) {
+                scr += p + " ";
+            }
+        }
+
+        return scr.trim();
     }
 
     function getScrambleMega() {
