@@ -44,25 +44,69 @@ let colors222 = [
 // Get scramble
 {
     function getScrambleNxN(n) {
+        if (n < 2) {
+            return "Don't be silly :P";
+        }
 
+        let scr = "";
+        let movesExtra = ["", "'", "2"];
+        let axises = n > 2 ? [["U","D"], ["F","B"], ["R","L"]] : [["U"], ["F"], ["R"]];
+        let movesAxis = [["",""]];
+        let num = n > 3 ? 20*(n-2) : (n === 3 ? Math.floor(Math.random() * 4 + 19) : Math.floor(Math.random() * 3 + 9));
+
+        for (let i = 4; i <= n; i++) {
+            let nW = Math.floor(i/2) === 2 ? "" : Math.floor(i/2);
+            let nA = [nW,"w"];
+            
+            if (!JSON.stringify(movesAxis).includes(JSON.stringify(nA))) {
+                movesAxis.push(nA);
+            }
+        }
+        
+        let curAxis = -1;
+        let moves = [];
+        for (let i = 0; i < num; i++) {
+            let axis = Math.floor(Math.random() * axises.length);
+
+            if (axis !== curAxis) {
+                curAxis = axis;
+                moves = movesAxis.map(m => [m[0] + axises[curAxis][0] + m[1]])
+                        .concat(movesAxis.map(m => [m[0] + axises[curAxis][1] + m[1]]));
+                if (n % 2 === 0) {
+                    moves.pop();
+                }
+            }
+            else if (moves.length === 0) {
+                i--;
+                continue;
+            }
+
+            let move = moves[Math.floor(Math.random() * moves.length)];
+            let moveE = movesExtra[Math.floor(Math.random() * movesExtra.length)];
+            
+            moves.splice(moves.indexOf(move), 1);
+
+            scr += move + moveE + " ";
+        }
+        return scr.trim();
     }
 
     function getScramble333() {
         let scr = "";
-        var moves = ["R", "L", "F", "B", "U", "D"];
-        var movesExtra = ["", "'", "2"];
-        var numOfMoves = [19, 20, 21];
-        var num = numOfMoves[Math.floor(Math.random() * numOfMoves.length)];
-        var scrambleArray = [];
+        let moves = ["R", "L", "F", "B", "U", "D"];
+        let movesExtra = ["", "'", "2"];
+        let numOfMoves = [19, 20, 21];
+        let num = numOfMoves[Math.floor(Math.random() * numOfMoves.length)];
+        let scrambleArray = [];
 
-        for (var i=0; i<num; i++) {
+        for (let i=0; i<num; i++) {
             if (scrambleArray.length < 1) { //Sjekker om array er tomt
                 scrambleArray[i] = moves[Math.floor(Math.random() * moves.length)];
             }
             else if (scrambleArray.length >= 1) {
-                var like = true;
+                let like = true;
                 while (like === true) {
-                    var trekk1 = moves[Math.floor(Math.random() * moves.length)];
+                    let trekk1 = moves[Math.floor(Math.random() * moves.length)];
                     scrambleArray[i] = trekk1;
 
                     if (scrambleArray[i] === moves[0]) {        //R
@@ -177,7 +221,7 @@ let colors222 = [
             }
         }
 
-        for (var j=0; j<scrambleArray.length; j++) {
+        for (let j=0; j<scrambleArray.length; j++) {
             scr += scrambleArray[j] + movesExtra[Math.floor(Math.random() * movesExtra.length)] + " ";
         }
 
@@ -535,7 +579,7 @@ let colors222 = [
         let strokeWidth = 1;
 
         let num = 0;
-        for (var y = 0*h; y < 3*h; y += h) {
+        for (let y = 0*h; y < 3*h; y += h) {
             for (let x = 3*w+space; x < 6*w; x += w) {
                 fill = colors333[solvedState333.indexOf(arr[num])];
                 
@@ -551,7 +595,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 3*h+space; y < 6*h; y += h) {
+        for (let y = 3*h+space; y < 6*h; y += h) {
             for (let x = 0*w; x < 3*w; x += w) {
                 fill = colors333[solvedState333.indexOf(arr[num])];
                 
@@ -567,7 +611,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 3*h+space; y < 6*h; y += h) {
+        for (let y = 3*h+space; y < 6*h; y += h) {
             for (let x = 3*w+space; x < 6*w; x += w) {
                 fill = colors333[solvedState333.indexOf(arr[num])];
                 
@@ -583,7 +627,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 3*h+space; y < 6*h; y += h) {
+        for (let y = 3*h+space; y < 6*h; y += h) {
             for (let x = 6*w+2*space; x < 9*w; x += w) {
                 fill = colors333[solvedState333.indexOf(arr[num])];
                 
@@ -599,7 +643,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 3*h+space; y < 6*h; y += h) {
+        for (let y = 3*h+space; y < 6*h; y += h) {
             for (let x = 9*w+3*space; x < 12*w+space; x += w) {
                 fill = colors333[solvedState333.indexOf(arr[num])];
                 
@@ -615,7 +659,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 6*h+2*space; y < 9*h; y += h) {
+        for (let y = 6*h+2*space; y < 9*h; y += h) {
             for (let x = 3*w+space; x < 6*w; x += w) {
                 fill = colors333[solvedState333.indexOf(arr[num])];
                 
@@ -646,7 +690,7 @@ let colors222 = [
         let strokeWidth = 1;
 
         let num = 0;
-        for (var y = 0*h; y < 2*h; y += h) {
+        for (let y = 0*h; y < 2*h; y += h) {
             for (let x = 2*w+space; x < 4*w; x += w) {
                 fill = colors222[solvedState222.indexOf(arr[num])];
                 
@@ -662,7 +706,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 2*h+space; y < 4*h; y += h) {
+        for (let y = 2*h+space; y < 4*h; y += h) {
             for (let x = 0*w; x < 2*w; x += w) {
                 fill = colors222[solvedState222.indexOf(arr[num])];
                 
@@ -678,7 +722,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 2*h+space; y < 4*h; y += h) {
+        for (let y = 2*h+space; y < 4*h; y += h) {
             for (let x = 2*w+space; x < 4*w; x += w) {
                 fill = colors222[solvedState222.indexOf(arr[num])];
                 
@@ -694,7 +738,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 2*h+space; y < 4*h; y += h) {
+        for (let y = 2*h+space; y < 4*h; y += h) {
             for (let x = 4*w+2*space; x < 6*w; x += w) {
                 fill = colors222[solvedState222.indexOf(arr[num])];
                 
@@ -710,7 +754,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 2*h+space; y < 4*h; y += h) {
+        for (let y = 2*h+space; y < 4*h; y += h) {
             for (let x = 6*w+3*space; x < 8*w+space; x += w) {
                 fill = colors222[solvedState222.indexOf(arr[num])];
                 
@@ -726,7 +770,7 @@ let colors222 = [
                 num++;
             }
         }
-        for (var y = 4*h+2*space; y < 6*h; y += h) {
+        for (let y = 4*h+2*space; y < 6*h; y += h) {
             for (let x = 2*w+space; x < 4*w; x += w) {
                 fill = colors222[solvedState222.indexOf(arr[num])];
                 
@@ -1348,7 +1392,7 @@ function applyMoves(allMoves) {
 
     resetCubeState();
 
-    for (var i = 0; i < scrambleArray.length; i++) {
+    for (let i = 0; i < scrambleArray.length; i++) {
         switch (scrambleArray[i]) {
             case "R":
                 _r();

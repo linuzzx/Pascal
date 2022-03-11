@@ -145,22 +145,22 @@ function getScramble() {
     if (!doNotScramble) {
         switch (curScrType) {
             case "333":
-                scramble = getScramble333();
+                scramble = getScrambleNxN(3);
                 break;
             case "222":
-                scramble = getScramble222();
+                scramble = getScrambleNxN(2);
                 break;
             case "444":
-                scramble = getScramble444();
+                scramble = getScrambleNxN(4);
                 break;
             case "555":
-                scramble = getScramble555();
+                scramble = getScrambleNxN(5);
                 break;
             case "666":
-                scramble = getScramble666();
+                scramble = getScrambleNxN(6);
                 break;
             case "777":
-                scramble = getScramble777();
+                scramble = getScrambleNxN(7);
                 break;
             case "clock":
                 scramble = getScrambleClock();
