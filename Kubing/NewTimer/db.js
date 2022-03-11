@@ -77,11 +77,11 @@ function getAllFromDB(exporting = false) {
     request.onsuccess = e => {
         data = e.target.result;
         // List opp data
-        if (!exporting) {
-            getData(data);
+        if (exporting) {
+            getExportData(data);
         }
         else {
-            getExportData(data);
+            getData(data);
         }
     }
 }

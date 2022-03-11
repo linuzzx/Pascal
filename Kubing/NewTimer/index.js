@@ -960,7 +960,7 @@ async function importFromCSTimer() {
                     if (key.includes("session")) {
                         // Add to current data
                         let num = sessionList.length + 1;
-                        let sessionId = formatSessionID(num);
+                        let sessionId = "session"+num;
                         let sessionName = sessionData[i].name || "Session " + num;
                         let sessionRank = sessionData[i].rank;
                         let sessionScrType = getScrType(Object.values(sessionData[i])[1]);
@@ -1143,20 +1143,6 @@ function getSettings() {
     showTime = settings.showTime;
     listLatestFirst = settings.listLatestFirst;
     customPlaceholder = settings.customPlaceholder;
-    $("#inpCustomPlaceholder").val(customPlaceholder);
-}
-
-function initActions() {
-    getSettings();
-
-    connectAndGetDataFromDB();
-    keyActions();
-
-    curScrType = $("#scrambleType").children(":selected").attr("id");
-
-    getScramble();
-
-    $("#timeList").parent().css("overflow-y", "scroll");
 
     if (showTime) {
         $("input:radio[name=showTime]").filter("[value=1]").prop('checked', true);
@@ -1174,6 +1160,19 @@ function initActions() {
     else {
         $("input:radio[name=wait055]").filter("[value=0]").prop('checked', true);
     }
+}
+
+function initActions() {
+    getSettings();
+
+    connectAndGetDataFromDB();
+    keyActions();
+
+    curScrType = $("#scrambleType").children(":selected").attr("id");
+
+    getScramble();
+
+    $("#timeList").parent().css("overflow-y", "scroll");
 
     $(".inner").on("mousedown", function (e) {
         e.stopPropagation();
