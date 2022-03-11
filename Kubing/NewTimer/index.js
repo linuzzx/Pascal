@@ -1186,6 +1186,7 @@ function initActions() {
 
     connectAndGetDataFromDB();
     keyActions();
+    touchActions();
 
     curScrType = $("#scrambleType").val();
 
@@ -1235,6 +1236,42 @@ function keyActions() {
                             timing = false;
                         }, 100);
                 }
+            }
+        }
+    });
+}
+
+function touchActions() {
+    $("html").on('touchStart', function (e) {
+        if (!showingOuterInner) {
+            if (timing) {
+                stopTimer();
+            }
+        }
+    });
+    
+    $("#display").on('touchStart', function (e) {
+        if (!showingOuterInner) {
+            if (!ready) {
+                waitForTimer();
+            }
+        }
+    })
+    .on('touchEnd', function (e) {
+        if (!showingOuterInner) {
+            if (ready && !timing) {
+                startTimer();
+            }
+            else if (wait055 && !ready && !timing) {
+                waiting = false;
+                clearInterval(waitingInterval);
+                resetTimer();
+            }
+            else if (timing) {
+                setTimeout(
+                    function() {
+                        timing = false;
+                    }, 100);
             }
         }
     });
