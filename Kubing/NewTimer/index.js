@@ -889,7 +889,7 @@ function getBestAvg(num) {
     }
     else if (num === 25) {
         arr = ao25s.slice();
-    }/*
+    }
     else if (num === 50) {
         arr = ao25s.slice();
     }
@@ -913,7 +913,7 @@ function getBestAvg(num) {
     }
     else if (num === 10000) {
         arr = ao10000s.slice();
-    }*/
+    }
 
     let bAvg = Infinity;
     
@@ -1005,7 +1005,7 @@ async function importFromCSTimer() {
 
                 let numOfSessions = json.properties.session || json.properties.sessionN || Object.keys(json).map(k => k).filter(function(k){if (k.includes("session")) {return k};}).length;
                 let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
-
+                
                 let i = 0;
                 $.each(json, function(key, sessions) {
                     if (key.includes("session")) {
@@ -1014,7 +1014,8 @@ async function importFromCSTimer() {
                         let sessionId = "session"+num;
                         let sessionName = sessionData[i].name || "Session " + num;
                         let sessionRank = sessionData[i].rank;
-                        let sessionScrType = getScrType(Object.values(sessionData[i])[1]);
+                        //let sessionScrType = getScrType(Object.values(sessionData[i])[1]);
+                        let sessionScrType = getScrType(sessionData[i].opt);
                         let sessionSolutions = [];
                         curSession = sessionList.length;
                         curScrType = sessionScrType;
@@ -1083,6 +1084,9 @@ function getScrType(opt) {
     }
     else if (st.includes("sq")) {
         return "sq1";
+    }
+    else {
+        return "333";
     }
 }
 
