@@ -889,7 +889,31 @@ function getBestAvg(num) {
     }
     else if (num === 25) {
         arr = ao25s.slice();
+    }/*
+    else if (num === 50) {
+        arr = ao25s.slice();
     }
+    else if (num === 100) {
+        arr = ao25s.slice();
+    }
+    else if (num === 200) {
+        arr = ao25s.slice();
+    }
+    else if (num === 500) {
+        arr = ao25s.slice();
+    }
+    else if (num === 1000) {
+        arr = ao25s.slice();
+    }
+    else if (num === 2000) {
+        arr = ao25s.slice();
+    }
+    else if (num === 5000) {
+        arr = ao25s.slice();
+    }
+    else if (num === 10000) {
+        arr = ao10000s.slice();
+    }*/
 
     let bAvg = Infinity;
     
