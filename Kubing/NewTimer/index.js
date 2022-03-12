@@ -267,6 +267,7 @@ function connectAndGetDataFromDB() {
 
 function getData(data) {
     let arr = data.slice().sort(function(a,b){return a.rank-b.rank});
+    
     if (arr.length !== 0) {
         sessionList = arr.slice();
 
@@ -483,10 +484,10 @@ function updateStats() {
             getAo25(sessionList[curSession], i);
             getAo50(sessionList[curSession], i);
             getAo100(sessionList[curSession], i);
-            getAo200(sessionList[curSession], i);
+            /*getAo200(sessionList[curSession], i);
             getAo500(sessionList[curSession], i);
             getAo1000(sessionList[curSession], i);
-            /*getAo2000(sessionList[curSession], i);
+            getAo2000(sessionList[curSession], i);
             getAo5000(sessionList[curSession], i);
             getAo10000(sessionList[curSession], i);*/
         }
@@ -1014,7 +1015,6 @@ async function importFromCSTimer() {
                         let sessionId = "session"+num;
                         let sessionName = sessionData[i].name || "Session " + num;
                         let sessionRank = sessionData[i].rank;
-                        //let sessionScrType = getScrType(Object.values(sessionData[i])[1]);
                         let sessionScrType = getScrType(sessionData[i].opt);
                         let sessionSolutions = [];
                         curSession = sessionList.length;
