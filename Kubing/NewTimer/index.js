@@ -560,7 +560,7 @@ function updateStats() {
 
 function addToPBList(num, arr) {
     let curAvg = arr[arr.length-1];
-    let bestAvg = getBestAvg(num);
+    let bestAvg = getBestAvg(num);console.log(bestAvg);
 
     let avgName = num === 3 ? "Mo3" : "Ao" + num;
     let curAvgID = num === 3 ? "curMo3" : "curAo" + num;
@@ -579,6 +579,8 @@ function addToPBList(num, arr) {
 
     $("#"+bestAvgID).on("click", function() {
         let i = arr.indexOf(bestAvg);
+        console.log(arr);
+        console.log(bestAvg);
         showInfo(i, num, true);
     });
 }
@@ -591,6 +593,7 @@ function reverseTable(table) {
 }
 
 function showInfo(i, num, pb = null) {
+    console.log(i);
     let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];
@@ -892,25 +895,25 @@ function getBestAvg(num) {
         arr = ao25s.slice();
     }
     else if (num === 50) {
-        arr = ao25s.slice();
+        arr = ao50s.slice();
     }
     else if (num === 100) {
-        arr = ao25s.slice();
+        arr = ao100s.slice();
     }
     else if (num === 200) {
-        arr = ao25s.slice();
+        arr = ao200s.slice();
     }
     else if (num === 500) {
-        arr = ao25s.slice();
+        arr = ao500s.slice();
     }
     else if (num === 1000) {
-        arr = ao25s.slice();
+        arr = ao1000s.slice();
     }
     else if (num === 2000) {
-        arr = ao25s.slice();
+        arr = ao2000s.slice();
     }
     else if (num === 5000) {
-        arr = ao25s.slice();
+        arr = ao5000s.slice();
     }
     else if (num === 10000) {
         arr = ao10000s.slice();
