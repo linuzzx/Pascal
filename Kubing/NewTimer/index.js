@@ -1271,7 +1271,7 @@ function keyActions() {
                 setTimeout(
                     function() {
                         timing = false;
-                    }, 100);
+                    }, 500);
             }
             else if (e.keyCode === 32) {
                 if (ready && !timing) {
