@@ -1268,7 +1268,13 @@ function keyActions() {
     })
     .on('keyup', function (e) {
         if (!showingOuterInner) {
-            if (e.keyCode === 32) {
+            if (timing && e.keyCode !== 27) {
+                setTimeout(
+                    function() {
+                        timing = false;
+                    }, 100);
+            }
+            else if (e.keyCode === 32) {
                 if (ready && !timing) {
                     startTimer();
                 }
@@ -1276,12 +1282,6 @@ function keyActions() {
                     waiting = false;
                     clearInterval(waitingInterval);
                     resetTimer();
-                }
-                else if (timing) {
-                    setTimeout(
-                        function() {
-                            timing = false;
-                        }, 100);
                 }
             }
         }
