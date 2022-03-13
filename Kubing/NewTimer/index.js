@@ -138,7 +138,6 @@ function resetTimer() {
     $("#display h1").css("color", "white");
     $("#display h1").text("0.00");
     $("#scramble h1").text(scramble);
-    drawScramble();
 }
 
 function getScramble() {
