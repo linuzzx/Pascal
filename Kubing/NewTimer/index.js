@@ -2,6 +2,7 @@ let timing, waiting, ready = false;
 let stopped = true;
 let scramble;
 let curScrType;
+let curSession;
 
 let interval;
 let waitingInterval;
@@ -45,7 +46,6 @@ let ao2000s = [];
 let ao5000s = [];
 let ao10000s = [];
 
-let curSession = 0;
 
 let showingOuterInner = false;
 
@@ -408,6 +408,7 @@ function checkSessions() {
 function changeSession() {
     let scr = sessionList[curSession].scrType;
     curSession = parseInt($("#sessionList").val());
+    changeSettings();
     
     if (scr === sessionList[curSession].scrType) {
         doNotScramble = true;
@@ -1170,6 +1171,7 @@ function getYYYYMMDD_HHmmss() {
 
 function changeSettings() {
     settings = {
+        "curSession":curSession,
         "wait055":wait055,
         "showTime":showTime,
         "listLatestFirst":listLatestFirst,
@@ -1185,6 +1187,7 @@ function getSettings() {
     }
     else {
         settings = {
+            "curSession":0,
             "wait055":false,
             "showTime":true,
             "listLatestFirst":true,
@@ -1192,6 +1195,7 @@ function getSettings() {
         };
     }
 
+    curSession = settings.curSession;
     wait055 = settings.wait055;
     showTime = settings.showTime;
     listLatestFirst = settings.listLatestFirst;
