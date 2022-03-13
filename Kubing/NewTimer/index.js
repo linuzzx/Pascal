@@ -732,8 +732,8 @@ function getDDMMYYYY(ms) {
     }
 
     const d = new Date(ms);
-    const day = d.getDay().toString().length < 2 ? "0" + d.getDay() : d.getDay();
-    const month = d.getMonth().toString().length < 2 ? "0" + d.getMonth() : d.getMonth();
+    const day = d.getDate().toString().length < 2 ? "0" + d.getDate() : d.getDate();
+    const month = (d.getMonth() + 1).toString().length < 2 ? "0" + (d.getMonth() + 1) : (d.getMonth() + 1);
     const year = d.getFullYear();
     const hours = d.getHours().toString().length < 2 ? "0" + d.getHours() : d.getHours();
     const minutes = d.getMinutes().toString().length < 2 ? "0" + d.getMinutes() : d.getMinutes();
