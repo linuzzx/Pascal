@@ -593,7 +593,6 @@ function reverseTable(table) {
 }
 
 function showInfo(i, num, pb = null) {
-    console.log(i);
     let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];
