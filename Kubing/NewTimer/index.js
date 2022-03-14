@@ -422,6 +422,7 @@ function changeSession() {
 
 function updateSession() {
     updateScrType();
+    //getStats();
     updateStats();
 }
 
@@ -534,8 +535,7 @@ function updateStats() {
         if (arr.length >= 100) {
             addToPBList(100, ao100s);
         }
-        /*
-        if (arr.length >= 200) {
+        /*if (arr.length >= 200) {
             addToPBList(200, ao200s);
         }
         if (arr.length >= 500) {
@@ -552,8 +552,7 @@ function updateStats() {
         }
         if (arr.length >= 10000) {
             addToPBList(10000, ao10000s);
-        }
-        */
+        }*/
     }
     adjustSize();
 }
@@ -579,8 +578,6 @@ function addToPBList(num, arr) {
 
     $("#"+bestAvgID).on("click", function() {
         let i = arr.indexOf(bestAvg);
-        console.log(arr);
-        console.log(bestAvg);
         showInfo(i, num, true);
     });
 }
@@ -593,6 +590,9 @@ function reverseTable(table) {
 }
 
 function showInfo(i, num, pb = null) {
+    if (i < 0) {
+        return;
+    }
     let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];

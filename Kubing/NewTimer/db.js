@@ -114,3 +114,80 @@ function removeAllFromDB() {
         console.log(e);
     };
 }
+
+async function getStats() {
+    let worker3 = new Worker('webWorker.js');
+    let worker5 = new Worker('webWorker.js');
+    let worker12 = new Worker('webWorker.js');
+    let worker25 = new Worker('webWorker.js');
+    let worker50 = new Worker('webWorker.js');
+    let worker100 = new Worker('webWorker.js');
+    let worker200 = new Worker('webWorker.js');
+    let worker500 = new Worker('webWorker.js');
+    let worker1000 = new Worker('webWorker.js');
+    let worker2000 = new Worker('webWorker.js');
+    let worker5000 = new Worker('webWorker.js');
+    let worker10000 = new Worker('webWorker.js');
+
+    worker3.postMessage([curSession, mo3s, 3]);
+    worker5.postMessage([curSession, ao5s, 5]);
+    worker12.postMessage([curSession, ao12s, 12]);
+    worker25.postMessage([curSession, ao25s, 25]);
+    worker50.postMessage([curSession, ao50s, 50]);
+    worker100.postMessage([curSession, ao100s, 100]);
+    worker200.postMessage([curSession, ao100s, 200]);
+    worker500.postMessage([curSession, ao100s, 500]);
+    worker1000.postMessage([curSession, ao100s, 1000]);
+    worker2000.postMessage([curSession, ao100s, 2000]);
+    worker5000.postMessage([curSession, ao100s, 5000]);
+    worker10000.postMessage([curSession, ao100s, 10000]);
+
+    worker3.onmessage = function (e) {
+        mo3s = e.data;
+        worker3.terminate();
+    }
+    worker5.onmessage = function (e) {
+        ao5s = e.data;
+        worker5.terminate();
+    }
+    worker12.onmessage = function (e) {
+        ao12s = e.data;
+        worker12.terminate();
+    }
+    worker25.onmessage = function (e) {
+        ao25s = e.data;
+        worker25.terminate();
+    }
+    worker50.onmessage = function (e) {
+        ao50s = e.data;
+        worker50.terminate();
+    }
+    worker100.onmessage = function (e) {
+        ao100s = e.data;
+        worker100.terminate();
+    }
+    worker200.onmessage = function (e) {
+        ao200s = e.data;
+        worker200.terminate();
+    }
+    worker500.onmessage = function (e) {
+        ao500s = e.data;
+        worker500.terminate();
+    }
+    worker1000.onmessage = function (e) {
+        ao1000s = e.data;
+        worker1000.terminate();
+    }
+    worker2000.onmessage = function (e) {
+        ao2000s = e.data;
+        worker2000.terminate();
+    }
+    worker5000.onmessage = function (e) {
+        ao5000s = e.data;
+        worker5000.terminate();
+    }
+    worker10000.onmessage = function (e) {
+        ao10000s = e.data;
+        worker10000.terminate();
+    }
+}
