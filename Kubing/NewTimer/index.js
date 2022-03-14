@@ -560,7 +560,7 @@ function updateStats() {
 
 function addToPBList(num, arr) {
     let curAvg = arr[arr.length-1];
-    let bestAvg = getBestAvg(num);console.log(bestAvg);
+    let bestAvg = getBestAvg(num);
 
     let avgName = num === 3 ? "Mo3" : "Ao" + num;
     let curAvgID = num === 3 ? "curMo3" : "curAo" + num;
@@ -1006,7 +1006,7 @@ async function importFromCSTimer() {
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
                 sessionList = [];
-
+                
                 let numOfSessions = json.properties.session || json.properties.sessionN || Object.keys(json).map(k => k).filter(function(k){if (k.includes("session")) {return k};}).length;
                 let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
                 
