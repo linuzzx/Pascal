@@ -191,3 +191,15 @@ async function getStats() {
         worker10000.terminate();
     }
 }
+
+async function getStats2(curSes, arr, num) {
+    let worker = new Worker('webWorker.js');
+
+    worker.postMessage([curSes, arr, num]);
+
+    worker.onmessage = function (e) {
+        arr = e.data;
+        worker.terminate();
+        console.log(arr);
+    }
+}

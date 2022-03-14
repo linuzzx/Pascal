@@ -22,7 +22,7 @@ onmessage = function(e) {
 
     request.onsuccess = e => {
         db = e.target.result;
-
+        
         calculateAvg();
     }
 
@@ -39,8 +39,10 @@ function calculateAvg() {
         var cursor = event.target.result;
         if (cursor) {
             let session = cursor.value;
+
             if (session.rank === curSession + 1) {
                 nArr = session.solutions.slice(num - 1,session.solutions.length - 1).map(s => getAvg(session, session.solutions.indexOf(s), num));
+
                 postMessage(nArr);
             }
     
