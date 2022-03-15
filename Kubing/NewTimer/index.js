@@ -1048,13 +1048,14 @@ async function importFromCSTimer() {
                 });
 
                 doNotScramble = true; 
+                dontGetAll = true; 
                 openDB(removeAllFromDB);
                 for (let s of sessionList) {
                     doNotScramble = true;
-                    openDB(editDB, s.id, s, true);
+                    dontGetAll = (sessionList.indexOf(s) !== sessionList.length - 1);
+                    openDB(editDB, s.id, s, dontGetAll);
                 }
                 curSession = 0;
-                getAllFromDB();
                 closeOptions();
             }
         }
@@ -1290,7 +1291,7 @@ function keyActions() {
                 setTimeout(
                     function() {
                         timing = false;
-                    }, 500);
+                    }, 100);
             }
             else if (e.keyCode === 32) {
                 if (ready && !timing) {
