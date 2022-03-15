@@ -117,9 +117,9 @@ function getAllFromDB(exporting = false) {
 
 function handleDataFromDB(data) {
     let start = Date.now();
-    let w3 = new Worker("worker.js");
-    w3.postMessage([data[curSession].solutions,3]);
-    w3.onmessage = function() {console.log(Date.now() - start); w3.terminate()}
+    let w = new Worker("worker.js");
+    w.postMessage(data[curSession].solutions);
+    w.onmessage = function(e) {console.log(e.data);console.log(Date.now() - start + "ms"); w.terminate()}
 }
 
 function handleDataFromDB2(data) {
