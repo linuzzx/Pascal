@@ -358,5 +358,6 @@ function adjustSize() {
     $("#inpScramble").css("width", "80%");
     $("#selectCubeType").css("font-size", inpFontSize);
     $("#selectGrouping").css("font-size", inpFontSize);
+    $("button").css("font-size", fontSize);
     $("label").css("font-size", inpFontSize);
 }
