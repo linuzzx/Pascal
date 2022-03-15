@@ -6,9 +6,9 @@ const readonly = "readonly";
 
 let db = null;
 
-function openDB(func, arg1 = null, arg2 = null) {
+function openDB(func, arg1 = null, arg2 = null, arg3 = null) {
     const request = indexedDB.open(dbName);
-
+    
     request.onupgradeneeded = e => {
         db = e.target.result;
 
@@ -18,7 +18,10 @@ function openDB(func, arg1 = null, arg2 = null) {
     request.onsuccess = e => {
         db = e.target.result;
         if (func) {
-            if (arg2) {
+            if (arg3) {
+                func(arg1,arg2,arg3);
+            }
+            else if (arg2) {
                 func(arg1,arg2);
             }
             else if (arg1) {
@@ -35,11 +38,14 @@ function openDB(func, arg1 = null, arg2 = null) {
     }
 }
 
-function editDB(key, val) {
+function editDB(key, val, dontGetAll = false) {
     const tx = db.transaction(storeName, readwrite);
     const store = tx.objectStore(storeName);
     store.put(val, key);
-    getAllFromDB();
+    
+    if (!dontGetAll) {
+        getAllFromDB();
+    }
 }
 
 function addToDB(key, val) {

@@ -1050,9 +1050,10 @@ async function importFromCSTimer() {
                 openDB(removeAllFromDB);
                 for (let s of sessionList) {
                     doNotScramble = true;
-                    openDB(editDB, s.id, s);
+                    openDB(editDB, s.id, s, true);
                 }
                 curSession = 0;
+                getAllFromDB();
                 closeOptions();
             }
         }
