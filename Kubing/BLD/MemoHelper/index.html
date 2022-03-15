@@ -16,7 +16,12 @@
         <h1 style="color: #aaaaaa;">BLD Memo Helper</h1>
         <h1 id="options">Memo</h1>
         <h1><input id="inpScramble" class="form-control" type="text" placeholder="Type scramble..."></h1>
-        <button id="btnGetMemo" class="btn btn-secondary" onclick="getMemo()">Get memo</button>
+        <button id="btnGetMemo" class="btn btn-secondary" onclick="getMemo()">Get memo</button><br/><br/>
+        <div>
+            <button id="btnGetScramble" class="btn btn-secondary" onclick="btnGetScrambleClick('333')">Scramble cube</button>
+            <button id="btnGetScramble" class="btn btn-secondary" onclick="btnGetScrambleClick('corners')">Scramble corners</button>
+            <button id="btnGetScramble" class="btn btn-secondary" onclick="btnGetScrambleClick('edges')">Scramble edges</button>
+        </div>
         <h1 id="memo"></h1>
         <h1 id="solution"></h1>
     </div>

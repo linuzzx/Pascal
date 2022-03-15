@@ -21,7 +21,11 @@ let cornerSolution = [];
 let cornersSol = [];
 let cornersTwisted = [];
 
+let cstimerScrambler;
+
 $(function() {
+    initCSTimerScrambler();
+
     $("#inpScramble").on('keyup', function (e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
             getMemo();
@@ -312,4 +316,47 @@ function get3style() {
     out += "<br>";
 
     $("#solution").html(out);
+}
+
+function btnGetScrambleClick(scrType) {
+    cstimerScrambler.getScramble([scrType], function(scramble) {
+        $("#inpScramble").val(scramble);
+        getMemo();
+    });
+}
+
+function initCSTimerScrambler() {
+    //initialize the scramble provider worker
+    cstimerScrambler = (function() {
+        if (!window.Worker) { // not available due to browser capability
+            return {};
+        }
+        let worker = new Worker('../../Tools/cstimer.js');
+        let callbacks = {};
+        let msgid = 0;
+
+        worker.onmessage = function(e) {
+            //data: [msgid, type, ret]
+            let data = e.data;
+            let callback = callbacks[data[0]];
+            delete callbacks[data[0]];
+            callback && callback(data[2]);
+        }
+
+        //[type, length, state]
+        function getScramble(args, callback) {
+            ++msgid;
+            callbacks[msgid] = callback;
+            worker.postMessage([msgid, 'scramble', args]);
+            return msgid;
+        }
+
+        return {
+            getScramble: getScramble
+        }
+    })();
+
+    // cstimerScrambler.getScramble(scrambleArgs, callback);
+    // scrambleArgs: [scramble type, scramble length (can be ignored for some scramble types), specific state (for oll, pll, etc) or undefined]
+    // callback: callback function with one parameter, which is the generated scramble.
 }
