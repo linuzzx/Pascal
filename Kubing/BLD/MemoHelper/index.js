@@ -351,9 +351,9 @@ function initCSTimerScrambler() {
 
 function adjustSize() {
     const inpFontSize = $("#btnGetMemo").css("font-size").split("px")[0]*1.5;
-    const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75)
+    const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75);
 
-    $("#inpMemo").css("font-size", fontSize);
+    $("#inpScramble").css("font-size", fontSize);
 
     $("#inpScramble").css("width", "80%");
     $("#selectCubeType").css("font-size", inpFontSize);
