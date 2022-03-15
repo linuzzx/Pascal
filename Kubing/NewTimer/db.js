@@ -118,8 +118,11 @@ function getAllFromDB(exporting = false) {
 function handleDataFromDB(data) {
     let start = Date.now();
     let w = new Worker("worker.js");
-    w.postMessage(data[curSession].solutions);
-    w.onmessage = function(e) {console.log(e.data);console.log(Date.now() - start + "ms"); w.terminate()}
+    let solves = data[curSession].solutions;
+    if (solves) {
+        w.postMessage(solves);
+        w.onmessage = function(e) {console.log(e.data);console.log(Date.now() - start + "ms"); w.terminate()}
+    }
 }
 
 function handleDataFromDB2(data) {
