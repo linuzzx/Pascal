@@ -422,18 +422,19 @@ function changeSession() {
 
 function updateSession() {
     updateScrType();
-    /*getStats2(curSession, mo3s, 3)
-    .then(getStats2(curSession, ao5s, 5))
-    .then(getStats2(curSession, ao12s, 12))
-    .then(getStats2(curSession, ao25s, 25))
-    .then(getStats2(curSession, ao50s, 50))
-    .then(getStats2(curSession, ao100s, 100))
-    .then(getStats2(curSession, ao200s, 200))
-    .then(getStats2(curSession, ao500s, 500))
-    .then(getStats2(curSession, ao1000s, 1000))
-    .then(getStats2(curSession, ao2000s, 2000))
-    .then(getStats2(curSession, ao5000s, 5000))
-    .then(getStats2(curSession, ao10000s, 10000));*/
+    /*getStats2(curSession, 3)
+    .then(getStats2(curSession, 5))
+    .then(getStats2(curSession, 12))
+    .then(getStats2(curSession, 25))
+    .then(getStats2(curSession, 50))
+    .then(getStats2(curSession, 100))
+    .then(getStats2(curSession, 200))
+    .then(getStats2(curSession, 500))
+    .then(getStats2(curSession, 1000))
+    .then(getStats2(curSession, 2000))
+    .then(getStats2(curSession, 5000))
+    .then(getStats2(curSession, 10000));*/
+    //getStats();
     updateStats();
 }
 

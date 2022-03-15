@@ -8,8 +8,7 @@ let num = 0;
 
 onmessage = function(e) {
     curSession = e.data[0];
-    nArr = e.data[1];
-    num = e.data[2];
+    num = e.data[1];
 
     const request = indexedDB.open(dbName);
 

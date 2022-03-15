@@ -6,6 +6,21 @@ const readonly = "readonly";
 
 let db = null;
 
+let arrays = {
+    3 : [],
+    5 : [],
+    12 : [],
+    25 : [],
+    50 : [],
+    100 : [],
+    200 : [],
+    500 : [],
+    1000 : [],
+    2000 : [],
+    5000 : [],
+    10000 : []
+};
+
 function openDB(func, arg1 = null, arg2 = null, arg3 = null) {
     const request = indexedDB.open(dbName);
     
@@ -135,18 +150,18 @@ async function getStats() {
     let worker5000 = new Worker('webWorker.js');
     let worker10000 = new Worker('webWorker.js');
 
-    worker3.postMessage([curSession, mo3s, 3]);
-    worker5.postMessage([curSession, ao5s, 5]);
-    worker12.postMessage([curSession, ao12s, 12]);
-    worker25.postMessage([curSession, ao25s, 25]);
-    worker50.postMessage([curSession, ao50s, 50]);
-    worker100.postMessage([curSession, ao100s, 100]);
-    worker200.postMessage([curSession, ao100s, 200]);
-    worker500.postMessage([curSession, ao100s, 500]);
-    worker1000.postMessage([curSession, ao100s, 1000]);
-    worker2000.postMessage([curSession, ao100s, 2000]);
-    worker5000.postMessage([curSession, ao100s, 5000]);
-    worker10000.postMessage([curSession, ao100s, 10000]);
+    worker3.postMessage([curSession, 3]);
+    worker5.postMessage([curSession, 5]);
+    worker12.postMessage([curSession, 12]);
+    worker25.postMessage([curSession, 25]);
+    worker50.postMessage([curSession, 50]);
+    worker100.postMessage([curSession, 100]);
+    worker200.postMessage([curSession, 200]);
+    worker500.postMessage([curSession, 500]);
+    worker1000.postMessage([curSession, 1000]);
+    worker2000.postMessage([curSession, 2000]);
+    worker5000.postMessage([curSession, 5000]);
+    worker10000.postMessage([curSession, 10000]);
 
     worker3.onmessage = function (e) {
         mo3s = e.data;
@@ -198,14 +213,61 @@ async function getStats() {
     }
 }
 
-async function getStats2(curSes, arr, num) {
+async function getStats2(curSes, num) {
     let worker = new Worker('webWorker.js');
-
-    worker.postMessage([curSes, arr, num]);
+    worker.postMessage([curSes, num]);
 
     worker.onmessage = function (e) {
-        arr = e.data;
+        if (num === 3) {
+            //mo3s = e.data;
+            arrays["3"] = e.data;
+        }
+        else if (num === 5) {
+            //ao5s = e.data;
+            arrays["5"] = e.data;
+        }
+        else if (num === 12) {
+            //ao12s = e.data;
+            arrays["12"] = e.data;
+        }
+        else if (num === 25) {
+            //ao25s = e.data;
+            arrays["25"] = e.data;
+        }
+        else if (num === 50) {
+            //ao50s = e.data;
+            arrays["50"] = e.data;
+        }
+        else if (num === 100) {
+            //ao100s = e.data;
+            arrays["100"] = e.data;
+        }
+        else if (num === 200) {
+            //ao200s = e.data;
+            arrays["200"] = e.data;
+        }
+        else if (num === 500) {
+            //ao500s = e.data;
+            arrays["500"] = e.data;
+        }
+        else if (num === 1000) {
+            //ao1000s = e.data;
+            arrays["1000"] = e.data;
+        }
+        else if (num === 2000) {
+            //ao2000s = e.data;
+            arrays["2000"] = e.data;
+        }
+        else if (num === 5000) {
+            //ao5000s = e.data;
+            arrays["5000"] = e.data;
+        }
+        else if (num === 10000) {
+            //ao10000s = e.data;
+            arrays["10000"] = e.data;
+        }
+
+        console.log(arrays);
         worker.terminate();
-        console.log(arr);
     }
 }
