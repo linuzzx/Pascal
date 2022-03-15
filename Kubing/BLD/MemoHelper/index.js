@@ -149,18 +149,6 @@ function setGrouping(g) {
     localStorage.setItem("grouping", grouping);
 }
 
-function adjustSize() {
-    const inpFontSize = $("#btnGetMemo").css("font-size").split("px")[0]*1.5;
-    const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75)
-
-    $("#inpMemo").css("font-size", fontSize);
-
-    $("#inpScramble").css("width", "80%");
-    $("#selectCubeType").css("font-size", inpFontSize);
-    $("#selectGrouping").css("font-size", inpFontSize);
-    $("label").css("font-size", inpFontSize);
-}
-
 function getM2OP() {
     let eSol = [];
     let fSol = [];
@@ -359,4 +347,16 @@ function initCSTimerScrambler() {
     // cstimerScrambler.getScramble(scrambleArgs, callback);
     // scrambleArgs: [scramble type, scramble length (can be ignored for some scramble types), specific state (for oll, pll, etc) or undefined]
     // callback: callback function with one parameter, which is the generated scramble.
+}
+
+function adjustSize() {
+    const inpFontSize = $("#btnGetMemo").css("font-size").split("px")[0]*1.5;
+    const fontSize = ($("#memo").css("font-size").split("px")[0] * 0.75)
+
+    $("#inpMemo").css("font-size", fontSize);
+
+    $("#inpScramble").css("width", "80%");
+    $("#selectCubeType").css("font-size", inpFontSize);
+    $("#selectGrouping").css("font-size", inpFontSize);
+    $("label").css("font-size", inpFontSize);
 }
