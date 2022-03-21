@@ -11,7 +11,7 @@ let board = [
 ];
 
 $(function() {
-    visualize("530070000600195000098000060800060003400803001700020006060000280000419005000080079");
+    initActions();
 });
 
 function visualize(board) {
@@ -59,7 +59,7 @@ function getBoard() {
 }
 
 function solve() {
-    for (let y = 0; y < 9; y++) {
+    outer : for (let y = 0; y < 9; y++) {
         for (let x = 0; x < 9; x++) {
             if (board[y][x] === 0) {
                 for (let n = 1; n < 10; n++) {
@@ -69,7 +69,6 @@ function solve() {
                         board[y][x] = 0;
                     }
                 }
-                break;
             }
         }
     }
@@ -97,4 +96,23 @@ function possible(y, x, n) {
         }
     }
     return true;
+}
+
+function setNumber(td, preVal) {
+    let newVal = $("#activeInp").val() !== "" ? $("#activeInp").val() : preVal;
+    $("#activeInp").remove();
+    $(td).html(newVal);
+}
+
+function initActions() {
+    visualize("530070000600195000098000060800060003400803001700020006060000280000419005000080079");
+
+    $("#sudokuBoard td").on("click", function(e) {
+        let preVal = $(e.target).text();
+        if (preVal === " ") {
+            preVal = 0;
+        }
+        $(this).html("<input id='activeInp' type='text' maxlength='1' step='1' placeholder='" + preVal + "' onkeydown='setNumber(" + this + ", " + preVal + ")' style='width: 3vh'/>");
+        $("#activeInp").focus();
+    });
 }

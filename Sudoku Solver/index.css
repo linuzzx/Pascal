@@ -14,6 +14,7 @@ body {
     width: 50vh;
     height: 50vh;
     border-spacing: 0;
+    table-layout:fixed;
 }
 
 #sudokuBoard td {
