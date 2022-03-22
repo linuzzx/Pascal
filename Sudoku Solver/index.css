@@ -22,6 +22,7 @@ body {
     padding: 0;
     text-align: center;
     border: 1px solid black;
+    cursor: default;
 }
 
 #sudokuBoard tr:nth-child(1) td {
@@ -50,4 +51,8 @@ body {
 
 .activeTD {
     border: 3px solid greenyellow !important;
+}
+
+button {
+    margin: 1vh;
 }
