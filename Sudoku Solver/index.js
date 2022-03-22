@@ -10,6 +10,8 @@ let board = [
     []
 ];
 
+let tdActive = false;
+
 $(function() {
     initActions();
 });
@@ -99,6 +101,7 @@ function possible(y, x, n) {
 }
 
 function setNumber(td, preVal) {
+    $(td).removeClass("activeTD");
     console.log("SetNumber");
     console.log(preVal);
     let newVal = $(".activeInp").val() !== "" ? $(".activeInp").val() : preVal;
@@ -108,10 +111,34 @@ function setNumber(td, preVal) {
 function initActions() {
     visualize("530070000600195000098000060800060003400803001700020006060000280000419005000080079");
 
+    $("html").on("click", function(e) {
+        if (tdActive) {
+            $("#sudokuBoard td").removeClass("activeTD");
+        }
+    });
+
     $("#sudokuBoard td").on("click", function(e) {
-        let preVal = $(e.target).text();
-        $(this).html("<input class='activeInp' type='text' maxlength='1' step='1' placeholder='" + preVal + "' onkeydown='setNumber(" + this + ", " + preVal + ")' style='width: 3vh'/>");
-        $("#activeInp").focus();
+        $("#sudokuBoard td").removeClass("activeTD");
+        tdActive = true;
+        $(this).addClass("activeTD");
+        e.stopPropagation();
+    });
+    $("html").on("keydown", function(e) {
+        if (tdActive && e.code.includes("Digit")) {
+            let newVal;
+            if (e.code === "Digit0") {
+                newVal = " ";
+            }
+            else {
+                newVal = e.key;
+            }
+            tdActive = false;
+            $(".activeTD").text(newVal);
+            $("#sudokuBoard td").removeClass("activeTD");
+        }
+        else {
+            $("#sudokuBoard td").removeClass("activeTD");
+        }
     });
 
     $(".activeInp").on("click", function(e) {

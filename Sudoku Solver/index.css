@@ -47,3 +47,7 @@ body {
 #sudokuBoard tr:nth-child(3) td, #sudokuBoard tr:nth-child(6) td {
     border-bottom: 3px solid black;
 }
+
+.activeTD {
+    border: 3px solid greenyellow !important;
+}
