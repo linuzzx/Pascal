@@ -99,8 +99,9 @@ function possible(y, x, n) {
 }
 
 function setNumber(td, preVal) {
-    let newVal = $("#activeInp").val() !== "" ? $("#activeInp").val() : preVal;
-    $("#activeInp").remove();
+    console.log("SetNumber");
+    console.log(preVal);
+    let newVal = $(".activeInp").val() !== "" ? $(".activeInp").val() : preVal;
     $(td).html(newVal);
 }
 
@@ -109,10 +110,11 @@ function initActions() {
 
     $("#sudokuBoard td").on("click", function(e) {
         let preVal = $(e.target).text();
-        if (preVal === " ") {
-            preVal = 0;
-        }
-        $(this).html("<input id='activeInp' type='text' maxlength='1' step='1' placeholder='" + preVal + "' onkeydown='setNumber(" + this + ", " + preVal + ")' style='width: 3vh'/>");
+        $(this).html("<input class='activeInp' type='text' maxlength='1' step='1' placeholder='" + preVal + "' onkeydown='setNumber(" + this + ", " + preVal + ")' style='width: 3vh'/>");
         $("#activeInp").focus();
+    });
+
+    $(".activeInp").on("click", function(e) {
+        alert("Hei")
     });
 }
