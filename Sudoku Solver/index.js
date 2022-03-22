@@ -60,7 +60,14 @@ function getBoard() {
     }
 }
 
-function solve() {
+function findSolution() {
+    solve();
+    await function() {
+        
+    }
+}
+
+async function solve() {
     solved = false;
     for (let y = 0; y < 9; y++) {
         for (let x = 0; x < 9; x++) {
@@ -105,7 +112,6 @@ function possible(y, x, n) {
 }
 
 function initActions() {
-    makeBoard("530070000600195000098000060800060003400803001700020006060000280000419005000080079");
     visualize();
 
     $("html").on("click", function(e) {
