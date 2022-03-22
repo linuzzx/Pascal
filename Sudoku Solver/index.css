@@ -1,4 +1,5 @@
 html {
+    background: #1E1E1E;
     margin: 0;
 }
 
@@ -15,12 +16,14 @@ body {
     height: 50vh;
     border-spacing: 0;
     table-layout: fixed;
+    background: #f1f1f1;
 }
 
 #sudokuBoard td {
     margin: 0;
     padding: 0;
     text-align: center;
+    font-weight: bold;
     border: 1px solid black;
     cursor: default;
     white-space: nowrap;

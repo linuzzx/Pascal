@@ -28,6 +28,7 @@ function visualize() {
     out += "</table>";
     
     $("#sudokuBoard").html(out);
+    adjustSize();
 }
 
 function makeBoard(str) {
@@ -140,7 +141,9 @@ function initActions() {
         }
     });
 
-    $(".activeInp").on("click", function(e) {
-        alert("Hei")
-    });
+    adjustSize();
+}
+
+function adjustSize() {
+    $("#sudokuBoard td").css("font-size", $("#sudokuBoard td").height() * 0.6);
 }
