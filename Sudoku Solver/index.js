@@ -66,18 +66,20 @@ function solve() {
                 for (let n = 1; n < 10; n++) {
                     if (possible(y, x, n)) {
                         board[y][x] = n;
-                        visualize();
                         if (solve()) {
                             return board;
                         }
+                        else {
+                            board[y][x] = 0;
+                        }
                     }
                 }
-                board[y][x] = 0;
                 return false;
             }
         }
     }
     visualize();
+    return board;
 }
 
 function possible(y, x, n) {
