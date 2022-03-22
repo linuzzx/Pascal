@@ -1,24 +1,39 @@
 let board = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    [],
-    []
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
 let tdActive = false;
+let solved = false;
 
 $(function() {
     initActions();
 });
 
-function visualize(board) {
-    let arr = board.split("").map(n => parseInt(n));
-    let arr2 = [
+function visualize() {
+    let out = "<table>";
+    for (let j = 0; j < board.length; j++) {
+        out += "<tr>";
+        for (let i = 0; i < board[j].length; i++) {
+            out += "<td>" + (board[j][i] === 0 ? "&nbsp;" : board[j][i]) + "</td>";
+        }
+        out += "</tr>";
+    }
+    out += "</table>";
+    
+    $("#sudokuBoard").html(out);
+}
+
+function makeBoard(str) {
+    let arr = str.split("").map(n => parseInt(n));
+    board = [
         arr.slice(0,9),
         arr.slice(9,18),
         arr.slice(18,27),
@@ -28,29 +43,14 @@ function visualize(board) {
         arr.slice(54,63),
         arr.slice(63,72),
         arr.slice(72,89)
-    ];console.log(arr2);
-    let out = "<table>";
-    for (let j = 0; j < arr2.length; j++) {
-        out += "<tr>";
-        for (let i = 0; i < arr2[j].length; i++) {
-            out += "<td>" + (arr2[j][i] === 0 ? " " : arr2[j][i]) + "</td>";
-        }
-        out += "</tr>";
-    }
-    out += "</table>";
-    
-    $("#sudokuBoard").html(out);
-    getBoard();
+    ];
 }
 
 function getBoard() {
     let row = 0;
     let col = 0;
     for (let td of $("#sudokuBoard table td").text()) {
-        if (td === " ") {
-            td = 0;
-        }
-        board[row][col] = parseInt(td);
+        board[row][col] = parseInt(td) || 0;
 
         col++;
         if (col === 9) {
@@ -61,20 +61,24 @@ function getBoard() {
 }
 
 function solve() {
-    outer : for (let y = 0; y < 9; y++) {
+    solved = false;
+    for (let y = 0; y < 9; y++) {
         for (let x = 0; x < 9; x++) {
             if (board[y][x] === 0) {
                 for (let n = 1; n < 10; n++) {
                     if (possible(y, x, n)) {
                         board[y][x] = n;
-                        solve();
-                        board[y][x] = 0;
+                        if (solve()) {
+                            return board;
+                        }
                     }
                 }
+                board[y][x] = 0;
+                return false;
             }
         }
     }
-    return board;
+    visualize();
 }
 
 function possible(y, x, n) {
@@ -100,16 +104,9 @@ function possible(y, x, n) {
     return true;
 }
 
-function setNumber(td, preVal) {
-    $(td).removeClass("activeTD");
-    console.log("SetNumber");
-    console.log(preVal);
-    let newVal = $(".activeInp").val() !== "" ? $(".activeInp").val() : preVal;
-    $(td).html(newVal);
-}
-
 function initActions() {
-    visualize("530070000600195000098000060800060003400803001700020006060000280000419005000080079");
+    makeBoard("530070000600195000098000060800060003400803001700020006060000280000419005000080079");
+    visualize();
 
     $("html").on("click", function(e) {
         if (tdActive) {
@@ -127,14 +124,16 @@ function initActions() {
         if (tdActive && e.code.includes("Digit")) {
             let newVal;
             if (e.code === "Digit0") {
-                newVal = " ";
+                newVal = "&nbsp;";
+                $(".activeTD").html(newVal);
             }
             else {
                 newVal = e.key;
+                $(".activeTD").text(newVal);
             }
             tdActive = false;
-            $(".activeTD").text(newVal);
             $("#sudokuBoard td").removeClass("activeTD");
+            getBoard();
         }
         else {
             $("#sudokuBoard td").removeClass("activeTD");

@@ -14,7 +14,7 @@ body {
     width: 50vh;
     height: 50vh;
     border-spacing: 0;
-    table-layout:fixed;
+    table-layout: fixed;
 }
 
 #sudokuBoard td {
@@ -23,6 +23,11 @@ body {
     text-align: center;
     border: 1px solid black;
     cursor: default;
+    white-space: nowrap;
+}
+
+#sudokuBoard tr {
+    white-space: nowrap;
 }
 
 #sudokuBoard tr:nth-child(1) td {
