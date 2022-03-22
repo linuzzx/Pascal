@@ -11,7 +11,6 @@ let board = [
 ];
 
 let tdActive = false;
-let solved = false;
 
 $(function() {
     initActions();
@@ -60,21 +59,14 @@ function getBoard() {
     }
 }
 
-function findSolution() {
-    solve();
-    await function() {
-        
-    }
-}
-
-async function solve() {
-    solved = false;
+function solve() {
     for (let y = 0; y < 9; y++) {
         for (let x = 0; x < 9; x++) {
             if (board[y][x] === 0) {
                 for (let n = 1; n < 10; n++) {
                     if (possible(y, x, n)) {
                         board[y][x] = n;
+                        visualize();
                         if (solve()) {
                             return board;
                         }
