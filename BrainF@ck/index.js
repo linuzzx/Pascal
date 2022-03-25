@@ -1,14 +1,13 @@
 let cells = new Array(30000).fill(0);
-let pointer = 0;
 let commands = ["<",">","+","-","[","]",",","."];
+let pointer, commas, loopStarts, loopEnds = 0;
 let inputs = [];
-let commas = 0;
 
 function runCode(code) {
     inputs = [];
     commas = code.split("").filter(c => c === ",").length;
-    let loopStarts = code.split("").filter(c => c === "[");
-    let loopEnds = code.split("").filter(c => c === "]");
+    loopStarts = code.split("").filter(c => c === "[");
+    loopEnds = code.split("").filter(c => c === "]");
     $("#output").css("color","black");
     $("#output").val("");
 
