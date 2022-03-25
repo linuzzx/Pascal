@@ -1,6 +1,9 @@
 let cells = new Array(30000).fill(0);
 let commands = ["<",">","+","-","[","]",",","."];
-let pointer, commas, loopStarts, loopEnds = 0;
+let pointer = 0;
+let commas = 0;
+let loopStarts = 0;
+let loopEnds = 0;
 let inputs = [];
 
 function runCode(code) {
@@ -40,6 +43,7 @@ function execCode(code) {
     }
 
     for (let i = 0; i < cleanCode.length; i++) {
+        let o = cells[pointer];
         c = cleanCode[i];
         switch (c) {
             case "<":
@@ -58,7 +62,7 @@ function execCode(code) {
                 if (cells[pointer] === 0) {
                     let done = false;
                     let sum = 1;
-                    let j = i;
+                    let j = i + 1;
                     while (!done) {
                         if (cleanCode[j] === "[") {
                             sum++;
@@ -81,7 +85,7 @@ function execCode(code) {
                 if (cells[pointer] !== 0) {
                     let done = false;
                     let sum = 1;
-                    let j = i;
+                    let j = i - 1;
                     while (!done) {
                         if (cleanCode[j] === "]") {
                             sum++;
@@ -97,7 +101,7 @@ function execCode(code) {
                             j--;
                         }
                     }
-                    i = j;
+                    i = j - 1;
                 }
                 break;
             case ",":
