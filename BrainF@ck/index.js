@@ -27,6 +27,17 @@ function execCode(code) {
     cells = new Array(30000).fill(0);
     let cleanCode = code.split("").filter(c => commands.includes(c));
     let output = "";
+    let starts = [];
+    let ends = [];
+
+    for (let i = 0; i < cleanCode.length; i++) {
+        if (cleanCode[i] === "[") {
+            starts.push(i);
+        }
+        else if (cleanCode[i] === "]") {
+            ends.push(i);
+        }
+    }
 
     for (let i = 0; i < cleanCode.length; i++) {
         c = cleanCode[i];
@@ -44,8 +55,50 @@ function execCode(code) {
                 cells[pointer] !== 0 ? cells[pointer]-- : cells[pointer] = 255;
                 break;
             case "[":
+                if (cells[pointer] === 0) {
+                    let done = false;
+                    let sum = 1;
+                    let j = i;
+                    while (!done) {
+                        if (cleanCode[j] === "[") {
+                            sum++;
+                        }
+                        else if (cleanCode[j] === "]") {
+                            sum--;
+                        }
+
+                        if (sum === 0) {
+                            done = true;
+                        }
+                        else {
+                            j++;
+                        }
+                    }
+                    i = j;
+                }
                 break;
             case "]":
+                if (cells[pointer] !== 0) {
+                    let done = false;
+                    let sum = 1;
+                    let j = i;
+                    while (!done) {
+                        if (cleanCode[j] === "]") {
+                            sum++;
+                        }
+                        else if (cleanCode[j] === "[") {
+                            sum--;
+                        }
+
+                        if (sum === 0) {
+                            done = true;
+                        }
+                        else {
+                            j--;
+                        }
+                    }
+                    i = j;
+                }
                 break;
             case ",":
                 cells[pointer] = inputs.shift();
