@@ -21,12 +21,19 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 const dbref = ref(db);
-
+console.log(db);
+console.log(dbref);
 class PR {
-    constructor(event, single, avg) {
+    constructor(event, single, NRs, CRs, WRs, avg, WRa, CRa, NRa) {
         this.event = event;
         this.single = single;
+        this.NRs = NRs;
+        this.CRs = CRs;
+        this.WRs = WRs;
         this.avg = avg;
+        this.NRa = NRa;
+        this.CRa = CRa;
+        this.WRa = WRa;
     }
 }
 
@@ -35,7 +42,7 @@ let prData = [];
 get(child(dbref, "PRs")).then((snapshot) => {
     snapshot.forEach(childSnapshot => {
         const c = childSnapshot.val();
-        prData.push(new PR(c.event, c.single, c.avg));
+        prData.push(new PR(c.event, c.single, c.NRs, c.CRs, c.WRs, c.avg, c.WRa, c.CRa, c.NRa));
     });
     makePRList();
 });
@@ -43,15 +50,32 @@ get(child(dbref, "PRs")).then((snapshot) => {
 function makePRList() {
     const table = $("#tbodyPR");
     let i = 1;
-    let out = "<tr><th>Event</th><th>Single</th><th>Average</th></tr>";
+    let out = "";
+
+    if ($(window).width() >= $(window).height()) {
+        out = "<tr><th>Event</th><th>NR</th><th>CR</th><th>WR</th><th>Single</th><th>Average</th><th>WR</th><th>CR</th><th>NR</th></tr>";
+        for (let d of prData) {
+            out += "<tr>"+"<td>"+d.event+"</td>"+"<td>"+d.NRs+"</td>"+"<td>"+d.CRs+"</td>"+"<td>"+d.WRs+"</td>"+"<td>"+d.single+"</td>"
+                    +"<td>"+d.avg+"</td>"+"<td>"+d.WRa+"</td>"+"<td>"+d.CRa+"</td>"+"<td>"+d.NRa+"</td>"+"</tr>";
+        }
+    }
+    else {
+        out = "<tr><th>Event</th><th>Single</th><th>Average</th></tr>";
+        for (let d of prData) {
+            out += "<tr>"+"<td>"+d.event+"</td>"+"<td>"+d.single+"</td>"+"<td>"+d.avg+"</td>"+"</tr>";
+        }
+    }
+
+    /*out = "<tr><th>Event</th><th>Single</th><th>Average</th></tr>";
 
     for (let d of prData) {
         out += "<tr>"+"<td>"+d.event+"</td>"+"<td>"+d.single+"</td>"+"<td>"+d.avg+"</td>"+"</tr>";
-    }
+    }*/
 
     $(table).html(out);
 
     styleTable();
+    styleRanking();
 }
 
 function styleTable() {
@@ -59,4 +83,13 @@ function styleTable() {
 
     $("#tablePR").css("height", height);
     $("#tablePR, th, td").css("font-size", "2.5vh");
+}
+
+function styleRanking() {
+    const rankings = $("#tablePR td:nth-child(2), #tablePR td:nth-child(3), #tablePR td:nth-child(4), #tablePR td:nth-child(7), #tablePR td:nth-child(8), #tablePR td:nth-child(9)");
+    for (let r of rankings) {
+        if (parseInt(r.textContent) <= 10) {
+            $(r).css("color", "#00ff00");
+        }
+    }
 }
