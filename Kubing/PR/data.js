@@ -49,7 +49,6 @@ get(child(dbref, "PRs")).then((snapshot) => {
 
 function makePRList() {
     const table = $("#tbodyPR");
-    let i = 1;
     let out = "";
 
     if ($(window).width() >= $(window).height()) {
@@ -58,24 +57,18 @@ function makePRList() {
             out += "<tr>"+"<td>"+d.event+"</td>"+"<td>"+d.NRs+"</td>"+"<td>"+d.CRs+"</td>"+"<td>"+d.WRs+"</td>"+"<td>"+d.single+"</td>"
                     +"<td>"+d.avg+"</td>"+"<td>"+d.WRa+"</td>"+"<td>"+d.CRa+"</td>"+"<td>"+d.NRa+"</td>"+"</tr>";
         }
+        $(table).html(out);
+        styleRanking();
     }
     else {
         out = "<tr><th>Event</th><th>Single</th><th>Average</th></tr>";
         for (let d of prData) {
             out += "<tr>"+"<td>"+d.event+"</td>"+"<td>"+d.single+"</td>"+"<td>"+d.avg+"</td>"+"</tr>";
         }
+        $(table).html(out);
     }
 
-    /*out = "<tr><th>Event</th><th>Single</th><th>Average</th></tr>";
-
-    for (let d of prData) {
-        out += "<tr>"+"<td>"+d.event+"</td>"+"<td>"+d.single+"</td>"+"<td>"+d.avg+"</td>"+"</tr>";
-    }*/
-
-    $(table).html(out);
-
     styleTable();
-    styleRanking();
 }
 
 function styleTable() {
