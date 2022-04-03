@@ -21,8 +21,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase();
 const dbref = ref(db);
-console.log(db);
-console.log(dbref);
+
 class PR {
     constructor(event, single, NRs, CRs, WRs, avg, WRa, CRa, NRa) {
         this.event = event;
@@ -45,6 +44,10 @@ get(child(dbref, "PRs")).then((snapshot) => {
         prData.push(new PR(c.event, c.single, c.NRs, c.CRs, c.WRs, c.avg, c.WRa, c.CRa, c.NRa));
     });
     makePRList();
+});
+
+get(child(dbref, "Datetime")).then((snapshot) => {
+    $("h1").text($("h1").text() + " (" + snapshot.val() + ")");
 });
 
 function makePRList() {
@@ -86,3 +89,7 @@ function styleRanking() {
         }
     }
 }
+
+$(window).resize(function(){
+    makePRList();
+});
