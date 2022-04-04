@@ -263,8 +263,9 @@ function closeTimeStats() {
 function connectAndGetDataFromDB() {
     openDB(getAllFromDB);
 }
-
+let startTime;
 function getData(data) {
+    console.log(Date.now()-startTime);console.log(data);
     let arr = data.slice().sort(function(a,b){return a.rank-b.rank});
     
     if (arr.length !== 0) {
@@ -1016,6 +1017,7 @@ async function importFromCSTimer() {
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
+                startTime = Date.now();
                 sessionList = [];
                 
                 let numOfSessions = json.properties.session || json.properties.sessionN || Object.keys(json).map(k => k).filter(function(k){if (k.includes("session")) {return k};}).length;
