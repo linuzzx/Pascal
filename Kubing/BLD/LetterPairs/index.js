@@ -57,21 +57,28 @@ function getLetterPair() {
 function checkImage() {
     let letterPair = $("#letterPair").text();
     let image = $("#inputImage").val().toUpperCase();
+    let correct = false;
+
+    outer : for (let i1 of image.split("/")) {
+        for (let i2 of images[letterPairs.indexOf(letterPair)].toUpperCase().split("/")) {
+            if (i1 === i2) {
+                correct = true;
+                break outer;
+            }
+        }
+    }
     
-    if (image === images[letterPairs.indexOf(letterPair)].toUpperCase()) {
+    if (correct) {
         $("#result").text("Correct!");
         $("#result").css("color", "green");
-
-        $("#inputImage").val("");
+        
         getLetterPair();
     }
     else {
         $("#result").html("Incorrect!<br><button class='btn btn-secondary' onclick='showAnswer()'>Show answer</button>");
         $("#result").css("color", "red");
-
-        $("#inputImage").val("");
-
     }
+    $("#inputImage").val("");
     $("#inputImage").focus();
 }
 
