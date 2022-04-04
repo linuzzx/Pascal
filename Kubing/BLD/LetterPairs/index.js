@@ -183,6 +183,7 @@ function skrivDataVertical(data) {
 
 function showLetterPairEdit() {
     $("#letterPairEdit").css("display", "block");
+    adjustSize();
 }
 
 function closeLetterPairEdit() {
@@ -204,7 +205,7 @@ function adjustSize() {
 
     $("#inputImage").css("font-size", fontSize);
 
-    $("img").css("width", "80%");
+    $("img").css("width", $("#innerLetterPairEdit").width() * 0.8);
     $("#inputImage").css("width", "30%");
     $("#inputImage").css("margin", "auto");
     $("#tableType").css("font-size", inpFontSize*1.5);
