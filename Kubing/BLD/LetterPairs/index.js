@@ -50,6 +50,7 @@ function getLetterPair() {
     if (pressedBtnNext) {
         $("#result").html("");
     }
+    pressedBtnNext = false;
     
     $("#inputImage").val("");
 }
