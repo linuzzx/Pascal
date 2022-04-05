@@ -46,6 +46,7 @@ let ao2000s = [];
 let ao5000s = [];
 let ao10000s = [];
 
+let bestAverages = {};
 
 let showingOuterInner = false;
 
@@ -263,9 +264,8 @@ function closeTimeStats() {
 function connectAndGetDataFromDB() {
     openDB(getAllFromDB);
 }
-let startTime;
+
 function getData(data) {
-    console.log(Date.now()-startTime);console.log(data);
     let arr = data.slice().sort(function(a,b){return a.rank-b.rank});
     
     if (arr.length !== 0) {
@@ -376,6 +376,8 @@ function deleteSession() {
 }
 
 function checkSessions() {
+    // Kanskje bedre å liste opp nye istedenfor å hente fra DB hver gang...
+
     // Clear sessionList
     $("#sessionList").empty();
     // List sessions
@@ -491,19 +493,19 @@ function updateStats() {
             let c = s.comment !== "" ? "*" : "&nbsp;";
             
             let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time, s.penalty)+"</td>";
-            let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
-            let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
+            let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAvg(sessionList[curSession], i, 5))+"</td>";
+            let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAvg(sessionList[curSession], i, 12))+"</td>";
             $("#timeList").append("<tr><td>"+(i + 1) + c +"</td>"+single+ao5+ao12+"</tr>");
-            getMo3(sessionList[curSession], i);
-            getAo25(sessionList[curSession], i);
-            getAo50(sessionList[curSession], i);
-            getAo100(sessionList[curSession], i);
-            /*getAo200(sessionList[curSession], i);
-            getAo500(sessionList[curSession], i);
-            getAo1000(sessionList[curSession], i);
-            getAo2000(sessionList[curSession], i);
-            getAo5000(sessionList[curSession], i);
-            getAo10000(sessionList[curSession], i);*/
+            getAvg(sessionList[curSession], i, 3);
+            getAvg(sessionList[curSession], i, 25);
+            getAvg(sessionList[curSession], i, 50);
+            getAvg(sessionList[curSession], i, 100);
+            /*getAvg(sessionList[curSession], i, 200);
+            getAvg(sessionList[curSession], i, 500);
+            getAvg(sessionList[curSession], i, 1000);
+            getAvg(sessionList[curSession], i, 2000);
+            getAvg(sessionList[curSession], i, 5000);
+            getAvg(sessionList[curSession], i, 10000);*/
         }
 
         if (listLatestFirst) {
@@ -568,11 +570,14 @@ function updateStats() {
         }*/
     }
     adjustSize();
+    console.log(Date.now() - startTime + "ms");
 }
 
 function addToPBList(num, arr) {
-    let curAvg = arr[arr.length-1];
-    let bestAvg = getBestAvg(num);
+    //let curAvg = arr[arr.length-1];
+    let curAvg = getAvg(sessionList[curSession], sessionList[curSession].solutions.length - 1, num);
+    //let bestAvg = getBestAvg(num);
+    let bestAvg = bestAverages[num].bestAvg;
 
     let avgName = num === 3 ? "Mo3" : "Ao" + num;
     let curAvgID = num === 3 ? "curMo3" : "curAo" + num;
@@ -581,7 +586,7 @@ function addToPBList(num, arr) {
     $("#pbList").append("<tr><th>"+avgName+"</th><td id='"+curAvgID+"' class='cellToClick'>"+getHHmmsshh(curAvg)+"</td><td id='"+bestAvgID+"' class='cellToClick'>"+getHHmmsshh(bestAvg)+"</td></tr>");
 
     $("#"+curAvgID).on("click", function() {
-        let i = arr.length-1;
+        let i = sessionList[curSession].solutions.length-1;
         showInfo(i, num, true);
     });
     
@@ -590,7 +595,7 @@ function addToPBList(num, arr) {
     }
 
     $("#"+bestAvgID).on("click", function() {
-        let i = arr.indexOf(bestAvg);
+        let i = bestAverages[num].lastIndex;
         showInfo(i, num, true);
     });
 }
@@ -603,7 +608,7 @@ function reverseTable(table) {
 }
 
 function showInfo(i, num, pb = null) {
-    if (i < 0) {
+    if (i < 0 || i < num - 1) {
         return;
     }
     let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
@@ -613,11 +618,13 @@ function showInfo(i, num, pb = null) {
         info += getHHmmsshh(s.time, s.penalty, true) + stripHTML(c) + "&nbsp;&nbsp;&nbsp;" + s.scramble;
     }
     else {
+        let avg = getAvg(sessionList[curSession], i, num);
         if (num === 3) {
-            info += "Mo3: " + getHHmmsshh(mo3s[i]) + "<br/><br/>"
+            //info += "Mo3: " + getHHmmsshh(mo3s[i]) + "<br/><br/>"
+            info += "Mo3: " + getHHmmsshh(avg) + "<br/><br/>"
         }
         else {
-            let ao;
+            /*let ao;
             if (num === 5) {
                 ao = ao5s[i];
             }
@@ -650,8 +657,8 @@ function showInfo(i, num, pb = null) {
             }
             else if (num === 10000) {
                 ao = ao10000s[i];
-            }
-            info += "Ao" + num + ": " + getHHmmsshh(ao) + "<br/><br/>";
+            }*/
+            info += "Ao" + num + ": " + getHHmmsshh(avg) + "<br/><br/>";
         }
 
         let arr = [];
@@ -660,7 +667,7 @@ function showInfo(i, num, pb = null) {
         let nRemove = num === 1 || num === 3 ? 0 : Math.ceil(0.05 * num);
 
         for (let j = 0; j < num; j++) {
-            let s = sessionList[curSession].solutions[i+j];
+            let s = sessionList[curSession].solutions[i-j];
             let p = s.penalty === -1 ? Infinity : s.penalty;
             arr.push(s.time + p);
         }
@@ -677,7 +684,7 @@ function showInfo(i, num, pb = null) {
         }
         
         for (let n = 0; n < num; n++) {
-            let s = sessionList[curSession].solutions[i+n];
+            let s = sessionList[curSession].solutions[i+n-num+1];
             let p = s.penalty === -1 ? Infinity : s.penalty;
             let c = s.comment !== "" ? "[" + s.comment + "]" : s.comment;
 
@@ -758,7 +765,7 @@ function getDDMMYYYY(ms) {
     return day + "." + month + "." + year + " " + hours + ":" + minutes + "." + seconds;
 }
 
-function getMo3(s, i) {
+/*function getMo3(s, i) {
     const num = 3;
     return getAvg(s, i, num);
 }
@@ -816,13 +823,13 @@ function getAo5000(s, i) {
 function getAo10000(s, i) {
     const num = 10000;
     return getAvg(s, i, num);
-}
+}*/
 
 function getAvg(s, i, num) {
     let avgArr;
     let toRemove = Math.ceil(0.05 * num);
     
-    if (num === 3) {
+    /*if (num === 3) {
         avgArr = mo3s;
     }
     else if (num === 5) {
@@ -857,7 +864,7 @@ function getAvg(s, i, num) {
     }
     else if (num === 10000) {
         avgArr = ao10000s;
-    }
+    }*/
 
     if (i >= (num-1)) {
         let avg = 0;
@@ -878,11 +885,11 @@ function getAvg(s, i, num) {
         avg /= nArr.length;
         
         if (avg === Infinity) {
-            avgArr.push("DNF");
+            //avgArr.push("DNF");
             return ("DNF");
         }
         else {
-            avgArr.push(avg*10);
+            //avgArr.push(avg*10);
             return avg*10;
         }
     }
@@ -1005,7 +1012,7 @@ function changeCustomPlaceholder(val) {
     }
     changeSettings();
 }
-
+let startTime;
 async function importFromCSTimer() {
     let fileHandle;
     [fileHandle] = await window.showOpenFilePicker();

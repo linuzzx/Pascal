@@ -105,9 +105,9 @@ function getAllFromDB(exporting = false) {
             getExportData(data);
         }
         else {
-            getData(data);
+            //getData(data);
             //handleDataFromDB(data);
-            //handleDataFromDB2(data);
+            handleDataFromDB2(data);
         }
     }
 
@@ -132,21 +132,24 @@ function handleDataFromDB(data) {
         }
     }
 }
-
 function handleDataFromDB2(data) {
-    let start = Date.now();
     let w = new Worker("worker2.js");
-    let averagesArr;
-    let solves = data[curSession].solutions;
+    let solves;
+
+    if (data.length !== 0) {
+        solves = data[curSession].solutions;
+    }
     
     if (solves) {
         w.postMessage(solves);
         w.onmessage = function(e) {
-            averagesArr = e.data;
-            console.log(averagesArr);
-            console.log("in " + (Date.now() - start) + "ms");
+            bestAverages = e.data;
             w.terminate()
+            getData(data);
         }
+    }
+    else {
+        getData(data);
     }
 }
 

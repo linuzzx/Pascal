@@ -20,6 +20,7 @@ onmessage = function(e) {
 
 function getAvg(solves, n) {
     let bestAvg = Infinity;
+    let firstIndex = 0;
     let lastIndex = 0;
     let toRemove = remove5(n);
     for (let i = 0; i < solves.length; i++) {
@@ -32,12 +33,13 @@ function getAvg(solves, n) {
             avg = 10 * Math.round(sumArr(sArr) / sArr.length);
             if (avg < bestAvg) {
                 bestAvg = avg;
+                firstIndex = i - (n - 1);
                 lastIndex = i;
             }
         }
     }
 
-    return {lastIndex, bestAvg};
+    return {firstIndex, lastIndex, bestAvg};
 }
 
 function sumArr(arr) {
