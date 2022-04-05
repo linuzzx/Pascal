@@ -107,6 +107,7 @@ function getAllFromDB(exporting = false) {
         else {
             getData(data);
             //handleDataFromDB(data);
+            //handleDataFromDB2(data);
         }
     }
 
@@ -134,122 +135,19 @@ function handleDataFromDB(data) {
 
 function handleDataFromDB2(data) {
     let start = Date.now();
-    let w3 = new Worker("worker.js");
-    let w5 = new Worker("worker.js");
-    let w12 = new Worker("worker.js");
-    let w25 = new Worker("worker.js");
-    let w50 = new Worker("worker.js");
-
-    w3.postMessage([data[curSession].solutions,3]);
-    w5.postMessage([data[curSession].solutions,5]);
-    w12.postMessage([data[curSession].solutions,12]);
-    w25.postMessage([data[curSession].solutions,25]);
-    w50.postMessage([data[curSession].solutions,50]);
-
-    w3.onmessage = function() {console.log(Date.now() - start); w3.terminate()}
-    w5.onmessage = function() {w5.terminate()}
-    w12.onmessage = function() {w12.terminate()}
-    w25.onmessage = function() {w25.terminate()}
-    w50.onmessage = function() {w50.terminate()}
-
-    /*let solArr = sessionList[curSession].solutions.map(s => s.time);
-    let arr = solArr.slice();
+    let w = new Worker("worker2.js");
+    let averagesArr;
+    let solves = data[curSession].solutions;
     
-    // pbList
-    $("#pbList").empty();
-    $("#pbList").append("<tr><th>Single</th><td id='curSingle' class='cellToClick'>-</td><td id='bestSingle' class='cellToClick'>-</td></tr>");
-
-    // timeList
-    $("#timeList").empty();
-
-    emptyAvgArrays();
-
-    if (arr.length !== 0) {
-        // timeList
-        for (let s of sessionList[curSession].solutions) {
-            let i = sessionList[curSession].solutions.indexOf(s);
-            let i5 = i - 4;
-            let i12 = i - 11;
-            let c = s.comment !== "" ? "*" : "&nbsp;";
-            
-            let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time, s.penalty)+"</td>";
-            let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
-            let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
-            $("#timeList").append("<tr><td>"+(i + 1) + c +"</td>"+single+ao5+ao12+"</tr>");
-            getMo3(sessionList[curSession], i);
-            getAo25(sessionList[curSession], i);
-            getAo50(sessionList[curSession], i);
-            getAo100(sessionList[curSession], i);*/
-            /*getAo200(sessionList[curSession], i);
-            getAo500(sessionList[curSession], i);
-            getAo1000(sessionList[curSession], i);
-            getAo2000(sessionList[curSession], i);
-            getAo5000(sessionList[curSession], i);
-            getAo10000(sessionList[curSession], i);*/
-        /*}
-
-        if (listLatestFirst) {
-            reverseTable("#timeList");
+    if (solves) {
+        w.postMessage(solves);
+        w.onmessage = function(e) {
+            averagesArr = e.data;
+            console.log(averagesArr);
+            console.log("in " + (Date.now() - start) + "ms");
+            w.terminate()
         }
-
-        // pbList
-        let rArr = arr.reverse();
-        curSingle = rArr[0];
-
-        let sArr = arr.sort(function(a, b){return a-b});
-        bestSingle = sArr[0];
-
-        $("#curSingle").text(getHHmmsshh(curSingle));
-        $("#bestSingle").text(getHHmmsshh(bestSingle));
-        
-        $("#curSingle").on("click", function() {
-            let i = solArr.indexOf(curSingle);
-            showInfo(i, 1, true);
-        });
-        
-        $("#bestSingle").on("click", function() {
-            let i = solArr.indexOf(bestSingle);
-            showInfo(i, 1, true);
-        });
-        
-        if (arr.length >= 3) {
-            addToPBList(3, mo3s);
-        }
-        if (arr.length >= 5) {
-            addToPBList(5, ao5s);
-        }
-        if (arr.length >= 12) {
-            addToPBList(12, ao12s);
-        }
-        if (arr.length >= 25) {
-            addToPBList(25, ao25s);
-        }
-        if (arr.length >= 50) {
-            addToPBList(50, ao50s);
-        }
-        if (arr.length >= 100) {
-            addToPBList(100, ao100s);
-        }*/
-        /*if (arr.length >= 200) {
-            addToPBList(200, ao200s);
-        }
-        if (arr.length >= 500) {
-            addToPBList(500, ao500s);
-        }
-        if (arr.length >= 1000) {
-            addToPBList(1000, ao1000s);
-        }
-        if (arr.length >= 2000) {
-            addToPBList(2000, ao2000s);
-        }
-        if (arr.length >= 5000) {
-            addToPBList(5000, ao5000s);
-        }
-        if (arr.length >= 10000) {
-            addToPBList(10000, ao10000s);
-        }*/
-    /*}
-    adjustSize();*/
+    }
 }
 
 function removeFromDB(key) {
