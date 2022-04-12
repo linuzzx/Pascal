@@ -529,6 +529,11 @@ function changeLetterScheme(ls) {
         ful="F",fu="F",fur="N",fr="N",fdr="U",fd="U",fdl="O",fl="O",ruf="D",ru="D",rub="L",rb="L",rdb="S",rd="S",rdf="M",rf="M",
         bur="B",bu="B",bul="J",bl="J",bdl="Q",bd="Q",bdr="K",br="K",dfl="V",df="V",dfr="T",dr="T",dbr="R",db="R",dbl="X",dl="X";
     }
+    else if (ls === "Elmer") {
+        ubl="A",ub="A",ubr="B",ur="B",ufr="C",uf="C",ufl="D",ul="D",lub="F",lu="F",luf="G",lf="G",ldf="H",ld="H",ldb="E",lb="E",
+        ful="Q",fu="Q",fur="R",fr="R",fdr="S",fd="S",fdl="T",fl="T",ruf="O",ru="P",rub="P",rb="M",rdb="M",rd="N",rdf="N",rf="O",
+        bur="K",bu="K",bul="L",bl="L",bdl="I",bd="I",bdr="J",br="J",dfl="U",df="U",dfr="V",dr="V",dbr="W",db="W",dbl="X",dl="X";
+    }
 
     letterSchemeEdges = [ub,ur,uf,ul,lu,lf,ld,lb,fu,fr,fd,fl,ru,rb,rd,rf,bu,bl,bd,br,df,dr,db,dl];
     letterSchemeCorners = [ubl,ubr,ufr,ufl,lub,luf,ldf,ldb,ful,fur,fdr,fdl,ruf,rub,rdb,rdf,bur,bul,bdl,bdr,dfl,dfr,dbr,dbl];
