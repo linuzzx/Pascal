@@ -55,7 +55,7 @@ $(() => {
     initHTML();
 });
 
-function checkRooms(users) {console.log(users);
+function checkRooms(users) {
     firebase.database().ref("rooms/").once('value', (snapshot) => {
         snapshot.forEach(childSnapshot => {
             const c = childSnapshot.val();
@@ -74,7 +74,6 @@ function checkRooms(users) {console.log(users);
                             }
                         }
                     }
-                    console.log(c.cubers);
                     if (c.cubers.length === 0) {
                         firebase.database().ref("rooms/" + c.id).remove();
                     }
@@ -423,7 +422,6 @@ function backToLobby() {
 }
 
 function logOut(uid) {
-    console.log(uid+" logged out");
     if (curRoom !== "lobby") {
         let roomRef = firebase.database().ref("rooms/"+curRoom);
         roomRef.once('value', (snapshot) => {
