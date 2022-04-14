@@ -18,6 +18,11 @@ $(() => {
                 room: "lobby"
             });
 
+            firebase.database().ref("cubers/").once("value", (snapshot) => {
+                let roomUsers = Object.values(snapshot.val()).map(u => [u.id, u.room]);
+                checkRooms(roomUsers);
+            });
+
             cuberRef.onDisconnect().remove();
         }
         else {
@@ -57,6 +62,10 @@ $(() => {
 
 function checkRooms(users) {
     firebase.database().ref("rooms/").once('value', (snapshot) => {
+        $("#rooms tr").remove();
+        if (snapshot.val() === null) {
+            $("#rooms").append("<tr><th>Currently no rooms...</th></tr>");
+        }
         snapshot.forEach(childSnapshot => {
             const c = childSnapshot.val();
             if (users.map(u => u[1]).filter(r => {return r === c.id}).length === 0) {
