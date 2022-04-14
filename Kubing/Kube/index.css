@@ -1,0 +1,19 @@
+html {
+    background: #1E1E1E;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: transparent;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    color: white;
+}
+
+#menu, #room {
+    padding: 1vw;
+}
