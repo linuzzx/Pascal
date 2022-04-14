@@ -36,41 +36,59 @@ $(() => {
 
     firebase.database().ref("rooms/").on("value", (snapshot) => {
         $("#rooms tr").remove();
-        snapshot.forEach(childSnapshot => {
-            let snap = childSnapshot.val();
-            $("#rooms").append("<tr><th><h2>" + snap.name + "</h2></th><th><h2><button onclick='joinRoom(" + snap.id + ")'>Join</button></h2></th></tr>");
-        });
+        if (snapshot.val() === null) {
+            $("#rooms").append("<tr><th>Currently no rooms...</th></tr>");
+        }
+        else {
+            snapshot.forEach(childSnapshot => {
+                let snap = childSnapshot.val();
+                if (snap.cubers !== undefined) {
+                    let p1 = snap.cubers.length;
+                    let p2 = p1 === 1 ? " cuber" : " cubers";
+                    let players = p1 + p2;
+                    $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3><button onclick='joinRoom(" + snap.id + ")'>Join</button></h3></td></tr>");
+                }
+            });
+        }
     });
 
     initHTML();
 });
 
-function checkRooms(users) {
+function checkRooms(users) {console.log(users);
     firebase.database().ref("rooms/").once('value', (snapshot) => {
         snapshot.forEach(childSnapshot => {
             const c = childSnapshot.val();
-            for (let u of users) {
-                let arr = c.cubers.map(cu => cu[0]);
-                if (arr.includes(u[0])) {
-                    let ind = arr.indexOf(u[0]);
-                    if (u[1] !== c.id) {
-                        c.cubers.splice(ind, 1);
-                        firebase.database().ref("rooms/" + c.id).update({cubers: c.cubers});
-                    }
-                }
-            }
-            if (c.cubers.length === 0) {
+            if (users.map(u => u[1]).filter(r => {return r === c.id}).length === 0) {
                 firebase.database().ref("rooms/" + c.id).remove();
             }
             else {
-                firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0]});
-                if (cuberId === c.cubers[0][0]) {
-                    $("#headerOther").hide();
-                    $("#headerLeader").show();
+                if (Object.keys(c).slice().includes("cubers")) {
+                    for (let u of users) {
+                        let arr = c.cubers.map(cu => cu[0]);
+                        if (arr.includes(u[0])) {
+                            let ind = arr.indexOf(u[0]);
+                            if (u[1] !== c.id) {
+                                c.cubers.splice(ind, 1);
+                                firebase.database().ref("rooms/" + c.id).update({cubers: c.cubers});
+                            }
+                        }
+                    }
+                    console.log(c.cubers);
+                    if (c.cubers.length === 0) {
+                        firebase.database().ref("rooms/" + c.id).remove();
+                    }
+                    else {
+                        firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0]});
+                        if (cuberId === c.cubers[0][0]) {
+                            $("#headerOther").hide();
+                            $("#headerLeader").show();
+                        }
+                    }
                 }
             }
         });
-    })
+    });
 }
 
 function createRandomName() {
@@ -381,7 +399,7 @@ function joinRoom(rid, create = false) {
 
     roomRef.on('value', (snapshot) => {
         let snap = snapshot.val();
-        let out = "No current rooms...";
+        let out = "";
         
         if (snap !== null && Object.keys(snap).includes("cubers")) {
             out = "<tr>";

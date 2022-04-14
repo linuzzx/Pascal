@@ -17,3 +17,11 @@ body {
 #menu, #room {
     padding: 1vw;
 }
+
+#rooms th, td {
+    padding: 0 2vw;
+}
+
+#rooms tr:nth-child(even) {
+    background-color: #2D2F33;
+}
