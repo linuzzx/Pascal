@@ -52,8 +52,26 @@ $(() => {
                 if (snap.cubers !== undefined) {
                     let p1 = snap.cubers.length;
                     let players = p1 + " / 10";
-                    let button = p1 >= 10 ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
+                    let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
                     $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
+                }
+                if (Object.keys(snap).includes("scrambles")) {
+                    $("#scrambleDisplay").text(snap.scrambles[snap.curScr]);
+                    $("#inpTimeDiv").show();
+                }
+                if (Object.keys(snap).includes("solves")) {
+                    let s = snap.solves.slice();
+                    if (s[s.length - 1].length === snap.cubers.length) {
+                        console.log("Alle har løst!");
+                        for (let cub of snap.cubers.slice()) {
+                            let ind;
+                            let arr = s[snap.curScr].map(sol => sol.cid);
+                            if (arr.includes(cub[0])) {
+                                ind = arr.indexOf(cub[0]);
+                            }
+                            $("#" + snap.curScr + "_" + cub[0]).text(s[snap.curScr][ind].time);
+                        }
+                    }
                 }
             });
         }
@@ -409,41 +427,51 @@ function joinRoom(rid, create = false) {
             roomRef.update({ cubers: users });
         }
         cuberRef.update({ room: rid });
-
-        let out = "<tr>";
-        for (let u of snap.cubers.slice()) {
-            out += "<th>" + u[1] + "</th>";
-        }
-        out += "</tr>";
-
-        $("#timeTable").html(out);
     });
 
     roomRef.on('value', (snapshot) => {
         let snap = snapshot.val();
         let out = "";
         
-        if (snap !== null && Object.keys(snap).includes("cubers")) {
-            out = "<tr>";
-            for (let u of snap.cubers.slice()) {
-                out += "<th>" + u[1] + "</th>";
+        if (snap !== null) {
+            if (Object.keys(snap).includes("cubers")) {
+                out = "<tr><th>#</th>";
+                for (let u of snap.cubers.slice()) {
+                    if (u[0] === cuberId) {
+                        out += "<th class='cuber'>" + u[1] + "</th>";
+                    }
+                    else {
+                        out += "<th>" + u[1] + "</th>";
+                    }
+                }
+                out += "</tr>";
+                for (let i = 0; i < 5; i++) {
+                    out += "<tr><th>" + (i + 1) + "</th>";
+                    for (let u of snap.cubers.slice()) {
+                        out += "<td id='" + i + "_" + u[0] + "'></td>";
+                    }
+                    out += "</tr>";
+                }
+                out += "<tr><th>Avg</th>";
+                for (let u of snap.cubers.slice()) {
+                    out += "<th id='avg_" + u[0] + "'></th>";
+                }
             }
-            out += "</tr>";
-        }
-
-        $("#timeTable").html(out);
-
-        if (snap.waiting === true) {
-            if (cuberId === leader) {
-                $("#headerLeader").show();
+    
+            $("#timeTable").html(out);
+    
+            if (snap.waiting === true) {
+                if (cuberId === leader) {
+                    $("#headerLeader").show();
+                }
+                else {
+                    $("#headerOther").show();
+                }
             }
             else {
-                $("#headerOther").show();
+                $("#headerLeader").hide();
+                $("#headerOther").hide();
             }
-        }
-        else {
-            $("#headerLeader").hide();
-            $("#headerOther").hide();
         }
     });
 
@@ -526,8 +554,7 @@ function get5scrambles(event) {
             default:
                 break;
         }
-        console.log(scramble);
-        scrambles.push([i, scramble]);
+        scrambles.push(scramble);
     }
     return scrambles;
 }
@@ -537,12 +564,60 @@ function startCubing() {
     
     firebase.database().ref("rooms/"+curRoom).update({
         waiting: false,
-        scrambles: scr
+        scrambles: scr,
+        curScr: 0
     });
 }
 
 function stopCubing() {
     firebase.database().ref("rooms/"+curRoom).update({waiting: true});
+}
+
+function submitTime(time) {
+    if (time.toUpperCase() === "DNF" 
+    || time.match(/[1-9][0-9]:[0-9][0-9].[0-9][0-9]/g) + "" === time
+    || time.match(/[0-9]:[0-9][0-9].[0-9][0-9]/g) + "" === time
+    || time.match(/[1-9][0-9].[0-9][0-9]/g) + "" === time
+    || time.match(/[0-9].[0-9][0-9]/g) + "" === time
+    ) {
+        let s = [];
+        let curS;
+        firebase.database().ref("rooms/" + curRoom).once("value", snapshot => {
+            let snap = snapshot.val();
+            if (Object.keys(snap).includes("solves")) {
+                s = snap.solves.slice();
+                curS = snap.curScr;
+                
+                if (curS > s.length) {
+                    s.push({curS:{
+                        cid: cuberId, 
+                        time: time.toUpperCase()
+                    }});
+                }
+                else {
+                    s[curS].push({
+                        cid: cuberId, 
+                        time: time.toUpperCase()
+                    });
+                }
+            }
+            else {
+                s.push({0:{
+                    cid: cuberId, 
+                    time: time.toUpperCase()
+                }});
+            }
+        });
+        firebase.database().ref("rooms/" + curRoom).update({
+            solves: s
+        });
+        $("#scrambleDisplay").text("Waiting for other cubers to submit");
+        $("#inpTimeDiv").hide();
+    }
+    else {
+        alert("Type in a valid value!");
+    }
+    $("#inpTime").val("");
 }
 
 function initHTML() {

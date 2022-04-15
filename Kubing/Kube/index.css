@@ -31,6 +31,20 @@ body {
     background-color: #2D2F33;
 }
 
+#timeTable {
+    border-collapse: collapse;
+}
+
+#timeTable th, td {
+    border: 1px solid black;
+    padding: 1vh;
+    text-align: end;
+}
+
 h3 {
     margin: 0;
+}
+
+.cuber {
+    color: #F76501;
 }
