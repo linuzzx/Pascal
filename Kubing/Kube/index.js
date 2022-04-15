@@ -52,7 +52,7 @@ $(() => {
                 if (snap.cubers !== undefined) {
                     let p1 = snap.cubers.length;
                     let players = p1 + " / 10";
-                    let button = p1 > 9 ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
+                    let button = p1 >= 10 ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
                     $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
                 }
             });
