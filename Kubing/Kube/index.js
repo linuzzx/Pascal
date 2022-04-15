@@ -51,9 +51,9 @@ $(() => {
                 let snap = childSnapshot.val();
                 if (snap.cubers !== undefined) {
                     let p1 = snap.cubers.length;
-                    let p2 = p1 === 1 ? " cuber" : " cubers";
-                    let players = p1 + p2;
-                    $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3><button onclick='joinRoom(" + snap.id + ")'>Join</button></h3></td></tr>");
+                    let players = p1 + " / 10";
+                    let button = p1 > 9 ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
+                    $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
                 }
             });
         }
@@ -486,17 +486,10 @@ function logOut(uid) {
 
 function startCubing() {
     firebase.database().ref("rooms/"+curRoom).update({waiting: false});
-    $("#headerLeader").hide();
-    $("#headerOther").hide();
 }
 
 function stopCubing() {
-    if (cuberId === leader) {
-        $("#headerLeader").show();
-    }
-    else {
-        $("#headerOther").show();
-    }
+    firebase.database().ref("rooms/"+curRoom).update({waiting: true});
 }
 
 function initHTML() {
