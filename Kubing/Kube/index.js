@@ -62,9 +62,8 @@ $(() => {
 
 function checkRooms(users) {
     firebase.database().ref("rooms/").once('value', (snapshot) => {
-        $("#rooms tr").remove();
         if (snapshot.val() === null) {
-            $("#rooms").append("<tr><th>Currently no rooms...</th></tr>");
+            $("#rooms").html("<tr><th>Currently no rooms...</th></tr>");
         }
         snapshot.forEach(childSnapshot => {
             const c = childSnapshot.val();
