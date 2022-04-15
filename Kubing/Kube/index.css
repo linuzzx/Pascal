@@ -18,10 +18,19 @@ body {
     padding: 1vw;
 }
 
+#rooms {
+    border-collapse: collapse;
+}
+
 #rooms th, td {
-    padding: 0 2vw;
+    background-color: transparent;
+    padding: 2vw;
 }
 
 #rooms tr:nth-child(even) {
     background-color: #2D2F33;
+}
+
+h3 {
+    margin: 0;
 }
