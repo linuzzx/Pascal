@@ -1,6 +1,7 @@
 let cuberId, cuberRef;
 let curRoom = null;
 let userName;
+let leader = null;
 
 const events = ["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx", "Pyraminx", "Skewb", "Square-1"];
 const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "minx", "pyram", "skewb", "sq1"];
@@ -70,6 +71,7 @@ function checkRooms(users) {
             const c = childSnapshot.val();
             if (users.map(u => u[1]).filter(r => {return r === c.id}).length === 0) {
                 firebase.database().ref("rooms/" + c.id).remove();
+                leader = null;
             }
             else {
                 if (Object.keys(c).slice().includes("cubers")) {
@@ -85,10 +87,12 @@ function checkRooms(users) {
                     }
                     if (c.cubers.length === 0) {
                         firebase.database().ref("rooms/" + c.id).remove();
+                        leader = null;
                     }
                     else {
                         firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0]});
-                        if (cuberId === c.cubers[0][0]) {
+                        leader = c.cubers[0][0];
+                        if (cuberId === c.cubers[0][0] && c.waiting === true) {
                             $("#headerOther").hide();
                             $("#headerLeader").show();
                         }
@@ -331,7 +335,16 @@ function createRandomName() {
         "Zealous"
     ]
 
-    return adjectives[Math.floor(Math.random() * adjectives.length)] + " cuber";
+    let userNames = [];
+
+    // Remove taken names
+    firebase.database().ref("cubers/").once("value", (snapshot) => {
+        userNames = Object.values(snapshot.val()).map(u => u.name.split(" ")[0]).slice();
+    });
+
+    let arr = adjectives.slice().filter(a => !userNames.includes(a));
+
+    return arr[Math.floor(Math.random() * arr.length)] + " cuber";
 }
 
 function changeUserName() {
@@ -366,7 +379,8 @@ function createRoom() {
             id: roomId,
             name: $("#inpRoomName").val(),
             leader: cuberId,
-            cubers: [[cuberId, $("#inpUserName").val()]]
+            cubers: [[cuberId, $("#inpUserName").val()]],
+            waiting: true
         });
 
         joinRoom(roomId, true);
@@ -418,6 +432,19 @@ function joinRoom(rid, create = false) {
         }
 
         $("#timeTable").html(out);
+
+        if (snap.waiting === true) {
+            if (cuberId === leader) {
+                $("#headerLeader").show();
+            }
+            else {
+                $("#headerOther").show();
+            }
+        }
+        else {
+            $("#headerLeader").hide();
+            $("#headerOther").hide();
+        }
     });
 
     $("#menu").hide();
@@ -440,20 +467,10 @@ function logOut(uid) {
             users.splice(users.map((u) => {return u[0]}).indexOf(uid));
             
             if (snap.leader === cuberId) {
-                roomRef.set({
-                    id: snap.id,
-                    name: snap.name,
-                    leader: users[0][0],
-                    cubers: users
-                });
+                roomRef.update({leader: users[0][0],cubers: users});
             }
             else {
-                roomRef.set({
-                    id: snap.id,
-                    name: snap.name,
-                    leader: snap.leader,
-                    cubers: users
-                });
+                roomRef.set({cubers: users});
             }
 
             let out = "<tr>";
@@ -464,6 +481,21 @@ function logOut(uid) {
 
             $("#timeTable").html(out);
         });
+    }
+}
+
+function startCubing() {
+    firebase.database().ref("rooms/"+curRoom).update({waiting: false});
+    $("#headerLeader").hide();
+    $("#headerOther").hide();
+}
+
+function stopCubing() {
+    if (cuberId === leader) {
+        $("#headerLeader").show();
+    }
+    else {
+        $("#headerOther").show();
     }
 }
 

@@ -6,13 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kube?</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../Tools/tools.js"></script>
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
     <div id="menu">
         <header>
             <h1>Kube?</h1>
-            <h2>User name <input type="text" id="inpUserName" onchange="changeUserName()"></h2>
+            <h2>User name <input type="text" id="inpUserName" onchange="changeUserName()">
+            <button onclick="$('#inpUserName').val(createRandomName()).trigger('change')">Generate name</button></h2>
         </header>
         <div id="createRoom">
             <h2>Create room</h1>
@@ -29,9 +31,10 @@
         <h1 id="roomName"></h1>
         <div id="headerLeader">
             <select id="events"></select>
-            <button id="btnStart">Start</button>
+            <button id="btnStart" onclick="startCubing()">Start</button>
         </div>
         <h2 id="headerOther">Waiting for leader to start</h2>
+        <h2 id="scrambleDisplay"></h2>
         <div>
             <table id="timeTable"></table>
         </div>
