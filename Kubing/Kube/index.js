@@ -61,16 +61,18 @@ $(() => {
                 }
                 if (Object.keys(snap).includes("solves")) {
                     let s = snap.solves.slice();
-                    if (s[s.length - 1].length === snap.cubers.length) {
-                        console.log("Alle har løst!");
-                        for (let cub of snap.cubers.slice()) {
+                    if (s[s.length - 1].length !== 0) {
+                        for (let cub of s[snap.curScr]) {
                             let ind;
                             let arr = s[snap.curScr].map(sol => sol.cid);
-                            if (arr.includes(cub[0])) {
-                                ind = arr.indexOf(cub[0]);
+                            if (arr.includes(cub.cid)) {
+                                ind = arr.indexOf(cub.cid);
                             }
-                            $("#" + snap.curScr + "_" + cub[0]).text(s[snap.curScr][ind].time);
+                            $("#" + snap.curScr + "_" + cub.cid).text(s[snap.curScr].map(sol => sol.time)[ind]);
                         }
+                    }
+                    if (s[s.length - 1].length === snap.cubers.length) {
+                        console.log("Alle har løst!");
                     }
                 }
             });
