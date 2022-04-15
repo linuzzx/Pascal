@@ -484,8 +484,61 @@ function logOut(uid) {
     }
 }
 
+function get5scrambles(event) {
+    let scrambles = [];
+
+    for (let i = 0; i < 5; i++) {
+        let scramble = "";
+        switch (event) {
+            case "333":
+                scramble = getScrambleNxN(3);
+                break;
+            case "222":
+                scramble = getScrambleNxN(2);
+                break;
+            case "444":
+                scramble = getScrambleNxN(4);
+                break;
+            case "555":
+                scramble = getScrambleNxN(5);
+                break;
+            case "666":
+                scramble = getScrambleNxN(6);
+                break;
+            case "777":
+                scramble = getScrambleNxN(7);
+                break;
+            case "clock":
+                scramble = getScrambleClock();
+                break;
+            case "minx":
+                scramble = getScrambleMega();
+                break;
+            case "pyram":
+                scramble = getScramblePyra();
+                break;
+            case "skewb":
+                scramble = getScrambleSkewb();
+                break;
+            case "sq1":
+                scramble = getScrambleSq1();
+                break;
+            default:
+                break;
+        }
+        console.log(scramble);
+        scrambles.push([i, scramble]);
+    }
+    return scrambles;
+}
+
 function startCubing() {
-    firebase.database().ref("rooms/"+curRoom).update({waiting: false});
+    let scr = get5scrambles($("#events option:selected").val());
+    
+    firebase.database().ref("rooms/"+curRoom).update({
+        waiting: false,
+        scrambles: scr
+    });
 }
 
 function stopCubing() {
