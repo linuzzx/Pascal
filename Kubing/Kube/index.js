@@ -49,30 +49,58 @@ $(() => {
             $("#rooms").append("<tr><td><h3>Room name</h3></td><td><h3>Number of cubers</h3></td><td><h3></h3></td></tr>");
             snapshot.forEach(childSnapshot => {
                 let snap = childSnapshot.val();
+                let nSolve = snap.curScr; //Object.keys(snap).includes("solves") ? snap.solves.slice().length - 1 : 0;
                 if (snap.cubers !== undefined) {
                     let p1 = snap.cubers.length;
                     let players = p1 + " / 10";
                     let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
                     $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
                 }
-                if (Object.keys(snap).includes("scrambles")) {
-                    $("#scrambleDisplay").text(snap.scrambles[snap.curScr]);
-                    $("#inpTimeDiv").show();
+                if (!snap.waiting) {
+                    $("#headerOther").hide();
                 }
-                if (Object.keys(snap).includes("solves")) {
-                    let s = snap.solves.slice();
-                    if (s[s.length - 1].length !== 0) {
-                        for (let cub of s[snap.curScr]) {
-                            let ind;
-                            let arr = s[snap.curScr].map(sol => sol.cid);
-                            if (arr.includes(cub.cid)) {
-                                ind = arr.indexOf(cub.cid);
+                if (Object.keys(snap).includes("scrambles")) {
+                    if (Object.keys(snap).includes("solves")) {
+                        let s = snap.solves.slice();
+                        if (s.length - 1 < nSolve || !s[nSolve].map(sol => sol.cid).includes(cuberId)) {
+                            $("#inpTimeDiv").show();
+                        }
+                        if (s[s.length - 1].length !== 0) {
+                            for (let cub of s[s.length - 1]) {
+                                let ind;
+                                let arr = s[s.length - 1].map(sol => sol.cid);
+                                if (arr.includes(cub.cid)) {
+                                    ind = arr.indexOf(cub.cid);
+                                }
+                                $("#" + (s.length - 1) + "_" + cub.cid).text(s[s.length - 1].map(sol => sol.time)[ind]);
                             }
-                            $("#" + snap.curScr + "_" + cub.cid).text(s[snap.curScr].map(sol => sol.time)[ind]);
+                            if (s.length === 5) {
+                                let cuberSolves = [];
+                                for (let sol of s) {
+                                    for (let cub of sol) {
+                                        cuberSolves.push([cub.cid, cub.time]);
+                                        /*if (cuberSolves[cub.cid]) {
+                                            cuberSolves[cub.cid].push(cub.time);
+                                        }
+                                        else {
+                                            cuberSolves.push({[cub.cid]: cub.time});
+                                        }*/
+                                    }
+                                }
+                                console.log(cuberSolves);
+                                console.log(cuberSolves.filter(cs => cs[0] === cuberId));
+                            }
+                            else if (s[nSolve] && s[nSolve].length === snap.cubers.length) {
+                                $("#scrambleDisplay").text(snap.scrambles[nSolve]);
+                                let newCur = nSolve + 1;
+                                firebase.database().ref("rooms/" + curRoom).update({
+                                    curScr: newCur
+                                });
+                            }
                         }
                     }
-                    if (s[s.length - 1].length === snap.cubers.length) {
-                        console.log("Alle har løst!");
+                    else {
+                        $("#inpTimeDiv").show();
                     }
                 }
             });
@@ -89,6 +117,7 @@ function checkRooms(users) {
         }
         snapshot.forEach(childSnapshot => {
             const c = childSnapshot.val();
+            console.log(users.map(u => u[1]).filter(r => {return r === c.id}));
             if (users.map(u => u[1]).filter(r => {return r === c.id}).length === 0) {
                 firebase.database().ref("rooms/" + c.id).remove();
                 leader = null;
@@ -368,10 +397,7 @@ function createRandomName() {
 }
 
 function changeUserName() {
-    cuberRef.set({
-        id: cuberId,
-        name: $("#inpUserName").val()
-    });
+    cuberRef.update({name: $("#inpUserName").val()});
 }
 
 function changeRoomName(inp) {
@@ -435,7 +461,7 @@ function joinRoom(rid, create = false) {
         let snap = snapshot.val();
         let out = "";
         
-        if (snap !== null) {
+        if (snap !== null && snap.waiting) {
             if (Object.keys(snap).includes("cubers")) {
                 out = "<tr><th>#</th>";
                 for (let u of snap.cubers.slice()) {
@@ -500,7 +526,7 @@ function logOut(uid) {
                 roomRef.update({leader: users[0][0],cubers: users});
             }
             else {
-                roomRef.set({cubers: users});
+                roomRef.update({cubers: users});
             }
 
             let out = "<tr>";
@@ -582,6 +608,8 @@ function submitTime(time) {
     || time.match(/[1-9][0-9].[0-9][0-9]/g) + "" === time
     || time.match(/[0-9].[0-9][0-9]/g) + "" === time
     ) {
+        $("#scrambleDisplay").text("Waiting for other cubers to submit");
+        $("#inpTimeDiv").hide();
         let s = [];
         let curS;
         firebase.database().ref("rooms/" + curRoom).once("value", snapshot => {
@@ -590,8 +618,8 @@ function submitTime(time) {
                 s = snap.solves.slice();
                 curS = snap.curScr;
                 
-                if (curS > s.length) {
-                    s.push({curS:{
+                if (curS > s.length - 1) {
+                    s.push({0:{
                         cid: cuberId, 
                         time: time.toUpperCase()
                     }});
@@ -613,8 +641,6 @@ function submitTime(time) {
         firebase.database().ref("rooms/" + curRoom).update({
             solves: s
         });
-        $("#scrambleDisplay").text("Waiting for other cubers to submit");
-        $("#inpTimeDiv").hide();
     }
     else {
         alert("Type in a valid value!");
