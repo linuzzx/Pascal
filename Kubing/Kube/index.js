@@ -39,7 +39,7 @@ $(() => {
         let roomUsers = Object.values(snapshot.val()).map(u => [u.id, u.room]);
         checkRooms(roomUsers);
     });
-
+    
     firebase.database().ref("rooms/").on("value", (snapshot) => {
         $("#rooms tr").remove();
         if (snapshot.val() === null) {
@@ -49,68 +49,112 @@ $(() => {
             $("#rooms").append("<tr><td><h3>Room name</h3></td><td><h3>Number of cubers</h3></td><td><h3></h3></td></tr>");
             snapshot.forEach(childSnapshot => {
                 let snap = childSnapshot.val();
-                let nSolve = snap.curScr;
-                if (snap.cubers !== undefined) {
-                    let p1 = snap.cubers.length;
-                    let players = p1 + " / 10";
-                    let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
-                    $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
-                }
-                if (!snap.waiting) {
-                    $("#headerOther").hide();
-                }
-                if (Object.keys(snap).includes("scrambles")) {
-                    if (Object.keys(snap).includes("solves")) {
-                        let s = snap.solves.slice();
-                        if (s.length - 1 < nSolve || !s[nSolve].map(sol => sol.cid).includes(cuberId)) {
-                            $("#inpTimeDiv").show();
-                        }
-                        if (s[s.length - 1].length !== 0) {
-                            for (let cub of s[s.length - 1]) {
-                                let ind;
-                                let arr = s[s.length - 1].map(sol => sol.cid);
-                                if (arr.includes(cub.cid)) {
-                                    ind = arr.indexOf(cub.cid);
+                
+                if (!snap.finished) {
+                    if (snap.cubers !== undefined) {
+                        let p1 = snap.cubers.length;
+                        let players = p1 + " / 10";
+                        let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
+                        $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
+                    }
+    
+                    if (snap.waiting) {
+                        let out = "";
+                        if (Object.keys(snap).includes("cubers")) {
+                            out = "<tr><th>#</th>";
+                            for (let u of snap.cubers.slice()) {
+                                if (u[0] === cuberId) {
+                                    out += "<th class='cuber'>" + u[1] + "</th>";
                                 }
-                                $("#" + (s.length - 1) + "_" + cub.cid).text(s[s.length - 1].map(sol => sol.time)[ind]);
-                            }
-                            if (s.length === 5) {
-                                let cuberSolves = [];
-                                for (let sol of s) {
-                                    for (let cub of sol) {
-                                        cuberSolves.push([cub.cid, cub.time]);
-                                    }
-                                }
-                                for (let c of snap.cubers.map(cs => cs[0])) {
-                                    let i = 0;
-                                    for (let cc of cuberSolves) {
-                                        if (cc[0] === c) {
-                                            i++;
-                                        }
-                                    }
-                                    if (i === 5) {
-                                        let avg = getCuberAvg(cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1]));
-                                        $("#avg_" + c).html(avg);
-                                        $("#scrambleDisplay").text("");
-                                    }
-                                }
-                                if (s[nSolve].length === snap.cubers.length) {
-                                    console.log("Alle er ferdige");
-                                    stopCubing();
+                                else {
+                                    out += "<th>" + u[1] + "</th>";
                                 }
                             }
-                            else if (s[nSolve] && s[nSolve].length === snap.cubers.length && curRoom !== null) {
-                                $("#scrambleDisplay").text(snap.scrambles[nSolve]);
-                                let newCur = nSolve + 1;
-                                firebase.database().ref("rooms/" + curRoom).update({
-                                    curScr: newCur
-                                });
+                            out += "</tr>";
+                            for (let i = 0; i < 5; i++) {
+                                out += "<tr><th>" + (i + 1) + "</th>";
+                                for (let u of snap.cubers.slice()) {
+                                    out += "<td id='" + i + "_" + u[0] + "'></td>";
+                                }
+                                out += "</tr>";
+                            }
+                            out += "<tr><th>Avg</th>";
+                            for (let u of snap.cubers.slice()) {
+                                out += "<td id='avg_" + u[0] + "'></td>";
                             }
                         }
+                        
+                        $("#timeTable").html(out);
+                
+                        if (cuberId === snap.leader[0]) {
+                            $("#headerLeader").show();
+                            $("#headerOther").hide();
+                        }
+                        else {
+                            $("#headerOther").show();
+                            $("#headerLeader").hide();
+                        }
+                        $("#inpTimeDiv").hide();
+                        $("#scrambleDisplay").text("");
                     }
                     else {
-                        $("#scrambleDisplay").text(snap.scrambles[0]);
-                        $("#inpTimeDiv").show();
+                        $("#headerLeader").hide();
+                        $("#headerOther").hide();
+                    }
+    
+                    if (Object.keys(snap).includes("scrambles") && !snap.waiting) {
+                        if (Object.keys(snap).includes("solves")) {
+                            let s = snap.solves.slice();
+                            if (s.length - 1 < snap.curScr || !s[snap.curScr].map(sol => sol.cid).includes(cuberId)) {
+                                $("#inpTimeDiv").show();
+                            }
+                            if (s[s.length - 1].length !== 0) {
+                                for (let cub of s[s.length - 1]) {
+                                    let ind;
+                                    let arr = s[s.length - 1].map(sol => sol.cid);
+                                    if (arr.includes(cub.cid)) {
+                                        ind = arr.indexOf(cub.cid);
+                                    }
+                                    $("#" + (s.length - 1) + "_" + cub.cid).text(s[s.length - 1].map(sol => sol.time)[ind]);
+                                }
+                                if (s.length === 5) {
+                                    let cuberSolves = [];
+                                    for (let sol of s) {
+                                        for (let cub of sol) {
+                                            cuberSolves.push([cub.cid, cub.time]);
+                                        }
+                                    }
+                                    for (let c of snap.cubers.map(cs => cs[0])) {
+                                        let i = 0;
+                                        for (let cc of cuberSolves) {
+                                            if (cc[0] === c) {
+                                                i++;
+                                            }
+                                        }
+                                        if (i === 5) {
+                                            let avg = getCuberAvg(cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1]));
+                                            $("#avg_" + c).text(avg);
+                                            $("#scrambleDisplay").text("");
+                                        }
+                                    }
+                                    if (s[snap.curScr].length === snap.cubers.length) {
+                                        console.log("Alle er ferdige");
+                                        stopCubing();
+                                    }
+                                }
+                                else if (s[snap.curScr] && s[snap.curScr].length === snap.cubers.length && curRoom !== null) {
+                                    $("#scrambleDisplay").text(snap.scrambles[snap.curScr]);
+                                    let newCur = snap.curScr + 1;
+                                    firebase.database().ref("rooms/" + curRoom).update({
+                                        curScr: newCur
+                                    });
+                                }
+                            }
+                        }
+                        else {
+                            $("#scrambleDisplay").text(snap.scrambles[0]);
+                            $("#inpTimeDiv").show();
+                        }
                     }
                 }
             });
@@ -127,7 +171,6 @@ function getCuberAvg(solves) {
       });
 
     let avg = sArr.slice(1,4).reduce((a, b) => a + b, 0) / 3;
-    
     return getmmsshh(avg);
 }
 
@@ -538,50 +581,6 @@ function joinRoom(rid, create = false) {
         cuberRef.update({ room: rid });
     });
 
-    roomRef.on('value', (snapshot) => {
-        let snap = snapshot.val();
-        let out = "";
-        
-        if (snap !== null && snap.waiting) {
-            if (Object.keys(snap).includes("cubers")) {
-                out = "<tr><th>#</th>";
-                for (let u of snap.cubers.slice()) {
-                    if (u[0] === cuberId) {
-                        out += "<th class='cuber'>" + u[1] + "</th>";
-                    }
-                    else {
-                        out += "<th>" + u[1] + "</th>";
-                    }
-                }
-                out += "</tr>";
-                for (let i = 0; i < 5; i++) {
-                    out += "<tr><th>" + (i + 1) + "</th>";
-                    for (let u of snap.cubers.slice()) {
-                        out += "<td id='" + i + "_" + u[0] + "'></td>";
-                    }
-                    out += "</tr>";
-                }
-                out += "<tr><th>Avg</th>";
-                for (let u of snap.cubers.slice()) {
-                    out += "<th id='avg_" + u[0] + "'></th>";
-                }
-            }
-            
-            $("#timeTable").html(out);
-    
-            if (cuberId === snap.leader[0]) {
-                $("#headerLeader").show();
-            }
-            else {
-                $("#headerOther").show();
-            }
-        }
-        else {
-            $("#headerLeader").hide();
-            $("#headerOther").hide();
-        }
-    });
-
     $("#menu").hide();
     $("#room").show();
 }
@@ -642,17 +641,21 @@ function get5scrambles(event) {
 function startCubing() {
     let scr = get5scrambles($("#events option:selected").val());
     $("#headerLeader").hide();
+    $("#headerOther").hide();
+
+    $("#timeTable td").text("");
     firebase.database().ref("rooms/"+curRoom).update({
         waiting: false,
         scrambles: scr,
         solves: {},
-        curScr: 0
+        curScr: 0,
+        finished: false
     });
 }
 
 function stopCubing() {
     if (curRoom !== null) {
-        firebase.database().ref("rooms/"+curRoom).update({waiting: true});
+        firebase.database().ref("rooms/"+curRoom).update({waiting: true, finished: true});
         if (leader === cuberId) {
             $("#headerLeader").show()
         }
