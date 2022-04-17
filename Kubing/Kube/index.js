@@ -2,6 +2,7 @@ let cuberId, cuberRef;
 let curRoom = null;
 let userName;
 let leader = null;
+let averages = {};
 
 const events = ["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx", "Pyraminx", "Skewb", "Square-1"];
 const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "minx", "pyram", "skewb", "sq1"];
@@ -133,6 +134,7 @@ $(() => {
                                         }
                                         if (i === 5) {
                                             let avg = getCuberAvg(cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1]));
+                                            averages[c] = getTime(avg);
                                             $("#avg_" + c).text(avg);
                                             $("#scrambleDisplay").text("");
                                         }
@@ -644,6 +646,7 @@ function startCubing() {
     $("#headerOther").hide();
 
     $("#timeTable td").text("");
+    $("#winner").text("");
     firebase.database().ref("rooms/"+curRoom).update({
         waiting: false,
         scrambles: scr,
@@ -655,6 +658,7 @@ function startCubing() {
 
 function stopCubing() {
     if (curRoom !== null) {
+        $("#winner").text(getWinner());
         firebase.database().ref("rooms/"+curRoom).update({waiting: true, finished: true});
         if (leader === cuberId) {
             $("#headerLeader").show()
@@ -662,6 +666,25 @@ function stopCubing() {
         else {
             $("#headerOther").show();
         }
+    }
+}
+
+function getWinner() {
+    let bestAvg = Object.values(averages).sort((a, b) => {
+        return b - a;
+    })[0];
+    let winners = [];
+    for (let i = 0; i < averages.length; i++) {
+        if (Object.values(averages)[i] === bestAvg) {
+            winners.push(Object.keys(averages)[i]);
+        }
+    }
+
+    if (winners.length === 1) {
+        return winners[0] + " wins!";
+    }
+    else {
+        return "It's a tie between " + winners.join(", ").replace(", "+winners[winners.length - 1],"& "+winners[winners.length - 1]);
     }
 }
 
