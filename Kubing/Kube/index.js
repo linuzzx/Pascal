@@ -670,16 +670,21 @@ function stopCubing() {
 }
 
 function getWinner() {
+    let cubers = {};
+    firebase.database().ref("cubers/").once("value", snapshot => {
+        cubers = snapshot.val();
+    });
     let bestAvg = Object.values(averages).sort((a, b) => {
         return b - a;
     })[0];
+    
     let winners = [];
-    for (let i = 0; i < averages.length; i++) {
+    for (let i = 0; i < Object.keys(averages).length; i++) {
         if (Object.values(averages)[i] === bestAvg) {
-            winners.push(Object.keys(averages)[i]);
+            winners.push(cubers[Object.keys(averages)[i]].name);
         }
     }
-
+    
     if (winners.length === 1) {
         return winners[0] + " wins!";
     }
