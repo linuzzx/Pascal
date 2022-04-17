@@ -60,6 +60,7 @@ $(() => {
                     $("#headerOther").hide();
                 }
                 if (Object.keys(snap).includes("scrambles")) {
+                    $("#scrambleDisplay").text(snap.scrambles[nSolve]);
                     if (Object.keys(snap).includes("solves")) {
                         let s = snap.solves.slice();
                         if (s.length - 1 < nSolve || !s[nSolve].map(sol => sol.cid).includes(cuberId)) {
@@ -87,8 +88,10 @@ $(() => {
                                         }*/
                                     }
                                 }
-                                console.log(cuberSolves);
-                                console.log(cuberSolves.filter(cs => cs[0] === cuberId));
+                                for (let cub of cuberSolves) {
+                                    let avg = getCuberAvg(cuberSolves.filter(cs => cs[0] === cuberId).map(cso => cso[1]));
+                                    $("#avg_" + cub[0]).html(avg);
+                                }
                             }
                             else if (s[nSolve] && s[nSolve].length === snap.cubers.length) {
                                 $("#scrambleDisplay").text(snap.scrambles[nSolve]);
@@ -110,6 +113,78 @@ $(() => {
     initHTML();
 });
 
+function getCuberAvg(solves) {
+    let arr = solves.map(s => getTime(s));
+    let sArr = arr.sort(function(a, b) {
+        return a - b;
+      });
+
+    let avg = sArr.slice(1,4).reduce((a, b) => a + b, 0) / 3;
+    
+    return getmmsshh(avg);
+}
+
+function getmmsshh(ms) {
+    if (ms === Infinity) {
+        return "DNF";
+    }
+    let timeStr = "";
+    let cs = Math.floor((ms % 1000) / 10);
+    let s = Math.floor((ms / 1000) % 60);
+    let m = Math.floor((ms / 60000) % 60);
+    let h = Math.floor((ms / 3600000) % 24);
+
+    if (h !== 0) {
+        if (m < 10) {
+            m = "0" + m;
+        }
+        if (s < 10) {
+            s = "0" + s;
+        }
+        if (cs < 10) {
+            cs = "0" + cs;
+        }
+        timeStr = h + ":" + m + ":" + s + "." + cs;
+    }
+    else {
+        if (m !==0) {
+            if (s < 10) {
+                s = "0" + s;
+            }
+            if (cs < 10) {
+                cs = "0" + cs;
+            }
+            timeStr = m + ":" + s + "." + cs;
+        }
+        else {
+            if (cs < 10) {
+                cs = "0" + cs;
+            }
+            timeStr = s + "." + cs;
+        }
+    }
+    return timeStr;
+}
+
+function getTime(solve) {
+    let ms = 0;
+    if (solve === "DNF") {
+        return Infinity;
+    }
+    else if (solve.split("").includes(":")) {
+        let m = parseInt(solve.split(":")[0]) * 60000;
+        let s = parseInt(solve.split(":")[1].split(".")[0]) * 1000;
+        let cs = parseInt(solve.split(":")[1].split(".")[1]) * 10;
+        ms = m + s + cs;
+    }
+    else {
+        let s = parseInt(solve.split(".")[0]) * 1000;
+        let cs = parseInt(solve.split(".")[1]) * 10;
+        ms = s + cs;
+    }
+    return ms;
+}
+
 function checkRooms(users) {
     firebase.database().ref("rooms/").once('value', (snapshot) => {
         if (snapshot.val() === null) {
@@ -117,7 +192,6 @@ function checkRooms(users) {
         }
         snapshot.forEach(childSnapshot => {
             const c = childSnapshot.val();
-            console.log(users.map(u => u[1]).filter(r => {return r === c.id}));
             if (users.map(u => u[1]).filter(r => {return r === c.id}).length === 0) {
                 firebase.database().ref("rooms/" + c.id).remove();
                 leader = null;
@@ -589,6 +663,7 @@ function get5scrambles(event) {
 
 function startCubing() {
     let scr = get5scrambles($("#events option:selected").val());
+    $("#headerLeader").hide();
     
     firebase.database().ref("rooms/"+curRoom).update({
         waiting: false,
