@@ -675,7 +675,7 @@ function getWinner() {
         cubers = snapshot.val();
     });
     let bestAvg = Object.values(averages).sort((a, b) => {
-        return b - a;
+        return a - b;
     })[0];
     
     let winners = [];
