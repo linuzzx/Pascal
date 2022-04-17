@@ -49,7 +49,7 @@ $(() => {
             $("#rooms").append("<tr><td><h3>Room name</h3></td><td><h3>Number of cubers</h3></td><td><h3></h3></td></tr>");
             snapshot.forEach(childSnapshot => {
                 let snap = childSnapshot.val();
-                let nSolve = snap.curScr; //Object.keys(snap).includes("solves") ? snap.solves.slice().length - 1 : 0;
+                let nSolve = snap.curScr;
                 if (snap.cubers !== undefined) {
                     let p1 = snap.cubers.length;
                     let players = p1 + " / 10";
@@ -80,12 +80,6 @@ $(() => {
                                 for (let sol of s) {
                                     for (let cub of sol) {
                                         cuberSolves.push([cub.cid, cub.time]);
-                                        /*if (cuberSolves[cub.cid]) {
-                                            cuberSolves[cub.cid].push(cub.time);
-                                        }
-                                        else {
-                                            cuberSolves.push({[cub.cid]: cub.time});
-                                        }*/
                                     }
                                 }
                                 for (let cub of cuberSolves) {
