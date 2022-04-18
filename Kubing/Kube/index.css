@@ -12,6 +12,7 @@ body {
     padding: 0;
     overflow: hidden;
     color: white;
+    font-family: cursive;
 }
 
 #menu, #room {
@@ -53,4 +54,9 @@ h3 {
 
 .cuber {
     color: #F76501;
+}
+
+input, button, select {
+    font-family: cursive;
+    font-size: medium;
 }
