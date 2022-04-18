@@ -38,11 +38,13 @@ $(() => {
 
     firebase.database().ref("cubers/").on("value", (snapshot) => {
         let ind = 0;
-        for (let u of Object.values(snapshot.val())) {
-            if (!Object.keys(u).includes("id") || !Object.keys(u).includes("name")) {
-                firebase.database().ref("cubers/" + Object.keys(snapshot.val())[ind]).remove();
+        if (Object.values(snapshot.val())) {
+            for (let u of Object.values(snapshot.val())) {
+                if (!Object.keys(u).includes("id") || !Object.keys(u).includes("name")) {
+                    firebase.database().ref("cubers/" + Object.keys(snapshot.val())[ind]).remove();
+                }
+                ind++;
             }
-            ind++;
         }
         let roomUsers = Object.values(snapshot.val()).map(u => [u.id, u.room]);
         checkRooms(roomUsers);
@@ -64,7 +66,7 @@ $(() => {
                     let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
                     $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
                 }
-                if (!snap.finished) {
+                if (/*!snap.finished && */snap.id === curRoom) {
     
                     if (snap.waiting) {
                         let out = "";
@@ -90,10 +92,21 @@ $(() => {
                             for (let u of snap.cubers.slice()) {
                                 out += "<td id='avg_" + u[0] + "'></td>";
                             }
+                            if (snap.solves) {
+                                let s = snap.solves.slice();
+                                for (let i = 0; i < 5; i++) {
+                                    for (let cub of s[i]) {
+                                        $("#" + (i) + "_" + cub.cid).text(cub.time);
+                                    }
+                                }
+                                let times = 
+                                console.log(times);
+                                $("#avg_" + c).text(getmmsshh(getCuberAvg(times)));
+                            }
                         }
                         
                         $("#timeTable").html(out);
-                
+
                         if (cuberId === snap.leader[0]) {
                             $("#headerLeader").show();
                             $("#headerOther").hide();
