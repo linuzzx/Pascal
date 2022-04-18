@@ -50,7 +50,7 @@ $(() => {
             $("#rooms").append("<tr><td><h3>Room name</h3></td><td><h3>Number of cubers</h3></td><td><h3></h3></td></tr>");
             snapshot.forEach(childSnapshot => {
                 let snap = childSnapshot.val();
-                
+                console.log(snap.curScr);
                 if (snap.cubers !== undefined) {
                     let p1 = snap.cubers.length;
                     let players = p1 + " / 10";
@@ -136,7 +136,6 @@ $(() => {
                                             let avg = getCuberAvg(cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1]));
                                             averages[c] = getTime(avg);
                                             $("#avg_" + c).text(avg);
-                                            $("#scrambleDisplay").text("");
                                         }
                                     }
                                     if (s[snap.curScr].length === snap.cubers.length) {
@@ -145,7 +144,8 @@ $(() => {
                                     }
                                 }
                                 else if (s[snap.curScr] && s[snap.curScr].length === snap.cubers.length && curRoom !== null) {
-                                    $("#scrambleDisplay").text(snap.scrambles[snap.curScr]);
+                                    //$("#scrambleDisplay").text(snap.scrambles[snap.curScr]);
+                                    $("#scrambleDisplay").text(snap.scrambles[s.length]);
                                     let newCur = snap.curScr + 1;
                                     firebase.database().ref("rooms/" + curRoom).update({
                                         curScr: newCur
@@ -246,6 +246,7 @@ function checkRooms(users) {
             const c = childSnapshot.val();
             if (users.map(u => u[1]).filter(r => {return r === c.id}).length === 0) {
                 firebase.database().ref("rooms/" + c.id).remove();
+                $("#winner").text("");
                 leader = null;
             }
             else {
@@ -275,6 +276,7 @@ function checkRooms(users) {
                 }
                 else {
                     firebase.database().ref("rooms/" + c.id).remove();
+                    $("#winner").text("");
                 }
             }
         });
@@ -661,6 +663,7 @@ function startCubing() {
 
 function stopCubing() {
     if (curRoom !== null) {
+        $("#scrambleDisplay").text("");
         $("#winner").text(getWinner());
         firebase.database().ref("rooms/"+curRoom).update({waiting: true, finished: true});
         if (leader === cuberId) {
