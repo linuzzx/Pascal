@@ -692,7 +692,7 @@ function getWinner() {
         return winners[0] + " wins!";
     }
     else {
-        return "It's a tie between " + winners.join(", ").replace(", "+winners[winners.length - 1],"& "+winners[winners.length - 1]);
+        return "It's a tie between " + winners.join(", ").replace(", "+winners[winners.length - 1]," & "+winners[winners.length - 1]);
     }
 }
 
