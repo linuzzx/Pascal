@@ -81,12 +81,10 @@ $(() => {
                     let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
                     $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
                 }
-                if (/*!snap.finished && */snap.id === curRoom) {
-    
+                if (snap.id === curRoom) {
                     if (snap.waiting) {
-                        let out = "";
                         if (Object.keys(snap).includes("cubers")) {
-                            out = "<tr><th>#</th>";
+                            let out = "<tr><th>#</th>";
                             for (let u of snap.cubers.slice()) {
                                 if (u[0] === cuberId) {
                                     out += "<th class='cuber'>" + u[1] + "</th>";
@@ -107,20 +105,33 @@ $(() => {
                             for (let u of snap.cubers.slice()) {
                                 out += "<td id='avg_" + u[0] + "'></td>";
                             }
+                        
+                            $("#timeTable").html(out);
+
                             if (snap.solves) {
+                                console.log("Har løst før");
                                 let s = snap.solves.slice();
                                 for (let i = 0; i < 5; i++) {
                                     for (let cub of s[i]) {
                                         $("#" + (i) + "_" + cub.cid).text(cub.time);
                                     }
                                 }
-                                let times = 
-                                console.log(times);
-                                $("#avg_" + c).text(getmmsshh(getCuberAvg(times)));
+                                for (let cub of s[4]) {
+                                    let cuberSolves = [];
+                                    for (let sol of s) {
+                                        for (let cuSol of sol) {
+                                            cuberSolves.push([cuSol.cid, cuSol.time]);
+                                        }
+                                    }
+                                    let c = cub.cid;
+                                    let times = cuberSolves.filter(so => so[0] === c).map(so => so[1]);
+                                    console.log(times);
+                                    console.log(getCuberAvg(times));
+                                    $("#avg_" + c).text(getCuberAvg(times));
+                                    console.log($("#avg_" + c));
+                                }
                             }
                         }
-                        
-                        $("#timeTable").html(out);
 
                         if (cuberId === snap.leader[0]) {
                             $("#headerLeader").show();
@@ -191,6 +202,8 @@ $(() => {
                         else {
                             $("#scrambleDisplay").text(snap.scrambles[0]);
                             $("#inpTimeDiv").show();
+                            $("#timeTable td").text("");
+                            $("#winner").text("");
                         }
                     }
                 }
@@ -690,8 +703,6 @@ function startCubing() {
     $("#headerLeader").hide();
     $("#headerOther").hide();
 
-    $("#timeTable td").text("");
-    $("#winner").text("");
     firebase.database().ref("rooms/"+curRoom).update({
         waiting: false,
         scrambles: scr,
@@ -742,12 +753,7 @@ function getWinner() {
 }
 
 function submitTime(time) {
-    if (time.toUpperCase() === "DNF" 
-    || time.match(/[1-9][0-9]:[0-9][0-9].[0-9][0-9]/g) + "" === time
-    || time.match(/[0-9]:[0-9][0-9].[0-9][0-9]/g) + "" === time
-    || time.match(/[1-9][0-9].[0-9][0-9]/g) + "" === time
-    || time.match(/[0-9].[0-9][0-9]/g) + "" === time
-    ) {
+    if (isValid(time)) {
         $("#scrambleDisplay").text("Waiting for other cubers to submit");
         $("#inpTimeDiv").hide();
         let s = [];
@@ -783,9 +789,48 @@ function submitTime(time) {
         });
     }
     else {
-        alert("Type in a valid value!");
+        alert("Type in a valid value! (Stackmat timer, but with 2 decimals)");
     }
     $("#inpTime").val("");
+}
+
+function isValid(time) {
+    let valid = false;
+    let arr = time.split("");
+    if (time.toUpperCase() === "DNF" 
+    || time.match(/[1-9][0-9]:[0-9][0-9]\.[0-9][0-9]/g) + "" === time
+    || time.match(/[0-9]:[0-9][0-9]\.[0-9][0-9]/g) + "" === time
+    || time.match(/[1-9][0-9]\.[0-9][0-9]/g) + "" === time
+    || time.match(/[0-9]\.[0-9][0-9]/g) + "" === time) {
+        valid = true;
+    }
+    /*time.toUpperCase() === "DNF" 
+    || time.match(/[1-9][0-9]:[0-9][0-9].[0-9][0-9]/g) + "" === time
+    || time.match(/[0-9]:[0-9][0-9].[0-9][0-9]/g) + "" === time
+    || time.match(/[1-9][0-9].[0-9][0-9]/g) + "" === time
+    || time.match(/[0-9].[0-9][0-9]/g) + "" === time*/
+    
+    /*if (time.toUpperCase() === "DNF") {
+        valid = true;
+    }
+    else if (time.split("").length === 8) {
+        if (9 >= parseInt(arr[0]) >= 1 && 9 >= parseInt(arr[1]) >= 0 && arr[2] === ":" && 9 >= parseInt(arr[3]) >= 0 && 9 >= parseInt(arr[4]) >= 0 && arr[5] === "." && 9 >= parseInt(arr[6]) >= 0 && 9 >= parseInt(arr[7]) >= 0) {
+            valid = true;
+        }
+    }
+    else if (time.split("").length === 7) {
+        if (9 >= parseInt(arr[0]) >= 1 && 9 >= parseInt(arr[1]) >= 0 && arr[2] === ":" && 9 >= parseInt(arr[3]) >= 0 && 9 >= parseInt(arr[4]) >= 0 && arr[5] === "." && 9 >= parseInt(arr[6]) >= 0 && 9 >= parseInt(arr[7]) >= 0) {
+            valid = true;
+        }
+    }
+    else if (time.split("").length === 5) {
+        
+    }
+    else if (time.split("").length === 4) {
+        
+    }*/
+
+    return valid;
 }
 
 function initHTML() {
