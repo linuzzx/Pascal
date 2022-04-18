@@ -239,6 +239,7 @@ function getTime(solve) {
 
 function checkRooms(users) {
     firebase.database().ref("rooms/").once('value', (snapshot) => {
+        let ind = 0;
         if (snapshot.val() === null) {
             $("#rooms").html("<tr><th>Currently no rooms...</th></tr>");
         }
@@ -249,36 +250,35 @@ function checkRooms(users) {
                 $("#winner").text("");
                 leader = null;
             }
-            else {
-                if (Object.keys(c).slice().includes("cubers")) {
-                    for (let u of users) {
-                        let arr = c.cubers.map(cu => cu[0]);
-                        if (arr.includes(u[0])) {
-                            let ind = arr.indexOf(u[0]);
-                            if (u[1] !== c.id) {
-                                c.cubers.splice(ind, 1);
-                                firebase.database().ref("rooms/" + c.id).update({cubers: c.cubers});
-                            }
+            if (Object.keys(c).slice().includes("cubers")) {
+                for (let u of users) {
+                    let arr = c.cubers.map(cu => cu[0]);
+                    if (arr.includes(u[0])) {
+                        let ind = arr.indexOf(u[0]);
+                        if (u[1] !== c.id) {
+                            c.cubers.splice(ind, 1);
+                            firebase.database().ref("rooms/" + c.id).update({cubers: c.cubers});
                         }
                     }
-                    if (c.cubers.length === 0) {
-                        firebase.database().ref("rooms/" + c.id).remove();
-                        leader = null;
-                    }
-                    else {
-                        firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0]});
-                        leader = c.cubers[0][0];
-                        if (cuberId === c.cubers[0][0] && c.waiting === true) {
-                            $("#headerOther").hide();
-                            $("#headerLeader").show();
-                        }
-                    }
+                }
+                if (c.cubers.length === 0) {
+                    firebase.database().ref("rooms/" + c.id).remove();
+                    leader = null;
                 }
                 else {
-                    firebase.database().ref("rooms/" + c.id).remove();
-                    $("#winner").text("");
+                    firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0]});
+                    leader = c.cubers[0][0];
+                    if (cuberId === c.cubers[0][0] && c.waiting === true) {
+                        $("#headerOther").hide();
+                        $("#headerLeader").show();
+                    }
                 }
             }
+            else {
+                firebase.database().ref("rooms/" + ind).remove();
+                $("#winner").text("");
+            }
+            ind++;
         });
     });
 }
