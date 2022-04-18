@@ -273,6 +273,9 @@ function checkRooms(users) {
                         }
                     }
                 }
+                else {
+                    firebase.database().ref("rooms/" + c.id).remove();
+                }
             }
         });
     });
