@@ -47,17 +47,17 @@ $(() => {
             $("#rooms").append("<tr><th>Currently no rooms...</th></tr>");
         }
         else {
-            $("#rooms").append("<tr><td><h3>Room name</h3></td><td><h3>Number of cubers</h3></td><td><h3></h3></td></tr>");
+            $("#rooms").append("<tr><td><h3>Room name</h3></td><td><h3>Number of cubers</h3></td><td><h3></h3></td></tr>");console.log(snapshot.val());
             snapshot.forEach(childSnapshot => {
                 let snap = childSnapshot.val();
-                
+                console.log(snap);
+                if (snap.cubers !== undefined) {
+                    let p1 = snap.cubers.length;
+                    let players = p1 + " / 10";
+                    let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
+                    $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
+                }
                 if (!snap.finished) {
-                    if (snap.cubers !== undefined) {
-                        let p1 = snap.cubers.length;
-                        let players = p1 + " / 10";
-                        let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
-                        $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
-                    }
     
                     if (snap.waiting) {
                         let out = "";
