@@ -50,7 +50,7 @@ $(() => {
             $("#rooms").append("<tr><td><h3>Room name</h3></td><td><h3>Number of cubers</h3></td><td><h3></h3></td></tr>");
             snapshot.forEach(childSnapshot => {
                 let snap = childSnapshot.val();
-                console.log(snap.curScr);
+                
                 if (snap.cubers !== undefined) {
                     let p1 = snap.cubers.length;
                     let players = p1 + " / 10";
