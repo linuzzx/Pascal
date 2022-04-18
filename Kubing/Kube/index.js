@@ -688,6 +688,8 @@ function getWinner() {
         }
     }
     
+    winners.sort();
+
     if (winners.length === 1) {
         return winners[0] + " wins!";
     }
