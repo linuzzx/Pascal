@@ -528,7 +528,12 @@ function createRandomName() {
 }
 
 function changeUserName() {
-    cuberRef.update({name: $("#inpUserName").val()});
+    if ($("#inpUserName").val() !== "") {
+        cuberRef.update({name: $("#inpUserName").val()});
+    }
+    else {
+        $("#inpUserName").val(createRandomName()).trigger("change");
+    }
 }
 
 function changeRoomName(inp) {

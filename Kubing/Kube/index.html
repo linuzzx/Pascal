@@ -13,7 +13,7 @@
     <div id="menu">
         <header>
             <h1>Kube?</h1>
-            <h2>User name <input type="text" id="inpUserName" onchange="changeUserName()">
+            <h2>User name <input type="text" id="inpUserName" onchange="changeUserName()" maxlength="20">
             <button onclick="$('#inpUserName').val(createRandomName()).trigger('change')">Generate name</button></h2>
         </header>
         <div id="createRoom">
