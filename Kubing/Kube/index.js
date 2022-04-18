@@ -37,6 +37,13 @@ $(() => {
     });
 
     firebase.database().ref("cubers/").on("value", (snapshot) => {
+        let ind = 0;
+        for (let u of Object.values(snapshot.val())) {
+            if (!Object.keys(u).includes("id") || !Object.keys(u).includes("name")) {
+                firebase.database().ref("cubers/" + Object.keys(snapshot.val())[ind]).remove();
+            }
+            ind++;
+        }
         let roomUsers = Object.values(snapshot.val()).map(u => [u.id, u.room]);
         checkRooms(roomUsers);
     });
