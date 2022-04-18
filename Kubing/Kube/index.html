@@ -11,11 +11,12 @@
 </head>
 <body>
     <div id="menu">
-        <header>
+        <div>
             <h1>Kube?</h1>
             <h2>User name <input type="text" id="inpUserName" onchange="changeUserName()" maxlength="20">
             <button onclick="$('#inpUserName').val(createRandomName()).trigger('change')">Generate name</button></h2>
-        </header>
+            <table id="cubers"></table>
+        </div>
         <div id="createRoom">
             <h2>Create room</h1>
             <input type="text" id="inpRoomName" placeholder="Room name" oninput="changeRoomName(value)">

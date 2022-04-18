@@ -17,7 +17,7 @@ $(() => {
             cuberRef.set({
                 id: cuberId,
                 name: userName,
-                room: "lobby"
+                room: "Lobby"
             });
 
             firebase.database().ref("cubers/").once("value", (snapshot) => {
@@ -39,9 +39,24 @@ $(() => {
     firebase.database().ref("cubers/").on("value", (snapshot) => {
         let ind = 0;
         if (Object.values(snapshot.val())) {
-            for (let u of Object.values(snapshot.val())) {
+            $("#cubers tr").remove();
+            $("#cubers").append("<tr><th>Cubers online</th><th>Room</th></tr>");
+            for (let u of Object.values(snapshot.val()).sort((a, b) => a.name.localeCompare(b.name))) {
                 if (!Object.keys(u).includes("id") || !Object.keys(u).includes("name")) {
                     firebase.database().ref("cubers/" + Object.keys(snapshot.val())[ind]).remove();
+                }
+                else {
+                    firebase.database().ref("rooms/").once('value', (snapshot) => {
+                        let snap = snapshot.val();
+                        let room = u.room === "Lobby" ? u.room : snap[u.room].name;
+
+                        if (u.id === cuberId) {
+                            $("#cubers").append("<tr><td class='cuber'>" + u.name + "</td><td>" + room + "</td></tr>");
+                        }
+                        else {
+                            $("#cubers").append("<tr><td>" + u.name + "</td><td>" + room + "</td></tr>");
+                        }
+                    });
                 }
                 ind++;
             }
@@ -618,7 +633,7 @@ function joinRoom(rid, create = false) {
 }
 
 function backToLobby() {
-    cuberRef.update({ room: "lobby" });
+    cuberRef.update({ room: "Lobby" });
     $("#room").hide();
     $("#menu").show();
 }

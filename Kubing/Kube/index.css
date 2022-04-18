@@ -31,7 +31,7 @@ body {
     background-color: #2D2F33;
 }
 
-#timeTable {
+#timeTable, #cubers {
     border-collapse: collapse;
 }
 
@@ -39,6 +39,12 @@ body {
     border: 1px solid black;
     padding: 1vh;
     text-align: end;
+}
+
+#cubers th, td {
+    border: 1px solid black;
+    padding: 1vh;
+    text-align: start;
 }
 
 h3 {
