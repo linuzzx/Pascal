@@ -807,6 +807,7 @@ function initApp() {
                             let s = snap.solves.slice();
                             if (s.length - 1 < snap.curScr || !s[snap.curScr].map(sol => sol.cid).includes(cuberId)) {
                                 $("#inpTimeDiv").show();
+                                $("#inpTime").focus();
                             }
                             if (s[s.length - 1].length !== 0) {
                                 for (let cub of s[s.length - 1]) {
@@ -864,9 +865,10 @@ function initApp() {
                         }
                         else {
                             $("#scrambleDisplay").html(snap.scrambles[0]);
-                            $("#inpTimeDiv").show();
                             $("#timeTable td").text("");
                             $("#winner").text("");
+                            $("#inpTimeDiv").show();
+                            $("#inpTime").focus();
                         }
                     }
                 }
@@ -892,4 +894,13 @@ function initHTML() {
     $("#inpUserName").val(cuberName);
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
+
+    
+    $("#inpTimeDiv").focus();
+
+    $("#inpTimeDiv").keypress(function(e) {
+        if (e.keyCode === 13) {
+            submitTime($('#inpTime').val());
+        }
+    });
 }
