@@ -415,9 +415,11 @@ function changeUserName() {
     }
 
     if (!randomName) {
+        alert("Ikke random")
         localStorage.setItem("cuberName", $("#inpUserName").val());
     }
     else {
+        alert("Random")
         localStorage.removeItem("cuberName");
     }
     randomName = false;
