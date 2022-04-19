@@ -1,7 +1,7 @@
 let cuberId, cuberRef;
 let curRoom = null;
 let cuberName;
-let customName = true;
+let randomName = false;
 let leader = null;
 let averages = {};
 
@@ -162,7 +162,7 @@ function checkRooms(users) {
 }
 
 function createRandomName() {
-    customName = false;
+    randomName = true;
     const adjectives = [
         "Adorable",
         "Adventurous",
@@ -414,13 +414,13 @@ function changeUserName() {
         $("#inpUserName").val(createRandomName()).trigger("change");
     }
 
-    if (customName) {
+    if (!randomName) {
         localStorage.setItem("cuberName", $("#inpUserName").val());
     }
     else {
-        customName = true;
         localStorage.removeItem("cuberName");
     }
+    randomName = false;
 }
 
 function changeRoomName(inp) {
