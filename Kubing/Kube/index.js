@@ -705,6 +705,8 @@ function isValid(time) {
 }
 
 function initApp() {
+    $("#loadingScreen").hide();
+    
     firebase.database().ref("cubers/").on("value", (snapshot) => {
         let ind = 0;
         if (Object.values(snapshot.val())) {
