@@ -11,10 +11,11 @@ const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "minx", "py
 $(() => {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            initApp();
             //You're logged in
             cuberId = user.uid;
             cuberRef = firebase.database().ref("cubers/" + cuberId);
+            
+            initApp();
 
             cuberRef.set({
                 id: cuberId,
@@ -415,7 +416,7 @@ function changeUserName() {
     }
     
     localStorage.setItem("cuberName", $("#inpUserName").val());
-    
+    console.log("randomName: "+randomName);
     if (randomName) {
         localStorage.removeItem("cuberName");
         randomName = false;
@@ -882,12 +883,13 @@ function initHTML() {
     }
     
     if (localStorage.getItem("cuberName")) {
-        cuberName = localStorage.getItem("cuberName")
+        cuberName = localStorage.getItem("cuberName");
     }
     else {
         cuberName = createRandomName();
     }
-    $("#inpUserName").val(cuberName);
+    console.log(cuberName);
+    $("#inpUserName").val(cuberName).trigger("change");
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
 }
