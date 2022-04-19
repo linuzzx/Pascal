@@ -1,6 +1,7 @@
 let cuberId, cuberRef;
 let curRoom = null;
-let userName;
+let cuberName;
+let customName;
 let leader = null;
 let averages = {};
 
@@ -17,7 +18,7 @@ $(() => {
 
             cuberRef.set({
                 id: cuberId,
-                name: userName,
+                name: cuberName,
                 room: "Lobby"
             });
 
@@ -161,6 +162,7 @@ function checkRooms(users) {
 }
 
 function createRandomName() {
+    customName = false;
     const adjectives = [
         "Adorable",
         "Adventurous",
@@ -411,6 +413,15 @@ function changeUserName() {
     else {
         $("#inpUserName").val(createRandomName()).trigger("change");
     }
+
+    if (customName) {
+
+        localStorage.setItem("cuberName", $("#inpUserName").val());
+    }
+    else {
+        customName = true;
+        localStorage.removeItem("cuberName");
+    }
 }
 
 function changeRoomName(inp) {
@@ -646,18 +657,6 @@ function skip() {
                     time: "DNF"
                 });
             }
-            /*if (curS > s.length - 1) {
-                s.push({0:{
-                    cid: cuberId, 
-                    time: time.toUpperCase()
-                }});
-            }
-            else {
-                s[curS].push({
-                    cid: cuberId, 
-                    time: time.toUpperCase()
-                });
-            }*/
         }
     });
     firebase.database().ref("rooms/" + curRoom).update({
@@ -706,7 +705,7 @@ function isValid(time) {
 
 function initApp() {
     $("#loadingScreen").hide();
-    
+
     firebase.database().ref("cubers/").on("value", (snapshot) => {
         let ind = 0;
         if (Object.values(snapshot.val())) {
@@ -909,8 +908,14 @@ function initHTML() {
     for (let e of events) {
         $("#events").append("<option value='" + scrTypes[events.indexOf(e)] + "'>" + e + "</option>");
     }
-    userName = createRandomName();
-    $("#inpUserName").val(userName);
+    
+    if (localStorage.getItem("cuberName")) {
+        cuberName = localStorage.getItem("cuberName")
+    }
+    else {
+        cuberName = createRandomName();
+    }
+    $("#inpUserName").val(cuberName);
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
 }
