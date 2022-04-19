@@ -81,3 +81,7 @@ input, button, select {
 .clickableTD {
     cursor: pointer;
 }
+
+.clickableTD:hover {
+    opacity: 0.7;
+}
