@@ -36,6 +36,11 @@ body {
     padding: 1vw;
 }
 
+/*.centered {
+    text-align: center;
+    margin: auto;
+}*/
+
 #rooms {
     border-collapse: collapse;
 }

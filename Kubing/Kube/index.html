@@ -38,15 +38,15 @@
             <button id="btnStart" onclick="startCubing()">Start</button>
         </div>
         <h2 id="headerOther">Waiting for leader to start</h2>
-        <h2 id="scrambleDisplay"></h2>
+        <h2 class="centered" id="scrambleDisplay"></h2><br>
         <div>
-            <table id="timeTable"></table>
+            <table class="centered" id="timeTable"></table>
         </div><br>
-        <div id="inpTimeDiv" hidden>
+        <div class="centered" id="inpTimeDiv" hidden>
             <input id="inpTime">
             <button onclick="submitTime($('#inpTime').val())">Submit</button>
         </div>
-        <h2 id="winner"></h2>
+        <h2 class="centered" id="winner"></h2>
     </div>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
