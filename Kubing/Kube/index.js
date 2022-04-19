@@ -136,7 +136,6 @@ $(() => {
                                         out += "\\n" + (j + 1) + ". " + so + "   " + snap.scrambles[j];
                                         j++;
                                     }
-                                    console.log(out);
                                     $("#avg_" + c).attr("onClick", 'alert(\"' + out + '\")');
                                 }
                             }
@@ -829,8 +828,6 @@ function skip() {
         if (Object.keys(snap).includes("solves")) {
             s = snap.solves.slice();
             curS = snap.curScr;
-            console.log(s);
-            console.log(curS);
             
             let notSolved = snap.cubers.slice().map(c => c[0]).filter(n => !s[curS].map(c => c.cid).includes(n));
             
