@@ -142,7 +142,7 @@ $(() => {
                             $("#headerLeader").hide();
                         }
                         $("#inpTimeDiv").hide();
-                        $("#scrambleDisplay").text("");
+                        $("#scrambleDisplay").html("");
                     }
                     else {
                         $("#headerLeader").hide();
@@ -190,8 +190,8 @@ $(() => {
                                     }
                                 }
                                 else if (s[snap.curScr] && s[snap.curScr].length === snap.cubers.length && curRoom !== null) {
-                                    //$("#scrambleDisplay").text(snap.scrambles[snap.curScr]);
-                                    $("#scrambleDisplay").text(snap.scrambles[s.length]);
+                                    //$("#scrambleDisplay").html(snap.scrambles[snap.curScr]);
+                                    $("#scrambleDisplay").html(snap.scrambles[s.length]);
                                     let newCur = snap.curScr + 1;
                                     firebase.database().ref("rooms/" + curRoom).update({
                                         curScr: newCur
@@ -200,7 +200,7 @@ $(() => {
                             }
                         }
                         else {
-                            $("#scrambleDisplay").text(snap.scrambles[0]);
+                            $("#scrambleDisplay").html(snap.scrambles[0]);
                             $("#inpTimeDiv").show();
                             $("#timeTable td").text("");
                             $("#winner").text("");
@@ -714,7 +714,7 @@ function startCubing() {
 
 function stopCubing() {
     if (curRoom !== null) {
-        $("#scrambleDisplay").text("");
+        $("#scrambleDisplay").html("");
         $("#winner").text(getWinner());
         firebase.database().ref("rooms/"+curRoom).update({waiting: true, finished: true});
         if (leader === cuberId) {
@@ -754,7 +754,13 @@ function getWinner() {
 
 function submitTime(time) {
     if (isValid(time)) {
-        $("#scrambleDisplay").text("Waiting for other cubers to submit");
+        if (cuberId === leader) {
+            $("#scrambleDisplay").html("Waiting for other cubers to submit <button onclick='skip()'>Skip</button>");
+        }
+        else {
+            $("#scrambleDisplay").html("Waiting for other cubers to submit");
+        }
+        
         $("#inpTimeDiv").hide();
         let s = [];
         let curS;
@@ -792,6 +798,44 @@ function submitTime(time) {
         alert("Type in a valid value! (Stackmat timer, but with 2 decimals)");
     }
     $("#inpTime").val("");
+}
+
+function skip() {
+    let s = [];
+    let curS;
+    firebase.database().ref("rooms/" + curRoom).once("value", snapshot => {
+        let snap = snapshot.val();
+        if (Object.keys(snap).includes("solves")) {
+            s = snap.solves.slice();
+            curS = snap.curScr;
+            console.log(s);
+            console.log(curS);
+            
+            let notSolved = snap.cubers.slice().map(c => c[0]).filter(n => !s[curS].map(c => c.cid).includes(n));
+            
+            for (let n of notSolved) {
+                s[curS].push({
+                    cid: n,
+                    time: "DNF"
+                });
+            }
+            /*if (curS > s.length - 1) {
+                s.push({0:{
+                    cid: cuberId, 
+                    time: time.toUpperCase()
+                }});
+            }
+            else {
+                s[curS].push({
+                    cid: cuberId, 
+                    time: time.toUpperCase()
+                });
+            }*/
+        }
+    });
+    firebase.database().ref("rooms/" + curRoom).update({
+        solves: s
+    });
 }
 
 function isValid(time) {
