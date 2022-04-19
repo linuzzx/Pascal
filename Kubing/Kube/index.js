@@ -665,7 +665,6 @@ function skip() {
 
 function isValid(time) {
     let valid = false;
-    let arr = time.split("");
     if (time.toUpperCase() === "DNF" 
     || time.match(/[1-9][0-9]:[0-9][0-9]\.[0-9][0-9]/g) + "" === time
     || time.match(/[0-9]:[0-9][0-9]\.[0-9][0-9]/g) + "" === time
@@ -673,31 +672,6 @@ function isValid(time) {
     || time.match(/[0-9]\.[0-9][0-9]/g) + "" === time) {
         valid = true;
     }
-    /*time.toUpperCase() === "DNF" 
-    || time.match(/[1-9][0-9]:[0-9][0-9].[0-9][0-9]/g) + "" === time
-    || time.match(/[0-9]:[0-9][0-9].[0-9][0-9]/g) + "" === time
-    || time.match(/[1-9][0-9].[0-9][0-9]/g) + "" === time
-    || time.match(/[0-9].[0-9][0-9]/g) + "" === time*/
-    
-    /*if (time.toUpperCase() === "DNF") {
-        valid = true;
-    }
-    else if (time.split("").length === 8) {
-        if (9 >= parseInt(arr[0]) >= 1 && 9 >= parseInt(arr[1]) >= 0 && arr[2] === ":" && 9 >= parseInt(arr[3]) >= 0 && 9 >= parseInt(arr[4]) >= 0 && arr[5] === "." && 9 >= parseInt(arr[6]) >= 0 && 9 >= parseInt(arr[7]) >= 0) {
-            valid = true;
-        }
-    }
-    else if (time.split("").length === 7) {
-        if (9 >= parseInt(arr[0]) >= 1 && 9 >= parseInt(arr[1]) >= 0 && arr[2] === ":" && 9 >= parseInt(arr[3]) >= 0 && 9 >= parseInt(arr[4]) >= 0 && arr[5] === "." && 9 >= parseInt(arr[6]) >= 0 && 9 >= parseInt(arr[7]) >= 0) {
-            valid = true;
-        }
-    }
-    else if (time.split("").length === 5) {
-        
-    }
-    else if (time.split("").length === 4) {
-        
-    }*/
 
     return valid;
 }
