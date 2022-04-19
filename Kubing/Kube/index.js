@@ -416,7 +416,7 @@ function changeUserName() {
     }
     
     localStorage.setItem("cuberName", $("#inpUserName").val());
-    console.log("randomName: "+randomName);
+    
     if (randomName) {
         localStorage.removeItem("cuberName");
         randomName = false;
@@ -888,7 +888,7 @@ function initHTML() {
     else {
         cuberName = createRandomName();
     }
-    console.log(cuberName);
+    
     $("#inpUserName").val(cuberName).trigger("change");
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
