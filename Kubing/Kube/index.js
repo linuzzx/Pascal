@@ -326,6 +326,10 @@ function checkRooms(users) {
                 firebase.database().ref("rooms/" + ind).remove();
                 $("#winner").text("");
             }
+            if (!Object.keys(c).includes("name")) {
+                firebase.database().ref("rooms/" + ind).remove();
+                $("#winner").text("");
+            }
             ind++;
         });
     });
