@@ -114,6 +114,7 @@ $(() => {
                                 for (let i = 0; i < 5; i++) {
                                     for (let cub of s[i]) {
                                         $("#" + (i) + "_" + cub.cid).text(cub.time);
+                                        $("#" + (i) + "_" + cub.cid).attr("onClick", "alert(\"" + cub.time + "   " + snap.scrambles[i] + "\")");
                                     }
                                 }
                                 for (let cub of s[4]) {
@@ -125,10 +126,18 @@ $(() => {
                                     }
                                     let c = cub.cid;
                                     let times = cuberSolves.filter(so => so[0] === c).map(so => so[1]);
-                                    console.log(times);
-                                    console.log(getCuberAvg(times));
-                                    $("#avg_" + c).text(getCuberAvg(times));
-                                    console.log($("#avg_" + c));
+                                    let avg = getCuberAvg(times);
+                                    
+                                    $("#avg_" + c).text(avg);
+                                   
+                                    let out = "avg: " + avg + "\\n";
+                                    let j = 0;
+                                    for (let so of times) {
+                                        out += "\\n" + (j + 1) + ". " + so + "   " + snap.scrambles[j];
+                                        j++;
+                                    }
+                                    console.log(out);
+                                    $("#avg_" + c).attr("onClick", 'alert(\"' + out + '\")');
                                 }
                             }
                         }
@@ -162,7 +171,9 @@ $(() => {
                                     if (arr.includes(cub.cid)) {
                                         ind = arr.indexOf(cub.cid);
                                     }
-                                    $("#" + (s.length - 1) + "_" + cub.cid).text(s[s.length - 1].map(sol => sol.time)[ind]);
+                                    let solTime = s[s.length - 1].map(sol => sol.time)[ind];
+                                    $("#" + (s.length - 1) + "_" + cub.cid).text(solTime);
+                                    $("#" + (s.length - 1) + "_" + cub.cid).attr("onClick", "alert(\"" + solTime + "   " + snap.scrambles[s.length - 1] + "\")");
                                 }
                                 if (s.length === 5) {
                                     let cuberSolves = [];
@@ -182,6 +193,12 @@ $(() => {
                                             let avg = getCuberAvg(cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1]));
                                             averages[c] = getTime(avg);
                                             $("#avg_" + c).text(avg);
+                                            let out = "avg: " + avg + "\\n";
+                                            let j = 0;
+                                            for (let so of cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1])) {
+                                                out += "\\n" + (j + 1) + ". " + so + "   " + snap.scrambles[j];
+                                            }
+                                            $("#avg_" + c).attr("onClick", "alert(\"" + out + "\")");
                                         }
                                     }
                                     if (s[snap.curScr].length === snap.cubers.length) {
