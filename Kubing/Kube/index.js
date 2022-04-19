@@ -1,7 +1,7 @@
 let cuberId, cuberRef;
 let curRoom = null;
 let cuberName;
-let customName;
+let customName = true;
 let leader = null;
 let averages = {};
 
@@ -415,7 +415,6 @@ function changeUserName() {
     }
 
     if (customName) {
-
         localStorage.setItem("cuberName", $("#inpUserName").val());
     }
     else {
