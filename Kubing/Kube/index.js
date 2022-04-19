@@ -889,7 +889,7 @@ function initHTML() {
         cuberName = createRandomName();
     }
     
-    $("#inpUserName").val(cuberName)//.trigger("change");
+    $("#inpUserName").val(cuberName);
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
 }
