@@ -415,11 +415,11 @@ function changeUserName() {
         else {
             localStorage.removeItem("cuberName");
         }
+        randomName = false;
     }
     else {
         $("#inpUserName").val(createRandomName()).trigger("change");
     }
-    randomName = false;
 }
 
 function changeRoomName(inp) {
