@@ -114,7 +114,8 @@ $(() => {
                                 for (let i = 0; i < 5; i++) {
                                     for (let cub of s[i]) {
                                         $("#" + (i) + "_" + cub.cid).text(cub.time);
-                                        $("#" + (i) + "_" + cub.cid).attr("onClick", "alert(\"" + cub.time + "   " + snap.scrambles[i] + "\")");
+                                        $("#" + (i) + "_" + cub.cid).attr("class", "clickableTD");
+                                        $("#" + (i) + "_" + cub.cid).attr("onClick", "window.alert(\"" + cub.time + "   " + snap.scrambles[i] + "\")");
                                     }
                                 }
                                 for (let cub of s[4]) {
@@ -136,7 +137,8 @@ $(() => {
                                         out += "\\n" + (j + 1) + ". " + so + "   " + snap.scrambles[j];
                                         j++;
                                     }
-                                    $("#avg_" + c).attr("onClick", 'alert(\"' + out + '\")');
+                                    $("#avg_" + c).attr("class", "clickableTD");
+                                    $("#avg_" + c).attr("onClick", 'window.alert(\"' + out + '\")');
                                 }
                             }
                         }
@@ -172,7 +174,8 @@ $(() => {
                                     }
                                     let solTime = s[s.length - 1].map(sol => sol.time)[ind];
                                     $("#" + (s.length - 1) + "_" + cub.cid).text(solTime);
-                                    $("#" + (s.length - 1) + "_" + cub.cid).attr("onClick", "alert(\"" + solTime + "   " + snap.scrambles[s.length - 1] + "\")");
+                                    $("#" + (s.length - 1) + "_" + cub.cid).attr("class", "clickableTD");
+                                    $("#" + (s.length - 1) + "_" + cub.cid).attr("onClick", "window.alert(\"" + solTime + "   " + snap.scrambles[s.length - 1] + "\")");
                                 }
                                 if (s.length === 5) {
                                     let cuberSolves = [];
@@ -197,7 +200,8 @@ $(() => {
                                             for (let so of cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1])) {
                                                 out += "\\n" + (j + 1) + ". " + so + "   " + snap.scrambles[j];
                                             }
-                                            $("#avg_" + c).attr("onClick", "alert(\"" + out + "\")");
+                                            $("#avg_" + c).attr("class", "clickableTD");
+                                            $("#avg_" + c).attr("onClick", "window.alert(\"" + out + "\")");
                                         }
                                     }
                                     if (s[snap.curScr].length === snap.cubers.length) {

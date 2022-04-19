@@ -60,3 +60,7 @@ input, button, select {
     font-family: Arial, Helvetica, sans-serif;
     font-size: medium;
 }
+
+.clickableTD {
+    cursor: pointer;
+}
