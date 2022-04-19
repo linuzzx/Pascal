@@ -415,12 +415,12 @@ function changeUserName() {
         $("#inpUserName").val(createRandomName()).trigger("change");
     }
     
-    /*localStorage.setItem("cuberName", $("#inpUserName").val());
+    localStorage.setItem("cuberName", $("#inpUserName").val());
     
     if (randomName) {
         localStorage.removeItem("cuberName");
         randomName = false;
-    }*/
+    }
 }
 
 function changeRoomName(inp) {
@@ -889,7 +889,7 @@ function initHTML() {
         cuberName = createRandomName();
     }
     
-    $("#inpUserName").val(cuberName).trigger("change");
+    $("#inpUserName").val(cuberName)//.trigger("change");
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
 }
