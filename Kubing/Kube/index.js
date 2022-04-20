@@ -417,12 +417,10 @@ function changeUserName() {
             localStorage.removeItem("cuberName");
             randomName = false;
         }
-
     }
     else {
-        userName = createRandomName();
+        $("#inpUserName").val(createRandomName());
     }
-    $("#inpUserName").val(userName);
     cuberRef.update({name: userName});
 }
 
@@ -891,6 +889,7 @@ function initHTML() {
     }
     else {
         cuberName = createRandomName();
+        randomName = false;
     }
     
     $("#inpUserName").val(cuberName);
