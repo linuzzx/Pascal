@@ -419,7 +419,7 @@ function changeUserName() {
 
     }
     else {
-        $("#inpUserName").val(createRandomName())//.trigger("change");
+        $("#inpUserName").val(createRandomName());
     }
     cuberRef.update({name: $("#inpUserName").val()});
 }
@@ -855,7 +855,6 @@ function initApp() {
                                     }
                                 }
                                 else if (s[snap.curScr] && s[snap.curScr].length === snap.cubers.length && curRoom !== null) {
-                                    //$("#scrambleDisplay").html(snap.scrambles[snap.curScr]);
                                     $("#scrambleDisplay").html(snap.scrambles[s.length]);
                                     let newCur = snap.curScr + 1;
                                     firebase.database().ref("rooms/" + curRoom).update({
@@ -892,7 +891,7 @@ function initHTML() {
         cuberName = createRandomName();
     }
     
-    $("#inpUserName").val(cuberName);
+    $("#inpUserName").val(cuberName).trigger("change");
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
 
