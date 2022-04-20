@@ -494,6 +494,9 @@ function backToLobby() {
     cuberRef.update({ room: "Lobby" });
     $("#room").hide();
     $("#menu").show();
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
 }
 
 function get5scrambles(event) {
@@ -547,6 +550,8 @@ function startCubing() {
     let scr = get5scrambles($("#events option:selected").val());
     $("#headerLeader").hide();
     $("#headerOther").hide();
+
+    resetTimer();
 
     firebase.database().ref("rooms/"+curRoom).update({
         waiting: false,
@@ -760,6 +765,7 @@ function stopTimer() {
 function resetTimer() {
     $("#timerDisplay").text("0.00");
     $("#timerButtons").hide();
+    $("#scrambleDisplay").hide();
 }
 
 function timeAgain() {
@@ -769,6 +775,7 @@ function timeAgain() {
     timing = false;
     stopped = true;
     ready = true;
+    $("#scrambleDisplay").show();
 }
 
 function initApp() {
