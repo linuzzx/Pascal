@@ -34,24 +34,24 @@
         <div id="roomHeader">
             <button onclick="backToLobby()">Back to lobby</button>
             <h1 id="roomName"></h1>
-            <!--div class="roomOptions">
+            <div class="roomOptions">
                 <h2>Options</h3>
                 <h3>Content positioning</h3>
-                <label for="radLeft">Type</label><input type="radio" name="contentPos" id="radLeft" value="left" onchange="togglePositioning($(this).val())" checked>
-                <label for="radCenter">Timer</label><input type="radio" name="contentPos" id="radCenter" value="center" onchange="togglePositioning($(this).val())">
+                <label for="radLeft">Left</label><input type="radio" name="contentPos" id="radLeft" value="left" onchange="togglePositioning($(this).val())" checked>
+                <label for="radCenter">Center</label><input type="radio" name="contentPos" id="radCenter" value="center" onchange="togglePositioning($(this).val())">
                 <br>
                 <br>
                 <h3>Time entry</h3>
-                <label for="radType">Type</label><input type="radio" name="timerType" id="radType" value="1" onchange="toggleTimerType($(this).val())" checked>
-                <label for="radTimer">Timer</label><input type="radio" name="timerType" id="radTimer" value="2" onchange="toggleTimerType($(this).val())">
-            </div-->
+                <label for="radType">Type</label><input type="radio" name="timerType" id="radType" value="type" onchange="toggleTimerType($(this).val())" checked>
+                <label for="radTimer">Timer</label><input type="radio" name="timerType" id="radTimer" value="timer" onchange="toggleTimerType($(this).val())">
+            </div>
         </div>
         <br>
-        <div id="headerLeader">
+        <div class="centered" id="headerLeader">
             <select id="events"></select>
             <button id="btnStart" onclick="startCubing()">Start</button>
         </div>
-        <h2 id="headerOther">Waiting for leader to start</h2>
+        <h2 class="centered" id="headerOther">Waiting for leader to start</h2>
         <h2 class="centered" id="scrambleDisplay"></h2><br>
         <div>
             <table class="centered" id="timeTable"></table>

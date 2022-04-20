@@ -678,15 +678,29 @@ function isValid(time) {
 }
 
 function toggleTimerType(val) {
-    console.log(val);
+    localStorage.setItem("timerType", val);
     switch (val) {
-        case "1":
+        case "type":
             $("#typeDiv").show();
             $("#timerDiv").hide();
             break;
-        case "2":
+        case "timer":
             $("#typeDiv").hide();
             $("#timerDiv").show();
+            break;
+    }
+}
+
+function togglePositioning(val) {
+    localStorage.setItem("positioning", val);
+    switch (val) {
+        case "left":
+            $(".centered").css("text-align", "left");
+            $(".centered").css("margin", "0");
+            break;
+        case "center":
+            $(".centered").css("text-align", "center");
+            $(".centered").css("margin", "auto");
             break;
     }
 }
@@ -897,14 +911,8 @@ function initHTML() {
     for (let e of events) {
         $("#events").append("<option value='" + scrTypes[events.indexOf(e)] + "'>" + e + "</option>");
     }
-    
-    if (localStorage.getItem("cuberName")) {
-        cuberName = localStorage.getItem("cuberName");
-    }
-    else {
-        cuberName = createRandomName();
-        randomName = false;
-    }
+
+    getLocalStorage();
     
     $("#inpUserName").val(cuberName);
     $("#btnCreateRoom").prop("disabled", true);
@@ -918,4 +926,28 @@ function initHTML() {
             submitTime($('#inpTime').val());
         }
     });
+}
+
+function getLocalStorage() {
+    if (localStorage.getItem("cuberName")) {
+        cuberName = localStorage.getItem("cuberName");
+    }
+    else {
+        cuberName = createRandomName();
+        randomName = false;
+    }
+    
+    if (localStorage.getItem("positioning")) {
+        let val = localStorage.getItem("positioning");
+        togglePositioning(val);
+
+        $("input:radio[name=contentPos]").val([val]);
+    }
+    
+    if (localStorage.getItem("timerType")) {
+        let val = localStorage.getItem("timerType");
+        toggleTimerType(val);
+
+        $("input:radio[name=timerType]").val([val]);
+    }
 }
