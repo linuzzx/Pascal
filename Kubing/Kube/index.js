@@ -408,9 +408,10 @@ function createRandomName() {
 }
 
 function changeUserName() {
-    if ($("#inpUserName").val() !== "") {
+    let userName = $("#inpUserName").val();
+    if (userName !== "") {
         if (!randomName) {
-            localStorage.setItem("cuberName", $("#inpUserName").val());
+            localStorage.setItem("cuberName", userName);
         }
         else {
             localStorage.removeItem("cuberName");
@@ -419,9 +420,10 @@ function changeUserName() {
 
     }
     else {
-        $("#inpUserName").val(createRandomName());
+        userName = createRandomName();
     }
-    cuberRef.update({name: $("#inpUserName").val()});
+    $("#inpUserName").val(userName);
+    cuberRef.update({name: userName});
 }
 
 function changeRoomName(inp) {
@@ -891,7 +893,7 @@ function initHTML() {
         cuberName = createRandomName();
     }
     
-    $("#inpUserName").val(cuberName).trigger("change");
+    $("#inpUserName").val(cuberName);
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
 
