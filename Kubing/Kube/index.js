@@ -748,6 +748,7 @@ function startTimer() {
     timing = true;
     stopped = false;
     $("#timerDisplay").css("color", "white");
+    $("#scrambleDisplay").hide();
 
     let startTime = new Date().getTime();
     timerInterval = setInterval(function() {
@@ -765,7 +766,7 @@ function stopTimer() {
 function resetTimer() {
     $("#timerDisplay").text("0.00");
     $("#timerButtons").hide();
-    $("#scrambleDisplay").hide();
+    $("#scrambleDisplay").show();
 }
 
 function timeAgain() {
@@ -775,7 +776,6 @@ function timeAgain() {
     timing = false;
     stopped = true;
     ready = true;
-    $("#scrambleDisplay").show();
 }
 
 function initApp() {
