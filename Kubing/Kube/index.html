@@ -37,8 +37,8 @@
             <div class="roomOptions">
                 <h2>Options</h3>
                 <h3>Content positioning</h3>
-                <label for="radLeft">Left</label><input type="radio" name="contentPos" id="radLeft" value="left" onchange="togglePositioning($(this).val())" checked>
-                <label for="radCenter">Center</label><input type="radio" name="contentPos" id="radCenter" value="center" onchange="togglePositioning($(this).val())">
+                <label for="radLeft">Left</label><input type="radio" name="contentPos" id="radLeft" value="left" onchange="togglePositioning($(this).val(), this)" checked>
+                <label for="radCenter">Center</label><input type="radio" name="contentPos" id="radCenter" value="center" onchange="togglePositioning($(this).val(), this)">
                 <br>
                 <br>
                 <h3>Time entry</h3>
@@ -64,8 +64,12 @@
             <div class="centered" id="timerDiv" hidden>
                 <span id="timerDisplay">0.00</span><br><br>
                 <span id="timerHelpText">No inspection. Start/Stop with space.</span><br><br>
-                <button onclick="timeAgain()" hidden>Time again</button>
-                <button onclick="submitTime($('#inpTime').val())" hidden>Submit</button>
+                <div id="timerButtons" hidden>
+                    <button onclick="submitTime($('#timerDisplay').text()); $('#timerButtons').hide(); timeAgain()">OK</button>
+                    <button onclick="submitTime($('#timerDisplay').text(), 2); $('#timerButtons').hide(); timeAgain()">+2</button>
+                    <button onclick="submitTime($('#timerDisplay').text(), 'DNF'); $('#timerButtons').hide(); timeAgain()">DNF</button><br>
+                    <button id="btnReset" onclick="timeAgain()">Reset</button>
+                </div>
             </div>
         </div>
         <h2 class="centered" id="winner"></h2>

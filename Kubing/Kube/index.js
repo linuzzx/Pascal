@@ -4,6 +4,11 @@ let cuberName;
 let randomName = false;
 let leader = null;
 let averages = {};
+let timerInterval;
+let useTimer = false;
+let timing = false;
+let stopped = true;
+let ready = true;
 
 const events = ["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx", "Pyraminx", "Skewb", "Square-1"];
 const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "minx", "pyram", "skewb", "sq1"];
@@ -592,7 +597,7 @@ function getWinner() {
     }
 }
 
-function submitTime(time) {
+function submitTime(time, penalty = null) {
     if (isValid(time)) {
         if (cuberId === leader) {
             $("#scrambleDisplay").html("Waiting for other cubers to submit <button onclick='skip()'>Skip</button>");
@@ -602,6 +607,11 @@ function submitTime(time) {
         }
         
         $("#inpTimeDiv").hide();
+
+        if (penalty) {
+            time = addPenalty(time, penalty);
+        }
+
         let s = [];
         let curS;
         firebase.database().ref("rooms/" + curRoom).once("value", snapshot => {
@@ -638,6 +648,17 @@ function submitTime(time) {
         alert("Type in a valid value! (Stackmat timer, but with 2 decimals)");
     }
     $("#inpTime").val("");
+}
+
+function addPenalty(time, penalty) {
+    if (penalty === "DNF") {
+        time = "DNF";
+    }
+    else if (penalty === 2) {
+        time = getmmsshh(getTime(time) + 2000);
+    }
+
+    return time;
 }
 
 function skip() {
@@ -677,32 +698,77 @@ function isValid(time) {
     return valid;
 }
 
-function toggleTimerType(val) {
+function toggleTimerType(val, el = null) {
     localStorage.setItem("timerType", val);
+    $(el).blur();
     switch (val) {
         case "type":
             $("#typeDiv").show();
             $("#timerDiv").hide();
+            $("#inpTime").focus();
+            useTimer = false;
             break;
         case "timer":
             $("#typeDiv").hide();
             $("#timerDiv").show();
+            $("#timerDiv").focus();
+            useTimer = true;
             break;
     }
 }
 
-function togglePositioning(val) {
+function togglePositioning(val, el = null) {
+    let timerType = localStorage.getItem("timerType");
     localStorage.setItem("positioning", val);
+    $(el).blur();
     switch (val) {
         case "left":
             $(".centered").css("text-align", "left");
             $(".centered").css("margin", "0");
+            toggleTimerType(timerType);
             break;
         case "center":
             $(".centered").css("text-align", "center");
             $(".centered").css("margin", "auto");
+            toggleTimerType(timerType);
             break;
     }
+}
+
+function readyTimer() {
+    $("#timerDisplay").css("color", "#00FF00");
+}
+
+function startTimer() {
+    timing = true;
+    stopped = false;
+    $("#timerDisplay").css("color", "white");
+
+    let startTime = new Date().getTime();
+    timerInterval = setInterval(function() {
+        let rawTime = new Date().getTime() - startTime;
+        $("#timerDisplay").text(getmmsshh(rawTime));
+    }, 10);
+}
+
+function stopTimer() {
+    stopped = true;
+    clearInterval(timerInterval);
+    $("#timerButtons").show();
+}
+
+function resetTimer() {
+    $("#timerDisplay").text("0.00");
+    $("#timerButtons").hide();
+}
+
+function timeAgain() {
+    resetTimer();
+    $("#btnReset").blur();
+    $("#timerButtons").hide();
+    timing = false;
+    stopped = true;
+    ready = true;
 }
 
 function initApp() {
@@ -918,12 +984,29 @@ function initHTML() {
     $("#btnCreateRoom").prop("disabled", true);
     $("#room").hide();
 
-    
-    $("#inpTimeDiv").focus();
-
     $("#inpTimeDiv").keypress(function(e) {
         if (e.keyCode === 13) {
             submitTime($('#inpTime').val());
+        }
+    });
+
+    $(window).on('keyup', e => {
+        if (e.keyCode === 32 && useTimer && !timing && stopped && ready) {
+            startTimer();
+        }
+        else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
+            setTimeout(() => {
+                timing = false;
+                ready = true;
+            },500);
+        }
+    })
+    .on("keydown", e => {
+        if (e.keyCode !== 27 && useTimer && timing) {
+            stopTimer();
+        }
+        else if (e.keyCode === 32 && useTimer && !timing && stopped && ready) {
+            readyTimer();
         }
     });
 }
