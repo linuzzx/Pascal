@@ -409,17 +409,18 @@ function createRandomName() {
 
 function changeUserName() {
     if ($("#inpUserName").val() !== "") {
+        if (!randomName) {
+            localStorage.setItem("cuberName", $("#inpUserName").val());
+        }
+        else {
+            localStorage.removeItem("cuberName");
+            randomName = false;
+        }
+
         cuberRef.update({name: $("#inpUserName").val()});
     }
     else {
         $("#inpUserName").val(createRandomName()).trigger("change");
-    }
-    
-    localStorage.setItem("cuberName", $("#inpUserName").val());
-    
-    if (randomName) {
-        localStorage.removeItem("cuberName");
-        randomName = false;
     }
 }
 
