@@ -677,6 +677,20 @@ function isValid(time) {
     return valid;
 }
 
+function toggleTimerType(val) {
+    console.log(val);
+    switch (val) {
+        case "1":
+            $("#typeDiv").show();
+            $("#timerDiv").hide();
+            break;
+        case "2":
+            $("#typeDiv").hide();
+            $("#timerDiv").show();
+            break;
+    }
+}
+
 function initApp() {
     $("#loadingScreen").hide();
 

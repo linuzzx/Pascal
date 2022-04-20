@@ -31,8 +31,22 @@
         </div>
     </div>
     <div id="room">
-        <button onclick="backToLobby()">Back to lobby</button>
-        <h1 id="roomName"></h1>
+        <div id="roomHeader">
+            <button onclick="backToLobby()">Back to lobby</button>
+            <h1 id="roomName"></h1>
+            <!--div class="roomOptions">
+                <h2>Options</h3>
+                <h3>Content positioning</h3>
+                <label for="radLeft">Type</label><input type="radio" name="contentPos" id="radLeft" value="left" onchange="togglePositioning($(this).val())" checked>
+                <label for="radCenter">Timer</label><input type="radio" name="contentPos" id="radCenter" value="center" onchange="togglePositioning($(this).val())">
+                <br>
+                <br>
+                <h3>Time entry</h3>
+                <label for="radType">Type</label><input type="radio" name="timerType" id="radType" value="1" onchange="toggleTimerType($(this).val())" checked>
+                <label for="radTimer">Timer</label><input type="radio" name="timerType" id="radTimer" value="2" onchange="toggleTimerType($(this).val())">
+            </div-->
+        </div>
+        <br>
         <div id="headerLeader">
             <select id="events"></select>
             <button id="btnStart" onclick="startCubing()">Start</button>
@@ -43,8 +57,16 @@
             <table class="centered" id="timeTable"></table>
         </div><br>
         <div class="centered" id="inpTimeDiv" hidden>
-            <input id="inpTime">
-            <button onclick="submitTime($('#inpTime').val())">Submit</button>
+            <div class="centered" id="typeDiv">
+                <input id="inpTime">
+                <button onclick="submitTime($('#inpTime').val())">Submit</button>
+            </div>
+            <div class="centered" id="timerDiv" hidden>
+                <span id="timerDisplay">0.00</span><br><br>
+                <span id="timerHelpText">No inspection. Start/Stop with space.</span><br><br>
+                <button onclick="timeAgain()" hidden>Time again</button>
+                <button onclick="submitTime($('#inpTime').val())" hidden>Submit</button>
+            </div>
         </div>
         <h2 class="centered" id="winner"></h2>
     </div>

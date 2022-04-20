@@ -90,3 +90,26 @@ input, button, select {
 .clickableTD:hover {
     opacity: 0.7;
 }
+
+#timerDisplay {
+    font-family: monospace;
+    font-size: 10vh;
+}
+
+#roomHeader {
+    display: grid;
+    grid-template-columns: 1fr 5fr 1fr;
+}
+
+#roomHeader button {
+    width: fit-content;
+    height: fit-content;
+}
+
+#roomHeader h1 {
+    text-align: center;
+}
+
+#roomOptions {
+    text-align: end;
+}
