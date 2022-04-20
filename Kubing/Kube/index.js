@@ -417,11 +417,11 @@ function changeUserName() {
             randomName = false;
         }
 
-        cuberRef.update({name: $("#inpUserName").val()});
     }
     else {
-        $("#inpUserName").val(createRandomName()).trigger("change");
+        $("#inpUserName").val(createRandomName())//.trigger("change");
     }
+    cuberRef.update({name: $("#inpUserName").val()});
 }
 
 function changeRoomName(inp) {
