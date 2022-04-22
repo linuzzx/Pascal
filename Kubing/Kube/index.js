@@ -11,6 +11,7 @@ let stopped = true;
 let ready = true;
 let waiting = false;
 let waitForOthers = true;
+let showingOuterInner = false;
 
 const events = ["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx", "Pyraminx", "Skewb", "Square-1"];
 const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "minx", "pyram", "skewb", "sq1"];
@@ -474,6 +475,7 @@ function createRoom() {
 function joinRoom(rid, create = false) {
     curRoom = rid;
     let roomRef = firebase.database().ref("rooms/"+rid);
+    $("#chat").html("");
 
     roomRef.once('value', (snapshot) => {
         let snap = snapshot.val();
@@ -492,7 +494,6 @@ function joinRoom(rid, create = false) {
 
     $("#menu").hide();
     $("#room").show();
-    $("#chat").html("");
 }
 
 function backToLobby() {
@@ -878,7 +879,7 @@ function initApp() {
                     let button = (p1 >= 10 || snap.waiting === false) ? "<button onclick='joinRoom(" + snap.id + ")' disabled>Join</button>" : "<button onclick='joinRoom(" + snap.id + ")'>Join</button>";
                     $("#rooms").append("<tr><td><h3>" + snap.name + "</h3></td><td><h3>" + players + "</h3></td><td><h3>" + button + "</h3></td></tr>");
                 }
-                if (snap.id === curRoom) {
+                if (snap.id === curRoom && snap.id !== "Lobby") {
                     if (snap.waiting) {
                         if (Object.keys(snap).includes("cubers")) {
                             let out = "<tr><th>#</th>";
@@ -1037,6 +1038,7 @@ function initApp() {
                         let out = [];
 
                         for (let c of chats) {
+                            console.log(c);
                             if (c.uid === cuberId) {
                                 out.push("<div class='chatLine'><b class='cuber'>" + getCuberName(c.uid) + "</b>: " + c.message + "</div>");
                             }
@@ -1064,7 +1066,6 @@ function getCuberName(cid) {
         let ind = cSnap.slice().map(c => c.id).indexOf(cid);
         cuber = Object.values(cSnap)[ind].name;
     });
-    console.log(cuber);
     return cuber;
 }
 
@@ -1110,29 +1111,33 @@ function initHTML() {
     });
 
     $(window).on('keyup', e => {
-        if (document.activeElement.id !== "inpChat") {
-            if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waiting && !waitForOthers) {
-                startTimer();
+        if (!showingOuterInner) {
+            if (document.activeElement.id !== "inpChat") {
+                if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waiting && !waitForOthers) {
+                    startTimer();
+                }
+                /*else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
+                    setTimeout(() => {
+                        timing = false;
+                    },500);
+                }*/
             }
-            /*else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
-                setTimeout(() => {
-                    timing = false;
-                },500);
-            }*/
         }
     })
     .on("keydown", e => {
-        if (document.activeElement.id !== "inpChat") {
-            if (e.keyCode !== 27 && useTimer && timing) {
-                stopTimer();
-            }
-            else if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waiting && !waitForOthers) {
-                readyTimer();
-            }
-            else if (e.keyCode === 13 && useTimer && !timing && stopped && !ready && $('#timerDisplay').text() !== "0.00") {
-                submitTime($('#timerDisplay').text());
-                $('#timerButtons').hide();
-                timeAgain();
+        if (!showingOuterInner) {
+            if (document.activeElement.id !== "inpChat") {
+                if (e.keyCode !== 27 && useTimer && timing) {
+                    stopTimer();
+                }
+                else if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waiting && !waitForOthers) {
+                    readyTimer();
+                }
+                else if (e.keyCode === 13 && useTimer && !timing && stopped && !ready && $('#timerDisplay').text() !== "0.00") {
+                    submitTime($('#timerDisplay').text());
+                    $('#timerButtons').hide();
+                    timeAgain();
+                }
             }
         }
     });
