@@ -6,6 +6,7 @@ let leader = null;
 let averages = {};
 let timerInterval;
 let useTimer = false;
+let cubingStarted = false;
 let timing = false;
 let stopped = true;
 let ready = true;
@@ -426,6 +427,7 @@ function changeUserName() {
     else {
         $("#inpUserName").val(createRandomName());
     }
+    cuberName = userName;
     cuberRef.update({name: userName});
 }
 
@@ -547,6 +549,7 @@ function get5scrambles(event) {
 }
 
 function startCubing() {
+    cubingStarted = true;
     let scr = get5scrambles($("#events option:selected").val());
     $("#headerLeader").hide();
     $("#headerOther").hide();
@@ -563,6 +566,7 @@ function startCubing() {
 }
 
 function stopCubing() {
+    cubingStarted = false;
     if (curRoom !== null) {
         $("#scrambleDisplay").html("");
         $("#winner").text(getWinner());
@@ -778,6 +782,46 @@ function timeAgain() {
     ready = true;
 }
 
+function changeChat(inp) {
+    if (inp !== "") {
+        $("#btnSendChat").prop("disabled", false);
+    }
+    else {
+        $("#btnSendChat").prop("disabled", true);
+    }
+}
+
+function sendChat(chat) {
+    if (chat.split("").length <= 40 && chat !== "") {
+        $("#inpChat").val("");
+        $("#btnSendChat").prop("disabled", true);
+
+        let chats = [];
+
+        let chatMessage = {
+            uid: cuberId,
+            message: stripHTML(chat),
+            date: Date.now()
+        };
+
+        firebase.database().ref("rooms/" + curRoom).once("value", (snapshot) => {
+            let snap = snapshot.val();
+            if (Object.keys(snap).includes("chat")) {
+                chats = snap.chat.slice();
+            }
+        });
+        
+        chats.push(chatMessage);
+
+        firebase.database().ref("rooms/" + curRoom).update({
+            chat: chats
+        });
+    }
+    else {
+        alert("Hey hacker! You're not allowed to send messages longer than 40 characters...");
+    }
+}
+
 function initApp() {
     $("#loadingScreen").hide();
 
@@ -972,12 +1016,49 @@ function initApp() {
                             $("#inpTime").focus();
                         }
                     }
+
+                    if (Object.keys(snap).includes("chat")) {
+                        let chats = snap.chat.slice();
+                        chats.sort((a, b) => {
+                            return a.date - b.date;
+                        });
+                        
+                        let out = [];
+
+                        for (let c of chats) {
+                            if (c.uid === cuberId) {
+                                out.push("<b class='cuber'>" + getCuberName(c.uid) + "</b>: " + c.message);
+                            }
+                            else {
+                                out.push("<b>" + getCuberName(c.uid) + "</b>: " + c.message);
+                            }
+                        }
+
+                        $("#chat").html(out.join("<br>"));
+                        let d = $('#chat').parent();
+                        d.scrollTop(d.prop("scrollHeight"));
+                    }
                 }
             });
         }
     });
 
     initHTML();
+}
+
+function getCuberName(cid) {
+    let cuber = "Unknown";
+    firebase.database().ref("cubers/").once("value", cSnapshot => {
+        let cSnap = Object.values(cSnapshot.val());
+        let ind = cSnap.slice().map(c => c.id).indexOf(cid);
+        cuber = Object.values(cSnap)[ind].name;
+    });
+    console.log(cuber);
+    return cuber;
+}
+
+function stripHTML(html){
+    return html.replaceAll("<","&lt;").replaceAll(">","&gt;");
 }
 
 function initHTML() {
@@ -996,26 +1077,40 @@ function initHTML() {
             submitTime($('#inpTime').val());
         }
     });
+    
+    $("#btnSendChat").prop("disabled", true);
+
+    $("#inpChat").keypress(function(e) {
+        if (e.keyCode === 13 && $('#inpChat').val() !== "") {
+            sendChat($('#inpChat').val());
+        }
+    });
 
     $(window).on('keyup', e => {
-        if (e.keyCode === 32 && useTimer && !timing && stopped && ready) {
-            startTimer();
-        }
-        else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
-            setTimeout(() => {
-                timing = false;
-                ready = true;
-            },500);
+        if (document.activeElement.id !== "inpChat") {
+            if (e.keyCode === 32 && useTimer && !timing && stopped && ready) {
+                startTimer();
+            }
+            else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
+                setTimeout(() => {
+                    timing = false;
+                    ready = true;
+                },500);
+            }
         }
     })
     .on("keydown", e => {
-        if (e.keyCode !== 27 && useTimer && timing) {
-            stopTimer();
-        }
-        else if (e.keyCode === 32 && useTimer && !timing && stopped && ready) {
-            readyTimer();
+        if (document.activeElement.id !== "inpChat") {
+            if (e.keyCode !== 27 && useTimer && timing) {
+                stopTimer();
+            }
+            else if (e.keyCode === 32 && useTimer && !timing && stopped && ready && cubingStarted) {
+                readyTimer();
+            }
         }
     });
+
+    adjustSize();
 }
 
 function getLocalStorage() {
@@ -1040,4 +1135,9 @@ function getLocalStorage() {
 
         $("input:radio[name=timerType]").val([val]);
     }
+}
+
+function adjustSize() {
+    $("#inpChat").width($("#outerChat").width() * 0.8);
+    $("#btnSendChat").outerWidth($("#outerChat").width() * 0.2);
 }

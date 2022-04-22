@@ -23,7 +23,7 @@
         <div id="createRoom">
             <h2>Create room</h1>
             <input type="text" id="inpRoomName" placeholder="Room name" oninput="changeRoomName(value)">
-            <button id="btnCreateRoom" onclick="createRoom()">Create</button>
+            <button id="btnCreateRoom" onclick="createRoom()" disabled>Create</button>
         </div>
         <div id="joinRoom">
             <h2>Join room</h1>
@@ -32,8 +32,34 @@
     </div>
     <div id="room">
         <div id="roomHeader">
-            <button onclick="backToLobby()">Back to lobby</button>
-            <h1 id="roomName"></h1>
+            <div>
+                <button onclick="backToLobby()">Back to lobby</button><br><br>
+                <h1 id="roomName"></h1>
+            </div>
+            <div>
+                <div class="centered" id="headerLeader">
+                    <select id="events"></select>
+                    <button id="btnStart" onclick="startCubing()">Start</button>
+                </div>
+                <h2 class="centered" id="headerOther">Waiting for leader to start</h2>
+                <h2 class="centered" id="scrambleDisplay"></h2><br>
+                <div class="centered" id="inpTimeDiv" hidden>
+                    <div class="centered" id="typeDiv">
+                        <input id="inpTime">
+                        <button onclick="submitTime($('#inpTime').val())">Submit</button>
+                    </div>
+                    <div class="centered" id="timerDiv" hidden>
+                        <span id="timerDisplay">0.00</span><br><br>
+                        <span id="timerHelpText">No inspection. Start/Stop with space.</span><br><br>
+                        <div id="timerButtons" hidden>
+                            <button onclick="submitTime($('#timerDisplay').text()); $('#timerButtons').hide(); timeAgain()">OK</button>
+                            <button onclick="submitTime($('#timerDisplay').text(), 2); $('#timerButtons').hide(); timeAgain()">+2</button>
+                            <button onclick="submitTime($('#timerDisplay').text(), 'DNF'); $('#timerButtons').hide(); timeAgain()">DNF</button><br>
+                            <button id="btnReset" onclick="timeAgain()">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="roomOptions">
                 <h2>Options</h3>
                 <h3>Content positioning</h3>
@@ -47,29 +73,17 @@
             </div>
         </div>
         <br>
-        <div class="centered" id="headerLeader">
-            <select id="events"></select>
-            <button id="btnStart" onclick="startCubing()">Start</button>
-        </div>
-        <h2 class="centered" id="headerOther">Waiting for leader to start</h2>
-        <h2 class="centered" id="scrambleDisplay"></h2><br>
+        
         <div>
             <table class="centered" id="timeTable"></table>
         </div><br>
-        <div class="centered" id="inpTimeDiv" hidden>
-            <div class="centered" id="typeDiv">
-                <input id="inpTime">
-                <button onclick="submitTime($('#inpTime').val())">Submit</button>
-            </div>
-            <div class="centered" id="timerDiv" hidden>
-                <span id="timerDisplay">0.00</span><br><br>
-                <span id="timerHelpText">No inspection. Start/Stop with space.</span><br><br>
-                <div id="timerButtons" hidden>
-                    <button onclick="submitTime($('#timerDisplay').text()); $('#timerButtons').hide(); timeAgain()">OK</button>
-                    <button onclick="submitTime($('#timerDisplay').text(), 2); $('#timerButtons').hide(); timeAgain()">+2</button>
-                    <button onclick="submitTime($('#timerDisplay').text(), 'DNF'); $('#timerButtons').hide(); timeAgain()">DNF</button><br>
-                    <button id="btnReset" onclick="timeAgain()">Reset</button>
-                </div>
+        <div>
+            <div class="centered" id="chatDiv">
+                <div class="centered" id="outerChat">
+                    <div id="chat"></div>
+                </div><br>
+                <input type="text" id="inpChat" oninput="changeChat(value)" maxlength="40">
+                <button id="btnSendChat" onclick="sendChat($('#inpChat').val())" disabled>Send</button>
             </div>
         </div>
         <h2 class="centered" id="winner"></h2>

@@ -13,6 +13,7 @@ body {
     overflow: hidden;
     color: white;
     font-family: Arial, Helvetica, sans-serif;
+    overflow-y: scroll;
 }
 
 #loadingScreen {
@@ -107,4 +108,60 @@ input, button, select {
 
 #roomOptions {
     text-align: end;
+}
+
+#outerChat {
+    padding: 0.5%;
+    width: 50vh;
+    height: 20vh;
+    background-color: white;
+    overflow-y: scroll;
+}
+
+#chat {
+    width: 100%;
+    height: 100%;
+    color: black;
+    text-align: left;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: transparent; 
+}
+
+
+/* width */
+#outerChat::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+#outerChat::-webkit-scrollbar-track {
+    background: transparent; 
+}
+   
+/* Handle */
+#outerChat::-webkit-scrollbar-thumb {
+    background: #505050;
+}
+  
+/* Handle on hover */
+#outerChat::-webkit-scrollbar-thumb:hover {
+    background: #383838; 
 }
