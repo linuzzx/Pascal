@@ -9,6 +9,7 @@ let useTimer = false;
 let timing = false;
 let stopped = true;
 let ready = true;
+let waiting = false;
 let waitForOthers = true;
 
 const events = ["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx", "Pyraminx", "Skewb", "Square-1"];
@@ -126,6 +127,7 @@ function checkRooms(users) {
         }
         snapshot.forEach(childSnapshot => {
             const c = childSnapshot.val();
+            waiting = c.waiting;
             if (users.map(u => u[1]).filter(r => {return r === c.id}).length === 0) {
                 firebase.database().ref("rooms/" + c.id).remove();
                 $("#winner").text("");
@@ -868,6 +870,7 @@ function initApp() {
             $("#rooms").append("<tr><td><h3>Room name</h3></td><td><h3>Number of cubers</h3></td><td><h3></h3></td></tr>");
             snapshot.forEach(childSnapshot => {
                 let snap = childSnapshot.val();
+                waiting = snap.waiting;
                 
                 if (snap.cubers !== undefined) {
                     let p1 = snap.cubers.length;
@@ -909,7 +912,7 @@ function initApp() {
                                     for (let cub of s[i]) {
                                         $("#" + (i) + "_" + cub.cid).text(cub.time);
                                         $("#" + (i) + "_" + cub.cid).attr("class", "clickableTD");
-                                        $("#" + (i) + "_" + cub.cid).attr("onClick", "window.alert(\"" + cub.time + "   " + snap.scrambles[i] + "\")");
+                                        $("#" + (i) + "_" + cub.cid).attr("onClick", "showTimeStats(\"" + cub.time + "&nbsp;&nbsp;&nbsp;" + snap.scrambles[i] + "\")");
                                     }
                                 }
                                 for (let cub of s[4]) {
@@ -925,14 +928,14 @@ function initApp() {
                                     
                                     $("#avg_" + c).text(avg);
                                    
-                                    let out = "avg: " + avg + "\\n";
+                                    let out = "avg: " + avg + "<br>";
                                     let j = 0;
                                     for (let so of times) {
-                                        out += "\\n" + (j + 1) + ". " + so + "   " + snap.scrambles[j];
+                                        out += "<br><br>" + (j + 1) + ". " + so + "&nbsp;&nbsp;&nbsp;" + snap.scrambles[j];
                                         j++;
                                     }
                                     $("#avg_" + c).attr("class", "clickableTD");
-                                    $("#avg_" + c).attr("onClick", 'window.alert(\"' + out + '\")');
+                                    $("#avg_" + c).attr("onClick", 'showTimeStats(\"' + out + '\")');
                                 }
                             }
                         }
@@ -970,7 +973,7 @@ function initApp() {
                                     let solTime = s[s.length - 1].map(sol => sol.time)[ind];
                                     $("#" + (s.length - 1) + "_" + cub.cid).text(solTime);
                                     $("#" + (s.length - 1) + "_" + cub.cid).attr("class", "clickableTD");
-                                    $("#" + (s.length - 1) + "_" + cub.cid).attr("onClick", "window.alert(\"" + solTime + "   " + snap.scrambles[s.length - 1] + "\")");
+                                    $("#" + (s.length - 1) + "_" + cub.cid).attr("onClick", "showTimeStats(\"" + solTime + "&nbsp;&nbsp;&nbsp;" + snap.scrambles[s.length - 1] + "\")");
                                 }
                                 if (s.length === 5) {
                                     let cuberSolves = [];
@@ -990,14 +993,14 @@ function initApp() {
                                             let avg = getCuberAvg(cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1]));
                                             averages[c] = getTime(avg);
                                             $("#avg_" + c).text(avg);
-                                            let out = "avg: " + avg + "\\n";
+                                            let out = "avg: " + avg + "<br>";
                                             let j = 0;
                                             for (let so of cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1])) {
-                                                out += "\\n" + (j + 1) + ". " + so + "   " + snap.scrambles[j];
+                                                out += "<br><br>" + (j + 1) + ". " + so + "&nbsp;&nbsp;&nbsp;" + snap.scrambles[j];
                                                 j++;
                                             }
                                             $("#avg_" + c).attr("class", "clickableTD");
-                                            $("#avg_" + c).attr("onClick", "window.alert(\"" + out + "\")");
+                                            $("#avg_" + c).attr("onClick", "showTimeStats(\"" + out + "\")");
                                         }
                                     }
                                     if (s[snap.curScr].length === snap.cubers.length) {
@@ -1017,6 +1020,7 @@ function initApp() {
                         }
                         else {
                             $("#scrambleDisplay").html(snap.scrambles[0]);
+                            waitForOthers = false;
                             $("#timeTable td").text("");
                             $("#winner").text("");
                             $("#inpTimeDiv").show();
@@ -1064,6 +1068,18 @@ function getCuberName(cid) {
     return cuber;
 }
 
+function showTimeStats(info) {
+    showingOuterInner = true;
+    $("#innerTimeStats div").html(info);
+    $("#outerTimeStats").css("display", "block");
+}
+
+function closeTimeStats() {
+    showingOuterInner = false;
+    $("#innerTimeStats div").html("");
+    $("#outerTimeStats").css("display", "none");
+}
+
 function stripHTML(html){
     return html.replaceAll("<","&lt;").replaceAll(">","&gt;");
 }
@@ -1095,7 +1111,7 @@ function initHTML() {
 
     $(window).on('keyup', e => {
         if (document.activeElement.id !== "inpChat") {
-            if (e.keyCode === 32 && useTimer && !timing && stopped && ready) {
+            if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waiting && !waitForOthers) {
                 startTimer();
             }
             /*else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
@@ -1110,7 +1126,7 @@ function initHTML() {
             if (e.keyCode !== 27 && useTimer && timing) {
                 stopTimer();
             }
-            else if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waitForOthers) {
+            else if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waiting && !waitForOthers) {
                 readyTimer();
             }
             else if (e.keyCode === 13 && useTimer && !timing && stopped && !ready && $('#timerDisplay').text() !== "0.00") {
@@ -1122,6 +1138,10 @@ function initHTML() {
     });
 
     adjustSize();
+
+    $(".inner").on("mousedown", function (e) {
+        e.stopPropagation();
+    });
 }
 
 function getLocalStorage() {

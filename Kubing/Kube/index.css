@@ -87,6 +87,12 @@ input, button, select {
     opacity: 0.7;
 }
 
+#scrambleDisplay {
+    padding: 0 5vw;
+    font-size: 3vh;
+    font-family: monospace;
+}
+
 #timerDisplay {
     font-family: monospace;
     font-size: 10vh;
@@ -113,7 +119,7 @@ input, button, select {
 #outerChat {
     padding: 0.5%;
     width: 50vh;
-    height: 20vh;
+    height: 15vh;
     background-color: white;
     overflow-y: scroll;
 }
@@ -127,6 +133,29 @@ input, button, select {
 
 .chatLine {
     margin-bottom: 2%;
+}
+
+.outer {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.inner {
+    color: white;
+    position: fixed;
+    width: 60%;
+    height: 60%;
+    top: 20%;
+    left: 20%;
+    border-radius: 10px;
+    background-color: #1E1E1E;
+    border: 1px solid black;
+    padding: 2%;
+    overflow-y: scroll;
 }
 
 /* width */
