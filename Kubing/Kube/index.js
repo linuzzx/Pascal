@@ -907,7 +907,6 @@ function initApp() {
                             $("#timeTable").html(out);
 
                             if (snap.solves) {
-                                console.log("Har løst før");
                                 let s = snap.solves.slice();
                                 for (let i = 0; i < 5; i++) {
                                     for (let cub of s[i]) {
@@ -1005,7 +1004,6 @@ function initApp() {
                                         }
                                     }
                                     if (s[snap.curScr].length === snap.cubers.length) {
-                                        console.log("Alle er ferdige");
                                         stopCubing();
                                     }
                                 }
@@ -1038,7 +1036,6 @@ function initApp() {
                         let out = [];
 
                         for (let c of chats) {
-                            console.log(c);
                             if (c.uid === cuberId) {
                                 out.push("<div class='chatLine'><b class='cuber'>" + getCuberName(c.uid) + "</b>: " + c.message + "</div>");
                             }
