@@ -42,7 +42,8 @@
                     <button id="btnStart" onclick="startCubing()">Start</button>
                 </div>
                 <h2 class="centered" id="headerOther">Waiting for leader to start</h2>
-                <h2 class="centered" id="scrambleDisplay"></h2><br>
+                <h2 class="centered" id="scrambleDisplay"></h2><br><br>
+                <h2 class="centered" id="winner"></h2>
                 <div class="centered" id="inpTimeDiv" hidden>
                     <div class="centered" id="typeDiv">
                         <input id="inpTime">
@@ -86,7 +87,6 @@
                 <button id="btnSendChat" onclick="sendChat($('#inpChat').val())" disabled>Send</button>
             </div>
         </div>
-        <h2 class="centered" id="winner"></h2>
     </div>
     
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>

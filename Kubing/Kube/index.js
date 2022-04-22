@@ -6,10 +6,10 @@ let leader = null;
 let averages = {};
 let timerInterval;
 let useTimer = false;
-let cubingStarted = false;
 let timing = false;
 let stopped = true;
 let ready = true;
+let waitForOthers = true;
 
 const events = ["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx", "Pyraminx", "Skewb", "Square-1"];
 const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "minx", "pyram", "skewb", "sq1"];
@@ -549,7 +549,6 @@ function get5scrambles(event) {
 }
 
 function startCubing() {
-    cubingStarted = true;
     let scr = get5scrambles($("#events option:selected").val());
     $("#headerLeader").hide();
     $("#headerOther").hide();
@@ -566,7 +565,6 @@ function startCubing() {
 }
 
 function stopCubing() {
-    cubingStarted = false;
     if (curRoom !== null) {
         $("#scrambleDisplay").html("");
         $("#winner").text(getWinner());
@@ -608,12 +606,14 @@ function getWinner() {
 
 function submitTime(time, penalty = null) {
     if (isValid(time)) {
+        ready = true;
         if (cuberId === leader) {
             $("#scrambleDisplay").html("Waiting for other cubers to submit <button onclick='skip()'>Skip</button>");
         }
         else {
             $("#scrambleDisplay").html("Waiting for other cubers to submit");
         }
+        waitForOthers = true;
         
         $("#inpTimeDiv").hide();
 
@@ -751,6 +751,7 @@ function readyTimer() {
 function startTimer() {
     timing = true;
     stopped = false;
+    ready = false;
     $("#timerDisplay").css("color", "white");
     $("#scrambleDisplay").hide();
 
@@ -763,14 +764,17 @@ function startTimer() {
 
 function stopTimer() {
     stopped = true;
+    timing = false;
     clearInterval(timerInterval);
     $("#timerButtons").show();
+    $("#timerHelpText").text("Press Enter for OK");
 }
 
 function resetTimer() {
     $("#timerDisplay").text("0.00");
     $("#timerButtons").hide();
     $("#scrambleDisplay").show();
+    $("#timerHelpText").text("No inspection. Start/Stop with space.");
 }
 
 function timeAgain() {
@@ -989,6 +993,7 @@ function initApp() {
                                             let j = 0;
                                             for (let so of cuberSolves.filter(cs => cs[0] === c).map(cso => cso[1])) {
                                                 out += "\\n" + (j + 1) + ". " + so + "   " + snap.scrambles[j];
+                                                j++;
                                             }
                                             $("#avg_" + c).attr("class", "clickableTD");
                                             $("#avg_" + c).attr("onClick", "window.alert(\"" + out + "\")");
@@ -1001,6 +1006,7 @@ function initApp() {
                                 }
                                 else if (s[snap.curScr] && s[snap.curScr].length === snap.cubers.length && curRoom !== null) {
                                     $("#scrambleDisplay").html(snap.scrambles[s.length]);
+                                    waitForOthers = false;
                                     let newCur = snap.curScr + 1;
                                     firebase.database().ref("rooms/" + curRoom).update({
                                         curScr: newCur
@@ -1091,12 +1097,11 @@ function initHTML() {
             if (e.keyCode === 32 && useTimer && !timing && stopped && ready) {
                 startTimer();
             }
-            else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
+            /*else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
                 setTimeout(() => {
                     timing = false;
-                    ready = true;
                 },500);
-            }
+            }*/
         }
     })
     .on("keydown", e => {
@@ -1104,8 +1109,13 @@ function initHTML() {
             if (e.keyCode !== 27 && useTimer && timing) {
                 stopTimer();
             }
-            else if (e.keyCode === 32 && useTimer && !timing && stopped && ready && cubingStarted) {
+            else if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waitForOthers) {
                 readyTimer();
+            }
+            else if (e.keyCode === 13 && useTimer && !timing && stopped && !ready && $('#timerDisplay').text() !== "0.00") {
+                submitTime($('#timerDisplay').text());
+                $('#timerButtons').hide();
+                timeAgain();
             }
         }
     });
