@@ -490,6 +490,7 @@ function joinRoom(rid, create = false) {
 
     $("#menu").hide();
     $("#room").show();
+    $("#chat").html("");
 }
 
 function backToLobby() {
