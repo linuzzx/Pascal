@@ -1034,14 +1034,14 @@ function initApp() {
 
                         for (let c of chats) {
                             if (c.uid === cuberId) {
-                                out.push("<b class='cuber'>" + getCuberName(c.uid) + "</b>: " + c.message);
+                                out.push("<div class='chatLine'><b class='cuber'>" + getCuberName(c.uid) + "</b>: " + c.message + "</div>");
                             }
                             else {
-                                out.push("<b>" + getCuberName(c.uid) + "</b>: " + c.message);
+                                out.push("<div class='chatLine'><b>" + getCuberName(c.uid) + "</b>: " + c.message + "</div>");
                             }
                         }
 
-                        $("#chat").html(out.join("<br>"));
+                        $("#chat").html(out.join(""));
                         let d = $('#chat').parent();
                         d.scrollTop(d.prop("scrollHeight"));
                     }

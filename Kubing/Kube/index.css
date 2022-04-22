@@ -125,6 +125,10 @@ input, button, select {
     text-align: left;
 }
 
+.chatLine {
+    margin-bottom: 2%;
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 0;
