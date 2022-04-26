@@ -9,7 +9,7 @@
     <title>Alg Inverter</title>
 </head>
 <body style="text-align: center;">
-    <input id="inpAlg" type="text" placeholder="alg" onchange="$('#algDisplay').text(inverseAlg($(this).val()))">
+    <input id="inpAlg" type="text" placeholder="alg" oninput="$('#algDisplay').text(inverseAlg($(this).val()))">
     <h1 id="algDisplay"></h1>
 </body>
 <script src="index.js"></script>
