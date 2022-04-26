@@ -10,11 +10,11 @@ function inverseAlg(alg) {
             if (a.includes("'")) {
                 arr.unshift(a.split("")[0]);
             }
-            else if (a.split("").length === 1) {
-                arr.unshift(a + "'");
+            else if (a.includes("2")) {
+                arr.unshift(a);
             }
             else {
-                arr.unshift(a);
+                arr.unshift(a + "'");
             }
         }
         invAlg = arr.join(" ");
