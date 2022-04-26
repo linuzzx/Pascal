@@ -45,16 +45,16 @@ function inverseComm(alg) {
         }
     }
 
-    if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets) {
+    if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets || (commas === colons && commas === leftBrackets)) {
         return "Illegal alg";
     }
-    else if (leftBrackets > 2 || commas > 2 || colons >= 2) {
+    else if (leftBrackets >= 2 || commas >= 2 || colons >= 2) {
         return "Alg format not supported";
     }
 
     let ABAB = alg.match(/\[(.*)\,(.*)\]/);
     let ABA = alg.match(/\[(.*)\:(.*)\]/);
-
+    
     if (ABAB) {
         invAlg = "[" + ABAB[2] + ", " + ABAB[1] + "]";
     }
