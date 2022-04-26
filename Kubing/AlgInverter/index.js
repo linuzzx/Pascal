@@ -30,7 +30,7 @@ function inverseComm(alg) {
     let colons = 0;
     let commas = 0;
 
-    for (let a of alg.split(" ")) {
+    for (let a of alg) {
         if (a === "[") {
             leftBrackets++;
         }
@@ -48,18 +48,18 @@ function inverseComm(alg) {
     if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets) {
         return "Illegal alg";
     }
-    else if (leftBrackets > 2 || commas >= 2 || colons >= 2) {
+    else if (leftBrackets > 2 || commas > 2 || colons >= 2) {
         return "Alg format not supported";
     }
 
-    let comm = alg.match(/\[(.*)\,(.*)\]/);
-    let conj = alg.match(/\[(.*)\:(.*)\]/);
+    let ABAB = alg.match(/\[(.*)\,(.*)\]/);
+    let ABA = alg.match(/\[(.*)\:(.*)\]/);
 
-    if (comm) {
-        invAlg = "[" + comm[2] + ", " + comm[1] + "]";
+    if (ABAB) {
+        invAlg = "[" + ABAB[2] + ", " + ABAB[1] + "]";
     }
-    else if (conj) {
-        invAlg = "[" + conj[1] + ": " + inverseAlg(conj[2]) + "]";
+    else if (ABA) {
+        invAlg = "[" + ABA[1] + ": " + inverseAlg(ABA[2]) + "]";
     }
 
     return invAlg;
