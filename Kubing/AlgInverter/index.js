@@ -1,7 +1,10 @@
 function inverseAlg(alg) {
     let invAlg = "";
 
-    if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",")) {
+    if (alg.trim() === "") {
+        return "Type in an alg";
+    }
+    else if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",")) {
         invAlg = inverseComm(alg);
     }
     else {
@@ -45,21 +48,35 @@ function inverseComm(alg) {
         }
     }
 
-    if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets || (commas === colons && commas === leftBrackets)) {
+    if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets || (alg[0] !== "[" && alg[alg.length - 1] !== "]")
+        || (colons === commas && colons === leftBrackets)) {
         return "Illegal alg";
     }
-    else if (leftBrackets >= 2 || commas >= 2 || colons >= 2) {
-        return "Alg format not supported";
-    }
-
-    let ABAB = alg.match(/\[(.*)\,(.*)\]/);
-    let ABA = alg.match(/\[(.*)\:(.*)\]/);
+console.log(alg);
+    alg = alg.slice(1, alg.length - 1);
+console.log(alg);
+    let ABCBCABCBC = alg.match(/(.*)\,\ \[(.*)\,(.*)\]/);
+    let ABAB = alg.match(/(.*)\,(.*)/);
+    let ABCBCA = alg.match(/(.*)\:\ \[(.*)\,(.*)\]/);
+    let ABA = alg.match(/(.*)\:(.*)/);
     
-    if (ABAB) {
-        invAlg = "[" + ABAB[2] + ", " + ABAB[1] + "]";
+    if (ABCBCABCBC) {
+        console.log(ABCBCABCBC);
+        tempAlg = alg;
+        invAlg = "[" + tempAlg.replace(alg.split(",")[0] + ",", "").trim() + ", " + alg.split(",")[0].trim() + "]";
+    }
+    else if (ABCBCA) {
+        console.log(ABCBCA);
+        tempAlg = alg;
+        invAlg = "[" + ABCBCA[1].trim() + ": " + inverseAlg(tempAlg.replace(ABCBCA[1] + ":", "").trim()) + "]";
+    }
+    else if (ABAB) {
+        console.log(ABAB);
+        invAlg = "[" + ABAB[2].trim() + ", " + ABAB[1].trim() + "]";
     }
     else if (ABA) {
-        invAlg = "[" + ABA[1] + ": " + inverseAlg(ABA[2]) + "]";
+        console.log(ABA);
+        invAlg = "[" + ABA[1].trim() + ": " + inverseAlg(ABA[2].trim()) + "]";
     }
 
     return invAlg;
