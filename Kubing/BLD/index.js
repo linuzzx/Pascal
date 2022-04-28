@@ -5,6 +5,7 @@ let selectedTopBtn = localStorage.getItem("selectedTopBtn") || "btnTopW";
 let selectedTopColor = localStorage.getItem("selectedTopColor") || "white";
 let selectedFrontBtn = localStorage.getItem("selectedFrontBtn") || "btnFrontG";
 let selectedFrontColor = localStorage.getItem("selectedFrontColor") || "green";
+let prevAlg = null;
 
 const edges = ["UB", "UR", "UL", "LU", "LF", "LD", "LB", "FR", "FD", "FL", "RU", "RB",
                 "RD", "RF", "BU", "BL", "BD", "BR", "DF", "DR", "DB", "DL"];
@@ -589,6 +590,11 @@ function listAlgs(content, arr) {
 function toggleTypeAlg(id) {
     let td = $("#"+id);
 
+    if (prevAlg && prevAlg !== "#" + id) {
+        $(prevAlg).data("current", "type");
+        $(prevAlg).html($(prevAlg).data("type"));
+    }
+
     if ($(td).data("current") === "type") {
         $(td).data("current", "alg");
         $(td).html($(td).data("alg"));
@@ -597,6 +603,7 @@ function toggleTypeAlg(id) {
         $(td).data("current", "type");
         $(td).html($(td).data("type"));
     }
+    prevAlg = "#" + id;
 }
 
 function getLetter(piece) {
