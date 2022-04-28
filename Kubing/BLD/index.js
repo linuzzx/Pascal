@@ -555,7 +555,13 @@ function listAlgs(content, arr) {
     let i=0;
     for (let a of arr) {
         let id = content+"_"+i;
-        let out = "<tr onclick='toggleTypeAlg(\""+id+"\")'><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td id='"+id+"' data-alg='"+a.alg.replaceAll("'", "&apos;")+"' data-type='"+a.type+"' data-current='type'>"+a.type+"</td></tr>";
+        let out = "";
+        if (content.includes("All")) {
+            out = "<tr onclick='toggleTypeAlg(\""+id+"\")'><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td id='"+id+"' data-alg='"+a.alg.replaceAll("'", "&apos;")+"' data-type='"+a.type+"' data-current='type'>"+a.type+"</td></tr>";
+        }
+        else {
+            out = "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
+        }
         if (i <= arr.length / 2) {
             utL += out;
         }
