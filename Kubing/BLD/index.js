@@ -557,7 +557,7 @@ function listAlgs(content, arr) {
     let utL = "<table class='tblAlgs'>";
     let utR = "<table class='tblAlgs'>";
 
-    arr.sort(compareLetters);
+    arr.sort(compareLetters2).sort(compareLetters1);
 
     let i=0;
     for (let a of arr) {
@@ -616,11 +616,21 @@ function getLetter(piece) {
     return customLetters[pieces.indexOf(piece)];
 }
 
-function compareLetters(a, b) {
+function compareLetters1(a, b) {
     if (a.letter1 < b.letter1){
         return -1;
     }
     if (a.letter1 > b.letter1){
+        return 1;
+    }
+    return 0;
+}
+
+function compareLetters2(a, b) {
+    if (a.letter2 < b.letter2){
+        return -1;
+    }
+    if (a.letter2 > b.letter2){
         return 1;
     }
     return 0;
