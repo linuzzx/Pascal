@@ -1,4 +1,4 @@
-let showing = "corners";
+let showing = null;
 let showingLetters = false;
 let selectedButton = null;
 let selectedTopBtn = localStorage.getItem("selectedTopBtn") || "btnTopW";
@@ -168,7 +168,7 @@ $(function () {
 
     makeAlgs();
 
-
+    showCorners();
 });
 
 function getKeyFromInput() {
@@ -197,7 +197,7 @@ function closeLetterScheme() {
 }
 
 function showCorners() {
-    if (showing === "edges") {
+    if (showing !== "corners") {
         showing = "corners";
 
         $("#cornerMenu").css("display", "grid");
@@ -210,11 +210,14 @@ function showCorners() {
         $("#cornerContentAll").css("display", "block");
         $(".aCorner").css("fontWeight", "normal");
         $("#aCornerAll").css("fontWeight", "bold");
+
+        $("#titleCorners").css("text-decoration", "underline");
+        $("#titleEdges").css("text-decoration", "none");
     }
 }
 
 function showEdges() {
-    if (showing === "corners") {
+    if (showing !== "edges") {
         showing = "edges";
 
         $("#cornerMenu").css("display", "none");
@@ -227,6 +230,9 @@ function showEdges() {
         $("#edgeContentAll").css("display", "block");
         $(".aEdges").css("fontWeight", "normal");
         $("#aEdgeAll").css("fontWeight", "bold");
+        
+        $("#titleCorners").css("text-decoration", "none");
+        $("#titleEdges").css("text-decoration", "underline");
     }
 }
 
