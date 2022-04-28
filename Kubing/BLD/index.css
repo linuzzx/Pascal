@@ -187,11 +187,6 @@ tr:hover {
     cursor: pointer;
 }
 
-#edgeContentInfo {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr;
-}
-
 td {
     font-size: 4vh;
 }
