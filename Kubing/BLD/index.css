@@ -183,7 +183,7 @@ tr:hover {
     cursor: default;
 }
 
-#edgeContentAll, #cornerContentAll tr {
+#edgeContentAll tr, #cornerContentAll tr {
     cursor: pointer;
 }
 
