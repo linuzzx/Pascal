@@ -123,11 +123,12 @@ if (localStorage.getItem("customArr") !== null) {
     customLetters = localStorage.getItem("customArr").split(";");
 }
 
-function Alg(letter1, letter2, pos1, pos2, alg) {
+function Alg(letter1, letter2, pos1, pos2, type, alg) {
     this.letter1 = letter1;
     this.letter2 = letter2;
     this.pos1 = pos1;
     this.pos2 = pos2;
+    this.type = type;
     this.alg = alg;
 }
 
@@ -446,35 +447,35 @@ function makeCornerAlgs() {
     for (let y=0; y<ufrTypes.length; y++) {
         for (let x=0; x<ufrTypes[y].length; x++) {
             if (ufrComms[y][x] !== "") {
-                cornerContentAllArr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContentAllArr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             //Sjekk localstorage for sjekkbokser her
             if (ufrTypes[y][x] === "U-Top / D-Side") {
-                cornerContent0Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent0Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "U-Top / D-Bottom") {
-                cornerContent1Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent1Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "D-Bottom / D-Bottom") {
-                cornerContent2Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent2Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "D-Side / D-Side") {
-                cornerContent3Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent3Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "BUR / D-Any" || ufrTypes[y][x] === "LUF / D-Any") {
-                cornerContent4Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent4Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "U-Side / D-Any") {
-                cornerContent5Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent5Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "D-Side / D-Bottom") {
-                cornerContent6Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent6Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "U-Any / U-Any") {
-                cornerContent7Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent7Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
             else if (ufrTypes[y][x] === "Special") {
-                cornerContent8Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrComms[y][x]));
+                cornerContent8Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
             }
         }
     }
@@ -505,31 +506,31 @@ function makeEdgeAlgs() {
     for (let y=0; y<ufTypes.length; y++) {
         for (let x=0; x<ufTypes[y].length; x++) {
             if (ufComms[y][x] !== "") {
-                edgeContentAllArr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContentAllArr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
             if (ufTypes[y][x] === "4-Mover") {
-                edgeContent0Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContent0Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "M-Swap") {
-                edgeContent1Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContent1Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "U-Swap") {
-                edgeContent2Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContent2Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "E-Swap") {
-                edgeContent3Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContent3Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "S-Swap") {
-                edgeContent4Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContent4Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "F-Swap") {
-                edgeContent5Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContent5Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "S-Insert") {
-                edgeContent6Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContent6Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
             else if (ufTypes[y][x] === "Special") {
-                edgeContent7Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufComms[y][x]));
+                edgeContent7Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
             }
         }
     }
@@ -553,11 +554,13 @@ function listAlgs(content, arr) {
 
     let i=0;
     for (let a of arr) {
+        let id = content+"_"+i;
+        let out = "<tr onclick='toggleTypeAlg(\""+id+"\")'><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td id='"+id+"' data-alg='"+a.alg.replaceAll("'", "&apos;")+"' data-type='"+a.type+"' data-current='type'>"+a.type+"</td></tr>";
         if (i <= arr.length / 2) {
-            utL += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
+            utL += out;
         }
         else {
-            utR += "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
+            utR += out;
         }
         i++;
     }
@@ -575,6 +578,19 @@ function listAlgs(content, arr) {
     }
 
     $("#"+content).html(ut);
+}
+
+function toggleTypeAlg(id) {
+    let td = $("#"+id);
+
+    if ($(td).data("current") === "type") {
+        $(td).data("current", "alg");
+        $(td).html($(td).data("alg"));
+    }
+    else {
+        $(td).data("current", "type");
+        $(td).html($(td).data("type"));
+    }
 }
 
 function getLetter(piece) {

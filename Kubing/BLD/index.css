@@ -178,6 +178,11 @@ a:active, .aEdge:active, .aCorner:active {
     margin: 0 1vw;
 }
 
+tr:hover {
+    background-color: #cccccc;
+    cursor: pointer;
+}
+
 td {
     font-size: 4vh;
 }
