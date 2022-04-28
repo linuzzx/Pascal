@@ -169,7 +169,7 @@
                 <a id="aCornerAll" class="aCorner" onclick="chooseCorner('All')">All algorithms</a>
                 <a id="aCorner0" class="aCorner" onclick="chooseCorner(0)">U-Top/D-Side</a>
                 <a id="aCorner1" class="aCorner" onclick="chooseCorner(1)">U-Top/D-Bottom</a>
-                <a id="aCorner2" class="aCorner" onclick="chooseCorner(2)">D-Bottom-D-Bottom</a>
+                <a id="aCorner2" class="aCorner" onclick="chooseCorner(2)">D-Bottom/D-Bottom</a>
                 <a id="aCorner3" class="aCorner" onclick="chooseCorner(3)">D-Side/D-Side</a>
                 <a id="aCorner4" class="aCorner" onclick="chooseCorner(4)">LUF or BUR/D-Any</a>
                 <a id="aCorner5" class="aCorner" onclick="chooseCorner(5)">U-Side/D-Any</a>
@@ -204,7 +204,42 @@
                 <div class="cornerContentClass" id="cornerContent7"><h1>U-Any / U-Any</h1></div>
                 <div class="cornerContentClass" id="cornerContent8"><h1>Special</h1></div>
                 <div class="cornerContentClass" id="cornerContentInfo">
-                    <h1>Info</h1>
+                    <h1>U-Top / D-Side</h1>
+                    <span>
+                        Pure commutator
+                    </span><br><br>
+                    <h1>U-Top / D-Bottom</h1>
+                    <span>
+                        Setup to U-Top / D-Side
+                    </span><br><br>
+                    <h1>D-Bottom / D-Bottom</h1>
+                    <span>
+                        Setup to pure commutator on bottom
+                    </span><br><br>
+                    <h1>D-Side / D-Side</h1>
+                    <span>
+                        No tips for now...
+                    </span><br><br>
+                    <h1>LUF or BUR / D-Any</h1>
+                    <span>
+                        No tips for now...
+                    </span><br><br>
+                    <h1>U-Side / D-Any</h1>
+                    <span>
+                        No tips for now...
+                    </span><br><br>
+                    <h1>D-Side / D-Bottom</h1>
+                    <span>
+                        No tips for now...
+                    </span><br><br>
+                    <h1>U-Any / U-Any</h1>
+                    <span>
+                        No tips for now...
+                    </span><br><br>
+                    <h1>Special</h1>
+                    <span>
+                        Look up the alg
+                    </span>
                 </div>
             </div>
             <div id="edgeContent">
@@ -218,7 +253,52 @@
                 <div class="edgeContentClass" id="edgeContent6"><h1>S-Insert</h1></div>
                 <div class="edgeContentClass" id="edgeContent7"><h1>Special</h1></div>
                 <div class="edgeContentClass" id="edgeContentInfo">
-                    <h1>Info</h1>
+                    <div>
+                        <h1>4-Mover</h1>
+                        <span>
+                            <ol>
+                                <li>Have all 3 pieces in 1 slice, same/opposite orientation</li>
+                                <li>Use M+U2, S+R2 or E+R2</li>
+                                <li>In the U2 or R2 layer, imagine an arrow for how the 2 pieces move</li>
+                                <li>The arrow must point at the 3rd piece before doing the slice move</li>
+                            </ol>
+                        </span><br><br>
+                        <h1>M-Swap</h1>
+                        <span>
+                            1 target is interchangable with a M-move<br>
+                            For the last piece:<br>
+                            <ul>
+                                <li>Side-targets setup to BU</li>
+                                <li>Non-side-targets setup to UF</li>
+                            </ul>
+                        </span><br><br>
+                        <h1>U-Swap</h1>
+                        <span>
+                            1 target in E-slice or RD/LD and 1 target in U-face
+                        </span><br><br>
+                        <h1>E-Swap</h1>
+                        <span>
+                            2 targets in E-slice
+                        </span><br><br>
+                    </div>
+                    <div>
+                        <h1>S-Swap</h1>
+                        <span>
+                            The two targets can interchange with a S-move
+                        </span><br><br>
+                        <h1>F-Swap</h1>
+                        <span>
+                            Interchange with F2
+                        </span><br><br>
+                        <h1>S-Insert</h1>
+                        <span>
+                            Targets are LB/LD, LF/LD, RF/RD or RB/RD
+                        </span><br><br>
+                        <h1>Special</h1>
+                        <span>
+                            Look up the alg
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
