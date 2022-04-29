@@ -571,10 +571,10 @@ function listAlgs(content, arr) {
         let out = "";
         let checked = learnedComms.includes(";"+a.letterpair+";") ? " checked" : "";
         if (content.includes("All")) {
-            out = "<tr><td><input type='checkbox' onclick='toggleCB(\""+a.letterpair+"\")'"+checked+"></td><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td id='"+id+"' class='clickableTD' data-alg='"+a.alg.replaceAll("'", "&apos;")+"' data-type='"+a.type+"' data-current='type' onclick='toggleTypeAlg(\""+id+"\")'>"+a.type+"</td></tr>";
+            out = "<tr><td><input class='form-check-input' type='checkbox' onclick='toggleCB(\""+a.letterpair+"\")'"+checked+"></td><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td id='"+id+"' class='clickableTD' data-alg='"+a.alg.replaceAll("'", "&apos;")+"' data-type='"+a.type+"' data-current='type' onclick='toggleTypeAlg(\""+id+"\")'>"+a.type+"</td></tr>";
         }
         else {
-            out = "<tr><td><input type='checkbox' onclick='toggleCB(\""+a.letterpair+"\")'"+checked+"></td><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
+            out = "<tr><td><input class='form-check-input' type='checkbox' onclick='toggleCB(\""+a.letterpair+"\")'"+checked+"></td><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
         }
         if (i <= arr.length / 2) {
             utL += out;
