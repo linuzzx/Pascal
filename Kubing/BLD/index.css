@@ -179,11 +179,11 @@ a:active, .aEdge:active, .aCorner:active {
 }
 
 tr:hover {
-    background-color: #cccccc;
     cursor: default;
 }
 
-#edgeContentAll tr, #cornerContentAll tr {
+.clickableTD:hover {
+    background-color: #cccccc;
     cursor: pointer;
 }
 
