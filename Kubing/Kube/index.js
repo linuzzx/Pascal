@@ -1065,7 +1065,7 @@ function initApp() {
                             if (cu["timing"]) {
                                 $("#" + snap.curScr + "_" + cu[0]).text("Timing");
                             }
-                            else {
+                            else if ($("#" + snap.curScr + "_" + cu[0]).text() === "Timing") {
                                 $("#" + snap.curScr + "_" + cu[0]).text("");
                             }
                         }
