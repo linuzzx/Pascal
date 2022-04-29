@@ -6,6 +6,7 @@ let selectedTopColor = localStorage.getItem("selectedTopColor") || "white";
 let selectedFrontBtn = localStorage.getItem("selectedFrontBtn") || "btnFrontG";
 let selectedFrontColor = localStorage.getItem("selectedFrontColor") || "green";
 let prevAlg = null;
+let learnedComms;
 
 const edges = ["UB", "UR", "UL", "LU", "LF", "LD", "LB", "FR", "FD", "FL", "RU", "RB",
                 "RD", "RF", "BU", "BL", "BD", "BR", "DF", "DR", "DB", "DL"];
@@ -124,17 +125,20 @@ if (localStorage.getItem("customArr") !== null) {
     customLetters = localStorage.getItem("customArr").split(";");
 }
 
-function Alg(letter1, letter2, pos1, pos2, type, alg) {
+function Alg(letter1, letter2, pos1, pos2, type, alg, letterpair) {
     this.letter1 = letter1;
     this.letter2 = letter2;
     this.pos1 = pos1;
     this.pos2 = pos2;
     this.type = type;
     this.alg = alg;
+    this.letterpair = letterpair;
 }
 
 //Startfunksjon
 $(function () {
+    learnedComms = localStorage.getItem("learnedComms") || "";
+
     $("#cornerContentAll").css("display", "block");
     $("#aCornerAll").css("fontWeight", "bold");
 
@@ -453,36 +457,37 @@ function makeCornerAlgs() {
 
     for (let y=0; y<ufrTypes.length; y++) {
         for (let x=0; x<ufrTypes[y].length; x++) {
+            let alg = new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x], corners[x]+" / "+corners[y]);
             if (ufrComms[y][x] !== "") {
-                cornerContentAllArr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContentAllArr.push(alg);
             }
             //Sjekk localstorage for sjekkbokser her
             if (ufrTypes[y][x] === "U-Top / D-Side") {
-                cornerContent0Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent0Arr.push(alg);
             }
             else if (ufrTypes[y][x] === "U-Top / D-Bottom") {
-                cornerContent1Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent1Arr.push(alg);
             }
             else if (ufrTypes[y][x] === "D-Bottom / D-Bottom") {
-                cornerContent2Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent2Arr.push(alg);
             }
             else if (ufrTypes[y][x] === "D-Side / D-Side") {
-                cornerContent3Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent3Arr.push(alg);
             }
             else if (ufrTypes[y][x] === "BUR / D-Any" || ufrTypes[y][x] === "LUF / D-Any") {
-                cornerContent4Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent4Arr.push(alg);
             }
             else if (ufrTypes[y][x] === "U-Side / D-Any") {
-                cornerContent5Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent5Arr.push(alg);
             }
             else if (ufrTypes[y][x] === "D-Side / D-Bottom") {
-                cornerContent6Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent6Arr.push(alg);
             }
             else if (ufrTypes[y][x] === "U-Any / U-Any") {
-                cornerContent7Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent7Arr.push(alg);
             }
             else if (ufrTypes[y][x] === "Special") {
-                cornerContent8Arr.push(new Alg(getLetter(corners[x]), getLetter(corners[y]), corners[x], corners[y], ufrTypes[y][x], ufrComms[y][x]));
+                cornerContent8Arr.push(alg);
             }
         }
     }
@@ -512,32 +517,33 @@ function makeEdgeAlgs() {
 
     for (let y=0; y<ufTypes.length; y++) {
         for (let x=0; x<ufTypes[y].length; x++) {
+            let alg = new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x], edges[x]+" / "+edges[y]);
             if (ufComms[y][x] !== "") {
-                edgeContentAllArr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContentAllArr.push(alg);
             }
             if (ufTypes[y][x] === "4-Mover") {
-                edgeContent0Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContent0Arr.push(alg);
             }
             else if (ufTypes[y][x] === "M-Swap") {
-                edgeContent1Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContent1Arr.push(alg);
             }
             else if (ufTypes[y][x] === "U-Swap") {
-                edgeContent2Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContent2Arr.push(alg);
             }
             else if (ufTypes[y][x] === "E-Swap") {
-                edgeContent3Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContent3Arr.push(alg);
             }
             else if (ufTypes[y][x] === "S-Swap") {
-                edgeContent4Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContent4Arr.push(alg);
             }
             else if (ufTypes[y][x] === "F-Swap") {
-                edgeContent5Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContent5Arr.push(alg);
             }
             else if (ufTypes[y][x] === "S-Insert") {
-                edgeContent6Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContent6Arr.push(alg);
             }
             else if (ufTypes[y][x] === "Special") {
-                edgeContent7Arr.push(new Alg(getLetter(edges[x]), getLetter(edges[y]), edges[x], edges[y], ufTypes[y][x], ufComms[y][x]));
+                edgeContent7Arr.push(alg);
             }
         }
     }
@@ -557,17 +563,18 @@ function listAlgs(content, arr) {
     let utL = "<table class='tblAlgs'>";
     let utR = "<table class='tblAlgs'>";
 
-    arr.sort(compareLetters2).sort(compareLetters1);
+    arr.sort(compareLetters2).sort(compareLetters1).sort(compareLettersLearned);
 
     let i=0;
     for (let a of arr) {
         let id = content+"_"+i;
         let out = "";
+        let checked = learnedComms.includes(";"+a.letterpair+";") ? " checked" : "";
         if (content.includes("All")) {
-            out = "<tr onclick='toggleTypeAlg(\""+id+"\")'><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td id='"+id+"' data-alg='"+a.alg.replaceAll("'", "&apos;")+"' data-type='"+a.type+"' data-current='type'>"+a.type+"</td></tr>";
+            out = "<tr><td><input type='checkbox' onclick='toggleCB(\""+a.letterpair+"\")'"+checked+"></td><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td id='"+id+"' class='clickableTD' data-alg='"+a.alg.replaceAll("'", "&apos;")+"' data-type='"+a.type+"' data-current='type' onclick='toggleTypeAlg(\""+id+"\")'>"+a.type+"</td></tr>";
         }
         else {
-            out = "<tr><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
+            out = "<tr><td><input type='checkbox' onclick='toggleCB(\""+a.letterpair+"\")'"+checked+"></td><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
         }
         if (i <= arr.length / 2) {
             utL += out;
@@ -591,6 +598,18 @@ function listAlgs(content, arr) {
     }
 
     $("#"+content).html(ut);
+}
+
+function toggleCB(lp) {
+    if (learnedComms.includes(";"+lp+";")) {
+        learnedComms = learnedComms.replace(";"+lp+";", "");
+    }
+    else {
+        learnedComms += ";"+lp+";";
+    }
+
+    localStorage.setItem("learnedComms", learnedComms);
+    makeAlgs();
 }
 
 function toggleTypeAlg(id) {
@@ -632,6 +651,16 @@ function compareLetters2(a, b) {
     }
     if (a.letter2 > b.letter2){
         return 1;
+    }
+    return 0;
+}
+
+function compareLettersLearned(a, b) {
+    if (learnedComms.includes(";"+a.letterpair+";") && !learnedComms.includes(";"+b.letterpair+";")){
+        return 1;
+    }
+    else if (!learnedComms.includes(";"+a.letterpair+";") && learnedComms.includes(";"+b.letterpair+";")) {
+        return -1;
     }
     return 0;
 }
