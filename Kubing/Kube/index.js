@@ -459,7 +459,11 @@ function createRoom() {
             id: roomId,
             name: $("#inpRoomName").val(),
             leader: cuberId,
-            cubers: [[cuberId, $("#inpUserName").val()]],
+            cubers: [{
+                0: cuberId,
+                1: $("#inpUserName").val(),
+                timing: false
+            }],
             waiting: true
         });
 
@@ -486,7 +490,11 @@ function joinRoom(rid, create = false) {
         else {
             $("#headerLeader").hide();
             let users = snap.cubers.slice();
-            users.push([cuberId, $("#inpUserName").val()]);
+            users.push({
+                0: cuberId,
+                1: $("#inpUserName").val(),
+                timing: false
+            });
             roomRef.update({ cubers: users });
         }
         cuberRef.update({ room: rid });
@@ -656,6 +664,15 @@ function submitTime(time, penalty = null) {
         firebase.database().ref("rooms/" + curRoom).update({
             solves: s
         });
+
+        let cId;
+        firebase.database().ref("rooms/" + curRoom + "/cubers").once("value", snapshot => {
+            let snap = snapshot.val();
+            cId = snap.map(c => c[0]).indexOf(cuberId);
+        });
+        firebase.database().ref("rooms/" + curRoom + "/cubers/" + cId).update({
+            timing: false
+        });
     }
     else {
         alert("Type in a valid value! (Stackmat timer, but with 2 decimals)");
@@ -753,6 +770,15 @@ function readyTimer() {
 }
 
 function startTimer() {
+    let cId;
+    firebase.database().ref("rooms/" + curRoom + "/cubers").once("value", snapshot => {
+        let snap = snapshot.val();
+        cId = snap.map(c => c[0]).indexOf(cuberId);
+    });
+    firebase.database().ref("rooms/" + curRoom + "/cubers/" + cId).update({
+        timing: true
+    });
+
     timing = true;
     stopped = false;
     ready = false;
@@ -779,6 +805,15 @@ function resetTimer() {
     $("#timerButtons").hide();
     $("#scrambleDisplay").show();
     $("#timerHelpText").text("No inspection. Start/Stop with space.");
+
+    let cId;
+    firebase.database().ref("rooms/" + curRoom + "/cubers").once("value", snapshot => {
+        let snap = snapshot.val();
+        cId = snap.map(c => c[0]).indexOf(cuberId);
+    });
+    firebase.database().ref("rooms/" + curRoom + "/cubers/" + cId).update({
+        timing: false
+    });
 }
 
 function timeAgain() {
@@ -955,10 +990,11 @@ function initApp() {
                         $("#headerLeader").hide();
                         $("#headerOther").hide();
                     }
-    
+                    
                     if (Object.keys(snap).includes("scrambles") && !snap.waiting) {
                         if (Object.keys(snap).includes("solves")) {
                             let s = snap.solves.slice();
+
                             if (s.length - 1 < snap.curScr || !s[snap.curScr].map(sol => sol.cid).includes(cuberId)) {
                                 $("#inpTimeDiv").show();
                                 $("#inpTime").focus();
@@ -1024,6 +1060,14 @@ function initApp() {
                             $("#winner").text("");
                             $("#inpTimeDiv").show();
                             $("#inpTime").focus();
+                        }
+                        for (let cu of snap.cubers) {
+                            if (cu["timing"]) {
+                                $("#" + snap.curScr + "_" + cu[0]).text("Timing");
+                            }
+                            else {
+                                $("#" + snap.curScr + "_" + cu[0]).text("");
+                            }
                         }
                     }
 
