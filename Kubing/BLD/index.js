@@ -560,6 +560,8 @@ function makeEdgeAlgs() {
 }
 
 function listAlgs(content, arr) {
+    let learnCount = 0;
+
     let utL = "<table class='tblAlgs'>";
     let utR = "<table class='tblAlgs'>";
 
@@ -570,6 +572,9 @@ function listAlgs(content, arr) {
         let id = content+"_"+i;
         let out = "";
         let checked = learnedComms.includes(";"+a.letterpair+";") ? " checked" : "";
+        if (checked === " checked") {
+            learnCount++;
+        }
         if (content.includes("All")) {
             out = "<tr><td><input class='form-check-input' type='checkbox' onclick='toggleCB(\""+a.letterpair+"\")'"+checked+"></td><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td id='"+id+"' class='clickableTD' data-alg='"+a.alg.replaceAll("'", "&apos;")+"' data-type='"+a.type+"' data-current='type' onclick='toggleTypeAlg(\""+id+"\")'>"+a.type+"</td></tr>";
         }
@@ -584,17 +589,16 @@ function listAlgs(content, arr) {
         }
         i++;
     }
+    let ut = "<h2>" + learnCount + " / " + arr.length + " learned</h2>";
 
     utL += "</table>";
     utR += "</table>";
 
-    let ut = "";
-
     if (window.innerHeight > window.innerWidth) {
-        ut = "<div id='"+content+"' style='display: block'>"+utL+"<div></div>"+utR+"</div>"
+        ut += "<div id='"+content+"' style='display: block'>"+utL+"<div></div>"+utR+"</div>"
     }
     else {
-        ut = "<div id='"+content+"' style='display: grid; grid-template-columns: 3fr 1fr 3fr'>"+utL+"<div></div>"+utR+"</div>"
+        ut += "<div id='"+content+"' style='display: grid; grid-template-columns: 3fr 1fr 3fr'>"+utL+"<div></div>"+utR+"</div>"
     }
 
     $("#"+content).html(ut);
