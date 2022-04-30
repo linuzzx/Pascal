@@ -870,7 +870,7 @@ function initApp() {
 
     firebase.database().ref("cubers/").on("value", (snapshot) => {
         let ind = 0;
-        if (Object.values(snapshot.val())) {
+        if (snapshot.val() && Object.values(snapshot.val())) {
             $("#cubers tr").remove();
             $("#cubers").append("<tr><th>Cubers online</th><th>Room</th></tr>");
             for (let u of Object.values(snapshot.val()).sort((a, b) => a.name.localeCompare(b.name))) {
