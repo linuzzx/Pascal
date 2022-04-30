@@ -1060,6 +1060,7 @@ function initApp() {
                             $("#winner").text("");
                             $("#inpTimeDiv").show();
                             $("#inpTime").focus();
+                            ready = true;
                         }
                         for (let cu of snap.cubers) {
                             if (cu["timing"]) {
