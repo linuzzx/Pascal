@@ -581,7 +581,7 @@ function listAlgs(content, arr) {
         else {
             out = "<tr><td><input class='form-check-input' type='checkbox' onclick='toggleCB(\""+a.letterpair+"\")'"+checked+"></td><td><b>"+a.letter1+" / "+a.letter2+"</b></td><td>"+a.alg+"</td></tr>";
         }
-        if (i <= arr.length / 2) {
+        if (i < arr.length / 2) {
             utL += out;
         }
         else {
