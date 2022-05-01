@@ -835,7 +835,7 @@ function changeChat(inp) {
 }
 
 function sendChat(chat) {
-    if (chat.split("").length <= 40 && chat !== "") {
+    if (chat.split("").length <= 100 && chat !== "") {
         $("#inpChat").val("");
         $("#btnSendChat").prop("disabled", true);
 
@@ -861,7 +861,7 @@ function sendChat(chat) {
         });
     }
     else {
-        alert("Hey hacker! You're not allowed to send messages longer than 40 characters...");
+        alert("Hey hacker! You're not allowed to send messages longer than 100 characters...");
     }
 }
 
