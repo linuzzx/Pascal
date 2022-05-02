@@ -151,7 +151,7 @@ function checkRooms(users) {
                     leader = null;
                 }
                 else {
-                    firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0][0]});
+                    firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0]});
                     leader = c.cubers[0][0];
                     if (cuberId === c.cubers[0][0] && c.waiting === true) {
                         $("#headerOther").hide();
