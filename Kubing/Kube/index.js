@@ -8,10 +8,11 @@ let timerInterval;
 let useTimer = false;
 let timing = false;
 let stopped = true;
-let ready = true;
+let ready;
 let waiting = false;
 let waitForOthers = true;
 let showingOuterInner = false;
+let readyToSubmit = false;
 
 const events = ["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx", "Pyraminx", "Skewb", "Square-1"];
 const scrTypes = ["333", "222", "444", "555", "666", "777", "clock", "minx", "pyram", "skewb", "sq1"];
@@ -150,7 +151,7 @@ function checkRooms(users) {
                     leader = null;
                 }
                 else {
-                    firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0]});
+                    firebase.database().ref("rooms/" + c.id).update({leader: c.cubers[0][0]});
                     leader = c.cubers[0][0];
                     if (cuberId === c.cubers[0][0] && c.waiting === true) {
                         $("#headerOther").hide();
@@ -502,6 +503,8 @@ function joinRoom(rid, create = false) {
 
     $("#menu").hide();
     $("#room").show();
+
+    resetTimer();
 }
 
 function backToLobby() {
@@ -673,6 +676,8 @@ function submitTime(time, penalty = null) {
         firebase.database().ref("rooms/" + curRoom + "/cubers/" + cId).update({
             timing: false
         });
+
+        resetTimer();
     }
     else {
         alert("Type in a valid value! (Stackmat timer, but with 2 decimals)");
@@ -782,6 +787,7 @@ function startTimer() {
     timing = true;
     stopped = false;
     ready = false;
+    readyToSubmit = false;
     $("#timerDisplay").css("color", "white");
     $("#scrambleDisplay").hide();
 
@@ -794,13 +800,14 @@ function startTimer() {
 
 function stopTimer() {
     stopped = true;
-    timing = false;
+    //timing = false;
     clearInterval(timerInterval);
     $("#timerButtons").show();
     $("#timerHelpText").text("Press Enter for OK");
 }
 
 function resetTimer() {
+    readyToSubmit = false;
     $("#timerDisplay").text("0.00");
     $("#timerButtons").hide();
     $("#scrambleDisplay").show();
@@ -823,6 +830,7 @@ function timeAgain() {
     timing = false;
     stopped = true;
     ready = true;
+    readyToSubmit = false;
 }
 
 function changeChat(inp) {
@@ -1158,11 +1166,10 @@ function initHTML() {
                 if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waiting && !waitForOthers) {
                     startTimer();
                 }
-                /*else if (e.keyCode === 32 && useTimer && !timing && stopped && !ready) {
-                    setTimeout(() => {
-                        timing = false;
-                    },500);
-                }*/
+                else if (e.keyCode === 32 && useTimer && timing && stopped) {
+                    timing = false;
+                    readyToSubmit = true;
+                }
             }
         }
     })
@@ -1175,7 +1182,8 @@ function initHTML() {
                 else if (e.keyCode === 32 && useTimer && !timing && stopped && ready && !waiting && !waitForOthers) {
                     readyTimer();
                 }
-                else if (e.keyCode === 13 && useTimer && !timing && stopped && !ready && $('#timerDisplay').text() !== "0.00") {
+                //else if (e.keyCode === 13 && useTimer && !timing && stopped && !ready && $('#timerDisplay').text() !== "0.00") {
+                else if (e.keyCode === 13 && readyToSubmit && $('#timerDisplay').text() !== "0.00") {
                     submitTime($('#timerDisplay').text());
                     $('#timerButtons').hide();
                     timeAgain();
