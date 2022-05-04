@@ -726,7 +726,8 @@ function isValid(time) {
     || time.match(/[1-9][0-9]:[0-9][0-9]\.[0-9][0-9]/g) + "" === time
     || time.match(/[0-9]:[0-9][0-9]\.[0-9][0-9]/g) + "" === time
     || time.match(/[1-9][0-9]\.[0-9][0-9]/g) + "" === time
-    || time.match(/[0-9]\.[0-9][0-9]/g) + "" === time) {
+    || time.match(/[0-9]\.[0-9][0-9]/g) + "" === time
+    || time !== "0.00") {
         valid = true;
     }
 
