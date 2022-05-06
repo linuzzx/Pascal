@@ -11,7 +11,7 @@ function inverseAlg(alg) {
         let arr = [];
         for (let a of alg.split(" ")) {
             if (a.includes("'")) {
-                arr.unshift(a.split("")[0]);
+                arr.unshift(a.slice(0, -1));
             }
             else if (a.includes("2")) {
                 arr.unshift(a);
