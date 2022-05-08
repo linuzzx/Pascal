@@ -32,4 +32,6 @@ function isValidScramble(scr) {
 
 function adjustSize() {
     $("#svgCube").height(3 * $("#svgCube").width() / 4);
+    $("#inpScramble").css("font-size", "3vh");
+    $("#btnSolve").css("font-size", "3vh");
 }

@@ -20,6 +20,10 @@ body {
     height: max-content;
 }
 
+#btnSolve {
+    margin-top: 1%;
+}
+
 #inpScramble {
     width: 80vw;
 }
