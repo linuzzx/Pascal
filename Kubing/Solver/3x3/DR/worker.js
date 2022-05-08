@@ -429,6 +429,7 @@ EO:
 EO to DR: 10
 DR: 12
 DR to HTR: 13
+HTR to solved: 15
 */
 
 function getCubeState(sol) {

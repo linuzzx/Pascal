@@ -6,6 +6,8 @@ $(() => {
 
 function solveCube(scr) {
     let w = new Worker("worker.js");
+    $("#solution").html("");
+    $("#searchDepth").html("");
     
     if (isValidScramble(scr)) {
         w.postMessage(scr);
