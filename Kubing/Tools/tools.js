@@ -1598,6 +1598,62 @@ function applyMoves(allMoves) {
     return getCubeState333();
 }
 
+function cleanAlg(alg) {
+    let arr = alg.split(" ");
+
+    for (let j = 0; j < alg.length; j++) {
+        for (let i = 1; i < arr.length; i++) {
+            if (arr[i].slice(0, -1) === arr[i - 1].slice(0, -1)) {
+                if (arr[i].includes("2")) {
+                    if (arr[i - 1].includes("2")) {
+                        arr[i - 1] = "";
+                        arr[i] = "";
+                    }
+                    else if (arr[i - 1].includes("'")) {
+                        arr[i - 1] = arr[i - 1].slice(0, -1);
+                        arr[i] = "";
+                    }
+                    else {
+                        arr[i - 1] = arr[i - 1].slice(0, -1) + "'";
+                    }
+                }
+                else if (arr[i].includes("'")) {
+                    if (arr[i - 1].includes("2")) {
+                        arr[i - 1] = arr[i - 1].slice(0, -1);
+                        arr[i] = "";
+                    }
+                    else if (arr[i - 1].includes("'")) {
+                        arr[i - 1] = arr[i - 1].slice(0, -1) + "2";
+                        arr[i] = "";
+                    }
+                    else {
+                        arr[i - 1] = "";
+                        arr[i] = "";
+                    }
+                }
+                else {
+                    if (arr[i - 1].includes("2")) {
+                        arr[i - 1] = arr[i - 1].slice(0, -1) + "'";
+                        arr[i] = "";
+                    }
+                    else if (arr[i - 1].includes("'")) {
+                        arr[i - 1] = "";
+                        arr[i] = "";
+                    }
+                    else {
+                        arr[i - 1] += "2";
+                        arr[i] = "";
+                    }
+                }
+            }
+        }
+    
+        arr = arr.filter(a => {return a !== ""});
+    }
+
+    return arr.join(" ");
+}
+
 function getCubeState333() {
     return [
         u1,u2,u3,u4,u5,u6,u7,u8,u9,
