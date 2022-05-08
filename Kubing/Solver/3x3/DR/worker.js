@@ -41,7 +41,8 @@ onmessage = e => {
 }
 
 function checkTime(start) {
-    const timeLimit = 300000;
+    const n = 10;
+    const timeLimit = n * 60 * 1000;
     return Date.now() - start >= timeLimit;
 }
 
