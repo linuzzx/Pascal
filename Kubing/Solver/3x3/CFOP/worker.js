@@ -159,13 +159,13 @@ function solveCross() {
 }
 
 function solveF2L() {
-    let solF2L = "";
     solutionF2L = "";
     
     for (let f2lIndex = 0; f2lIndex < 4; f2lIndex++) {
         let solLength = 1;
         let start = Date.now();
         let arr = movesF2L.slice();
+        let solF2L = "";
 
         solveLoop : while (!isF2L(solF2L, f2lIndex)) {
             if (checkTime(start)) {
@@ -361,7 +361,7 @@ function isCross(sol) {
 
 function isF2L(sol, i) {
     resetCubeState();
-    getCubeState([cubeScramble, solutionEO, solutionCross, sol].join(" "));
+    getCubeState([cubeScramble, solutionEO, solutionCross, solutionF2L, sol].join(" "));
     
     let cL = cubeState[13];
     let cF = cubeState[22];
@@ -393,9 +393,9 @@ function isF2L(sol, i) {
     
     let pairs = [
         (dbl === cD && bdl === cB && ldb === cL && bl === cB && lb === cL),
+        (dbr === cD && bdr === cB && rdb === cR && br === cB && rb === cR),
         (dfl === cD && fdl === cF && ldf === cL && fl === cF && lf === cL),
-        (dfr === cD && fdr === cF && rdf === cR && fr === cF && rf === cR),
-        (dbr === cD && bdr === cB && rdb === cR && br === cB && rb === cR)
+        (dfr === cD && fdr === cF && rdf === cR && fr === cF && rf === cR)
     ];
 
     switch (i) {
