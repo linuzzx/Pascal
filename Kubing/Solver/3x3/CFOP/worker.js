@@ -2,7 +2,7 @@
 let moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"];
 let movesEO = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F2", "B2"];
 let triggers = ["R U R'", "R U' R'", "R U2 R'", "R' U R", "R' U' R", "R' U2 R", "L U L'", "L U' L'", "L U2 L'", "L' U L", "L' U' L", "L' U2 L"];
-let movesF2L = ["U", "U'", "U2", "R", "R'", "L", "L'"].concat(triggers);
+let movesF2L = ["U", "U'", "U2", "R", "R'", "L", "L'"].concat(triggers);console.log(movesF2L);
 let movesDR = ["U", "U'", "U2", "D", "D'", "D2", "R2", "L2", "F2", "B2"];
 let movesHTR = ["U2", "D2", "R2", "L2", "F2", "B2"];
 
@@ -180,7 +180,7 @@ function solveF2L() {
                     }
                     if (isF2L(m, f2lIndex)) {
                         solF2L = m;
-                        solutionInfo += "<h1><b>"+f2lIndex+". pair:</b> " + solF2L + "</h1>";
+                        solutionInfo += "<h1><b>"+(f2lIndex + 1)+". pair:</b> " + solF2L + "</h1>";
                         postMessage([solutionInfo, true]);
                         break solveLoop;
                     }
@@ -199,7 +199,7 @@ function solveF2L() {
                         tArr.push(m1 + " " + m2);
                         if (isF2L(m1 + " " + m2, f2lIndex)) {
                             solF2L = m1 + " " + m2;
-                            solutionInfo += "<h1><b>"+f2lIndex+". pair:</b> " + solF2L + "</h1>";
+                            solutionInfo += "<h1><b>"+(f2lIndex + 1)+". pair:</b> " + solF2L + "</h1>";
                             postMessage([solutionInfo, true]);
                             break solveLoop;
                         }
