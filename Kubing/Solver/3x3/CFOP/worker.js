@@ -2,7 +2,7 @@
 let moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"];
 let movesEO = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F2", "B2"];
 let triggers = ["R U R'", "R U' R'", "R U2 R'", "R' U R", "R' U' R", "R' U2 R", "L U L'", "L U' L'", "L U2 L'", "L' U L", "L' U' L", "L' U2 L"];
-let movesF2L = ["U", "U'", "U2", "R", "R'", "L", "L'"].concat(triggers);console.log(movesF2L);
+let movesF2L = ["U", "U'", "U2"].concat(triggers);
 let movesDR = ["U", "U'", "U2", "D", "D'", "D2", "R2", "L2", "F2", "B2"];
 let movesHTR = ["U2", "D2", "R2", "L2", "F2", "B2"];
 
@@ -189,9 +189,7 @@ function solveF2L() {
             else {
                 let tArr = arr.slice();
                 for (let m1 of arr) {
-                    let prevMove = m1.split(" ")[m1.split(" ").length - 1][0];
-                    //let prevPrevMove = m1.split(" ")[m1.split(" ").length - 2] ? m1.split(" ")[m1.split(" ").length - 2][0] : "";
-                    for (let m2 of movesEO.filter(m => {return m[0] !== prevMove})) {
+                    for (let m2 of movesF2L) {
                         if (checkTime(start)) {
                             timeInteruption = true;
                             break solveLoop;
