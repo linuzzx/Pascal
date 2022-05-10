@@ -10,10 +10,12 @@ function solveCube(scr) {
     $("#searchDepth").html("");
     
     if (isValidScramble(scr)) {
+        $("#inpScramble").prop('disabled', true);
         w.postMessage(scr);
         w.onmessage = e => {
-            if (e.data.length === 2) {
+            if (e.data.length === 3) {
                 $("#solution").html("<h1>" + e.data[0] + "</h1>");
+                draw333Svg('#svgCube', e.data[2]);
             }
             else if (e.data[0] === 0) {
                 $("#searchDepth").html("<h1><b>Time interuption</b></h1>");
@@ -23,6 +25,7 @@ function solveCube(scr) {
             }
             else {
                 $("#searchDepth").html("");
+                $("#inpScramble").prop('disabled', false);
             }
         }
     }
