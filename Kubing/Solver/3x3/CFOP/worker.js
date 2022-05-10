@@ -251,7 +251,8 @@ function solveAUF() {
     }
     
     solution = cleanAlg([solutionCross, solutionF2L, solutionOLL, solutionPLL, solutionAUF].join(" "));
-    solutionInfo += "<h1><b>AUF:</b> " + solutionAUF + "</h1><br><h1><b>Solution:</b> " + solution + "</h1><br><h1><b>Moves:</b> " + solution.split(" ").length + "</h1>";
+    solutionInfo += "<h1><b>AUF:</b> " + solutionAUF + "</h1><br><h1><b>Solution:</b> " + solution + "</h1><br><h1><b>Moves:</b> " + 
+        solution.split(" ").filter(s => {return !s.includes("x") || !s.includes("y") || !s.includes("z")}).length + "</h1>";
     postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
     postMessage(["Solved"]);
 }
