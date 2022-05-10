@@ -353,7 +353,7 @@ function isOLL(sol) {
 
 function isPLL(sol) {
     resetCubeState()
-    getCubeState([cubeScramble, solutionCross, solutionF2L, sol].join(" "));
+    getCubeState([cubeScramble, solutionCross, solutionF2L, solutionOLL, sol].join(" "));
 
     let cU = cubeState[4];
     let cL = cubeState[13];
@@ -950,7 +950,7 @@ function resetCubeState() {
 const plls = [
     "R U' R U R U R U' R' U' R2", "R2 U R U R' U' R' U' R' U R'", "M2 U M2 U M' U2 M2 U2 M'", "M2 U M2 U2 M2 U M2",
     "x' R U' R' D R U R' D' R U R' D R U' R' D' x", "R' U R' U' y R' F' R2 U' R' U R' F R F", "F R U' R' U' R U R' F' R U R' U' R' F R F'", "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'", "R' U R U' R' F' U' F R U R' F R' F' R U' R",
-    "U' x R' U R' D2 R U' R' D2 R2 x'", "x R2 D2 R U R' D2 R U' R x'", "U L U2 L' U2 L F' L' U' L U L F L2", "U R' U2 R U2 R' F R U R' U' R' F' R2", "L' U' L F L' U' L U L F' L2 U L", "U2 R U R' F' R U R' U' R' F R2 U' R'", "U2 R U R' U' R' F R2 U' R' U' R U R' F'", "U2 R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", "U2 R2 Uw R' U R' U' R Uw' R2 y' R' U R", "U2 R' U' R y R2 Uw R' U R U' R Uw' R2", "U2 R2 Uw' R U' R U R' Uw R2 y R U' R'", "U2 R U R' y' R2 Uw' R U' R' U R' Uw R2",
+    "x R' U R' D2 R U' R' D2 R2 x'", "x R2 D2 R U R' D2 R U' R x'", "L U2 L' U2 L F' L' U' L U L F L2", "R' U2 R U2 R' F R U R' U' R' F' R2", "L' U' L F L' U' L U L F' L2 U L", "R U R' F' R U R' U' R' F R2 U' R'", "R U R' U' R' F R2 U' R' U' R U R' F'", "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", "R2 Uw R' U R' U' R Uw' R2 y' R' U R", "R' U' R y R2 Uw R' U R U' R Uw' R2", "R2 Uw' R U' R U R' Uw R2 y R U' R'", "R U R' y' R2 Uw' R U' R' U R' Uw R2",
 ];
 
 const olls = [
