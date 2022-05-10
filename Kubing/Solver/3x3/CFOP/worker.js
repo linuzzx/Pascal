@@ -131,7 +131,6 @@ function solveF2L() {
                         solutionInfo += "<h1><b>"+(f2lIndex + 1)+". pair:</b> " + cleanAlg(solF2L) + "</h1>";
                         solution = cleanAlg([solutionCross, solutionF2L, solF2L].join(" "));
                         postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
-                        //postMessage([solutionInfo, true]);
                         break solveLoop;
                     }
                 }
@@ -150,7 +149,6 @@ function solveF2L() {
                             solutionInfo += "<h1><b>"+(f2lIndex + 1)+". pair:</b> " + cleanAlg(solF2L) + "</h1>";
                             solution = cleanAlg([solutionCross, solutionF2L, solF2L].join(" "));
                             postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
-                            //postMessage([solutionInfo, true]);
                             break solveLoop;
                         }
                     }
@@ -229,7 +227,7 @@ function solvePLL() {
         postMessage([solLength]);
     }
     if (!timeInteruption) {
-        solutionInfo += "<h1><b>OLL:</b> " + cleanAlg(solutionPLL) + "</h1>";
+        solutionInfo += cleanAlg(solutionPLL) !== "" ? "<h1><b>PLL:</b> " + cleanAlg(solutionPLL) + "</h1>" : "";
         solution = cleanAlg([solutionCross, solutionF2L, solutionOLL, solutionPLL].join(" "));
         postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
         solveAUF();
@@ -251,8 +249,10 @@ function solveAUF() {
     }
     
     solution = cleanAlg([solutionCross, solutionF2L, solutionOLL, solutionPLL, solutionAUF].join(" "));
-    solutionInfo += "<h1><b>AUF:</b> " + solutionAUF + "</h1><br><h1><b>Solution:</b> " + solution + "</h1><br><h1><b>Moves:</b> " + 
-        solution.split(" ").filter(s => {return !s.includes("x") || !s.includes("y") || !s.includes("z")}).length + "</h1>";
+    solutionInfo += solutionAUF !== "" ? ("<h1><b>AUF:</b> " + solutionAUF + "</h1><br><h1><b>Solution:</b> " + solution + "</h1><br><h1><b>Moves:</b> " + 
+        solution.split(" ").filter(s => {return s.split("")[0] !== "x" || s.split("")[0] !== "y" || s.split("")[0] !== "z"}).length + "</h1>") :
+        ("<h1><b>Solution:</b> " + solution + "</h1><br><h1><b>Moves:</b> " + 
+        solution.split(" ").filter(s => {return s.split("")[0] !== "x" || s.split("")[0] !== "y" || s.split("")[0] !== "z"}).length + "</h1>");
     postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
     postMessage(["Solved"]);
 }
