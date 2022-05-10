@@ -396,7 +396,7 @@ function isPLL(sol) {
 
 function isSolved(sol) {
     resetCubeState()
-    getCubeState([cubeScramble, solutionCross, solutionF2L, solutionLL, sol].join(" "));
+    getCubeState([cubeScramble, solutionCross, solutionF2L, solutionOLL, solutionPLL, sol].join(" "));
     
     let cU = cubeState[4];
     let cL = cubeState[13];
