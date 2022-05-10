@@ -1599,59 +1599,34 @@ function applyMoves(allMoves) {
 }
 
 function cleanAlg(alg) {
-    let arr = alg.split(" ");
-
-    for (let j = 0; j < alg.length; j++) {
-        for (let i = 1; i < arr.length; i++) {
-            if (arr[i].slice(0, -1) === arr[i - 1].slice(0, -1)) {
-                if (arr[i].includes("2")) {
-                    if (arr[i - 1].includes("2")) {
-                        arr[i - 1] = "";
-                        arr[i] = "";
-                    }
-                    else if (arr[i - 1].includes("'")) {
-                        arr[i - 1] = arr[i - 1].slice(0, -1);
-                        arr[i] = "";
-                    }
-                    else {
-                        arr[i - 1] = arr[i - 1].slice(0, -1) + "'";
-                    }
-                }
-                else if (arr[i].includes("'")) {
-                    if (arr[i - 1].includes("2")) {
-                        arr[i - 1] = arr[i - 1].slice(0, -1);
-                        arr[i] = "";
-                    }
-                    else if (arr[i - 1].includes("'")) {
-                        arr[i - 1] = arr[i - 1].slice(0, -1) + "2";
-                        arr[i] = "";
-                    }
-                    else {
-                        arr[i - 1] = "";
-                        arr[i] = "";
-                    }
-                }
-                else {
-                    if (arr[i - 1].includes("2")) {
-                        arr[i - 1] = arr[i - 1].slice(0, -1) + "'";
-                        arr[i] = "";
-                    }
-                    else if (arr[i - 1].includes("'")) {
-                        arr[i - 1] = "";
-                        arr[i] = "";
-                    }
-                    else {
-                        arr[i - 1] += "2";
-                        arr[i] = "";
-                    }
-                }
-            }
-        }
+    const moveArr = ["R","L","F","B","U","D","Rw","Lw","Fw","Bw","Uw","Dw","x","y","z"];
+    const moves = alg.split(" ");
+    let newAlg = alg.replaceAll("Rw","r").replaceAll("Lw","l").replaceAll("Uw","u").replaceAll("Dw","d").replaceAll("Fw","f").replaceAll("Bw","b");
     
-        arr = arr.filter(a => {return a !== ""});
+
+    for (let _move of moves) {
+        for (let m of moveArr) {
+            //Fjerne doble mellomrom
+            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
+
+            newAlg = newAlg.replaceAll((m + " " + m + "2"),(m + "'"));
+            newAlg = newAlg.replaceAll((m + " " + m + "'"),(""));
+            newAlg = newAlg.replaceAll((m + " " + m),(m + "2"));
+
+            newAlg = newAlg.replaceAll((m + "2 " + m + "2"),(""));
+            newAlg = newAlg.replaceAll((m + "2 " + m + "'"),(m));
+            newAlg = newAlg.replaceAll((m + "2 " + m),(m + "'"));
+
+            newAlg = newAlg.replaceAll((m + "' " + m + "2"),(m));
+            newAlg = newAlg.replaceAll((m + "' " + m + "'"),(m + "2"));
+            newAlg = newAlg.replaceAll((m + "' " + m),(""));
+            
+            //Fjerne doble mellomrom
+            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
+        }
     }
 
-    return arr.join(" ");
+    return newAlg.replaceAll("r","Rw").replaceAll("l","Lw").replaceAll("u","Uw").replaceAll("d","Dw").replaceAll("f","Fw").replaceAll("b","Bw").trim();
 }
 
 function getCubeState333() {

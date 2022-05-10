@@ -90,8 +90,8 @@ function solveEO() {
         postMessage([solLength]);
     }
     if (!timeInteruption) {
-        solutionInfo += "<h1><b>EO:</b> " + solutionEO + "</h1>";
-        solution = [solutionEO].join(" ");
+        solutionInfo += "<h1><b>EO:</b> " + cleanAlg(solutionEO) + "</h1>";
+        solution = cleanAlg([solutionEO].join(" "));
         postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
         //postMessage([solutionInfo, true]);
         solveCross();
@@ -147,8 +147,8 @@ function solveCross() {
         postMessage([solLength]);
     }
     if (!timeInteruption) {
-        solutionInfo += "<h1><b>Cross:</b> " + solutionCross + "</h1>";
-        solution = [solutionEO, solutionCross].join(" ");
+        solutionInfo += "<h1><b>Cross:</b> " + cleanAlg(solutionCross) + "</h1>";
+        solution = cleanAlg([solutionEO, solutionCross].join(" "));
         postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
         //postMessage([solutionInfo, true]);
         solveF2L();
@@ -180,8 +180,8 @@ function solveF2L() {
                     }
                     if (isF2L(m, f2lIndex)) {
                         solF2L = m;
-                        solutionInfo += "<h1><b>"+(f2lIndex + 1)+". pair:</b> " + solF2L + "</h1>";
-                        solution = [solutionEO, solutionCross, solutionF2L, solF2L].join(" ");
+                        solutionInfo += "<h1><b>"+(f2lIndex + 1)+". pair:</b> " + cleanAlg(solF2L) + "</h1>";
+                        solution = cleanAlg([solutionEO, solutionCross, solutionF2L, solF2L].join(" "));
                         postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
                         //postMessage([solutionInfo, true]);
                         break solveLoop;
@@ -199,8 +199,8 @@ function solveF2L() {
                         tArr.push(m1 + " " + m2);
                         if (isF2L(m1 + " " + m2, f2lIndex)) {
                             solF2L = m1 + " " + m2;
-                            solutionInfo += "<h1><b>"+(f2lIndex + 1)+". pair:</b> " + solF2L + "</h1>";
-                            solution = [solutionEO, solutionCross, solutionF2L, solF2L].join(" ");
+                            solutionInfo += "<h1><b>"+(f2lIndex + 1)+". pair:</b> " + cleanAlg(solF2L) + "</h1>";
+                            solution = cleanAlg([solutionEO, solutionCross, solutionF2L, solF2L].join(" "));
                             postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
                             //postMessage([solutionInfo, true]);
                             break solveLoop;
@@ -293,8 +293,8 @@ function solveLL() {
         postMessage([solLength]);
     }
     if (!timeInteruption) {
-        solutionInfo += "<h1><b>Last layer:</b> " + solutionLL + "</h1>";
-        solution = [solutionEO, solutionCross, solutionF2L, solutionLL].join(" ");
+        solutionInfo += "<h1><b>Last layer:</b> " + cleanAlg(solutionLL) + "</h1>";
+        solution = cleanAlg([solutionEO, solutionCross, solutionF2L, solutionLL].join(" "));
         postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
         solveAUF();
     }
@@ -314,8 +314,8 @@ function solveAUF() {
         }
     }
     
-    solution = [solutionEO, solutionCross, solutionF2L, solutionLL, solutionAUF].join(" ");
-    solutionInfo += "<h1><b>AUF:</b> " + solutionAUF + "</h1><br><h1><b>Solution:</b> " + solution + "</h1>";
+    solution = cleanAlg([solutionEO, solutionCross, solutionF2L, solutionLL, solutionAUF].join(" "));
+    solutionInfo += "<h1><b>AUF:</b> " + solutionAUF + "</h1><br><h1><b>Solution:</b> " + solution + "</h1><br><h1><b>Moves:</b> " + solution.split(" ").length + "</h1>";
     postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
     //postMessage([solutionInfo, true]);
     postMessage(["Solved"]);
@@ -1317,3 +1317,34 @@ const zbllsAS = [
     "U' R U2 R2 D' R U2 R' D R2 U' R' U R U' R'", "U' R D R' U' R D' R2 U' R U2 R' U' R", "R D' R U' R' D U' R' U R U R2 U' R' U R", "R U R' F' R U R' U' R' F R2 U R' U' R U' R'", "U2 R2 D Rw' U2 Rw D' R2 U' R U' R'", "R U2 R' U' R U' R D R' U2 R D' R' U2 R'", "L R' U' R U L' U2 R' U2 R", "U2 R2 D R' U2 R D' R2 U' R U' R'", "R U R' F' R U2 R' U2 R' F R2 U' R'", "U' R' U' R U' R U R D R' U' R D' R U2 R", "U R U R' U2 R U R' U' F' R U2 R' U' R U' R' F", "R2 D' R U' R' D F R U R U' R' F' R",
     "U' R U2 R' U' F' R U R' U' R' F R2 U' R'", "U' R' U2 R' D' R U R' D R2 U' R' U2 R", "U2 R' U' R U' R2 D' Rw U2 Rw' D R2", "R U' R' U2 R U' R2 D' R U' R' D R", "U R U R' U' R2 U R U R' U' D R' U' R D' R", "U2 R' U' R U' R2 D' R U2 R' D R2", "U2 R U2 R' U2 L' U R U' R' L", "R' U2 R' D' R U2 R' D R U' R U' R' U2 R", "R' U' R U R' F R U R' U' R' F' R2", "U R U2 R D' R U' R' D R U R U' R U' R'", "U R U R' U R' F U' R2 U' R2 U F' U R", "U' R U R' U R' U' R2 U' R D' R U R' D R U R",
 ];
+
+function cleanAlg(alg) {
+    const moveArr = ["R","L","F","B","U","D","Rw","Lw","Fw","Bw","Uw","Dw","x","y","z"];
+    const moves = alg.split(" ");
+    let newAlg = alg.replaceAll("Rw","r").replaceAll("Lw","l").replaceAll("Uw","u").replaceAll("Dw","d").replaceAll("Fw","f").replaceAll("Bw","b");
+    
+
+    for (let _move of moves) {
+        for (let m of moveArr) {
+            //Fjerne doble mellomrom
+            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
+
+            newAlg = newAlg.replaceAll((m + " " + m + "2"),(m + "'"));
+            newAlg = newAlg.replaceAll((m + " " + m + "'"),(""));
+            newAlg = newAlg.replaceAll((m + " " + m),(m + "2"));
+
+            newAlg = newAlg.replaceAll((m + "2 " + m + "2"),(""));
+            newAlg = newAlg.replaceAll((m + "2 " + m + "'"),(m));
+            newAlg = newAlg.replaceAll((m + "2 " + m),(m + "'"));
+
+            newAlg = newAlg.replaceAll((m + "' " + m + "2"),(m));
+            newAlg = newAlg.replaceAll((m + "' " + m + "'"),(m + "2"));
+            newAlg = newAlg.replaceAll((m + "' " + m),(""));
+            
+            //Fjerne doble mellomrom
+            newAlg = newAlg.replaceAll(" ",";").replaceAll(";;",";").replaceAll(";"," ");
+        }
+    }
+
+    return newAlg.replaceAll("r","Rw").replaceAll("l","Lw").replaceAll("u","Uw").replaceAll("d","Dw").replaceAll("f","Fw").replaceAll("b","Bw").trim();
+}
