@@ -2,6 +2,7 @@ const config = {
     hiddenLayers: [3]
 }
 
+//const net = new brain.NeuralNetwork(config)
 const net = new brain.NeuralNetwork()
 
 net.train([
@@ -26,4 +27,4 @@ net.train([
 const diagram = $("#diagram");
 $(diagram).html(brain.utilities.toSVG(net))
 
-console.log(net.run([1, 0]))
+$("#result").text(net.run([1, 0]));
