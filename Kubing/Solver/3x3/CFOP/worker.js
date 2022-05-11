@@ -1,10 +1,11 @@
 let moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"];
 let movesEO = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F2", "B2"];
 let triggers = [
+    "S R S'", "S R' S'", "S' L' S", "S' L S",
     "R U R'", "R U' R'", "R U2 R'", "R' U R", "R' U' R", "R' U2 R",
     "L U L'", "L U' L'", "L U2 L'", "L' U L", "L' U' L", "L' U2 L",
     "F U F'", "F U' F'", "F U2 F'", "F' U F", "F' U' F", "F' U2 F",
-    "B U B'", "B U' B'", "B U2 B'", "B' U B", "B' U' B", "B' U2 B"
+    "Fw R Fw'", "Fw R' Fw'", "Fw R2 Fw'", "Fw' L Fw", "Fw' L' Fw", "Fw' L2 Fw"
 ];
 let movesF2L = ["U", "U'", "U2"].concat(triggers);
 
