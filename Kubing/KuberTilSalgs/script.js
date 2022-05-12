@@ -10,11 +10,16 @@ $(() => {
             out += "<div class='puzzleBox'><h1>"+c.type+"</h1><h1>"+c.name+"</h1><img src='"+c.img+"'><br><h1>"+c.price+"</h1></div><br>";
         }
         $("#puzzles").html(out);
+        adjustSize();
     });
 
     adjustSize();
 });
 
 function adjustSize() {
-    
+    $(".puzzleBox").width($("body").width() / 3);
+    $(".puzzleBox").height($(".puzzleBox").width());
+    $("img").width($("body").width() / 4);
+    $("img").height($("img").width());
+    $("img").css("margin", "auto");
 }

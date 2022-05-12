@@ -13,12 +13,15 @@ body {
     padding: 0;
 }
 
+img {
+    width: max-content;
+    height: max-content;
+}
+
 h1 {
     color: white;
 }
 
 .puzzleBox {
     background-color: blue;
-    width: 30%;
-    height: 30%;
 }
