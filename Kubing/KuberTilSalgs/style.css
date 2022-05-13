@@ -27,10 +27,13 @@ h1 {
 }
 
 #puzzles {
-    display: flex;
-    flex-direction: column;
+    
 }
 
 puzzle {
     background-color: #f1f1f1;
+}
+
+puzzle h1, puzzle img {
+    width: auto;
 }

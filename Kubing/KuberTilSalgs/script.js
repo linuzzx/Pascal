@@ -21,7 +21,7 @@ $(window).resize(() => {
 
 function showPuzzles() {
     for (let p of puzzles) {
-        $("#puzzles").append("<h1>"+p.name+"</h1><img src='"+p.image+"'><h1>"+p.price+"kr</h1>");
+        $("#puzzles").append("<puzzle><h1>"+p.name+"</h1><img src='"+p.image+"'><h1>"+p.price+"kr</h1></puzzle>");
     }
 }
 
