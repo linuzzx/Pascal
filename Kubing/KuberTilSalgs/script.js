@@ -1,25 +1,40 @@
 let cubes = {};
+let puzzles = [];
 $(() => {
     firebase.database().ref("Kuber/").once("value", (snapshot) => {
         cubes = snapshot.val();
-        console.log(cubes);
-        let out = "";
-        let cubeTypes = Object.values(cubes).map(t => t.type);
-        console.log(cubeTypes);
+        
         for (let c of Object.values(cubes)) {
-            out += "<div class='puzzleBox'><h1>"+c.type+"</h1><h1>"+c.name+"</h1><img src='"+c.img+"'><br><h1>"+c.price+"</h1></div><br>";
+            puzzles.push(new Puzzle(c.type, c.name, c.price, c.img));
         }
-        $("#puzzles").html(out);
+
+        showPuzzles();
         adjustSize();
     });
 
     adjustSize();
 });
 
+$(window).resize(() => {
+    adjustSize();
+});
+
+function showPuzzles() {
+    for (let p of puzzles) {
+        $("#puzzles").append("<h1>"+p.name+"</h1><img src='"+p.image+"'><h1>"+p.price+"kr</h1>");
+    }
+}
+
 function adjustSize() {
-    $(".puzzleBox").width($("body").width() / 3);
-    $(".puzzleBox").height($(".puzzleBox").width());
-    $("img").width($("body").width() / 4);
-    $("img").height($("img").width());
-    $("img").css("margin", "auto");
+    $("puzzle").height($("body").width() / 3);
+    $("puzzle").width($("puzzle").height());
+}
+
+class Puzzle {
+    constructor(type, name, price, image) {
+        this.type = type;
+        this.name = name;
+        this.price = price;
+        this.image = image;
+    }
 }

@@ -14,8 +14,8 @@ body {
 }
 
 img {
-    width: max-content;
-    height: max-content;
+    width: fit-content;
+    height: auto;
 }
 
 h1 {
@@ -24,4 +24,13 @@ h1 {
 
 .puzzleBox {
     background-color: blue;
+}
+
+#puzzles {
+    display: flex;
+    flex-direction: column;
+}
+
+puzzle {
+    background-color: #f1f1f1;
 }
