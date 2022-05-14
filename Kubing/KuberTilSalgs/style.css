@@ -11,15 +11,7 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-}
-
-img {
-    width: fit-content;
-    height: auto;
-}
-
-h1 {
-    color: white;
+    text-align: center;
 }
 
 .puzzleBox {
@@ -27,13 +19,80 @@ h1 {
 }
 
 #puzzles {
-    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-puzzle {
-    background-color: #f1f1f1;
+.puzzle {
+    background-color: transparent;
+    margin: 1%;
+    padding: 0;
+    text-align: center;
+    border-radius: 5%;
+    perspective: 500px;
 }
 
-puzzle h1, puzzle img {
-    width: auto;
+h1 {
+    color: #fff;
+}
+
+.puzzle h2 {
+    font-size: 2vw;
+    color: black;
+    margin: 0;
+}
+
+.puzzle img {
+    max-width: 80%;
+    height: auto;
+}
+
+.puzzle span {
+    font-size: 1.5vw;
+    color: black;
+}
+
+/********************************/
+/* The flip card container - set the width and height to whatever you want. We have added the border property to demonstrate that the flip itself goes out of the box on hover (remove perspective if you don't want the 3D effect */
+  
+/* This container is needed to position the front and back side */
+.puzzle-content {
+    object-fit: contain;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    border-radius: 5%;
+}
+  
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.puzzle:hover .puzzle-content {
+    transform: rotateY(180deg);
+}
+  
+/* Position the front and back side */
+.puzzle-front, .puzzle-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 5%;
+    padding: 2%;
+    -webkit-backface-visibility: hidden; /* Safari */
+    backface-visibility: hidden;
+}
+  
+/* Style the front side (fallback if image is missing) */
+.puzzle-front {
+    background-color: #bbb;
+    color: black;
+}
+  
+/* Style the back side */
+.puzzle-back {
+    background-color: dodgerblue;
+    color: white;
+    transform: rotateY(180deg);
 }
