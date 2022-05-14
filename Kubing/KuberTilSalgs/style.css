@@ -19,6 +19,7 @@ body {
 }
 
 #puzzles {
+    padding: 1%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -30,7 +31,7 @@ body {
     padding: 0;
     text-align: center;
     border-radius: 5%;
-    perspective: 500px;
+    perspective: 1000px;
 }
 
 h1 {
@@ -63,7 +64,7 @@ h1 {
     width: 100%;
     height: 100%;
     text-align: center;
-    transition: transform 0.8s;
+    transition: transform 0.75s;
     transform-style: preserve-3d;
     border-radius: 5%;
 }
@@ -79,7 +80,6 @@ h1 {
     width: 100%;
     height: 100%;
     border-radius: 5%;
-    padding: 2%;
     -webkit-backface-visibility: hidden; /* Safari */
     backface-visibility: hidden;
 }
@@ -94,5 +94,8 @@ h1 {
 .puzzle-back {
     background-color: dodgerblue;
     color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transform: rotateY(180deg);
 }

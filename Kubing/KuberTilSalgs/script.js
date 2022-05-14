@@ -32,10 +32,6 @@ function adjustSize() {
     $(".puzzle").width($("body").width() / 5);
     $(".puzzle").height($(".puzzle").width());
 
-    console.log(".puzzle",$("body").width() / 5);
-    console.log("img",$(".puzzle img").css("height"));
-    console.log("h2",$(".puzzle h2").height());
-
     $(".puzzle img").height(($("body").width() / 5) - 2 * $(".puzzle h2").height());
 }
 
