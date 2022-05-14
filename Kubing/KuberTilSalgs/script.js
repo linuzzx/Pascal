@@ -1,18 +1,11 @@
 let cubes = {};
-//let puzzles = [];
-let puzzles = {};
+let puzzles = [];
 $(() => {
     firebase.database().ref("Kuber/").once("value", (snapshot) => {
         cubes = snapshot.val();
         
-        /*for (let c of Object.values(cubes)) {
-            puzzles.push(new Puzzle(c.type, c.name, c.price, c.img, c.info));
-        }*/
         for (let c of Object.values(cubes)) {
-            if (!puzzles[c.type]) {
-                puzzles[c.type] = [];
-            }
-            puzzles[c.type].push(new Puzzle(c.name, c.price, c.img, c.info));
+            puzzles.push(new Puzzle(c.type, c.name, c.price, c.img, c.info));
         }
 
         showPuzzles();
