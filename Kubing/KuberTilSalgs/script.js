@@ -37,13 +37,6 @@ function showPuzzles() {
     }
 }
 
-function adjustSize() {
-    $(".puzzle").width($("body").width() / 5);
-    $(".puzzle").height($(".puzzle").width());
-
-    $(".puzzle img").height(($("body").width() / 5) - 2 * $(".puzzle h2").height());
-}
-
 function addAccordion() {
     let accTypes = $("#accTypes");
     let panelTypes = $("#panelTypes");
@@ -51,9 +44,11 @@ function addAccordion() {
     let types = $.uniqueSort(puzzles.map(p => p.type));
     let out = "";
     for (let t of types) {
-        out += "<h3 onclick='showType(\"" + t + "\")'>" + t + "</h3>";
+        out += "<h3 id='panel_" + t + "' class='panels' onclick='showType(\"" + t + "\")'>" + t + "</h3>";
     }
     $(panelTypes).html(out);
+
+    $("#panel_" + types[0]).prop("style", "background-color: #bbbbbb");
     
     $(accTypes).on("click", () => {
         toggleAccordion();
@@ -62,19 +57,29 @@ function addAccordion() {
 
 function toggleAccordion() {
     let panelTypes = $("#panelTypes");
-    $("#accTypes").toggleClass("active");
-        if ($(panelTypes).css("max-height") !== "none") {
-            $(panelTypes).css("max-height", "none");
-        }
-        else {
-            $(panelTypes).css("max-height", "0");
-        } 
+    if ($(panelTypes).css("max-height") !== "none") {
+        $(panelTypes).css("max-height", "none");
+        $("#accTypes h3:nth-child(2)").text("-");
+    }
+    else {
+        $(panelTypes).css("max-height", "0");
+        $("#accTypes h3:nth-child(2)").text("+");
+    }
 }
 
 function showType(type) {
     $(".puzzleContainer").prop("hidden", true);
     $("#puzzle_" + type).prop("hidden", false);
+    $("#panelTypes h3").prop("style", "none");
+    $("#panel_" + type).prop("style", "background-color: #bbbbbb");
     toggleAccordion();
+}
+
+function adjustSize() {
+    $(".puzzle").width($("body").width() / 5);
+    $(".puzzle").height($(".puzzle").width());
+
+    $(".puzzle img").height(($("body").width() / 5) - 2 * $(".puzzle h2").height());
 }
 
 class Puzzle {
