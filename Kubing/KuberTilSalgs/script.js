@@ -9,6 +9,7 @@ $(() => {
         }
 
         showPuzzles();
+        addAccordion();
         adjustSize();
     });
 });
@@ -18,13 +19,21 @@ $(window).resize(() => {
 });
 
 function showPuzzles() {
-    let id = 0;
-    for (let p of puzzles) {
-        $("#puzzles").append("<div class='puzzle'><div class='puzzle-content'>"+
-        "<div class='puzzle-front'><h2>"+p.name+"</h2><img src='"+p.image+"'><h2>"+p.price+"kr</h2></div>"+
-        "<div class='puzzle-back'><span>"+p.info+"</span></div>"+
-        "</div></div>");
-        id++;
+    let ind = 0;
+    for (let t of $.uniqueSort(puzzles.map(pz => pz.type))) {
+        let h = ind === 0 ? "" : "hidden";
+        let out = "<div id='puzzle_" + t + "' class='puzzleContainer' " + h + ">";
+        for (let p of puzzles) {
+            if (p.type === t) {
+                out += "<div class='puzzle'><div class='puzzle-content'>"+
+                "<div class='puzzle-front'><h2>"+p.name+"</h2><img src='"+p.image+"'><h2>"+p.price+"kr</h2></div>"+
+                "<div class='puzzle-back'><span>"+p.info+"</span></div>"+
+                "</div></div>";
+            }
+        }
+        out += "</div>";
+        $("#puzzles").append(out);
+        ind++;
     }
 }
 
@@ -33,6 +42,39 @@ function adjustSize() {
     $(".puzzle").height($(".puzzle").width());
 
     $(".puzzle img").height(($("body").width() / 5) - 2 * $(".puzzle h2").height());
+}
+
+function addAccordion() {
+    let accTypes = $("#accTypes");
+    let panelTypes = $("#panelTypes");
+    
+    let types = $.uniqueSort(puzzles.map(p => p.type));
+    let out = "";
+    for (let t of types) {
+        out += "<h3 onclick='showType(\"" + t + "\")'>" + t + "</h3>";
+    }
+    $(panelTypes).html(out);
+    
+    $(accTypes).on("click", () => {
+        toggleAccordion();
+    });
+}
+
+function toggleAccordion() {
+    let panelTypes = $("#panelTypes");
+    $("#accTypes").toggleClass("active");
+        if ($(panelTypes).css("max-height") !== "none") {
+            $(panelTypes).css("max-height", "none");
+        }
+        else {
+            $(panelTypes).css("max-height", "0");
+        } 
+}
+
+function showType(type) {
+    $(".puzzleContainer").prop("hidden", true);
+    $("#puzzle_" + type).prop("hidden", false);
+    toggleAccordion();
 }
 
 class Puzzle {
