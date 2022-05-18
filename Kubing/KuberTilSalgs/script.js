@@ -76,19 +76,19 @@ function showType(type) {
 }
 
 function adjustSize() {
-    $(".puzzle").width($("body").width() / 5);
-    $(".puzzle").height($(".puzzle").width());
-
-    $(".puzzle img").height(($("body").width() / 5) - 2 * $(".puzzle h2").height());
-
     if ($("body").width() > $("body").height()) {
         $("#accTypes").css("width", "50vw");
         $("#panelTypes").css("width", "50vw");
+        $(".puzzle").css("width", "20vw");
     }
     else {
         $("#accTypes").css("width", "90vw");
         $("#panelTypes").css("width", "90vw");
+        $(".puzzle").css("width", "40vw");
     }
+
+    $(".puzzle").height($(".puzzle").width());
+    $(".puzzle img").height($(".puzzle").width() - 2 * $(".puzzle h2").height());
 }
 
 class Puzzle {
