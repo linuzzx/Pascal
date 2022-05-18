@@ -80,6 +80,15 @@ function adjustSize() {
     $(".puzzle").height($(".puzzle").width());
 
     $(".puzzle img").height(($("body").width() / 5) - 2 * $(".puzzle h2").height());
+
+    if ($("body").width() > $("body").height()) {
+        $("#accTypes").css("width", "50vw");
+        $("#panelTypes").css("width", "50vw");
+    }
+    else {
+        $("#accTypes").css("width", "90vw");
+        $("#panelTypes").css("width", "90vw");
+    }
 }
 
 class Puzzle {

@@ -103,12 +103,11 @@ h1 {
     background-color: #eee;
     color: #444;
     cursor: pointer;
-    padding: 18px;
-    width: 100%;
+    padding: 2%;
     border: none;
     text-align: left;
+    margin: auto;
     outline: none;
-    transition: 0.4s;
 }
 
 #accTypes h3 {
@@ -127,11 +126,12 @@ h1 {
 #panelTypes {
     position: fixed;
     z-index: 2;
-    width: 100%;
     max-height: 0;
     background-color: #f1f1f1;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 #panelTypes h3 {
