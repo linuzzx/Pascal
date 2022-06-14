@@ -3,6 +3,14 @@ let points;
 let interval;
 
 $(() => {
+    if ($(window).height() > $(window).width()) {
+        $("#triangle").css("height", "90vw");
+        $("#triangle").css("width", "90vw");
+    }
+    else {
+        $("#triangle").css("height", "90vh");
+        $("#triangle").css("width", "90vh");
+    }
     svg = $("#triangle").height();
     points = [
         [svg*0.1, svg*0.9],
@@ -120,5 +128,5 @@ function generateSlow() {
         else {
             clearInterval(interval);
         }
-    }, Math.floor(ms/k));
+    }, 1);
 }
