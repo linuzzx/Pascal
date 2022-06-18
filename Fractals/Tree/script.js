@@ -12,24 +12,20 @@ $(() => {
     w = $("#tree").width();
     h = $("#tree").height();
 
-    length = h / 3;
-
     points = [];
     nPoints = [];
 });
 
 function drawBranch(p0, dir) {
     let p;
-    let al = angle * depth + 90;
-    let ar = al - 2 * angle;
+    let al =  p0[2] + angle;
+    let ar =  p0[2] - angle;
 
-    let pl = p0[2] === 2 ? [p0[0]+(Math.cos(ar*Math.PI/180) * length), p0[1]-(Math.sin(ar*Math.PI/180) * length), 1]
-                        : [p0[0]+(Math.cos(al*Math.PI/180) * length), p0[1]-(Math.sin(al*Math.PI/180) * length), 1];
-    let pr = p0[2] === 2 ? [p0[0]+(Math.cos((ar-2*angle)*Math.PI/180) * length), p0[1]-(Math.sin((ar-2*angle)*Math.PI/180) * length), 2]
-                        : [p0[0]+(Math.cos(ar*Math.PI/180) * length), p0[1]-(Math.sin(ar*Math.PI/180) * length), 2];
-
+    let pl = [p0[0]+(Math.cos(al*Math.PI/180) * length), p0[1]-(Math.sin(al*Math.PI/180) * length), al];
+    let pr = [p0[0]+(Math.cos(ar*Math.PI/180) * length), p0[1]-(Math.sin(ar*Math.PI/180) * length), ar];
+    
     if (dir === 0) {
-        p = [p0[0], p0[1] - length, 0];
+        p = [p0[0], p0[1] - length, p0[2]];
     }
     else if (dir === 1) {
         p = pl;
@@ -51,10 +47,11 @@ function drawBranch(p0, dir) {
 }
 
 function drawTree(k) {
+    clearTree();
     for (let i = 0; i < k; i++) {
         depth = i;
         if (i === 0) {
-            let p = [0.5*w, h, 0];
+            let p = [0.5*w, h, 90];
             drawBranch(p, 0);
         }
         else {
@@ -73,7 +70,7 @@ function drawTree(k) {
 
 function clearTree() {
     $("#tree").empty();
-    length = h / 3;
+    length = h / 5;
 
     points = [];
     nPoints = [];
