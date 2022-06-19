@@ -78,7 +78,7 @@ function clearTree() {
 
 function generateFast() {
     clearInterval(interval);
-    let k  = $("#inpK").val();
+    let k  = parseInt($("#inpK").val()) > 20 ? 20 : parseInt($("#inpK").val());
 
     clearTree();
     drawTree(k);
@@ -88,7 +88,7 @@ function generateSlow() {
     clearInterval(interval);
     clearTree();
 
-    const k = parseInt($("#inpK").val());
+    const k = parseInt($("#inpK").val()) > 20 ? 20 : parseInt($("#inpK").val());
     const ms = 5000;
     let i = 0;
     
