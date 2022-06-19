@@ -91,19 +91,32 @@ function generateSlow() {
     const k = parseInt($("#inpK").val());
     const ms = 5000;
     let i = 0;
-    let prevPoint = [w*0.5, w*0.5];
     
-    while (i === 0) {
-        let p = [Math.random()*w, Math.random()*w];
-        if (insideTriangle(p)) {
-            prevPoint = p;
+    interval = setInterval(() => {
+        depth = i;
+        if (i <= k) {
+            if (i === 0) {
+                let p = [0.5*w, h, 90];
+                drawBranch(p, 0);
+            }
+            else {
+                points = nPoints.slice();
+                nPoints = [];
+    
+                length *= 0.8;
+    
+                for (let p of points) {
+                    drawBranch(p, 1);
+                    drawBranch(p, 2);
+                }
+            }
             i++;
         }
         else {
-            i--;
+            clearInterval(interval);
         }
-    }
-    interval = setInterval(() => {
+    }, ms/k);
+    /* interval = setInterval(() => {
         if (i <= k) {
             let cp = points[Math.floor(Math.random() * 3)];
             let p = [(cp[0] + prevPoint[0]) / 2.0, (cp[1] + prevPoint[1]) / 2.0];
@@ -115,5 +128,5 @@ function generateSlow() {
         else {
             clearInterval(interval);
         }
-    }, ms/k);
+    }, ms/k); */
 }
