@@ -14,6 +14,8 @@ $(() => {
 
     points = [];
     nPoints = [];
+    $("#inpK").val(10);
+    $("#rangeAngle").val(30);
     setAngle();
 });
 
