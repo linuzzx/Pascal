@@ -1,6 +1,5 @@
 let w, h;
 let interval;
-//const angle = 30;
 let length;
 let depth;
 let points, nPoints;
@@ -16,11 +15,23 @@ $(() => {
     nPoints = [];
     $("#inpK").val(10);
     $("#rangeAngle").val(30);
+    $("#rangeMulti").val(0.8);
+    setDepth();
     setAngle();
+    setMulti();
 });
+
+function setDepth() {
+    $("#lblDepth").text($("#inpK").val());
+}
 
 function setAngle() {
     $("#lblAngle").text($("#rangeAngle").val() + "°");
+}
+
+function setMulti() {
+    multiplier = parseFloat($("#rangeMulti").val());
+    $("#lblMulti").text($("#rangeMulti").val());
 }
 
 function drawBranch(p0, dir) {
@@ -66,7 +77,7 @@ function drawTree(k) {
             points = nPoints.slice();
             nPoints = [];
 
-            length *= 0.8;
+            length *= multiplier;
 
             for (let p of points) {
                 drawBranch(p, 1);
@@ -86,7 +97,7 @@ function clearTree() {
 
 function generateFast() {
     clearInterval(interval);
-    let k  = parseInt($("#inpK").val()) > 20 ? 20 : parseInt($("#inpK").val());
+    let k  = parseInt($("#inpK").val());
 
     clearTree();
     drawTree(k);
@@ -96,7 +107,7 @@ function generateSlow() {
     clearInterval(interval);
     clearTree();
 
-    const k = parseInt($("#inpK").val()) > 20 ? 20 : parseInt($("#inpK").val());
+    const k = parseInt($("#inpK").val());
     const ms = 5000;
     let i = 0;
     
