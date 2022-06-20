@@ -3,6 +3,7 @@ let interval;
 let length;
 let depth;
 let points, nPoints;
+let multiplier;
 
 $(() => {
     $("#tree").css("width", "100vw");
@@ -122,7 +123,7 @@ function generateSlow() {
                 points = nPoints.slice();
                 nPoints = [];
     
-                length *= 0.8;
+                length *= multiplier;
     
                 for (let p of points) {
                     drawBranch(p, 1);
