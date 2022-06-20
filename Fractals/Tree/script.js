@@ -1,6 +1,6 @@
 let w, h;
 let interval;
-const angle = 30;
+//const angle = 30;
 let length;
 let depth;
 let points, nPoints;
@@ -14,9 +14,15 @@ $(() => {
 
     points = [];
     nPoints = [];
+    setAngle();
 });
 
+function setAngle() {
+    $("#lblAngle").text($("#rangeAngle").val() + "°");
+}
+
 function drawBranch(p0, dir) {
+    let angle = parseInt($("#rangeAngle").val());
     let p;
     let al =  p0[2] + angle;
     let ar =  p0[2] - angle;

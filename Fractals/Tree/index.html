@@ -11,6 +11,8 @@
 </head>
 <body>
     <input id="inpK" type="number" min="1" max="20" step="1" placeholder="Depth">
+    <input type="range" id="rangeAngle" min="5" max="90" step="5" onchange="setAngle()">
+    <label id="lblAngle" for="rangeAngle"></label>
     <button onclick="generateFast()">Fast</button>
     <button onclick="generateSlow()">Slow</button>
     <br><br>
