@@ -136,17 +136,4 @@ function generateSlow() {
             clearInterval(interval);
         }
     }, ms/k);
-    /* interval = setInterval(() => {
-        if (i <= k) {
-            let cp = points[Math.floor(Math.random() * 3)];
-            let p = [(cp[0] + prevPoint[0]) / 2.0, (cp[1] + prevPoint[1]) / 2.0];
-
-            drawPoint(p);
-            prevPoint = p;
-            i++;
-        }
-        else {
-            clearInterval(interval);
-        }
-    }, ms/k); */
 }
