@@ -974,18 +974,19 @@ function initApp() {
                                     out += "<th>" + u[1] + "</th>";
                                 }
                             }
-                            out += "</tr>";
+                            out += "<th>Best</th></tr>";
                             for (let i = 0; i < 5; i++) {
                                 out += "<tr><th>" + (i + 1) + "</th>";
                                 for (let u of snap.cubers.slice()) {
                                     out += "<td id='" + i + "_" + u[0] + "'></td>";
                                 }
-                                out += "</tr>";
+                                out += "<td id='" + i + "_best'></td></tr>";
                             }
                             out += "<tr><th>Avg</th>";
                             for (let u of snap.cubers.slice()) {
                                 out += "<td id='avg_" + u[0] + "'></td>";
                             }
+                            out += "<td id='avg_best'></td></tr>";
                         
                             $("#timeTable").html(out);
 
@@ -1042,7 +1043,24 @@ function initApp() {
                     if (Object.keys(snap).includes("scrambles") && !snap.waiting) {
                         if (Object.keys(snap).includes("solves")) {
                             let s = snap.solves.slice();
-
+                            let bestSolves = [];
+                            
+                            let i = 0;
+                            for (let so of s) {
+                                for (let cub of so) {
+                                    console.log(cub.time);
+                                    if (bestSolves[i]) {
+                                        if (getTime(cub.time) < getTime(bestSolves[i])) {
+                                            bestSolves[i] = cub.time;
+                                        }
+                                    }
+                                    else {
+                                        bestSolves.push(cub.time);
+                                    }
+                                }
+                                i++;
+                            }
+                            
                             if (s.length - 1 < snap.curScr || !s[snap.curScr].map(sol => sol.cid).includes(cuberId)) {
                                 $("#inpTimeDiv").show();
                                 $("#inpTime").focus();
@@ -1058,6 +1076,10 @@ function initApp() {
                                     $("#" + (s.length - 1) + "_" + cub.cid).text(solTime);
                                     $("#" + (s.length - 1) + "_" + cub.cid).attr("class", "clickableTD");
                                     $("#" + (s.length - 1) + "_" + cub.cid).attr("onClick", "showTimeStats(\"" + solTime + "&nbsp;&nbsp;&nbsp;" + snap.scrambles[s.length - 1] + "\")");
+                                    
+                                    $("#" + (s.length - 1) + "_best").text(bestSolves[s.length - 1]);
+                                    $("#" + (s.length - 1) + "_best").attr("class", "clickableTD");
+                                    $("#" + (s.length - 1) + "_best").attr("onClick", "showTimeStats(\"" + bestSolves[s.length - 1] + "&nbsp;&nbsp;&nbsp;" + snap.scrambles[s.length - 1] + "\")");
                                 }
                                 if (s.length === 5) {
                                     let cuberSolves = [];
@@ -1089,6 +1111,25 @@ function initApp() {
                                     }
                                     if (s[snap.curScr].length === snap.cubers.length) {
                                         stopCubing();
+                                        bestSolves = bestSolves.slice(0, 5);
+
+                                        let i = 0;
+                                        for (let solve of bestSolves) {
+                                            $("#"+i+"_best").text(solve);
+                                            $("#" + i + "_best").attr("class", "clickableTD");
+                                            $("#" + i + "_best").attr("onClick", "showTimeStats(\"" + solve + "&nbsp;&nbsp;&nbsp;" + snap.scrambles[i] + "\")");
+                                            i++;
+                                        }
+
+                                        $("#avg_best").text(getCuberAvg(bestSolves));
+                                        let out = "avg: " + getCuberAvg(bestSolves) + "<br>";
+                                        let j = 0;
+                                        for (let so of bestSolves) {
+                                            out += "<br><br>" + (j + 1) + ". " + so + "&nbsp;&nbsp;&nbsp;" + snap.scrambles[j];
+                                            j++;
+                                        }
+                                        $("#avg_best").attr("class", "clickableTD");
+                                        $("#avg_best").attr("onClick", "showTimeStats(\"" + out + "\")");
                                     }
                                 }
                                 else if (s[snap.curScr] && s[snap.curScr].length === snap.cubers.length && curRoom !== null) {
