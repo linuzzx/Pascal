@@ -3,10 +3,10 @@ let interval;
 let w, h;
 
 $(() => {
-    $("#poly").css("width", "90vw");
+    $("#poly").css("width", "50vw");
     w = $("#poly").width();
     h = w;
-    $("#poly").css("height", "90vw");
+    $("#poly").css("height", "50vw");
 
     $("#inpN").val(3);
     $("#inpK").val(10000);

@@ -10,8 +10,10 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <input id="inpN" type="number" min="3" step="1" placeholder="N-polygon">
-    <input id="inpK" type="number" min="0" step="1" placeholder="Number of dots">
+    <label for="inpN">Polygon</label>
+    <input id="inpN" type="number" min="3" step="1" placeholder="N-polygon"><br>
+    <label for="inpK">Points</label>
+    <input id="inpK" type="number" min="0" step="1" placeholder="Number of dots"><br>
     <button onclick="drawPoly()">Draw</button>
     <br><br>
     <svg id="poly"></svg>
