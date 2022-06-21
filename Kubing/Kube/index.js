@@ -1048,7 +1048,6 @@ function initApp() {
                             let i = 0;
                             for (let so of s) {
                                 for (let cub of so) {
-                                    console.log(cub.time);
                                     if (bestSolves[i]) {
                                         if (getTime(cub.time) < getTime(bestSolves[i])) {
                                             bestSolves[i] = cub.time;
