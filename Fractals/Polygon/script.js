@@ -7,6 +7,9 @@ $(() => {
     w = $("#poly").width();
     h = w;
     $("#poly").css("height", "90vw");
+
+    $("#inpN").val(3);
+    $("#inpK").val(10000);
 });
 
 function drawPoly() {
@@ -37,6 +40,28 @@ function drawPoly() {
     $(poly).attr("style", "fill:white;stroke:black;stroke-width:1");
 
     $("#poly").append(poly);
+
+    fillPoly(p0, points);
+}
+
+function fillPoly(p0, points) {
+    let prevPoint;
+    const n = $("#inpN").val();
+    const k = $("#inpK").val();
+
+    for (let i = 0; i <= k; i++) {
+        if (i === 0) {
+            let p = p0;
+            prevPoint = p;
+        }
+        else {
+            let cp = points[Math.floor(Math.random() * n)];
+            let p = [(cp[0] + prevPoint[0]) / 2.0, (cp[1] + prevPoint[1]) / 2.0];
+
+            drawPoint(p);
+            prevPoint = p;
+        }
+    }
 }
 
 function drawPoint(p) {
@@ -45,7 +70,7 @@ function drawPoint(p) {
     $(c).attr('cy', p[1]);
     $(c).attr('r', 1);
     $(c).attr('fill', "black");
-    $("#square").append(c);
+    $("#poly").append(c);
 }
 
 function drawCorners() {
