@@ -621,6 +621,7 @@ function getWinner() {
 
 function submitTime(time, penalty = null) {
     if (isValid(time)) {
+        time = formatTime(time);
         ready = true;
         if (cuberId === leader) {
             $("#scrambleDisplay").html("Waiting for other cubers to submit <button onclick='skip()'>Skip</button>");
@@ -680,9 +681,35 @@ function submitTime(time, penalty = null) {
         resetTimer();
     }
     else {
-        alert("Type in a valid value! (Stackmat timer, but with 2 decimals)");
+        alert("Type in a valid value!\n\n-Stackmat timer, but with 2 decimals\n-Same as above, but without : and .");
     }
     $("#inpTime").val("");
+}
+
+function formatTime(time) {
+    let arr = time.split("");
+    
+    if (arr.length === 6 && isNumber(arr[0]) && isNumber(arr[1]) && isNumber(arr[2]) && isNumber(arr[3]) && isNumber(arr[4]) && isNumber(arr[5])) {
+        return arr[0] + arr[1] + ":" + arr[2] + arr[3] + "." + arr[4] + arr[5];
+    }
+    else if (arr.length === 5 && isNumber(arr[0]) && isNumber(arr[1]) && isNumber(arr[2]) && isNumber(arr[3]) && isNumber(arr[4])) {
+        return arr[0] + ":" + arr[1] + arr[2] + "." + arr[3] + arr[4];
+    }
+    else if (arr.length === 4 && isNumber(arr[0]) && isNumber(arr[1]) && isNumber(arr[2]) && isNumber(arr[3])) {
+        return arr[0] + arr[1] + "." + arr[2] + arr[3];
+    }
+    else if (arr.length === 3 && isNumber(arr[0]) && isNumber(arr[1]) && isNumber(arr[2])) {
+        return arr[0] + "." + arr[1] + arr[2];
+    }
+    else if (arr.length === 2 && isNumber(arr[0]) && isNumber(arr[1])) {
+        return "0." + arr[0] + arr[1];
+    }
+    else if (arr.length === 1 && isNumber(arr[0])) {
+        return "0.0" + arr[0];
+    }
+    else {
+        return time;
+    }
 }
 
 function addPenalty(time, penalty) {
@@ -722,16 +749,28 @@ function skip() {
 
 function isValid(time) {
     let valid = false;
+    let arr = time.split("");
     if (time.toUpperCase() === "DNF" 
-    || time.match(/[1-9][0-9]:[0-9][0-9]\.[0-9][0-9]/g) + "" === time
-    || time.match(/[0-9]:[0-9][0-9]\.[0-9][0-9]/g) + "" === time
-    || time.match(/[1-9][0-9]\.[0-9][0-9]/g) + "" === time
-    || time.match(/[0-9]\.[0-9][0-9]/g) + "" === time
-    || time !== "0.00") {
+    || arr.length === 8 && isNumber(arr[0]) && isNumber(arr[1]) && arr[2] === ":" && isNumber(arr[3]) && isNumber(arr[4]) && arr[5] === "." && isNumber(arr[6]) && isNumber(arr[7])
+    || arr.length === 7 && isNumber(arr[0]) && arr[1] === ":" && isNumber(arr[2]) && isNumber(arr[3]) && arr[4] === "." && isNumber(arr[5]) && isNumber(arr[6])
+    || arr.length === 5 && isNumber(arr[0]) && isNumber(arr[1]) && arr[2] === "." && isNumber(arr[3]) && isNumber(arr[4])
+    || arr.length === 4 && isNumber(arr[0]) && arr[1] === "." && isNumber(arr[2]) && isNumber(arr[3])
+
+    || arr.length === 6 && isNumber(arr[0]) && isNumber(arr[1]) && isNumber(arr[2]) && isNumber(arr[3]) && isNumber(arr[4]) && isNumber(arr[5])
+    || arr.length === 5 && isNumber(arr[0]) && isNumber(arr[1]) && isNumber(arr[2]) && isNumber(arr[3]) && isNumber(arr[4])
+    || arr.length === 4 && isNumber(arr[0]) && isNumber(arr[1]) && isNumber(arr[2]) && isNumber(arr[3])
+    || arr.length === 3 && isNumber(arr[0]) && isNumber(arr[1]) && isNumber(arr[2])
+    || arr.length === 2 && isNumber(arr[0]) && isNumber(arr[1])
+    || arr.length === 1 && isNumber(arr[0])
+    ) {
         valid = true;
     }
 
     return valid;
+}
+
+function isNumber(c) {
+    return /\d/.test(c);
 }
 
 function toggleTimerType(val, el = null) {
