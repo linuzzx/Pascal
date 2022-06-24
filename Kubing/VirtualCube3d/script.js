@@ -46,7 +46,7 @@ function init() {
     let colGreen = 0x00ff00;
     let colBlue = 0x0000ff;
     let colRed = 0xff0000;
-    let colOrange = 0xff6600;
+    let colOrange = 0xffaa00;
     
     let white = new THREE.MeshBasicMaterial( { color: colWhite });
     let yellow = new THREE.MeshBasicMaterial( { color: colYellow } );
