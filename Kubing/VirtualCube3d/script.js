@@ -8,6 +8,8 @@ let cube, planeCube;
 let origo;
 let xAxis, yAxis, zAxis;
 
+let anim;
+
 /* let u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
 let l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
 let f1 = "ful", f2 = "fu", f3 = "fur", f4 = "fl", f5 = "f", f6 = "fr", f7 = "fdl", f8 = "fd", f9 = "fdr", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
@@ -130,10 +132,10 @@ function init() {
             cubies.push(plane);
         }
     }
-    // Red
+    // Orange
     for (let y = -1; y < 2; y++) {
         for (let z = -1; z < 2; z++) {
-            let planeMaterial = new THREE.MeshBasicMaterial( {color: colRed, side: THREE.DoubleSide} );
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colOrange, side: THREE.DoubleSide} );
             let plane = new THREE.Mesh( planeGeometry, planeMaterial );
 
             plane.position.set(-1*m2 * m1, y * m1, z * m1);
@@ -142,10 +144,10 @@ function init() {
             cubies.push(plane);
         }
     }
-    // Orange
+    // Red
     for (let y = -1; y < 2; y++) {
         for (let z = -1; z < 2; z++) {
-            let planeMaterial = new THREE.MeshBasicMaterial( {color: colOrange, side: THREE.DoubleSide} );
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colRed, side: THREE.DoubleSide} );
             let plane = new THREE.Mesh( planeGeometry, planeMaterial );
 
             plane.position.set(1*m2 * m1, y * m1, z * m1);
@@ -187,6 +189,7 @@ function init() {
     yAxis = new THREE.Vector3(0, 1, 0);
     zAxis = new THREE.Vector3(0, 0, 1);
     
+    anim = true;
     animate();
 }
 
@@ -197,10 +200,12 @@ function animate() {
 };
 
 function applyScramble() {
+    anim = false;
     let scr = getScrambleNxN(3);
     for (let s of scr.split(" ")) {
         applyMove(s);
     }
+    anim = true;
 }
 
 function getTurn(e) {
@@ -331,8 +336,20 @@ function calcRotationAroundAxis( obj3D, axis, angle ){
 
 function doMove(cubie, xyz, angle) {
     let axis = xyz === "x" ? xAxis : xyz === "y" ? yAxis : zAxis;
-    calcRotationAroundAxis(cubie, xyz, angle);
-    cubie.rotateOnWorldAxis(axis, angle);
+
+    /* if (anim) {
+        let steps = 1000;
+        let a = angle / steps;
+
+        for (let i = 0; i < steps; i++) {
+            calcRotationAroundAxis(cubie, xyz, a);
+            cubie.rotateOnWorldAxis(axis, a);
+        }
+    }
+    else { */
+        calcRotationAroundAxis(cubie, xyz, angle);
+        cubie.rotateOnWorldAxis(axis, angle);
+    //}
 }
 
 function doR() {
