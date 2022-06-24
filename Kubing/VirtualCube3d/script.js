@@ -1,24 +1,31 @@
 let scene, camera, renderer;
-let cubies = [];
 
-let cube;
+let cubies = [];
+let planes = [];
+
+let cube, planeCube;
 
 let origo;
 let xAxis, yAxis, zAxis;
 
-let u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
+/* let u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
 let l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
 let f1 = "ful", f2 = "fu", f3 = "fur", f4 = "fl", f5 = "f", f6 = "fr", f7 = "fdl", f8 = "fd", f9 = "fdr", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
 let r1 = "ruf", r2 = "ru", r3 = "rub", r4 = "rf", r5 = "r", r6 = "rb", r7 = "rdf", r8 = "rd", r9 = "rdb", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
 let b1 = "bur", b2 = "bu", b3 = "bul", b4 = "br", b5 = "b", b6 = "bl", b7 = "bdr", b8 = "bd", b9 = "bdl", nb1, nb2, nb3, nb4, nb5, nb6, nb7, nb8, nb9;
-let d1 = "dfl", d2 = "df", d3 = "dfr", d4 = "dl", d5 = "d", d6 = "dr", d7 = "dbl", d8 = "db", d9 = "dbr", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
+let d1 = "dfl", d2 = "df", d3 = "dfr", d4 = "dl", d5 = "d", d6 = "dr", d7 = "dbl", d8 = "db", d9 = "dbr", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9; */
 
 let keyBinds = ["J", "F", "H", "G", "I", "K", "D", "E", "S", "L", "W", "O", ",", ".", "N", "B", "Ø", "A", "Å", "Q", "U", "M", "V", "R"];
 let possibleMoves = ["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];;
 
 $(() => {
     $(window).keypress(function(e) {
-        getTurn(e.keyCode);
+        if (e.keyCode === 32) {
+            applyScramble();
+        }
+        else {
+            getTurn(e.keyCode);
+        }
     });
     init();
 });
@@ -28,15 +35,25 @@ function init() {
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
     cube = new THREE.Object3D();
+    planeCube = new THREE.Object3D();
     
+    let planeSize = 0.9;
     let geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    let planeGeometry = new THREE.PlaneGeometry( planeSize, planeSize );
+
+    let colWhite = 0xffffff;
+    let colYellow = 0xffff00;
+    let colGreen = 0x00ff00;
+    let colBlue = 0x0000ff;
+    let colRed = 0xff0000;
+    let colOrange = 0xff6600;
     
-    let white = new THREE.MeshBasicMaterial( { color: 0xffffff });
-    let yellow = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
-    let green = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-    let blue = new THREE.MeshBasicMaterial( { color: 0x0000ff } );
-    let red = new THREE.MeshBasicMaterial( { color: 0xff0000 } );
-    let orange = new THREE.MeshBasicMaterial( { color: 0xff6600 } );
+    let white = new THREE.MeshBasicMaterial( { color: colWhite });
+    let yellow = new THREE.MeshBasicMaterial( { color: colYellow } );
+    let green = new THREE.MeshBasicMaterial( { color: colGreen } );
+    let blue = new THREE.MeshBasicMaterial( { color: colBlue } );
+    let red = new THREE.MeshBasicMaterial( { color: colRed } );
+    let orange = new THREE.MeshBasicMaterial( { color: colOrange } );
     
     let materials = [
         red,
@@ -50,21 +67,98 @@ function init() {
     for (let z = -1; z < 2; z++) {
         for (let y = -1; y < 2; y++) {
             for (let x = -1; x < 2; x++) {
-                let c = new THREE.Mesh(geometry, materials);
-                c.position.set(x * 1.01, y * 1.01, z * 1.01);
-    
-                let edges = new THREE.LineSegments(
-                    new THREE.EdgesGeometry( c.geometry ),
-                    new THREE.LineBasicMaterial({color: 0x000000, linewidth: 1})
-                );
-                c.add(edges);
-                cubies.push(c);
-                cube.add(c);
+                if (!(x === 0 && y === 0 && z === 0)) {
+                    let c = new THREE.Mesh(geometry, materials);
+                    c.position.set(x * 1.01, y * 1.01, z * 1.01);
+        
+                    let edges = new THREE.LineSegments(
+                        new THREE.EdgesGeometry( c.geometry ),
+                        new THREE.LineBasicMaterial({color: 0x000000, linewidth: 1})
+                    );
+                    c.add(edges);
+                    cubies.push(c);
+                    cube.add(c);
+                }
             }
         }
     }
-    scene.add(cube);
+    let m1 = 1.01;
+    let m2 = 1.5// + planeSize / 2;
+    // White
+    for (let z = -1; z < 2; z++) {
+        for (let x = -1; x < 2; x++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colWhite, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(x * m1, 1*m2 * m1, z * m1);
+            plane.rotateX(-Math.PI / 2);
+            planeCube.add(plane);
+            cubies.push(plane);
+        }
+    }
+    // Yellow
+    for (let z = -1; z < 2; z++) {
+        for (let x = -1; x < 2; x++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colYellow, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(x * m1, -1*m2 * m1, z * m1);
+            plane.rotateX(Math.PI / 2);
+            planeCube.add(plane);
+            cubies.push(plane);
+        }
+    }
+    // Green
+    for (let y = -1; y < 2; y++) {
+        for (let x = -1; x < 2; x++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colGreen, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(x * m1, y * m1, 1*m2 * m1);
+            planeCube.add(plane);
+            cubies.push(plane);
+        }
+    }
+    // Blue
+    for (let y = -1; y < 2; y++) {
+        for (let x = -1; x < 2; x++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colBlue, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(x * m1, y * m1, -1*m2 * m1);
+            planeCube.add(plane);
+            cubies.push(plane);
+        }
+    }
+    // Red
+    for (let y = -1; y < 2; y++) {
+        for (let z = -1; z < 2; z++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colRed, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(-1*m2 * m1, y * m1, z * m1);
+            plane.rotateY(-Math.PI / 2);
+            planeCube.add(plane);
+            cubies.push(plane);
+        }
+    }
+    // Orange
+    for (let y = -1; y < 2; y++) {
+        for (let z = -1; z < 2; z++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colOrange, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(1*m2 * m1, y * m1, z * m1);
+            plane.rotateY(-Math.PI / 2);
+            planeCube.add(plane);
+            cubies.push(plane);
+        }
+    }
+
+    //scene.add(cube);
+    scene.add(planeCube);
     
+    // Cubes for axises
     /* let redcube = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), red);
     redcube.position.set(3, 0, 0);
     scene.add(redcube);
@@ -83,7 +177,8 @@ function init() {
     
     camera.rotateX(-Math.PI / 4);
     
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setClearColor( 0x000000, 0 );
     renderer.setSize( window.innerWidth, window.innerHeight );
     $("body").append( renderer.domElement );
 
@@ -101,15 +196,22 @@ function animate() {
     renderer.render( scene, camera );
 };
 
+function applyScramble() {
+    let scr = getScrambleNxN(3);
+    for (let s of scr.split(" ")) {
+        applyMove(s);
+    }
+}
+
 function getTurn(e) {
     const key = keyBinds.indexOf(String.fromCharCode(e).toUpperCase());
     const turn = possibleMoves[key];
     if (turn) {
-        applyMoves(turn);
+        applyMove(turn);
     }
 }
 
-function applyMoves(turn) {
+function applyMove(turn) {
     switch (turn) {
         case "R":
             doR();
