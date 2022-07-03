@@ -12,8 +12,9 @@ function solveCube(scr) {
     if (isValidScramble(scr)) {
         w.postMessage(scr);
         w.onmessage = e => {
-            if (e.data.length === 2) {
+            if (e.data.length === 3) {
                 $("#solution").html("<h1>" + e.data[0] + "</h1>");
+                draw333Svg('#svgCube', e.data[2]);
             }
             else if (e.data[0] === 0) {
                 $("#searchDepth").html("<h1><b>Time interuption</b></h1>");

@@ -93,7 +93,7 @@ function solveEO() {
     }
     if (!timeInteruption) {
         solutionInfo += "<h1><b>EO:</b> " + solutionEO + "</h1>";
-        postMessage([solutionInfo, true]);
+        postMessage([solutionInfo, true, (cubeScramble + " " + solutionEO)]);
         solveDR();
     }
     else {
@@ -148,7 +148,7 @@ function solveDR() {
     }
     if (!timeInteruption) {
         solutionInfo += "<h1><b>DR:</b> " + solutionDR + "</h1>";
-        postMessage([solutionInfo, true]);
+        postMessage([solutionInfo, true, (cubeScramble + " " + solutionEO + " " + solutionDR)]);
         solveHTR();
     }
     else {
@@ -203,7 +203,7 @@ function solveHTR() {
     }
     if (!timeInteruption) {
         solutionInfo += "<h1><b>HTR:</b> " + solutionHTR + "</h1>";
-        postMessage([solutionInfo, true]);
+        postMessage([solutionInfo, true, (cubeScramble + " " + solutionEO + " " + solutionDR + " " + solutionHTR)]);
         solveFinal();
     }
     else {
@@ -259,7 +259,7 @@ function solveFinal() {
     if (!timeInteruption) {
         solution = [solutionEO, solutionDR, solutionHTR, solutionFinal].join(" ");
         solutionInfo += "<h1><b>Final moves:</b> " + solutionFinal + "</h1><br><h1><b>Solution:</b> " + solution + "</h1>";
-        postMessage([solutionInfo, false]);
+        postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
         postMessage(["Solved"]);
     }
     else {
