@@ -19,6 +19,7 @@ function solveCube(scr) {
             }
             else if (e.data[0] === 0) {
                 $("#searchDepth").html("<h1><b>Time interuption</b></h1>");
+                $("#inpScramble").prop('disabled', false);
             }
             else if (e.data[0] !== "Solved") {
                 $("#searchDepth").html("<h1>Searching at depth " + e.data[0] + "</h1>");
