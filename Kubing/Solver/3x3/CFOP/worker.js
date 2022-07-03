@@ -9,6 +9,8 @@ let triggers = [
 ];
 let movesF2L = ["U", "U'", "U2"].concat(triggers);
 
+let orientations = ["", "x2", "x", "x'", "z", "z'"];
+
 let u1 = "w", u2 = "w", u3 = "w", u4 = "w", u5 = "w", u6 = "w", u7 = "w", u8 = "w", u9 = "w", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
 let l1 = "o", l2 = "o", l3 = "o", l4 = "o", l5 = "o", l6 = "o", l7 = "o", l8 = "o", l9 = "o", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
 let f1 = "g", f2 = "g", f3 = "g", f4 = "g", f5 = "g", f6 = "g", f7 = "g", f8 = "g", f9 = "g", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
@@ -63,13 +65,15 @@ function solveCross() {
         }
         if (solLength === 1) {
             for (let m of arr) {
-                if (checkTime(start)) {
-                    timeInteruption = true;
-                    break solveLoop;
-                }
-                if (isCross(m)) {
-                    solutionCross = m;
-                    break solveLoop;
+                for (let o of orientations) {
+                    if (checkTime(start)) {
+                        timeInteruption = true;
+                        break solveLoop;
+                    }
+                    if (isCross(o + " " + m)) {
+                        solutionCross = o + " " + m;
+                        break solveLoop;
+                    }
                 }
             }
         }
@@ -79,14 +83,16 @@ function solveCross() {
                 let prevMove = m1.split(" ")[m1.split(" ").length - 1][0];
                 //let prevPrevMove = m1.split(" ")[m1.split(" ").length - 2] ? m1.split(" ")[m1.split(" ").length - 2][0] : "";
                 for (let m2 of moves.filter(m => {return m[0] !== prevMove})) {
-                    if (checkTime(start)) {
-                        timeInteruption = true;
-                        break solveLoop;
-                    }
                     tArr.push(m1 + " " + m2);
-                    if (isCross(m1 + " " + m2)) {
-                        solutionCross = m1 + " " + m2;
-                        break solveLoop;
+                    for (let o of orientations) {
+                        if (checkTime(start)) {
+                            timeInteruption = true;
+                            break solveLoop;
+                        }
+                        if (isCross(o + " " + m1 + " " + m2)) {
+                            solutionCross = o + " " + m1 + " " + m2;
+                            break solveLoop;
+                        }
                     }
                 }
             }
@@ -950,6 +956,90 @@ function resetCubeState() {
 }
 
 const plls = [
+    "R2 F2 R' B' R F2 R' B R'",
+    "R B' R F2 R' B R F2 R2",
+    "L U' R D2 R' U L' R U' L D2 L' U R'",
+    "F2 L2 B' F2 U B' R2 F D' B R2 B F'",
+    "F' U' F R2 D B' U B U' B D' R2",
+    "R2 D B' U B' U' B D' R2 F' U F",
+    "F U F' L2 D' B U' B' U B' D L2",
+    "L2 D' B U' B U B' D L2 F U' F'",
+    "L2 B2 F2 R2 D L2 B2 F2 R2",
+    "B2 L U L' B2 R D' R D R2",
+    "B2 R' U' R B2 L' D L' D' L2",
+    "R2 F2 U2 F2 U F2 R2 U2 R2 U F2 U2 R2",
+    "L2 F2 U2 F2 U' F2 L2 U2 L2 U' F2 U2 L2",
+    "R' U2 R U2 R' F R U R' U' R' F' R2",
+    "L U2 L' U2 L F' L' U' L U L F L2",
+    "R2 D B2 U' B2 R2 D' F2 U F2",
+    "R2 U B' F R2 B F' U R2",
+    "R2 U' B' F R2 B F' U' R2",
+    "R D2 F2 D R' D' F2 U2 L' U' L D2 U' R'",
+    "F2 U' F2 U' F2 U2 L' B' L F2 L' B L",
+    "B2 F2 U' L2 R2 D L R' D2 U2 L R'",
+  ];
+  
+  const olls = [
+    "B R' U2 R B2 L' B2 L U2 B'",
+    "B' R2 U' F U R U' F' R U B",
+    "F R' F' U' F U R U' F'",
+    "R L' B' L U2 L' B' R B' L R2",
+    "F' L F L' U2 F2 R' F' R F'",
+    "B L2 F' L' F L' B'",
+    "F' L' B L' B' L2 F",
+    "B F' L B' U2 B L F' L B' F2",
+    "R U' R2 D' L F' L' D R2 U R'",
+    "L' B2 R B R' B L",
+    "R B' R' B U2 R2 F R F' R",
+    "L F L' B' L U F' U' L' B",
+    "L' U' B' U B L",
+    "B' R' B L' B' R B L",
+    "R' U' R F' B2 D L D' F B2",
+    "L B D2 R2 U2 F R2 D2 L",
+    "L' B' U R' U' R B L",
+    "R B U B' R' B F2 D' L' D B' F2",
+    "L' U' L U' L' U2 L",
+    "R B L' B L B' U B' U' R'",
+    "R' U' F' U F U' F' U F R",
+    "B U L U' L' B'",
+    "F' U' F U F R' F' R",
+    "B U B' U B U' B' U B U2 B'",
+    "R B U' L U L' U B' U' R'",
+    "B U' F' U B' U' F",
+    "B R U R' B' F D R' D' F'",
+    "L' U' L B L' B' U B L B'",
+    "B' R' U2 F R' F' R2 B L U2 L'",
+    "L' B' L F' L' B2 L' B' L2 F",
+    "R B L' B L B2 R'",
+    "B' R B U2 L' B' R B' R2 B2 L",
+    "L' B' U' B U B' U' B U L",
+    "B F' U L U' L' B' U' F",
+    "L' B L2 B' U2 B' U2 B L'",
+    "B2 D' B U2 B' D B U2 B",
+    "L' B L F' L' B' L F",
+    "B L U L' U' L U L' U' B'",
+    "R B L' B L' D L D' L B2 R'",
+    "B U B' U' L' B' R B R' L",
+    "B R' U2 R U2 R B2 R' B",
+    "B' R U R2 U R2 U2 R' U B",
+    "B' R B U B' R' B R U' R'",
+    "B' R B U B' U' R' U B",
+    "B L F L' B2 L U F' U' L' B",
+    "R' F' U' F U R",
+    "R U B U2 B' U' B U B' R'",
+    "R U2 R2 U' R2 U' R2 U2 R",
+    "B L B' F U F' U' B L' B'",
+    "R B U B2 R B R2 U R U2 R'",
+    "R D' R2 U F' U2 F U' R2 D R'",
+    "L' B' R' U2 R U' B L F U2 F'",
+    "R B U B2 U' R' U R B R'",
+    "R U2 R2 F R F' R U2 R'",
+    "L' U' B2 D' B U B' D B2 L",
+    "L' B L B' U' B' U B",
+    "R L' U' B' U B L U R'",
+  ];
+
+/* const plls = [
     "R U' R U R U R U' R' U' R2", "R2 U R U R' U' R' U' R' U R'", "M2 U M2 U M' U2 M2 U2 M'", "M2 U M2 U2 M2 U M2",
     "x' R U' R' D R U R' D' R U R' D R U' R' D' x", "R' U R' U' y R' F' R2 U' R' U R' F R F", "F R U' R' U' R U R' F' R U R' U' R' F R F'", "R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'", "R' U R U' R' F' U' F R U R' F R' F' R U' R",
     "x R' U R' D2 R U' R' D2 R2 x'", "x R2 D2 R U R' D2 R U' R x'", "L U2 L' U2 L F' L' U' L U L F L2", "R' U2 R U2 R' F R U R' U' R' F' R2", "L' U' L F L' U' L U L F' L2 U L", "R U R' F' R U R' U' R' F R2 U' R'", "R U R' U' R' F R2 U' R' U' R U R' F'", "R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R", "R2 Uw R' U R' U' R Uw' R2 y' R' U R", "R' U' R y R2 Uw R' U R U' R Uw' R2", "R2 Uw' R U' R U R' Uw R2 y R U' R'", "R U R' y' R2 Uw' R U' R' U R' Uw R2",
@@ -967,7 +1057,7 @@ const olls = [
     "Fw' L' U' L U Fw", "Fw R U R' U' Fw'", "F R U R' U' F'", "R' U' R' F R F' U R", "F' L' U' L U L' U' L U F", "F R U R' U' R U R' U' F'", "Rw U' Rw2 U Rw2 U Rw2 U' Rw",
     "Rw' U Rw2 U' Rw2' U' Rw2 U Rw'", "Fw R U R' U' R U R' U' Fw'", "R U R' U R Dw' R U' R' F'", "Rw' U' R U' R' U R U' R' U2 Rw", "Rw U R' U R U' R' U R U2 Rw'",
     "R U2 R2 U' R U' R' U2 F R F'", "Rw U Rw' U R U' R' U R U' R' Rw U' Rw'", "R U R' U' M' U R U' Rw'"
-]
+] */
 
 const zbllsT = [
     "U' R U R' U R U2 R' U2 R' U' R U' R' U2 R", "R' U R U2 R' U' R U' R U R' U' R' U' R U R U' R'", "U2 R' U2 R U R' U R2 U2 R' U' R U' R'", "R U2 R' U' R U' R2 U2 R U R' U R", "R' U R U2 R' U' R U2 R' U' R U' R' U R", "U2 R U' R' U2 R U R' U2 R U R' U R U' R'", "R' U R2 U R' U R' U' R U' R' U' R U R U' R'", "U' R U R' U R U' R' U R' U' R2 U' R2 U2 R", "U2 R' U2 R U R' U R U' R' U' R U' R' U2 R", "R U2 R' U' R U' R' U R U R'U R U2 R'", "U' R' U' R2 U R2 U R2 U2 R' U R' U R ", "U' R U R2 U' R2 U' R2 U2 R U' R U' R'",
