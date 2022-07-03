@@ -10,6 +10,7 @@ function solveCube(scr) {
     $("#searchDepth").html("");
     
     if (isValidScramble(scr)) {
+        $("#inpScramble").prop('disabled', true);
         w.postMessage(scr);
         w.onmessage = e => {
             if (e.data.length === 3) {
@@ -24,6 +25,7 @@ function solveCube(scr) {
             }
             else {
                 $("#searchDepth").html("");
+                $("#inpScramble").prop('disabled', false);
             }
         }
     }
