@@ -1,10 +1,18 @@
 let moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"];
 let movesEO = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F2", "B2"];
 let triggers = [
+    "R U R'", "R U2 R'", "R U' R'", "F' U F", "F' U2 F", "F' U' F",
+    "R' U R", "R' U2 R", "R' U' R", "B U B'", "B U2 B'", "B U' B'",
+    "L' U L", "L' U2 L", "L' U' L", "F U F'", "F U2 F'", "F U' F'",
+    "L U L'", "L U2 L'", "L U' L'", "B' U B", "B' U2 B", "B' U' B",
+    "R' F R F'", "F R' F' R", "R B' R' B", "B' R B R'", "L F' L' F", "F' L F L'", "L' B L B'", "B L' B' L",
+];
+let triggersOld = [
     "S R S'", "S R' S'", "S' L' S", "S' L S",
     "R U R'", "R U' R'", "R U2 R'", "R' U R", "R' U' R", "R' U2 R",
     "L U L'", "L U' L'", "L U2 L'", "L' U L", "L' U' L", "L' U2 L",
     "F U F'", "F U' F'", "F U2 F'", "F' U F", "F' U' F", "F' U2 F",
+    "B U B'", "B U' B'", "B U2 B'", "B' U B", "B' U' B", "B' U2 B",
     "Fw R Fw'", "Fw R' Fw'", "Fw R2 Fw'", "Fw' L Fw", "Fw' L' Fw", "Fw' L2 Fw"
 ];
 let movesF2L = ["U", "U'", "U2"].concat(triggers);
@@ -115,6 +123,77 @@ function solveCross() {
 
 function solveF2L() {
     solutionF2L = "";
+    let num = getNumberOfSolvedF2L("");
+    
+    while (num < 4) {
+        let solLength = 1;
+        let start = Date.now();
+        let arr = movesF2L.slice();
+        let solF2L = "";
+        let tNum = num;
+
+        solveLoop : while (getNumberOfSolvedF2L(solutionF2L) <= tNum) {
+            if (checkTime(start)) {
+                timeInteruption = true;
+                break solveLoop;
+            }
+            if (solLength === 1) {
+                for (let m of arr) {
+                    if (checkTime(start)) {
+                        timeInteruption = true;
+                        break solveLoop;
+                    }
+                    if (getNumberOfSolvedF2L(m) > num) {
+                        num = getNumberOfSolvedF2L(m);
+                        console.log(num);
+                        solF2L = m;
+                        solutionInfo += "<h1><b>"+getNumberOfSolvedF2L(m)+". pair:</b> " + cleanAlg(solF2L) + "</h1>";
+                        solution = cleanAlg([solutionCross, solutionF2L, solF2L].join(" "));
+                        postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
+                        break solveLoop;
+                    }
+                }
+            }
+            else {
+                let tArr = arr.slice();
+                for (let m1 of arr) {
+                    for (let m2 of movesF2L) {
+                        if (checkTime(start)) {
+                            timeInteruption = true;
+                            break solveLoop;
+                        }
+                        tArr.push(m1 + " " + m2);
+                        if (getNumberOfSolvedF2L(m1 + " " + m2) > num) {
+                            num = getNumberOfSolvedF2L(m1 + " " + m2);
+                            solF2L = m1 + " " + m2;
+                            solutionInfo += "<h1><b>"+getNumberOfSolvedF2L(m1 + " " + m2)+". pair:</b> " + cleanAlg(solF2L) + "</h1>";
+                            solution = cleanAlg([solutionCross, solutionF2L, solF2L].join(" "));
+                            postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
+                            break solveLoop;
+                        }
+                    }
+                }
+                arr = tArr.slice();
+            }
+            solLength++;
+            postMessage([solLength]);
+        }
+
+        solutionF2L += solF2L + " ";
+    }
+    
+    if (!timeInteruption) {
+        solveOLL();
+    }
+    else {
+        postMessage([0]);
+    }
+}
+
+/*
+
+function solveF2L() {
+    solutionF2L = "";
     
     for (let f2lIndex = 0; f2lIndex < 4; f2lIndex++) {
         let solLength = 1;
@@ -175,6 +254,7 @@ function solveF2L() {
         postMessage([0]);
     }
 }
+*/
 
 function solveOLL() {
     let solLength = 1;
@@ -289,6 +369,16 @@ function isCross(sol) {
     );
 }
 
+function getNumberOfSolvedF2L(sol) {
+    let num = 0;
+    for (let i = 0; i < 4; i++) {
+        if (isF2L(sol, i)) {
+            num++;
+        }
+    }
+    return num;
+}
+
 function isF2L(sol, i) {
     resetCubeState();
     getCubeState([cubeScramble, solutionCross, solutionF2L, sol].join(" "));
@@ -330,6 +420,17 @@ function isF2L(sol, i) {
 
     switch (i) {
         case 0:
+            return isCross([solutionCross, solutionF2L, sol].join(" ")) && pairs[0];
+        case 1:
+            return isCross([solutionCross, solutionF2L, sol].join(" ")) && pairs[1];
+        case 2:
+            return isCross([solutionCross, solutionF2L, sol].join(" ")) && pairs[2];
+        case 3:
+            return isCross([solutionCross, solutionF2L, sol].join(" ")) && pairs[3];
+    }
+/* 
+    switch (i) {
+        case 0:
             return isCross([solutionCross, sol].join(" ")) && pairs[0];
         case 1:
             return isCross([solutionCross, solutionF2L, sol].join(" ")) && pairs[0] && pairs[1];
@@ -337,7 +438,7 @@ function isF2L(sol, i) {
             return isCross([solutionCross, solutionF2L, sol].join(" ")) && pairs[0] && pairs[1] && pairs[2];
         case 3:
             return isCross([solutionCross, solutionF2L, sol].join(" ")) && pairs[0] && pairs[1] && pairs[2] && pairs[3];
-    }
+    } */
 }
 
 function isOLL(sol) {
