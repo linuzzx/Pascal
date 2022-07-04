@@ -1,11 +1,11 @@
 let moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"];
 let movesEO = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F2", "B2"];
 let triggers = [
-    "R U R'", "R U2 R'", "R U' R'", "F' U F", "F' U2 F", "F' U' F",
-    "R' U R", "R' U2 R", "R' U' R", "B U B'", "B U2 B'", "B U' B'",
     "L' U L", "L' U2 L", "L' U' L", "F U F'", "F U2 F'", "F U' F'",
     "L U L'", "L U2 L'", "L U' L'", "B' U B", "B' U2 B", "B' U' B",
-    "R' F R F'", "F R' F' R", "R B' R' B", "B' R B R'", "L F' L' F", "F' L F L'", "L' B L B'", "B L' B' L",
+    "R U R'", "R U2 R'", "R U' R'", "F' U F", "F' U2 F", "F' U' F",
+    "R' U R", "R' U2 R", "R' U' R", "B U B'", "B U2 B'", "B U' B'",
+    "R' F R F'", "F R' F' R", "R B' R' B", "B' R B R'", "L F' L' F", "F' L F L'", "L' B L B'", "B L' B' L"
 ];
 let triggersOld = [
     "S R S'", "S R' S'", "S' L' S", "S' L S",
