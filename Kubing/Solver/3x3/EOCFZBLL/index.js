@@ -11,6 +11,7 @@ function solveCube(scr) {
     
     if (isValidScramble(scr)) {
         $("#inpScramble").prop('disabled', true);
+        $("#btnSolve").prop('disabled', true);
         w.postMessage(scr);
         w.onmessage = e => {
             if (e.data.length === 3) {
@@ -20,6 +21,7 @@ function solveCube(scr) {
             else if (e.data[0] === 0) {
                 $("#searchDepth").html("<h1><b>Time interuption</b></h1>");
                 $("#inpScramble").prop('disabled', false);
+                $("#btnSolve").prop('disabled', false);
             }
             else if (e.data[0] !== "Solved") {
                 $("#searchDepth").html("<h1>Searching at depth " + e.data[0] + "</h1>");
@@ -27,6 +29,7 @@ function solveCube(scr) {
             else {
                 $("#searchDepth").html("");
                 $("#inpScramble").prop('disabled', false);
+                $("#btnSolve").prop('disabled', false);
             }
         }
     }
