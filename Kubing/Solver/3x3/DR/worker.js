@@ -263,7 +263,8 @@ function solveFinal() {
     }
     if (!timeInteruption) {
         solution = [solutionEO, solutionDR, solutionHTR, solutionFinal].join(" ");
-        solutionInfo = "<h1><b>Final moves:</b> " + solutionFinal + "</h1><div><svg class='svgStep' id='svg_"+ step +"'></svg></div>" + "</h1><br><h1><b>Solution:</b> " + solution;
+        solutionInfo = "<h1><b>Final moves:</b> " + solutionFinal + "</h1><div><svg class='svgStep' id='svg_"+ step +"'></svg></div>"
+        + "</h1><br><h1><b>Solution:</b> " + solution + "<br><br>";
         step++;
         postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
         postMessage(["Solved"]);

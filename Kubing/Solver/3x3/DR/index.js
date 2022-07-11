@@ -18,6 +18,7 @@ function solveCube(scr) {
             if (e.data.length === 3) {
                 $("#solution").append("<h1>" + e.data[0] + "</h1>");
                 draw333Svg("#svg_" + step, e.data[2]);
+                scrollDown();
                 adjustSize();
                 step++;
             }
@@ -40,6 +41,11 @@ function solveCube(scr) {
 
 function isValidScramble(scr) {
     return scr.trim() !== "";
+}
+
+function scrollDown() {
+    const element = document.getElementsByTagName("body")[0].parentElement;
+    element.scrollTop = element.scrollHeight;
 }
 
 function adjustSize() {
