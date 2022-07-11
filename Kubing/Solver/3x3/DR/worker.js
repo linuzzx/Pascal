@@ -1,7 +1,7 @@
 //let moves = [[["U", "U'", "U2"], ["D", "D'", "D2"]], [["R", "R'", "R2"], ["L", "L'", "L2"]], [["F", "F'", "F2"], ["B", "B'", "B2"]]];
 let moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"];
-let movesEO = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F2", "B2"];
-let movesDR = ["U", "U'", "U2", "D", "D'", "D2", "R2", "L2", "F2", "B2"];
+let movesEO = ["F2", "B2", "U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2"];
+let movesDR = ["R2", "L2", "F2", "B2", "U", "U'", "U2", "D", "D'", "D2"];
 let movesHTR = ["U2", "D2", "R2", "L2", "F2", "B2"];
 
 let moveAxis = [["U", "D"], ["R", "L"], ["F", "B"]];
@@ -43,7 +43,7 @@ onmessage = e => {
 }
 
 function checkTime(start) {
-    const n = 10;
+    const n = 20;
     const timeLimit = n * 60 * 1000;
     return Date.now() - start >= timeLimit;
 }
@@ -408,8 +408,24 @@ function isHTR(sol) {
     let b = cubeState.slice(36, 45);
     let d = cubeState.slice(45, 54);
 
+    let cornersU = [cubeState[0], cubeState[2], cubeState[6], cubeState[8]];
+    let cornersD = [cubeState[45], cubeState[47], cubeState[51], cubeState[53]];
+
     return u.filter(c => {return c === cU || c === cD}).length === 9 && l.filter(c => {return c === cL || c === cR}).length === 9 && f.filter(c => {return c === cF || c === cB}).length === 9 &&
-        r.filter(c => {return c === cL || c === cR}).length === 9 && b.filter(c => {return c === cF || c === cB}).length === 9 && d.filter(c => {return c === cU || c === cD}).length === 9;
+        r.filter(c => {return c === cL || c === cR}).length === 9 && b.filter(c => {return c === cF || c === cB}).length === 9 && d.filter(c => {return c === cU || c === cD}).length === 9 &&
+        
+        cornersU.filter(c => {return c === cU}).length % 2 === 0 &&
+        ((cornersU[0] === cU && cornersU[1] == cU && cornersU[2] === cU && cornersU[3] == cU) ||
+
+        (cornersU[0] === cU && cornersU[1] == cU && cornersD[0] === cU && cornersD[1] == cU) ||
+        (cornersU[2] === cU && cornersU[3] == cU && cornersD[0] === cU && cornersD[1] == cU) ||
+        (cornersU[0] === cU && cornersU[1] == cU && cornersD[0] === cU && cornersD[1] == cU) ||
+        (cornersU[2] === cU && cornersU[3] == cU && cornersD[0] === cU && cornersD[1] == cU) ||
+
+        (cornersU[0] === cU && cornersU[3] == cU && cornersD[0] === cU && cornersD[3] == cU) ||
+        (cornersU[0] === cU && cornersU[3] == cU && cornersD[1] === cU && cornersD[2] == cU) ||
+        (cornersU[1] === cU && cornersU[2] == cU && cornersD[0] === cU && cornersD[3] == cU) ||
+        (cornersU[1] === cU && cornersU[2] == cU && cornersD[1] === cU && cornersD[2] == cU));
 }
 
 function isSolved(sol) {

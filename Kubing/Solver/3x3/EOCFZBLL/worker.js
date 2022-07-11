@@ -39,7 +39,7 @@ onmessage = e => {
 }
 
 function checkTime(start) {
-    const n = 10;
+    const n = 20;
     const timeLimit = n * 60 * 1000;
     return Date.now() - start >= timeLimit;
 }
