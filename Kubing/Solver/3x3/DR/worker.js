@@ -33,6 +33,8 @@ let solutionInfo = "";
 
 let timeInteruption = false;
 
+let step = 0;
+
 onmessage = e => {
     cubeScramble = e.data;
     getCubeState(cubeScramble);
@@ -92,7 +94,8 @@ function solveEO() {
         postMessage([solLength]);
     }
     if (!timeInteruption) {
-        solutionInfo += "<h1><b>EO:</b> " + solutionEO + "</h1>";
+        solutionInfo = "<h1><b>EO:</b> " + solutionEO + "</h1><div><svg class='svgStep' id='svg_"+ step +"'></svg></div>";
+        step++;
         postMessage([solutionInfo, true, (cubeScramble + " " + solutionEO)]);
         solveDR();
     }
@@ -147,7 +150,8 @@ function solveDR() {
         postMessage([solLength]);
     }
     if (!timeInteruption) {
-        solutionInfo += "<h1><b>DR:</b> " + solutionDR + "</h1>";
+        solutionInfo = "<h1><b>DR:</b> " + solutionDR + "</h1><div><svg class='svgStep' id='svg_"+ step +"'></svg></div>";
+        step++;
         postMessage([solutionInfo, true, (cubeScramble + " " + solutionEO + " " + solutionDR)]);
         solveHTR();
     }
@@ -202,7 +206,8 @@ function solveHTR() {
         postMessage([solLength]);
     }
     if (!timeInteruption) {
-        solutionInfo += "<h1><b>HTR:</b> " + solutionHTR + "</h1>";
+        solutionInfo = "<h1><b>HTR:</b> " + solutionHTR + "</h1><div><svg class='svgStep' id='svg_"+ step +"'></svg></div>";
+        step++;
         postMessage([solutionInfo, true, (cubeScramble + " " + solutionEO + " " + solutionDR + " " + solutionHTR)]);
         solveFinal();
     }
@@ -258,7 +263,8 @@ function solveFinal() {
     }
     if (!timeInteruption) {
         solution = [solutionEO, solutionDR, solutionHTR, solutionFinal].join(" ");
-        solutionInfo += "<h1><b>Final moves:</b> " + solutionFinal + "</h1><br><h1><b>Solution:</b> " + solution + "</h1>";
+        solutionInfo = "<h1><b>Final moves:</b> " + solutionFinal + "</h1><div><svg class='svgStep' id='svg_"+ step +"'></svg></div>" + "</h1><br><h1><b>Solution:</b> " + solution;
+        step++;
         postMessage([solutionInfo, true, (cubeScramble + " " + solution)]);
         postMessage(["Solved"]);
     }

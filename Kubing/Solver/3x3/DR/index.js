@@ -8,6 +8,7 @@ function solveCube(scr) {
     let w = new Worker("worker.js");
     $("#solution").html("");
     $("#searchDepth").html("");
+    let step = 0;
     
     if (isValidScramble(scr)) {
         $("#inpScramble").prop('disabled', true);
@@ -15,8 +16,10 @@ function solveCube(scr) {
         w.postMessage(scr);
         w.onmessage = e => {
             if (e.data.length === 3) {
-                $("#solution").html("<h1>" + e.data[0] + "</h1>");
-                draw333Svg('#svgCube', e.data[2]);
+                $("#solution").append("<h1>" + e.data[0] + "</h1>");
+                draw333Svg("#svg_" + step, e.data[2]);
+                adjustSize();
+                step++;
             }
             else if (e.data[0] === 0) {
                 $("#searchDepth").html("<h1><b>Time interuption</b></h1>");
@@ -40,7 +43,7 @@ function isValidScramble(scr) {
 }
 
 function adjustSize() {
-    $("#svgCube").height(3 * $("#svgCube").width() / 4);
+    $("svg").height(3 * $("#svgCube").width() / 4);
     $("#inpScramble").css("font-size", "3vh");
     $("#btnSolve").css("font-size", "3vh");
 }

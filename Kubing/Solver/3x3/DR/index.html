@@ -10,11 +10,11 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1><input type="text" placeholder="Scramble" id="inpScramble" oninput="draw333Svg('#svgCube', $(this).val())"></h1>
+    <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="draw333Svg('#svgCube', $(this).val())"></h1>
     <div><svg id="svgCube"></svg></div>
     <button id="btnSolve" onclick="solveCube($('#inpScramble').val())">Solve</button>
     <div id="solution"></div>
     <div id="searchDepth"></div>
 </body>
-<script src="index.js"></script>
+<script src="index.js" defer></script>
 </html>
