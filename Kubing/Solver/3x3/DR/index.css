@@ -24,8 +24,12 @@ body {
     margin-top: 1%;
 }
 
+h1 {
+    text-align: center;
+}
+
 #inpScramble {
-    width: 80vw;
+    width: 95vw;
 }
 
 #solution {
