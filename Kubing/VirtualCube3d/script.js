@@ -340,12 +340,10 @@ function doMove(cubie, xyz, angle) {
     let axis = xyz === "x" ? xAxis : xyz === "y" ? yAxis : zAxis;
     let euler = calcRotationAroundAxis(xyz, angle);
     
-    /*if (anim) {
+    if (anim) {
         let tempCube = new THREE.Object3D();
-        let cub = cubie.clone()
-        tempCube.add(clone);
-
-        tempCube.rotateOnWorldAxis(xyz,)
+        scene.add(tempCube)
+        tempCube.add(cubie);
         
         gsap.to(tempCube.rotation, {
             duration: .25,
@@ -356,10 +354,10 @@ function doMove(cubie, xyz, angle) {
         //planeCube.add(cubie);
         //tempCube.removeFromParent();
     }
-    else {*/
+    else {
         cubie.position.applyEuler(euler);
         cubie.rotateOnWorldAxis(axis, angle);
-    //}
+    }
 }
 
 function doR() {
