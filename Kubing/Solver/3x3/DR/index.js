@@ -5,6 +5,7 @@ $(() => {
 });
 
 function solveCube(scr) {
+    let start = Date.now();
     let w = new Worker("worker.js");
     $("#solution").html("");
     $("#searchDepth").html("");
@@ -13,6 +14,7 @@ function solveCube(scr) {
     if (isValidScramble(scr)) {
         $("#inpScramble").prop('disabled', true);
         $("#btnSolve").prop('disabled', true);
+        $("#btnScramble").prop('disabled', true);
         w.postMessage(scr);
         w.onmessage = e => {
             if (e.data.length === 3) {
@@ -26,14 +28,16 @@ function solveCube(scr) {
                 $("#searchDepth").html("<h1><b>Time interuption</b></h1>");
                 $("#inpScramble").prop('disabled', false);
                 $("#btnSolve").prop('disabled', false);
+                $("#btnScramble").prop('disabled', false);
             }
             else if (e.data[0] !== "Solved") {
                 $("#searchDepth").html("<h1>Searching at depth " + e.data[0] + "</h1>");
             }
             else {
-                $("#searchDepth").html("");
+                $("#searchDepth").html("<h1>" + (Date.now() - start) + " ms</h1>");
                 $("#inpScramble").prop('disabled', false);
                 $("#btnSolve").prop('disabled', false);
+                $("#btnScramble").prop('disabled', false);
             }
         }
     }
@@ -51,5 +55,5 @@ function scrollDown() {
 function adjustSize() {
     $("svg").height(3 * $("#svgCube").width() / 4);
     $("#inpScramble").css("font-size", "3vh");
-    $("#btnSolve").css("font-size", "3vh");
+    $("button").css("font-size", "3vh");
 }

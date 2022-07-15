@@ -12,6 +12,7 @@
 <body>
     <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="draw333Svg('#svgCube', $(this).val())"></h1>
     <div><svg id="svgCube"></svg></div>
+    <button id="btnScramble" onclick="$('#inpScramble').val(getScrambleNxN(3)); draw333Svg('#svgCube', $('#inpScramble').val())">Scramble</button>
     <button id="btnSolve" onclick="solveCube($('#inpScramble').val())">Solve</button>
     <div id="solution"></div>
     <div id="searchDepth"></div>
