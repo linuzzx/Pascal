@@ -1,6 +1,11 @@
 $(() => {
     draw333Svg('#svgCube', $("#inpScramble").val());
 
+    $("#inpEO").val(parseInt(localStorage.getItem("inpEO")) || 1);
+    $("#inpDR").val(parseInt(localStorage.getItem("inpDR")) || 1);
+    $("#inpHTR").val(parseInt(localStorage.getItem("inpHTR")) || 1);
+    updateTotalSolutions();
+
     adjustSize();
 });
 
@@ -24,8 +29,19 @@ function solveCube(scr) {
                 $("#searchDepth").html("<h1>" + e.data[1] + "</h1>");
             }
             else if (e.data.length === 3) {
+                let eo = e.data[2][0];
+                let dr = e.data[2][1];
+                let htr = e.data[2][2];
+                let final = e.data[2][3];
+                eo !== "" ? $("#solution").append("<h1><b>EO:</b> " + eo + "</h1><div><svg class='svgStep' id='svg_eo'></svg></div>") : "";
+                eo !== "" ? draw333Svg("#svg_eo", [scr, eo].filter(s => {return s !== ""}).join(" ")) : "";
+                dr !== "" ? $("#solution").append("<h1><b>DR:</b> " + dr + "</h1><div><svg class='svgStep' id='svg_dr'></svg></div>") : "";
+                dr !== "" ? draw333Svg("#svg_dr", [scr, eo, dr].filter(s => {return s !== ""}).join(" ")) : "";
+                htr !== "" ? $("#solution").append("<h1><b>HTR:</b> " + htr + "</h1><div><svg class='svgStep' id='svg_htr'></svg></div>") : "";
+                htr !== "" ? draw333Svg("#svg_htr", [scr, eo, dr, htr].filter(s => {return s !== ""}).join(" ")) : "";
+                final !== "" ? $("#solution").append("<h1><b>Final moves:</b> " + final + "</h1><div><svg class='svgStep' id='svg_final'></svg></div>") : "";
+                final !== "" ? draw333Svg("#svg_final", [scr, eo, dr, htr, final].filter(s => {return s !== ""}).join(" ")) : "";
                 $("#solution").append("<h1>" + e.data[0] + "</h1>");
-                draw333Svg("#svg_" + step, e.data[2]);
                 scrollDown();
                 adjustSize();
                 step++;
@@ -59,6 +75,7 @@ function changeSolValues() {
     let eo = $("#inpEO");
     let dr = $("#inpDR");
     let htr = $("#inpHTR");
+
     if ($(eo).val() === "") {
         $(eo).val(1);
     }
@@ -69,8 +86,19 @@ function changeSolValues() {
         $(htr).val(1);
     }
 
-    let solutions = $(eo).val() * $(dr).val() * $(htr).val();
+    localStorage.setItem("inpEO", $(eo).val());
+    localStorage.setItem("inpDR", $(dr).val());
+    localStorage.setItem("inpHTR", $(htr).val());
+
+    updateTotalSolutions();
+}
+
+function updateTotalSolutions() {
+    let eo = $("#inpEO");
+    let dr = $("#inpDR");
+    let htr = $("#inpHTR");
     
+    let solutions = $(eo).val() * $(dr).val() * $(htr).val();
     $("#totalSolutions").text(solutions + solutions === 1 ? solutions + " solution" : solutions + " solutions");
 }
 
