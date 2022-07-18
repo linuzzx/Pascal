@@ -12,6 +12,14 @@
 <body>
     <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="draw333Svg('#svgCube', $(this).val())"></h1>
     <div><svg id="svgCube"></svg></div>
+    <h2>Number of solutions:</h2>
+    <table>
+        <tr><td>EO</td><td>DR</td><td>HTR</td></tr>
+        <tr><td><input type="number" id="inpEO" value="1" min="1" max="20" step="1" oninput="changeSolValues()"></td>
+            <td><input type="number" id="inpDR" value="1" min="1" max="20" step="1" oninput="changeSolValues()"></td>
+            <td><input type="number" id="inpHTR" value="1" min="1" max="20" step="1" oninput="changeSolValues()"></td></tr>
+    </table>
+    <h2 id="totalSolutions">1 solution</h2>
     <button id="btnScramble" onclick="$('#inpScramble').val(getScrambleNxN(3)); draw333Svg('#svgCube', $('#inpScramble').val())">Scramble</button>
     <button id="btnSolve" onclick="solveCube($('#inpScramble').val())">Solve</button>
     <div id="solution"></div>
