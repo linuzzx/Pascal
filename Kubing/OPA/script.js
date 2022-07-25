@@ -1,13 +1,17 @@
 let scramble = "";
 
 $(() => {
-    scramble = getScrambleNxN(4);
-    $("#scramble").text(scramble);
-    $("#answer").text("");
+    restart();
 });
 
+function restart() {
+    scramble = getScramble4x4(30);
+    $("#scramble").text(scramble);
+    $("#answer").text("");
+}
+
 function scr() {
-    let scr = getScramble4x4();
+    let scr = getScramble4x4(15 + Math.round(Math.random() * 5));
     scramble += " " + scr;
     $("#scramble").text(scr);
     $("#answer").text("");
@@ -26,13 +30,12 @@ function checkParity() {
     $("#answer").text(answer);
 }
 
-function getScramble4x4() {
+function getScramble4x4(num) {
     let n = 4;
     let scr = "";
     let movesExtra = ["", "'", "2"];
     let axises = [["U","D"], ["F","B"], ["R","L"]];
     let movesAxis = [["",""]];
-    let num = 10;
 
     for (let i = 4; i <= n; i++) {
         let nW = Math.floor(i/2) === 2 ? "" : Math.floor(i/2);
