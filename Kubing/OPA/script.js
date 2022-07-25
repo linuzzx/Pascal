@@ -1,15 +1,19 @@
+let scramble = "";
+
 $(() => {
-    $("#scramble").text(getScrambleNxN(4));
+    scramble = getScrambleNxN(4);
+    $("#scramble").text(scramble);
     $("#answer").text("");
 });
 
 function scr() {
-    $("#scramble").text(getScramble4x4());
+    let scr = getScramble4x4();
+    scramble += " " + scr;
+    $("#scramble").text(scr);
     $("#answer").text("");
 }
 
 function checkParity() {
-    let scramble = $("#scramble").text();
     let qwt = 0;
     for (let m of scramble.split(" ")) {
         if (m.includes("w") && !m.includes("2")) {
