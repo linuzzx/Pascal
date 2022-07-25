@@ -5,7 +5,7 @@ $(() => {
 });
 
 function restart() {
-    scramble = getScramble4x4(30);
+    scramble = getScramble4x4(45);
     $("#scramble").text(scramble);
     $("#answer").text("");
 }
