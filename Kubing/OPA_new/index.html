@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OLL Parity Avoidance Trainer</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="settings">
+        <label for="cbTimer">Timer </label>
+        <input type="checkbox" id="cbTimer" onchange="toggleTimer(this.checked)">
+    </div>
+    <div id="grid">
+        <div>
+            <table>
+                <th>#</th><th>Time</th>
+            </table>
+        </div>
+        <div id="content">
+            <h1 id="scramble"></h1><br>
+            <button id="btnScramble" class="btn btn-secondary" onclick="scr()">Scramble</button>
+            <button id="btnCheck" class="btn btn-secondary" onclick="checkParity()">Check</button>
+            <button id="btnRestart" class="btn btn-secondary" onclick="restart()">Restart</button><br><br>
+            <h1 id="timer">0.00</h1><br><br>
+            <h1 id="answer"></h1>
+        </div>
+        <div></div>
+    </div>
+</body>
+</html>
