@@ -54,9 +54,6 @@ button {
     text-align: center;
 }
 
-#line {
+#svg {
     position: absolute;
-    top: 0;
-    left: 0;
-    background: red;
 }

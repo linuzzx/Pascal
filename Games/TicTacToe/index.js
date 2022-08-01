@@ -12,6 +12,8 @@ $(function() {
     $("input[name=players][value='"+localStorage.getItem("selectedPlayers")+"']").prop("checked",true);
     $("input[name=first][value='"+localStorage.getItem("selectedFirst")+"']").prop("checked",true);
     $("input[name=difficulty][value='"+localStorage.getItem("selectedDifficulty")+"']").prop("checked",true);
+
+    $("#svg").css("display", "none");
     adjustSize();
 });
 
@@ -84,6 +86,7 @@ function reset() {
         $(b).text("");
     }
     $("#winner").text("");
+    $("#svg").css("display", "none");
 }
 
 function getBoardValues() {
@@ -262,6 +265,10 @@ function adjustSize() {
     $("#btnStart").css("font-size", fontSize * 2 / 3);
     $("#board button").css("font-size", fontSize);
 
+    $("#svg").css("width", size);
+    $("#svg").css("height", size);
+    $("#svg").position($("#board").position()[0], $("#board").position()[1]);
+
     if (finished) {
         drawLine(startEnd);
     }
@@ -279,52 +286,61 @@ function printBoard() {
 function drawLine(stend) {
     const start = stend[0];
     const end = stend[1];
-    
-    const startButton = $("#btn"+start);
-    const endButton = $("#btn"+end);
-    const buttonSize = $("#btn"+start).height();
-    const line = $("#line");
-    const sTop = startButton.position().top;
-    const eTop = endButton.position().top;
-    const sLeft = startButton.position().left;
-    const eLeft = endButton.position().left;
 
-    let rotation = 0;//sTop < eTop && sLeft < eLeft ? 45 : (sTop < eTop && sLeft > eLeft ? 315 : (sTop < eTop && sLeft === eLeft ? 90 : 0));
-    let top = 0;//(sTop < eTop ? sTop : eTop) + 0.5*buttonSize - 0.5*$(line).height();
-    let left = 0;//(sLeft < eLeft ? sLeft : (sLeft > eLeft ? eLeft : (sLeft+eLeft)/2)) + 0.5*buttonSize - 0.5*$(line).height();
-    let width = 0;//sTop === eTop || sLeft === eLeft ? 2*buttonSize : 4*Math.sqrt(buttonSize*buttonSize*0.5);
-    let height = buttonSize / 10;
-    const borderRadius = buttonSize / 4;
+    let xyStart = getXY(start);
+    let xyEnd = getXY(end);
+    let x1 = xyStart[0];
+    let y1 = xyStart[1];
+    let x2 = xyEnd[0];
+    let y2 = xyEnd[1];
 
-    if (start === 0 && end === 2 || start === 3 && end === 5 || start === 6 && end === 8) {
-        top = sTop + 0.5*buttonSize;
-        left = sLeft + 0.5*buttonSize;
-        width = 2*buttonSize;
-    }
-    else if (start === 0 && end === 6 || start === 1 && end === 7 || start === 2 && end === 8) {
-        top = sTop + 0.5*buttonSize;
-        left = sLeft + 0.5*buttonSize;
-        width = height;
-        height = 2*buttonSize;
-    }
-    else if (start === 0 && end === 8) {
-        top = $("#btn4").position().top + 0.5*buttonSize;
-        left = sLeft + 0.5*buttonSize;
-        width = 4*Math.sqrt(buttonSize*buttonSize*0.5);
-        rotation = 45;
-    }
-    else if (start === 2 && end === 6) {
-        top = $("#btn4").position().top + 0.5*buttonSize;
-        left = eLeft + 0.5*buttonSize;
-        width = 4*Math.sqrt(buttonSize*buttonSize*0.5);
-        rotation = 315;
+    $("svg").empty();
+
+    let svgLine = document.createElementNS('http://www.w3.org/2000/svg', "line");
+    $(svgLine).attr("x1", x1);
+    $(svgLine).attr("y1", y1);
+    $(svgLine).attr("x2", x2);
+    $(svgLine).attr("y2", y2);
+    $(svgLine).attr("style", "stroke:red;stroke-width:10");
+
+    $("#svg").append(svgLine);
+    $("#svg").css("display", "block");
+}
+
+function getXY(i) {
+    let btnSize = $("#board").height() / 3;
+
+    let xy;
+
+    switch (i) {
+        case 0:
+            xy = [0, 0];
+            break;
+        case 1:
+            xy = [1, 0];
+            break;
+        case 2:
+            xy = [2, 0];
+            break;
+        case 3:
+            xy = [0, 1];
+            break;
+        case 4:
+            xy = [1, 1];
+            break;
+        case 5:
+            xy = [2, 1];
+            break;
+        case 6:
+            xy = [0, 2];
+            break;
+        case 7:
+            xy = [1, 2];
+            break;
+        case 8:
+            xy = [2, 2];
+            break;
     }
 
-    $(line).css("top",top);
-    $(line).css("left",left);
-    $(line).css("width",width);
-    $(line).css("height",height);
-    $(line).css("border-radius",borderRadius);
-    $(line).css("transform","rotate("+rotation+"deg)");
-    $(line).css("-webkit-transform","rotate("+rotation+"deg)");
+    return [xy[0] * btnSize + 0.5 * btnSize, xy[1] * btnSize + 0.5 * btnSize];
 }
