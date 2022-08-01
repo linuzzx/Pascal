@@ -301,6 +301,7 @@ function drawLine(stend) {
     $(svgLine).attr("y1", y1);
     $(svgLine).attr("x2", x2);
     $(svgLine).attr("y2", y2);
+    $(svgLine).attr("stroke-linecap", "round");
     $(svgLine).attr("style", "stroke:red;stroke-width:10");
 
     $("#svg").append(svgLine);
