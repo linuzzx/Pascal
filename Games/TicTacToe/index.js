@@ -99,14 +99,18 @@ function getBoardValues() {
 
 function cpuMakeMove() {
     if (difficulty === 0) {
-        cpuRandom();
+        cpuEasy();
     }
-    else {
-        cpuMiniMax();
+    else if (difficulty === 1) {
+        cpuMedium();
+    }
+    else if (difficulty === 2) {
+        cpuHard();
     }
 }
 
-function cpuRandom() {
+function cpuEasy() {
+    // Random moves
     let possibleMoves = [];
     for (let b of $("#board button")) {
         if ($(b).text() === "") {
@@ -114,14 +118,41 @@ function cpuRandom() {
         }
     }
     setTimeout(() => {
-        chooseTile(false, $(possibleMoves[Math.floor(Math.random()*possibleMoves.length)]));
+        chooseTile(false, possibleMoves[Math.floor(Math.random()*possibleMoves.length)]);
         waiting = false;
     }, 250);
 }
 
-function cpuMiniMax() {
-    //Fjern denne
-    //cpuRandom();
+function cpuMedium() {
+    // Prevent player from winning and try to win
+    let possibleMoves = [];
+    let btnBoard = $("#board button");
+    let valBoard = [];
+
+    for (let i = 0; i < 9; i++) {
+        valBoard.push($("#btn" + i).text());
+    }
+
+    let winMove = btnBoard[mediumThink(valBoard, true)];
+    let bestMove = winMove ? winMove : btnBoard[mediumThink(valBoard, false)];
+
+    if (!bestMove) {
+        for (let b of $("#board button")) {
+            if ($(b).text() === "") {
+                possibleMoves.push(b);
+            }
+        }
+        bestMove = possibleMoves[Math.floor(Math.random()*possibleMoves.length)];
+    }
+
+    setTimeout(() => {
+        chooseTile(false, bestMove);
+        waiting = false;
+    }, 250);
+}
+
+function cpuHard() {
+    // Check tables
     let possibleMoves = [];
     let tempBoard = $("#board button");
     let ai = first === 0? "X": "O";
@@ -145,10 +176,53 @@ function cpuMiniMax() {
     }
 }
 
+function oppPlayer(p) {
+    if (p === "X") {
+        return "O";
+    }
+    else if (p === "O") {
+        return "X";
+    }
+}
+
 function minimax(board, depth, isMaximizing) {
     let score = 0;
 
     return score;
+}
+
+function mediumThink(b, win) {
+    let bestMove = -1;
+    let p = win ? moves[index % 2] : oppPlayer(moves[index % 2]);
+
+    if (b[0] === "" && (b[1] === b[2] && b[1] === p || b[3] === b[6] && b[3] === p || b[4] === b[8] && b[4] === p)) {
+        bestMove = 0;
+    }
+    else if (b[1] === "" && (b[0] === b[2] && b[0] === p || b[4] === b[7] && b[4] === p)) {
+        bestMove = 1;
+    }
+    else if (b[2] === "" && (b[0] === b[1] && b[0] === p || b[5] === b[8] && b[5] === p || b[4] === b[6] && b[4] === p)) {
+        bestMove = 2;
+    }
+    else if (b[3] === "" && (b[0] === b[6] && b[0] === p || b[4] === b[5] && b[4] === p)) {
+        bestMove = 3;
+    }
+    else if (b[4] === "" && (b[1] === b[7] && b[1] === p || b[3] === b[5] && b[3] === p || b[0] === b[8] && b[0] === p || b[2] === b[6] && b[2] === p)) {
+        bestMove = 4;
+    }
+    else if (b[5] === "" && (b[2] === b[8] && b[2] === p || b[3] === b[4] && b[3] === p)) {
+        bestMove = 5;
+    }
+    else if (b[6] === "" && (b[0] === b[3] && b[0] === p || b[7] === b[8] && b[7] === p || b[4] === b[2] && b[4] === p)) {
+        bestMove = 6;
+    }
+    else if (b[7] === "" && (b[6] === b[8] && b[6] === p || b[1] === b[4] && b[1] === p)) {
+        bestMove = 7;
+    }
+    else if (b[8] === "" && (b[6] === b[7] && b[6] === p || b[2] === b[5] && b[2] === p || b[4] === b[0] && b[4] === p)) {
+        bestMove = 8;
+    }
+    return bestMove;
 }
 
 function isGameOver(b) {
