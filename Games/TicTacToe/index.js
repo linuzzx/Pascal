@@ -1,4 +1,4 @@
-let boardTiles = [2,2,2,2,2,2,2,2,2];
+let boardTiles = ["","","","","","","","",""];
 const moves = ["X","O",""];
 let index = 0;
 let players = 0;
@@ -133,8 +133,8 @@ function cpuMedium() {
         valBoard.push($("#btn" + i).text());
     }
 
-    let winMove = btnBoard[mediumThink(valBoard, true)];
-    let bestMove = winMove ? winMove : btnBoard[mediumThink(valBoard, false)];
+    let winMove = btnBoard[thinkMedium(valBoard, true)];
+    let bestMove = winMove ? winMove : btnBoard[thinkMedium(valBoard, false)];
 
     if (!bestMove) {
         for (let b of $("#board button")) {
@@ -153,27 +153,14 @@ function cpuMedium() {
 
 function cpuHard() {
     // Check tables
-    let possibleMoves = [];
-    let tempBoard = $("#board button");
-    let ai = first === 0? "X": "O";
-    let i = 0;
-    let score = 0;
-    let bestScore = 0;
-    let nextMove;
+    let btnBoard = $("#board button");
 
-    for (let b of tempBoard) {
-        if ($(b).text() === "") {
-            $(b).text() = ai;
-            //minimax
-            score = minimax(tempBoard, 0, false);
-            $(b).text() = "";
-        }
-        i++;
-    }
-    console.log(possibleMoves);
-    for (let p of possibleMoves) {
+    let bestMove = btnBoard[thinkHard(btnBoard, moves[index % 2])];
 
-    }
+    setTimeout(() => {
+        chooseTile(false, bestMove);
+        waiting = false;
+    }, 250);
 }
 
 function oppPlayer(p) {
@@ -185,13 +172,7 @@ function oppPlayer(p) {
     }
 }
 
-function minimax(board, depth, isMaximizing) {
-    let score = 0;
-
-    return score;
-}
-
-function mediumThink(b, win) {
+function thinkMedium(b, win) {
     let bestMove = -1;
     let p = win ? moves[index % 2] : oppPlayer(moves[index % 2]);
 
@@ -225,46 +206,52 @@ function mediumThink(b, win) {
     return bestMove;
 }
 
+function thinkHard(b, p) {
+    let board = b.slice();
+    let queue = [];
+
+    for (let b1 of board.filter(b2 => {return $(b2).text()})) {
+        queue.push(b1);
+    }
+    if (!isGameOver(board)) {
+        for (let q of queue) {
+            thinkHard(q);
+        }
+    }
+}
+
 function isGameOver(b) {
     let winner = "";
 
-    if (b[0] === b[1] && b[0] === b[2] && b[0] !== 2) {
+    if (b[0] === b[1] && b[0] === b[2] && b[0] !== "") {
         winner = moves[b[0]];
-        startEnd = [0,2];
     }
-    else if (b[3] === b[4] && b[3] === b[5] && b[3] !== 2) {
+    else if (b[3] === b[4] && b[3] === b[5] && b[3] !== "") {
         winner = moves[b[3]];
-        startEnd = [3,5];
     }
-    else if (b[6] === b[7] && b[6] === b[8] && b[6] !== 2) {
+    else if (b[6] === b[7] && b[6] === b[8] && b[6] !== "") {
         winner = moves[b[6]];
-        startEnd = [6,8];
     }
-    else if (b[0] === b[3] && b[0] === b[6] && b[0] !== 2) {
+    else if (b[0] === b[3] && b[0] === b[6] && b[0] !== "") {
         winner = moves[b[0]];
-        startEnd = [0,6];
     }
-    else if (b[1] === b[4] && b[1] === b[7] && b[1] !== 2) {
+    else if (b[1] === b[4] && b[1] === b[7] && b[1] !== "") {
         winner = moves[b[1]];
-        startEnd = [1,7];
     }
-    else if (b[2] === b[5] && b[2] === b[8] && b[2] !== 2) {
+    else if (b[2] === b[5] && b[2] === b[8] && b[2] !== "") {
         winner = moves[b[2]];
-        startEnd = [2,8];
     }
-    else if (b[0] === b[4] && b[0] === b[8] && b[0] !== 2) {
+    else if (b[0] === b[4] && b[0] === b[8] && b[0] !== "") {
         winner = moves[b[0]];
-        startEnd = [0,8];
     }
-    else if (b[2] === b[4] && b[2] === b[6] && b[2] !== 2) {
+    else if (b[2] === b[4] && b[2] === b[6] && b[2] !== "") {
         winner = moves[b[2]];
-        startEnd = [2,6];
     }
     else if (!b.includes("")) {
         winner = "Draw";
     }
 
-    return winner !== "";
+    return winner;
 }
 
 function checkIfWon(b) {
@@ -272,35 +259,35 @@ function checkIfWon(b) {
     
     let winner = "";
 
-    if (b[0] === b[1] && b[0] === b[2] && b[0] !== 2) {
+    if (b[0] === b[1] && b[0] === b[2] && b[0] !== "") {
         winner = moves[b[0]];
         startEnd = [0,2];
     }
-    else if (b[3] === b[4] && b[3] === b[5] && b[3] !== 2) {
+    else if (b[3] === b[4] && b[3] === b[5] && b[3] !== "") {
         winner = moves[b[3]];
         startEnd = [3,5];
     }
-    else if (b[6] === b[7] && b[6] === b[8] && b[6] !== 2) {
+    else if (b[6] === b[7] && b[6] === b[8] && b[6] !== "") {
         winner = moves[b[6]];
         startEnd = [6,8];
     }
-    else if (b[0] === b[3] && b[0] === b[6] && b[0] !== 2) {
+    else if (b[0] === b[3] && b[0] === b[6] && b[0] !== "") {
         winner = moves[b[0]];
         startEnd = [0,6];
     }
-    else if (b[1] === b[4] && b[1] === b[7] && b[1] !== 2) {
+    else if (b[1] === b[4] && b[1] === b[7] && b[1] !== "") {
         winner = moves[b[1]];
         startEnd = [1,7];
     }
-    else if (b[2] === b[5] && b[2] === b[8] && b[2] !== 2) {
+    else if (b[2] === b[5] && b[2] === b[8] && b[2] !== "") {
         winner = moves[b[2]];
         startEnd = [2,8];
     }
-    else if (b[0] === b[4] && b[0] === b[8] && b[0] !== 2) {
+    else if (b[0] === b[4] && b[0] === b[8] && b[0] !== "") {
         winner = moves[b[0]];
         startEnd = [0,8];
     }
-    else if (b[2] === b[4] && b[2] === b[6] && b[2] !== 2) {
+    else if (b[2] === b[4] && b[2] === b[6] && b[2] !== "") {
         winner = moves[b[2]];
         startEnd = [2,6];
     }
