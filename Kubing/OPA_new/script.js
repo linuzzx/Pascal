@@ -55,7 +55,7 @@ function initActions() {
         else if (e.which === 32 && !timing && showingParity) {
             scr();
         }
-        else if (e.which === 27) {
+        else if (e.which === 27 && !guessing && showingParity) {
             restart();
         }
     });
@@ -92,7 +92,7 @@ function scr() {
 
 function guessParity() {
     guessing = true;
-    $("#answer").text("Press [space] if even targets, [backspace] if odd targets.");
+    $("#answer").text("Press [spacebar] if even targets, [backspace] if odd targets.");
 }
 
 function checkParity() {
@@ -112,6 +112,8 @@ function checkParity() {
 
     timeList.push(curTime + "*" + (answer === guess));
     localStorage.setItem("timeListOPA", timeList.join(";"));
+
+    $("#scramble").text("[spacebar] to scramble on top of previous scramble, [escape] for new scramble")
 
     addToList(curTime, answer === guess);
 }
