@@ -133,6 +133,7 @@ function clearList() {
         localStorage.removeItem("timeListOPA");
         updateStats();
     }
+    $("#btnClear").blur();
 }
 
 function updateStats() {
