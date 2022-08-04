@@ -2,6 +2,12 @@ let scramble = "";
 let timing, showingParity, ready;
 let start;
 let interval;
+let scrambling;
+let locked;
+let guessing;
+let guess;
+let curTime;
+let timeList;
 
 $(() => {
     restart();
@@ -10,20 +16,47 @@ $(() => {
 });
 
 function initActions() {
+    adjustSize();
+
+    // Hent fra DB her
+    timeList = localStorage.getItem("timeListOPA") ? localStorage.getItem("timeListOPA").split(";") : [];
+
+    if (timeList.length !== 0) {
+        for (let t of timeList) {
+            addToList(t.split("*")[0], t.split("*")[1]);
+        }
+    }
+
     $(window).on("keyup", e => {
-        if (e.keyCode === 32 && !timing && !showingParity && ready) {
+        if (e.which === 32 && !timing && !showingParity && ready && !scrambling) {
             startTimer();
         }
-        else if (e.keyCode === 32 && timing) {
+        else if (e.which === 32 && timing) {
             readyTimer();
+        }
+        else if (scrambling) {
+            scrambling = false;
         }
     });
     $(window).on("keydown", e => {
-        if (e.keyCode === 32 && timing) {
+        if (guessing) {
+            if (e.which === 32) {
+                guess = "Even";
+                checkParity();
+            }
+            else if (e.which === 8) {
+                guess = "Odd";
+                checkParity();
+            }
+        }
+        else if (e.which !== 27 && timing && !locked) {
             stopTimer();
         }
-        else if (e.keyCode === 32 && !timing && showingParity) {
+        else if (e.which === 32 && !timing && showingParity) {
             scr();
+        }
+        else if (e.which === 27) {
+            restart();
         }
     });
 }
@@ -38,6 +71,12 @@ function restart() {
     timing = false;
     ready = true;
     showingParity = false;
+    scrambling = false;
+    guessing = false;
+    locked = false;
+
+    guess = "";
+    curTime = 0;
 }
 
 function scr() {
@@ -45,13 +84,19 @@ function scr() {
     scramble += " " + scr;
     $("#scramble").text(scr);
     $("#answer").text("");
+    $("#timer").text("0.00");
     $("#btnScramble").blur();
-    setTimeout(() => {
-        showingParity = false
-    }, 100);
+    showingParity = false;
+    scrambling = true;
+}
+
+function guessParity() {
+    guessing = true;
+    $("#answer").text("Press [space] if even targets, [backspace] if odd targets.");
 }
 
 function checkParity() {
+    guessing = false;
     showingParity = true;
     let qwt = 0;
     for (let m of scramble.split(" ")) {
@@ -64,6 +109,48 @@ function checkParity() {
 
     $("#answer").text(answer);
     $("#btnCheck").blur();
+
+    timeList.push(curTime + "*" + (answer === guess));
+    localStorage.setItem("timeListOPA", timeList.join(";"));
+
+    addToList(curTime, answer === guess);
+}
+
+function addToList(t, g) {
+    let i = $("#tblTimes tr").length + 1;
+    $("#tblTimes").append("<tr data-time='"+t+"' data-guess='"+g+"'><th>"+i+"</th><td>"+getHHmmsshh(t)+"</td><td>"+g+"</td></tr>");
+    let d = $("#tblTimes").parent();
+    d.scrollTop(d.prop("scrollHeight"));
+
+    updateStats();
+}
+
+function clearList() {
+    if (confirm("Do you really want to clear time list? There is no way back...")) {
+        $("#tblTimes").html("");
+
+        // Fjern fra localStorage
+        localStorage.removeItem("timeListOPA");
+        updateStats();
+    }
+}
+
+function updateStats() {
+    if ($("#tblTimes tr").length === 0) {
+        $("#tdRate").html("-");
+        $("#tdMean").html("-");
+    }
+    else {
+        let totalTime = 0;
+        for (let t of timeList.map(t => t.split("*")[0])) {
+            totalTime += parseInt(t);
+        }
+        let attempts = timeList.length;
+        let successes = timeList.map(t => t.split("*")[1]).filter(g => g === "true").length;
+        let percentage = " (" + ((successes / attempts) * 100).toFixed(1) + "%)";
+        $("#tdRate").html(successes + "/" + attempts + percentage);
+        $("#tdMean").html(getHHmmsshh(Math.round(totalTime / attempts)));
+    }
 }
 
 function startTimer() {
@@ -71,16 +158,21 @@ function startTimer() {
     ready = false;
     start = Date.now();
     $("#timer").text("Timing");
+    $("#scramble").html("<br>");
 }
 
 function stopTimer() {
-    $("#timer").text(getHHmmsshh(Date.now() - start));
-    checkParity();
+    locked = true;
+    let time = Date.now() - start;
+    $("#timer").text(getHHmmsshh(time));
+    curTime = time;
+    guessParity();
 }
 
 function readyTimer() {
     ready = true;
     timing = false;
+    locked = false;
 }
 
 function toggleTimer(val) {
@@ -192,4 +284,9 @@ function getHHmmsshh(ms, penalty = 0, stats = false) {
     } */
     
     return timeStr;
+}
+
+function adjustSize() {
+    $("#tblHeader th, #tblHeader td, #tblTimes th, #tblTimes td").width($("#tblTimes").width() / 3);
+    $("#tblTimes").parent().css("overflow-y", "scroll");
 }
