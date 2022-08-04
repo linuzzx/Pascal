@@ -68,6 +68,7 @@ label {
     width: 100%;
     border-collapse: collapse;
     color: #aaaaaa;
+    table-layout: fixed;
     margin: 1%;
 }
 
