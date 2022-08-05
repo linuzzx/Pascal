@@ -141,7 +141,6 @@ function clearList() {
 
 function deleteTime(i) {
     if (confirm("Are you sure you want do delete the time?")) {
-        //$("#tblTimes tr:nth-child("+i+")").remove();
         timeList[i] = "null";
         timeList = timeList.filter(t => t !== "null");
         $("#tblTimes").html("");
@@ -154,7 +153,7 @@ function deleteTime(i) {
 }
 
 function updateStats() {
-    if ($("#tblTimes tr").length === 0) {
+    if (timeList.length === 0) {
         $("#tdBest").html("-");
         $("#tdRate").html("-");
         $("#tdMean").html("-");
