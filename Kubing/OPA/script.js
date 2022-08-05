@@ -2,12 +2,15 @@ let scramble = "";
 let timing, showingParity, ready;
 let start;
 let interval;
+let inspectionInterval;
 let scrambling;
 let locked;
 let guessing;
 let guess;
 let curTime;
+let inspection;
 let timeList;
+let settings;
 
 $(() => {
     restart();
@@ -20,10 +23,13 @@ $(window).resize(() => {
 });
 
 function initActions() {
+    inspection = false;
     adjustSize();
 
     // Hent fra DB her
     timeList = localStorage.getItem("timeListOPA") ? localStorage.getItem("timeListOPA").split(";") : [];
+    settings = localStorage.getItem("settingsOPA") ? JSON.parse(localStorage.getItem("settingsOPA")) : {};
+    getSettings();
 
     if (timeList.length !== 0) {
         for (let t of timeList) {
@@ -187,9 +193,14 @@ function startTimer() {
     start = Date.now();
     $("#timer").text("Timing");
     $("#scramble").html("<br>");
+
+    if (inspection) {
+        runInspection();
+    }
 }
 
 function stopTimer() {
+    stopInspection();
     locked = true;
     let time = Date.now() - start;
     $("#timer").text(getHHmmsshh(time));
@@ -203,8 +214,32 @@ function readyTimer() {
     locked = false;
 }
 
-function toggleTimer(val) {
-    console.log(val);
+function runInspection() {
+    $("body").css("background", "green");
+    let i8 = false;
+    let i12 = false;
+    let i15 = false;
+    let i17 = false;
+
+    inspectionInterval = setInterval(() => {
+        if (Date.now() - start >= 8000 && !i8) {
+            $("body").css("background", "yellow");
+        }
+        if (Date.now() - start >= 12000 && !i12) {
+            $("body").css("background", "orange");
+        }
+        if (Date.now() - start >= 15000 && !i15) {
+            $("body").css("background", "red");
+        }
+        if (Date.now() - start >= 17000 && !i17) {
+            $("body").css("background", "#500000");
+        }
+    }, 1000);
+}
+
+function stopInspection() {
+    clearInterval(inspectionInterval);
+    $("body").css("background", "transparent");
 }
 
 function getScramble4x4(num) {
@@ -396,6 +431,26 @@ function drawGraph() {
             $("#svgGraph").append(circle);
         }
     }
+}
+
+function toggleTimer(val) {
+    console.log(val);
+}
+
+function toggleInspection(val) {
+    inspection = val;
+    settings["inspection"] = val;
+    console.log(settings);
+    updateSettings();
+}
+
+function updateSettings() {
+    localStorage.setItem("settingsOPA", JSON.stringify(settings));
+}
+
+function getSettings() {
+    $("#cbInspection").prop('checked', settings["inspection"]);
+    inspection = settings["inspection"];
 }
 
 function adjustSize() {
