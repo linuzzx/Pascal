@@ -41,6 +41,10 @@ h1 {
     height: 90vh;
 }
 
+#left, #content {
+    margin-top: 5vh;
+}
+
 label {
     color: #aaaaaa;
 }
