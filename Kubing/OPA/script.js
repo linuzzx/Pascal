@@ -440,7 +440,7 @@ function toggleTimer(val) {
 function toggleInspection(val) {
     inspection = val;
     settings["inspection"] = val;
-    console.log(settings);
+    $("#cbInspection").blur();
     updateSettings();
 }
 
