@@ -119,8 +119,8 @@ function checkParity() {
 }
 
 function addToList(t, g) {
-    let i = $("#tblTimes tr").length + 1;
-    $("#tblTimes").append("<tr data-time='"+t+"' data-guess='"+g+"'><th>"+i+"</th><td>"+getHHmmsshh(t)+"</td><td>"+g+"</td></tr>");
+    let i = $("#tblTimes tr").length;
+    $("#tblTimes").append("<tr data-time='"+t+"' data-guess='"+g+"' onclick='deleteTime("+i+")'><th>"+(i + 1)+"</th><td>"+getHHmmsshh(t)+"</td><td>"+g+"</td></tr>");
     let d = $("#tblTimes").parent();
     d.scrollTop(d.prop("scrollHeight"));
 
@@ -130,6 +130,7 @@ function addToList(t, g) {
 function clearList() {
     if (confirm("Do you really want to clear time list? There is no way back...")) {
         $("#tblTimes").html("");
+        timeList = [];
 
         // Fjern fra localStorage
         localStorage.removeItem("timeListOPA");
@@ -138,8 +139,23 @@ function clearList() {
     $("#btnClear").blur();
 }
 
+function deleteTime(i) {
+    if (confirm("Are you sure you want do delete the time?")) {
+        //$("#tblTimes tr:nth-child("+i+")").remove();
+        timeList[i] = "null";
+        timeList = timeList.filter(t => t !== "null");
+        $("#tblTimes").html("");
+        for (let t of timeList) {
+            addToList(t.split("*")[0], t.split("*")[1]);
+        }
+        localStorage.setItem("timeListOPA", timeList.join(";"));
+        updateStats();
+    }
+}
+
 function updateStats() {
     if ($("#tblTimes tr").length === 0) {
+        $("#tdBest").html("-");
         $("#tdRate").html("-");
         $("#tdMean").html("-");
     }
@@ -148,9 +164,12 @@ function updateStats() {
         for (let t of timeList.map(t => t.split("*")[0])) {
             totalTime += parseInt(t);
         }
+        let bestTime = timeList.filter(t => t.split("*")[1] === "true").map(t => parseInt(t.split("*")[0])).sort((a, b) => a - b)[0];
+        let best = bestTime ? getHHmmsshh(bestTime) : "-";
         let attempts = timeList.length;
         let successes = timeList.map(t => t.split("*")[1]).filter(g => g === "true").length;
         let percentage = " (" + ((successes / attempts) * 100).toFixed(1) + "%)";
+        $("#tdBest").html(best);
         $("#tdRate").html(successes + "/" + attempts + percentage);
         $("#tdMean").html(getHHmmsshh(Math.round(totalTime / attempts)));
     }
@@ -290,6 +309,11 @@ function getHHmmsshh(ms, penalty = 0, stats = false) {
 }
 
 function adjustSize() {
+    $("#svgGraph").width("25%");
+    $("#svgGraph").height($("#svgGraph").width() * 2 / 4);
+    $("#svgGraph").css("right", "0.5%");
+    $("#svgGraph").css("bottom", $("#svgGraph").css("right"));
+
     $("#tblHeader th, #tblHeader td, #tblTimes th, #tblTimes td").width($("#tblTimes").width() / 3);
     $("#tblTimes").parent().css("overflow-y", "scroll");
 }

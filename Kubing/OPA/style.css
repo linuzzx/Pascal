@@ -72,8 +72,18 @@ label {
     margin: 1%;
 }
 
-#tdRate, #tdMean {
+#tdBest, #tdRate, #tdMean {
     text-align: left;
+}
+
+#tblTimes tr:hover th, #tblTimes tr:hover td {
+    cursor: pointer;
+    background-color: #454545;
+}
+
+#svgGraph {
+    position: absolute;
+    background-color: white;
 }
 
 /* width */
