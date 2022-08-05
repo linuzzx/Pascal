@@ -10,6 +10,7 @@ let guess;
 let curTime;
 let inspection;
 let timeList;
+let graph;
 let settings;
 
 $(() => {
@@ -381,14 +382,16 @@ function drawGraph() {
     let width = $("#svgGraph").width() - x;
     let height = $("#svgGraph").height() - 10;
 
-    let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-    $(rect).attr("x", x);
-    $(rect).attr("y", y);
-    $(rect).attr("width", width);
-    $(rect).attr("height", height);
-    $(rect).attr("style", "fill:#f1f1f1;");
-
-    $("#svgGraph").append(rect);
+    if (graph === "light") {
+        let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+        $(rect).attr("x", x);
+        $(rect).attr("y", y);
+        $(rect).attr("width", width);
+        $(rect).attr("height", height);
+        $(rect).attr("style", "fill:#f1f1f1;");
+    
+        $("#svgGraph").append(rect);
+    }
 
     if (timeList.length >= 2) {
         let diff = w - b;
@@ -402,6 +405,7 @@ function drawGraph() {
         }
         
         for (let p = 1; p < points.length; p++) {
+            let colLine = graph === "dark" ? "#aaaaaa" : "black";
             let x1 = points[p - 1][0];
             let x2 = points[p][0];
             let y1 = points[p - 1][1];
@@ -412,7 +416,7 @@ function drawGraph() {
             $(line).attr("y1", y1);
             $(line).attr("x2", x2);
             $(line).attr("y2", y2);
-            $(line).attr("style", "stroke:black;stroke-width:1");
+            $(line).attr("style", "stroke:"+colLine+";stroke-width:1");
 
             $("#svgGraph").append(line);
         }
@@ -425,7 +429,7 @@ function drawGraph() {
             let circle = document.createElementNS('http://www.w3.org/2000/svg', "circle");
             $(circle).attr("cx", cx);
             $(circle).attr("cy", cy);
-            $(circle).attr("r", 4);
+            $(circle).attr("r", 3);
             $(circle).attr("style", "fill:"+color);
 
             $("#svgGraph").append(circle);
@@ -433,7 +437,7 @@ function drawGraph() {
     }
 }
 
-function toggleTimer(val) {
+function toggleButtons(val) {
     console.log(val);
 }
 
@@ -444,6 +448,14 @@ function toggleInspection(val) {
     updateSettings();
 }
 
+function toggleGraph(val) {
+    graph = val ? "dark" : "light";
+    settings["graph"] = graph;
+    $("#cbGraph").blur();
+    updateSettings();
+    drawGraph();console.log(settings);
+}
+
 function updateSettings() {
     localStorage.setItem("settingsOPA", JSON.stringify(settings));
 }
@@ -451,6 +463,12 @@ function updateSettings() {
 function getSettings() {
     $("#cbInspection").prop('checked', settings["inspection"]);
     inspection = settings["inspection"];
+
+    if (!settings["graph"]) {
+        settings["graph"] = "dark";
+    }
+    $("#cbGraph").prop('checked', settings["graph"] === "dark");
+    graph = settings["graph"];
 }
 
 function adjustSize() {
