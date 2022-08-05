@@ -15,6 +15,10 @@ $(() => {
     initActions();
 });
 
+$(window).resize(() => {
+    drawGraph();
+});
+
 function initActions() {
     adjustSize();
 
@@ -26,6 +30,8 @@ function initActions() {
             addToList(t.split("*")[0], t.split("*")[1]);
         }
     }
+
+    drawGraph();
 
     $(window).on("keyup", e => {
         if (e.which === 32 && !timing && !showingParity && ready && !scrambling) {
@@ -172,6 +178,7 @@ function updateStats() {
         $("#tdRate").html(successes + "/" + attempts + percentage);
         $("#tdMean").html(getHHmmsshh(Math.round(totalTime / attempts)));
     }
+    drawGraph();
 }
 
 function startTimer() {
@@ -305,6 +312,90 @@ function getHHmmsshh(ms, penalty = 0, stats = false) {
     } */
     
     return timeStr;
+}
+
+function drawGraph() {
+    $("#svgGraph").empty();
+    let w = timeList.map(t => parseInt(t.split("*")[0])).sort((a, b) => b - a)[0];
+    let b = timeList.map(t => parseInt(t.split("*")[0])).sort((a, b) => a - b)[0];
+    let worstTime = timeList.length >= 2 ? getHHmmsshh(w) : "-";
+    let bestTime = timeList.length >= 2 ? getHHmmsshh(b) : "-";
+    
+    let worst = document.createElementNS('http://www.w3.org/2000/svg', "text");
+    $(worst).attr("x", 0);
+    $(worst).attr("y", 15);
+    $(worst).attr("font-size", 15);
+    $(worst).attr("fill", "#aaaaaa");
+    $(worst).text(worstTime);
+
+    $("#svgGraph").append(worst);
+
+    let best = document.createElementNS('http://www.w3.org/2000/svg', "text");
+    $(best).attr("x", 0);
+    $(best).attr("y", $("#svgGraph").height()-5);
+    $(best).attr("font-size", 15);
+    $(best).attr("text-align", "right");
+    $(best).attr("fill", "#aaaaaa");
+    $(best).text(bestTime);
+
+    $("#svgGraph").append(best);
+
+    let wWorst = $(worst)[0].getBoundingClientRect().width;
+    let x = wWorst + 5;
+    let y = 5;
+    let width = $("#svgGraph").width() - x;
+    let height = $("#svgGraph").height() - 10;
+
+    let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+    $(rect).attr("x", x);
+    $(rect).attr("y", y);
+    $(rect).attr("width", width);
+    $(rect).attr("height", height);
+    $(rect).attr("style", "fill:#f1f1f1;");
+
+    $("#svgGraph").append(rect);
+
+    if (timeList.length >= 2) {
+        let diff = w - b;
+        let n = width / (timeList.length - 1);
+        let i = 0;
+        let points = [];
+        
+        for (let t of timeList) {
+            points.push([x + i * n, y + (1 - ((t.split("*")[0] - b) / diff)) * height, t.split("*")[1]]);
+            i++;
+        }
+        
+        for (let p = 1; p < points.length; p++) {
+            let x1 = points[p - 1][0];
+            let x2 = points[p][0];
+            let y1 = points[p - 1][1];
+            let y2 = points[p][1];
+
+            let line = document.createElementNS('http://www.w3.org/2000/svg', "line");
+            $(line).attr("x1", x1);
+            $(line).attr("y1", y1);
+            $(line).attr("x2", x2);
+            $(line).attr("y2", y2);
+            $(line).attr("style", "stroke:black;stroke-width:1");
+
+            $("#svgGraph").append(line);
+        }
+
+        for (let p of points) {
+            let cx = p[0];
+            let cy = p[1];
+            let color = p[2] === "true" ? "#00aa00" : "#FF0000";
+
+            let circle = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+            $(circle).attr("cx", cx);
+            $(circle).attr("cy", cy);
+            $(circle).attr("r", 4);
+            $(circle).attr("style", "fill:"+color);
+
+            $("#svgGraph").append(circle);
+        }
+    }
 }
 
 function adjustSize() {
