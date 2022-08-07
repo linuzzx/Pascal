@@ -453,7 +453,7 @@ function toggleGraph(val) {
     settings["graph"] = graph;
     $("#cbGraph").blur();
     updateSettings();
-    drawGraph();console.log(settings);
+    drawGraph();
 }
 
 function updateSettings() {
