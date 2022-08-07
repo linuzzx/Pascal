@@ -476,6 +476,7 @@ function adjustSize() {
     $("#svgGraph").height($("#svgGraph").width() * 2 / 4);
     $("#svgGraph").css("right", "0.5%");
     $("#svgGraph").css("bottom", $("#svgGraph").css("right"));
+    $("#svgGraph").attr("viewBox", "-10 -10 " + ($("#svgGraph").width() + 10) + " " + ($("#svgGraph").height() + 10));
 
     $("#tblHeader th, #tblHeader td, #tblTimes th, #tblTimes td").width($("#tblTimes").width() / 3);
     $("#tblTimesParent").css("overflow-y", "scroll");
