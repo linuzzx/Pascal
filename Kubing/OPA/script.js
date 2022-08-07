@@ -478,5 +478,5 @@ function adjustSize() {
     $("#svgGraph").css("bottom", $("#svgGraph").css("right"));
 
     $("#tblHeader th, #tblHeader td, #tblTimes th, #tblTimes td").width($("#tblTimes").width() / 3);
-    $("#tblTimes").parent().css("overflow-y", "scroll");
+    $("#tblTimesParent").css("overflow-y", "scroll");
 }
