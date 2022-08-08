@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<<<<<<< HEAD
     <div id="grid">
         <div id="left">
             <table id="tblHeader">
@@ -30,18 +31,50 @@
                     <tr><th>Mean time:</th><th id="tdMean">-</th></tr>
                 </table>
             </div>
+=======
+    <div id="gridRows">
+        <div id="settings">
+            <!--label for="cbButtons">Buttons </label>
+            <input type="checkbox" id="cbButtons" onchange="toggleTimer(this.checked)"><br-->
+            <!--label for="cbHold">Hold space 0.55s </label>
+            <input type="checkbox" id="cbHold" onchange="toggleHold(this.checked)"><br-->
+            <label for="cbInspection">Change color at 8, 12, 15 </label>
+            <input type="checkbox" id="cbInspection" onchange="toggleInspection(this.checked)"><br>
+            <label for="cbGraph">Dark graph </label>
+            <input type="checkbox" id="cbGraph" onchange="toggleGraph(this.checked)"><br>
+            <button id="btnClear" class="btn btn-secondary" onclick="clearList()">Clear time list</button>
+>>>>>>> b36a10255cc3acac51f25608b48ffc9fa3937008
         </div>
-        <div id="content">
-            <h1 id="scramble"></h1><br>
-            <!--div id="btns">
-                <button id="btnScramble" class="btn btn-secondary" onclick="scr()">Scramble</button>
-                <button id="btnCheck" class="btn btn-secondary" onclick="checkParity()">Check</button>
-                <button id="btnRestart" class="btn btn-secondary" onclick="restart()">Restart</button><br><br>
-            </div-->
-            <h1 id="timer">0.00</h1><br><br>
-            <h1 id="answer"></h1>
+        <div id="gridColumns">
+            <div>
+                <table id="tblHeader">
+                    <tr><th>#</th><th>Time</th><th>Success</th></tr>
+                </table><br>
+                <div id="tblTimesParent">
+                    <table id="tblTimes"></table>
+                </div>
+            </div>
+            <div id="content">
+                <h1 id="scramble"></h1><br>
+                <!--div id="btns">
+                    <button id="btnScramble" class="btn btn-secondary" onclick="scr()">Scramble</button>
+                    <button id="btnCheck" class="btn btn-secondary" onclick="checkParity()">Check</button>
+                    <button id="btnRestart" class="btn btn-secondary" onclick="restart()">Restart</button><br><br>
+                </div-->
+                <h1 id="timer">0.00</h1><br><br>
+                <h1 id="answer"></h1>
+            </div>
+            <div></div>
+        </div>
+        <div>
+            <table id="tblStats">
+                <tr><th>Best time:</th><th id="tdBest">-</th></tr>
+                <tr><th>Success rate:</th><th id="tdRate">-</th></tr>
+                <tr><th>Mean time:</th><th id="tdMean">-</th></tr>
+            </table>
             <svg id="svgGraph"></svg>
         </div>
+<<<<<<< HEAD
         <div id="settings">
             <!--label for="cbButtons">Buttons </label>
             <input type="checkbox" id="cbButtons" onchange="toggleTimer(this.checked)"><br-->
@@ -53,6 +86,8 @@
             <input type="checkbox" id="cbGraph" onchange="toggleGraph(this.checked)"><br>
             <button id="btnClear" class="btn btn-secondary" onclick="clearList()">Clear time list</button>
         </div>
+=======
+>>>>>>> b36a10255cc3acac51f25608b48ffc9fa3937008
     </div>
 </body>
 </html>
