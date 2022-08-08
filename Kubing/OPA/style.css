@@ -28,17 +28,23 @@ h1 {
 #settings {
     text-align: right;
     margin: 1%;
-    height: 5vh;
+    height: 100%;
 }
 
 #timer {
     font-size: 7vh;
 }
 
-#grid {
+#gridRows {
+    display: grid;
+    grid-template-rows: 1fr 6fr 1fr;
+    height: 100%;
+}
+
+#gridColumns {
     display: grid;
     grid-template-columns: 1fr 4fr 1fr;
-    height: 90vh;
+    height: 100%;
 }
 
 #left, #content {
@@ -64,12 +70,14 @@ label {
 }
 
 #tblTimesParent {
-    height: 75vh;
-    max-height: 75vh;
+    height: 50vh;
+    max-height: 50vh;
 }
 
 #tblStats {
-    width: 100%;
+    position: absolute;
+    bottom: 0.5%;
+    width: 20%;
     border-collapse: collapse;
     color: #aaaaaa;
     table-layout: fixed;
