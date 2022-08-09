@@ -355,7 +355,6 @@ function doMove(cubies, xyz, angle) {
         }
         tween = gsap.to(tempCube.rotation, {
             duration: .15,
-            overwrite: true,
             x: xyz === "x" ? angle : 0,
             y: xyz === "y" ? angle : 0,
             z: xyz === "z" ? angle : 0
