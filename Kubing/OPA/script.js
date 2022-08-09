@@ -10,7 +10,7 @@ let guess;
 let curTime;
 let inspection;
 let timeList;
-let graph;
+/* let graph; */
 let settings;
 
 $(() => {
@@ -382,7 +382,7 @@ function drawGraph() {
     let width = $("#svgGraph").width() - x;
     let height = $("#svgGraph").height() - 10;
 
-    if (graph === "light") {
+    /* if (graph === "light") {
         let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
         $(rect).attr("x", x);
         $(rect).attr("y", y);
@@ -391,7 +391,7 @@ function drawGraph() {
         $(rect).attr("style", "fill:#f1f1f1;");
     
         $("#svgGraph").append(rect);
-    }
+    } */
 
     if (timeList.length >= 2) {
         let diff = w - b;
@@ -405,7 +405,7 @@ function drawGraph() {
         }
         
         for (let p = 1; p < points.length; p++) {
-            let colLine = graph === "dark" ? "#aaaaaa" : "black";
+            let colLine = "#aaaaaa";
             let x1 = points[p - 1][0];
             let x2 = points[p][0];
             let y1 = points[p - 1][1];
@@ -448,13 +448,13 @@ function toggleInspection(val) {
     updateSettings();
 }
 
-function toggleGraph(val) {
+/* function toggleGraph(val) {
     graph = val ? "dark" : "light";
     settings["graph"] = graph;
     $("#cbGraph").blur();
     updateSettings();
     drawGraph();
-}
+} */
 
 function updateSettings() {
     localStorage.setItem("settingsOPA", JSON.stringify(settings));
@@ -464,11 +464,11 @@ function getSettings() {
     $("#cbInspection").prop('checked', settings["inspection"]);
     inspection = settings["inspection"];
 
-    if (!settings["graph"]) {
+    /* if (!settings["graph"]) {
         settings["graph"] = "dark";
     }
     $("#cbGraph").prop('checked', settings["graph"] === "dark");
-    graph = settings["graph"];
+    graph = settings["graph"]; */
 }
 
 function adjustSize() {
