@@ -203,12 +203,13 @@ function animate() {
 };
 
 function applyScramble() {
+    let oAnim = anim;
     anim = false;
     let scr = getScrambleNxN(3);
     for (let s of scr.split(" ")) {
         applyMove(s);
     }
-    anim = true;
+    anim = oAnim;
 }
 
 function getTurn(e) {
