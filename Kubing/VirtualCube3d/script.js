@@ -12,29 +12,63 @@ let xAxis, yAxis, zAxis;
 let anim;
 let tween;
 
-/* let u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
-let l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
-let f1 = "ful", f2 = "fu", f3 = "fur", f4 = "fl", f5 = "f", f6 = "fr", f7 = "fdl", f8 = "fd", f9 = "fdr", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
-let r1 = "ruf", r2 = "ru", r3 = "rub", r4 = "rf", r5 = "r", r6 = "rb", r7 = "rdf", r8 = "rd", r9 = "rdb", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
-let b1 = "bur", b2 = "bu", b3 = "bul", b4 = "br", b5 = "b", b6 = "bl", b7 = "bdr", b8 = "bd", b9 = "bdl", nb1, nb2, nb3, nb4, nb5, nb6, nb7, nb8, nb9;
-let d1 = "dfl", d2 = "df", d3 = "dfr", d4 = "dl", d5 = "d", d6 = "dr", d7 = "dbl", d8 = "db", d9 = "dbr", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9; */
+let time = 0;
+let moveCount = 0;
+let tps = 0;
+let interval;
+let timing = false;
+let ready = false;
 
-let keyBinds = ["J", "F", "H", "G", "I", "K", "D", "E", "S", "L", "W", "O", ",", ".", "N", "B", "Ø", "A", "Å", "Q", "U", "M", "V", "R"];
-let possibleMoves = ["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];;
+let r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
+let l1 = "orange", l2 = "orange", l3 = "orange", l4 = "orange", l5 = "orange", l6 = "orange", l7 = "orange", l8 = "orange", l9 = "orange", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
+let f1 = "green", f2 = "green", f3 = "green", f4 = "green", f5 = "green", f6 = "green", f7 = "green", f8 = "green", f9 = "green", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
+let b1 = "blue", b2 = "blue", b3 = "blue", b4 = "blue", b5 = "blue", b6 = "blue", b7 = "blue", b8 = "blue", b9 = "blue", nb1, nb2, nb3, nb4, nb5, nb6, nb7, nb8, nb9;
+let u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "white", u7 = "white", u8 = "white", u9 = "white", nu1, nu2, nu3, nu4, nu5, nu6, nu7, nu8, nu9;
+let d1 = "yellow", d2 = "yellow", d3 = "yellow", d4 = "yellow", d5 = "yellow", d6 = "yellow", d7 = "yellow", d8 = "yellow", d9 = "yellow", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
+
+let keyBinds = [];//["J", "F", "H", "G", "I", "K", "D", "E", "S", "L", "W", "O", ",", ".", "N", "B", "Ø", "A", "Å", "Q", "U", "M", "V", "R"];
+let possibleMoves = [];//["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];;
 
 $(() => {
     $(window).keypress(function(e) {
-        if (e.keyCode === 32) {
-            applyScramble();
-        }
-        else {
-            getTurn(e.keyCode);
-        }
+        getTurn(e);
     });
     init();
 });
 
+function getBindings() {
+        let i = 0;
+    if (localStorage.getItem("keys")) {
+        const keys = localStorage.getItem("keys").split("KEY");
+        for (let inp of $("#keysDiv table tr td:nth-child(2) input")) {
+            $(inp).val(keys[i]);
+            i++;
+        }
+    }
+}
+
+function updateBindings() {
+    keyBinds = [];
+    let keysToStore = "";
+    for (let v of $("#keysDiv table tr td:nth-child(2) input")) {
+        keyBinds.push($(v).val());
+        keysToStore += $(v).val()+"KEY";
+    }
+    localStorage.setItem("keys",keysToStore);
+}
+
+function getPossibleMoves() {
+    possibleMoves = [];
+    for (let m of $("#keysDiv table tr td:nth-child(1)")) {
+        possibleMoves.push($(m).text());
+    }
+}
+
 function init() {
+    getBindings();
+    updateBindings();
+    getPossibleMoves();
+
     lock = false;
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
@@ -185,7 +219,7 @@ function init() {
     renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setClearColor( 0x000000, 0 );
     renderer.setSize( window.innerWidth, window.innerHeight );
-    $("body").append( renderer.domElement );
+    $("#cubeDisplay").append( renderer.domElement );
 
     origo = new THREE.Vector3(0, 0, 0);
     xAxis = new THREE.Vector3(1, 0, 0);
@@ -206,6 +240,7 @@ function applyScramble() {
     let oAnim = anim;
     anim = false;
     let scr = getScrambleNxN(3);
+    $("#scramble").text(scr);
     for (let s of scr.split(" ")) {
         applyMove(s);
     }
@@ -213,13 +248,36 @@ function applyScramble() {
 }
 
 function getTurn(e) {
-    const key = keyBinds.indexOf(String.fromCharCode(e).toUpperCase());
-    const turn = possibleMoves[key];
-    if (turn) {
-        if (tween) {
-            tween.progress(1);
+    if (!ready && !timing) {
+        if (e.which === 32) {
+            getReady();
+            if (e.target === document.body) {  
+                e.preventDefault();  
+            }  
         }
-        applyMove(turn);
+    }
+    else {
+        const key = keyBinds.indexOf(String.fromCharCode(e.which));
+        const turn = possibleMoves[key];
+        if (turn) {
+            if (turn.includes("x") || turn.includes("y") || turn.includes("z")) {}
+            else {
+                if (ready) {
+                // Start timer
+                    ready = false;
+                    timing = true;
+                    startTimer();
+                }
+                // Count move
+                moveCount++;
+                $("#moves").html(moveCount + " moves");
+            }
+            if (tween) {
+                tween.progress(1);
+            }
+
+            applyMove(turn);
+        }
     }
 }
 
@@ -300,6 +358,56 @@ function applyMove(turn) {
     }
 }
 
+function getReady() {
+    if (!timing) {
+        ready = true;
+        applyScramble();
+        $("#time").html("0.00");
+        moveCount = 0;
+        $("#moves").html(moveCount + " moves");
+        $("#tps").html("");
+    }
+}
+
+// Ta tid
+function startTimer() {
+    if (timing) {
+        let start = new Date().getTime();
+        interval = setInterval(function() {
+            time = new Date().getTime() - start;
+
+            let ms = Math.floor((time % 1000) / 10);
+            let s = Math.floor((time / 1000) % 60);
+            let m = Math.floor((time / 60000) % 60);
+
+            if (ms < 10) ms = "0" + ms;
+
+            if (m === 0) {
+                $("#time").html(s + "." + ms);
+            }
+            else {
+                if (s < 10) s = "0" + s;
+                $("#time").html(m + ":" + s + "." + ms);
+            }
+
+            let solved = checkState();
+            if (solved) {
+                stopTimer();
+            }
+        }, 10);
+    }
+}
+
+function stopTimer() {
+    if (timing) {
+        timing = false;
+        clearInterval(interval);
+
+        tps = moveCount / (time / 1000);
+        $("#tps").html(tps.toFixed(2) + " tps");
+    }
+}
+
 function rotateAroundPoint(obj, point, axis, theta, pointIsWorld = true){
 // obj - your object (THREE.Object3D or derived)
 // point - the point of rotation (THREE.Vector3)
@@ -361,10 +469,18 @@ function doMove(cubies, xyz, angle) {
         });
     }
     else {
+        let tempCube = new THREE.Object3D();
+        
         for (let cubie of cubies) {
-            cubie.position.applyEuler(euler);
-            cubie.rotateOnWorldAxis(axis, angle);
+            scene.attach(tempCube);
+            tempCube.attach(cubie);
         }
+        tween = gsap.to(tempCube.rotation, {
+            duration: 0,
+            x: xyz === "x" ? angle : 0,
+            y: xyz === "y" ? angle : 0,
+            z: xyz === "z" ? angle : 0
+        });
     }
 }
 
@@ -486,4 +602,68 @@ function doLw() {
 function doLwi() {
     let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).x < 1});
     doMove(c, "x", -Math.PI / 2);
+}
+
+function checkState() {
+    let u = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y > 1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
+    let d = planes.filter(cd => {return cd.getWorldPosition(new THREE.Vector3()).y < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
+    let f = planes.filter(cf => {return cf.getWorldPosition(new THREE.Vector3()).z > 1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
+    let b = planes.filter(cb => {return cb.getWorldPosition(new THREE.Vector3()).z < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
+    let r = planes.filter(cr => {return cr.getWorldPosition(new THREE.Vector3()).x > 1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
+    let l = planes.filter(cl => {return cl.getWorldPosition(new THREE.Vector3()).x < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
+
+    return ((u[0] === u[1] && u[0] === u[2] && u[0] === u[3] && u[0] === u[4] && u[0] === u[5] && u[0] === u[6] && u[0] === u[7] && u[0] === u[8]) &&
+    (d[0] === d[1] && d[0] === d[2] && d[0] === d[3] && d[0] === d[4] && d[0] === d[5] && d[0] === d[6] && d[0] === d[7] && d[0] === d[8]) &&
+    (f[0] === f[1] && f[0] === f[2] && f[0] === f[3] && f[0] === f[4] && f[0] === f[5] && f[0] === f[6] && f[0] === f[7] && f[0] === f[8]) &&
+    (b[0] === b[1] && b[0] === b[2] && b[0] === b[3] && b[0] === b[4] && b[0] === b[5] && b[0] === b[6] && b[0] === b[7] && b[0] === b[8]) &&
+    (r[0] === r[1] && r[0] === r[2] && r[0] === r[3] && r[0] === r[4] && r[0] === r[5] && r[0] === r[6] && r[0] === r[7] && r[0] === r[8]) &&
+    (l[0] === l[1] && l[0] === l[2] && l[0] === l[3] && l[0] === l[4] && l[0] === l[5] && l[0] === l[6] && l[0] === l[7] && l[0] === l[8]));
+}
+
+function getScrambleNxN(n) {
+    if (n < 2) {
+        return "Don't be silly :P";
+    }
+
+    let scr = "";
+    let movesExtra = ["", "'", "2"];
+    let axises = n > 2 ? [["U","D"], ["F","B"], ["R","L"]] : [["U"], ["F"], ["R"]];
+    let movesAxis = [["",""]];
+    let num = n > 3 ? 20*(n-2) : (n === 3 ? Math.floor(Math.random() * 4 + 19) : Math.floor(Math.random() * 3 + 9));
+
+    for (let i = 4; i <= n; i++) {
+        let nW = Math.floor(i/2) === 2 ? "" : Math.floor(i/2);
+        let nA = [nW,"w"];
+        
+        if (!JSON.stringify(movesAxis).includes(JSON.stringify(nA))) {
+            movesAxis.push(nA);
+        }
+    }
+    
+    let curAxis = -1;
+    let moves = [];
+    for (let i = 0; i < num; i++) {
+        let axis = Math.floor(Math.random() * axises.length);
+
+        if (axis !== curAxis) {
+            curAxis = axis;
+            moves = movesAxis.map(m => [m[0] + axises[curAxis][0] + m[1]])
+                    .concat(movesAxis.map(m => [m[0] + axises[curAxis][1] + m[1]]));
+            if (n % 2 === 0) {
+                moves.pop();
+            }
+        }
+        else if (moves.length === 0) {
+            i--;
+            continue;
+        }
+
+        let move = moves[Math.floor(Math.random() * moves.length)];
+        let moveE = movesExtra[Math.floor(Math.random() * movesExtra.length)];
+        
+        moves.splice(moves.indexOf(move), 1);
+
+        scr += move + moveE + " ";
+    }
+    return scr.trim();
 }

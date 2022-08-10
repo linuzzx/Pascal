@@ -13,6 +13,10 @@ body {
     padding: 0;
 }
 
+#scramble {
+    text-align: center;
+}
+
 #cubeDisplay {
     position: absolute;
     height: 100%;
@@ -70,4 +74,24 @@ span {
 #timeAndMoves {
     position: absolute;
     right: 1%;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: transparent; 
 }
