@@ -248,6 +248,7 @@ function applyScramble() {
     for (let s of scr.split(" ")) {
         applyMove(s);
     }
+    
     anim = oAnim;
 }
 
@@ -293,11 +294,19 @@ function applyMove(turn) {
         case "R'":
             doRi();
             break;
+        case "R2":
+            doR();
+            doR();
+            break;
         case "L":
             doL();
             break;
         case "L'":
             doLi();
+            break;
+        case "L2":
+            doL();
+            doL();
             break;
         case "F":
             doF();
@@ -305,11 +314,19 @@ function applyMove(turn) {
         case "F'":
             doFi();
             break;
+        case "F2":
+            doF();
+            doF();
+            break;
         case "B":
             doB();
             break;
         case "B'":
             doBi();
+            break;
+        case "B2":
+            doB();
+            doB();
             break;
         case "U":
             doU();
@@ -317,11 +334,19 @@ function applyMove(turn) {
         case "U'":
             doUi();
             break;
+        case "U2":
+            doU();
+            doU();
+            break;
         case "D":
             doD();
             break;
         case "D'":
             doDi();
+            break;
+        case "D2":
+            doD();
+            doD();
             break;
         case "x":
             doX();
@@ -457,16 +482,16 @@ function calcRotationAroundAxis(axis, angle){
 }
 
 function doMove(cubies, xyz, angle) {
-    let axis = xyz === "x" ? xAxis : xyz === "y" ? yAxis : zAxis;
-    let euler = calcRotationAroundAxis(xyz, angle);
+    /* let axis = xyz === "x" ? xAxis : xyz === "y" ? yAxis : zAxis;
+    let euler = calcRotationAroundAxis(xyz, angle); */
+    let tempCube = new THREE.Object3D();
+    
+    for (let cubie of cubies) {
+        scene.attach(tempCube);
+        tempCube.attach(cubie);
+    }
     
     if (anim) {
-        let tempCube = new THREE.Object3D();
-        
-        for (let cubie of cubies) {
-            scene.attach(tempCube);
-            tempCube.attach(cubie);
-        }
         tween = gsap.to(tempCube.rotation, {
             duration: .15,
             x: xyz === "x" ? angle : 0,
@@ -475,12 +500,6 @@ function doMove(cubies, xyz, angle) {
         });
     }
     else {
-        let tempCube = new THREE.Object3D();
-        
-        for (let cubie of cubies) {
-            scene.attach(tempCube);
-            tempCube.attach(cubie);
-        }
         tween = gsap.to(tempCube.rotation, {
             duration: 0,
             x: xyz === "x" ? angle : 0,
