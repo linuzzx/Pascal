@@ -241,6 +241,7 @@ function animate() {
 };
 
 function applyScramble() {
+    resetState();
     let oAnim = anim;
     anim = false;
     let scr = getScrambleNxN(3);
@@ -248,7 +249,6 @@ function applyScramble() {
     for (let s of scr.split(" ")) {
         applyMove(s);
     }
-    
     anim = oAnim;
 }
 
@@ -629,6 +629,46 @@ function doLwi() {
     doMove(c, "x", -Math.PI / 2);
 }
 
+function resetState() {
+    let u = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y > 1.5});
+    let d = planes.filter(cd => {return cd.getWorldPosition(new THREE.Vector3()).y < -1.5});
+    let f = planes.filter(cf => {return cf.getWorldPosition(new THREE.Vector3()).z > 1.5});
+    let b = planes.filter(cb => {return cb.getWorldPosition(new THREE.Vector3()).z < -1.5});
+    let r = planes.filter(cr => {return cr.getWorldPosition(new THREE.Vector3()).x > 1.5});
+    let l = planes.filter(cl => {return cl.getWorldPosition(new THREE.Vector3()).x < -1.5});
+
+    for (let p of u) {
+        p.material.color.r = 1;
+        p.material.color.g = 1;
+        p.material.color.b = 1;
+    }
+    for (let p of d) {
+        p.material.color.r = 1;
+        p.material.color.g = 1;
+        p.material.color.b = 0;
+    }
+    for (let p of f) {
+        p.material.color.r = 0;
+        p.material.color.g = 1;
+        p.material.color.b = 0;
+    }
+    for (let p of b) {
+        p.material.color.r = 0;
+        p.material.color.g = 0;
+        p.material.color.b = 1;
+    }
+    for (let p of r) {
+        p.material.color.r = 1;
+        p.material.color.g = 0;
+        p.material.color.b = 0;
+    }
+    for (let p of l) {
+        p.material.color.r = 1;
+        p.material.color.g = 2/3;
+        p.material.color.b = 0;
+    }
+}
+
 function checkState() {
     let u = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y > 1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
     let d = planes.filter(cd => {return cd.getWorldPosition(new THREE.Vector3()).y < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
@@ -636,7 +676,12 @@ function checkState() {
     let b = planes.filter(cb => {return cb.getWorldPosition(new THREE.Vector3()).z < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
     let r = planes.filter(cr => {return cr.getWorldPosition(new THREE.Vector3()).x > 1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
     let l = planes.filter(cl => {return cl.getWorldPosition(new THREE.Vector3()).x < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
-
+console.log(u);
+console.log(d);
+console.log(f);
+console.log(b);
+console.log(r);
+console.log(l);
     solved = ((u[0] === u[1] && u[0] === u[2] && u[0] === u[3] && u[0] === u[4] && u[0] === u[5] && u[0] === u[6] && u[0] === u[7] && u[0] === u[8]) &&
     (d[0] === d[1] && d[0] === d[2] && d[0] === d[3] && d[0] === d[4] && d[0] === d[5] && d[0] === d[6] && d[0] === d[7] && d[0] === d[8]) &&
     (f[0] === f[1] && f[0] === f[2] && f[0] === f[3] && f[0] === f[4] && f[0] === f[5] && f[0] === f[6] && f[0] === f[7] && f[0] === f[8]) &&
