@@ -266,7 +266,7 @@ function getTurn(e) {
         }
     }
     else if (!solved) {
-        const key = keyBinds.indexOf(String.fromCharCode(e.which));
+        const key = keyBinds.indexOf(String.fromCharCode(e.which).toLowerCase());
         const turn = possibleMoves[key];
         if (turn) {
             if (turn.includes("x") || turn.includes("y") || turn.includes("z")) {}
@@ -281,8 +281,7 @@ function getTurn(e) {
                 moveCount++;
                 $("#moves").html(moveCount + " moves");
             }
-            console.log(getAxis(turn));
-            console.log(getAxis(prevTurn));
+            
             if (tween) {
                 tween.progress(1);
             }
