@@ -19,6 +19,8 @@ let interval;
 let timing = false;
 let ready = false;
 
+let solved;
+
 let r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
 let l1 = "orange", l2 = "orange", l3 = "orange", l4 = "orange", l5 = "orange", l6 = "orange", l7 = "orange", l8 = "orange", l9 = "orange", nl1, nl2, nl3, nl4, nl5, nl6, nl7, nl8, nl9;
 let f1 = "green", f2 = "green", f3 = "green", f4 = "green", f5 = "green", f6 = "green", f7 = "green", f8 = "green", f9 = "green", nf1, nf2, nf3, nf4, nf5, nf6, nf7, nf8, nf9;
@@ -68,6 +70,8 @@ function init() {
     getBindings();
     updateBindings();
     getPossibleMoves();
+
+    solved = true;
 
     lock = false;
     scene = new THREE.Scene();
@@ -248,15 +252,15 @@ function applyScramble() {
 }
 
 function getTurn(e) {
-    if (!ready && !timing) {
+    if (!ready && !timing && solved) {
         if (e.which === 32) {
             getReady();
             if (e.target === document.body) {  
                 e.preventDefault();  
-            }  
+            }
         }
     }
-    else {
+    else if (!solved) {
         const key = keyBinds.indexOf(String.fromCharCode(e.which));
         const turn = possibleMoves[key];
         if (turn) {
@@ -360,6 +364,7 @@ function applyMove(turn) {
 
 function getReady() {
     if (!timing) {
+        solved = false;
         ready = true;
         applyScramble();
         $("#time").html("0.00");
@@ -374,6 +379,12 @@ function startTimer() {
     if (timing) {
         let start = new Date().getTime();
         interval = setInterval(function() {
+
+            checkState();
+            if (solved) {
+                stopTimer();
+            }
+
             time = new Date().getTime() - start;
 
             let ms = Math.floor((time % 1000) / 10);
@@ -389,12 +400,7 @@ function startTimer() {
                 if (s < 10) s = "0" + s;
                 $("#time").html(m + ":" + s + "." + ms);
             }
-
-            let solved = checkState();
-            if (solved) {
-                stopTimer();
-            }
-        }, 10);
+        }, 1);
     }
 }
 
@@ -612,7 +618,7 @@ function checkState() {
     let r = planes.filter(cr => {return cr.getWorldPosition(new THREE.Vector3()).x > 1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
     let l = planes.filter(cl => {return cl.getWorldPosition(new THREE.Vector3()).x < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
 
-    return ((u[0] === u[1] && u[0] === u[2] && u[0] === u[3] && u[0] === u[4] && u[0] === u[5] && u[0] === u[6] && u[0] === u[7] && u[0] === u[8]) &&
+    solved = ((u[0] === u[1] && u[0] === u[2] && u[0] === u[3] && u[0] === u[4] && u[0] === u[5] && u[0] === u[6] && u[0] === u[7] && u[0] === u[8]) &&
     (d[0] === d[1] && d[0] === d[2] && d[0] === d[3] && d[0] === d[4] && d[0] === d[5] && d[0] === d[6] && d[0] === d[7] && d[0] === d[8]) &&
     (f[0] === f[1] && f[0] === f[2] && f[0] === f[3] && f[0] === f[4] && f[0] === f[5] && f[0] === f[6] && f[0] === f[7] && f[0] === f[8]) &&
     (b[0] === b[1] && b[0] === b[2] && b[0] === b[3] && b[0] === b[4] && b[0] === b[5] && b[0] === b[6] && b[0] === b[7] && b[0] === b[8]) &&
