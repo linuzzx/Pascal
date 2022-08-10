@@ -79,7 +79,7 @@ function init() {
 
     lock = false;
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
     cube = new THREE.Object3D();
     planeCube = new THREE.Object3D();
