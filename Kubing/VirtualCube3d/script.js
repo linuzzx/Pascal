@@ -19,6 +19,8 @@ let interval;
 let timing = false;
 let ready = false;
 
+let prevTurn;
+
 let solved;
 
 let r1 = "red", r2 = "red", r3 = "red", r4 = "red", r5 = "red", r6 = "red", r7 = "red", r8 = "red", r9 = "red", nr1, nr2, nr3, nr4, nr5, nr6, nr7, nr8, nr9;
@@ -72,6 +74,8 @@ function init() {
     getPossibleMoves();
 
     solved = true;
+
+    prevTurn = "";
 
     lock = false;
     scene = new THREE.Scene();
@@ -277,11 +281,14 @@ function getTurn(e) {
                 moveCount++;
                 $("#moves").html(moveCount + " moves");
             }
+            console.log(getAxis(turn));
+            console.log(getAxis(prevTurn));
             if (tween) {
                 tween.progress(1);
             }
 
             applyMove(turn);
+            prevTurn = turn;
         }
     }
 }
@@ -629,7 +636,32 @@ function doLwi() {
     doMove(c, "x", -Math.PI / 2);
 }
 
+function getAxis(t) {
+    let axis;
+    switch (t[0]) {
+        case "U":
+        case "D":
+        case "E":
+            axis = 0;
+            break;
+        case "R":
+        case "L":
+        case "M":
+            axis = 1;
+            break;
+        case "F":
+        case "B":
+        case "S":
+            axis = 2;
+            break;
+    }
+
+    return axis;
+}
+
 function resetState() {
+    prevTurn = "";
+
     let u = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y > 1.5});
     let d = planes.filter(cd => {return cd.getWorldPosition(new THREE.Vector3()).y < -1.5});
     let f = planes.filter(cf => {return cf.getWorldPosition(new THREE.Vector3()).z > 1.5});
@@ -676,12 +708,7 @@ function checkState() {
     let b = planes.filter(cb => {return cb.getWorldPosition(new THREE.Vector3()).z < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
     let r = planes.filter(cr => {return cr.getWorldPosition(new THREE.Vector3()).x > 1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
     let l = planes.filter(cl => {return cl.getWorldPosition(new THREE.Vector3()).x < -1.5}).map(p => p.material.color.r + ";" + p.material.color.g + ";" + p.material.color.b);
-console.log(u);
-console.log(d);
-console.log(f);
-console.log(b);
-console.log(r);
-console.log(l);
+
     solved = ((u[0] === u[1] && u[0] === u[2] && u[0] === u[3] && u[0] === u[4] && u[0] === u[5] && u[0] === u[6] && u[0] === u[7] && u[0] === u[8]) &&
     (d[0] === d[1] && d[0] === d[2] && d[0] === d[3] && d[0] === d[4] && d[0] === d[5] && d[0] === d[6] && d[0] === d[7] && d[0] === d[8]) &&
     (f[0] === f[1] && f[0] === f[2] && f[0] === f[3] && f[0] === f[4] && f[0] === f[5] && f[0] === f[6] && f[0] === f[7] && f[0] === f[8]) &&
