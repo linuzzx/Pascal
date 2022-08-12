@@ -52,11 +52,13 @@ function initActions() {
     });
     $(window).on("keydown", e => {
         if (guessing) {
-            if (e.which === 32) {
+            // if (e.which === 32) {
+            if (e.which === 50) {
                 guess = "Even";
                 checkParity();
             }
-            else if (e.which === 8) {
+            // else if (e.which === 8) {
+            else if (e.which === 49) {
                 guess = "Odd";
                 checkParity();
             }
@@ -121,7 +123,7 @@ function drawScramble() {
 
 function guessParity() {
     guessing = true;
-    $("#answer").text("Press [spacebar] if even targets, [backspace] if odd targets.");
+    $("#answer").text("Press [1] if odd targets, [2] if even targets.");
 }
 
 function checkParity() {
