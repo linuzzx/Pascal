@@ -89,7 +89,16 @@ label {
     background-color: #454545;
 }
 
+#btnClear {
+    position: relative;
+    left: 10%;
+}
+
 #svgGraph {
+    position: absolute;
+}
+
+#svgDrawScramble {
     position: absolute;
 }
 

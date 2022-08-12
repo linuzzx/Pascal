@@ -14,8 +14,6 @@ let timeList;
 let settings;
 
 $(() => {
-    restart();
-
     initActions();
 });
 
@@ -38,6 +36,7 @@ function initActions() {
         }
     }
 
+    restart();
     drawGraph();
 
     $(window).on("keyup", e => {
@@ -81,6 +80,8 @@ function restart() {
     $("#timer").text("0.00");
     $("#btnRestart").blur();
 
+    drawScramble();
+
     timing = false;
     ready = true;
     showingParity = false;
@@ -95,12 +96,27 @@ function restart() {
 function scr() {
     let scr = getScramble4x4(15 + Math.round(Math.random() * 5));
     scramble += " " + scr;
+
+    drawScramble();
+
     $("#scramble").text(scr);
     $("#answer").text("");
     $("#timer").text("0.00");
     $("#btnScramble").blur();
     showingParity = false;
     scrambling = true;
+}
+
+function drawScramble() {
+    $("#svgDrawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='444' scramble=\""+
+                scramble+"\"></scramble-display>");
+
+    if (settings["drawScramble"]) {
+        $("#svgDrawScramble").css("display", "block");
+    }
+    else {
+        $("#svgDrawScramble").css("display", "none");
+    }
 }
 
 function guessParity() {
@@ -448,6 +464,19 @@ function toggleInspection(val) {
     updateSettings();
 }
 
+function toggleDrawScramble(val) {
+    settings["drawScramble"] = val;
+    $("#cbDrawScramble").blur();
+    updateSettings();
+
+    if (val) {
+        $("#svgDrawScramble").css("display", "block");
+    }
+    else {
+        $("#svgDrawScramble").css("display", "none");
+    }
+}
+
 /* function toggleGraph(val) {
     graph = val ? "dark" : "light";
     settings["graph"] = graph;
@@ -462,6 +491,7 @@ function updateSettings() {
 
 function getSettings() {
     $("#cbInspection").prop('checked', settings["inspection"]);
+    $("#cbDrawScramble").prop('checked', settings["drawScramble"]);
     inspection = settings["inspection"];
 
     /* if (!settings["graph"]) {
@@ -477,6 +507,10 @@ function adjustSize() {
     $("#svgGraph").css("right", "0.5%");
     $("#svgGraph").css("bottom", $("#svgGraph").css("right"));
     $("#svgGraph").attr("viewBox", "-10 -10 " + ($("#svgGraph").width() + 10) + " " + ($("#svgGraph").height() + 10));
+
+    $("#svgDrawScramble").css("left", "50%");
+    $("#svgDrawScramble").css("transform", "translate(-50%)");
+    $("#svgDrawScramble").css("bottom", $("#svgGraph").css("right"));
 
     $("#tblHeader th, #tblHeader td, #tblTimes th, #tblTimes td").width($("#tblTimes").width() / 3);
     $("#tblTimesParent").css("overflow-y", "scroll");
