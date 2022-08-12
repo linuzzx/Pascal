@@ -40,7 +40,7 @@ function initActions() {
     drawGraph();
 
     $(window).on("keyup", e => {
-        if (e.which === 32 && !timing && !showingParity && ready && !scrambling) {
+        if (e.which === 32 && !timing && !showingParity && ready && !scrambling && !guessing) {
             startTimer();
         }
         else if (e.which === 32 && timing) {
