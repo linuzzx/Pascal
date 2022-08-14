@@ -23,6 +23,8 @@ const solvedState222 = [
     d1,d3,d7,d9
 ];
 
+const colors = ["white", "#FFAA00", "#00FF00", "red", "blue", "yellow"];
+
 let colors333 = [
     "white", "white", "white", "white", "white", "white", "white", "white", "white",
     "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00", "#FFAA00",
@@ -1333,6 +1335,95 @@ let colors222 = [
     }
 }
 
+function drawScrambleNxN(id, n, scr) {
+    $(id).empty();
+
+    let cube = getState(n, scr);
+
+    let stroke = "#1E1E1E";
+    let width = $(id).width();
+    let height = 3 * width / 4;
+    let space = width / 20;
+    let size = ((width - 3 * space) / 4) / n;
+    let fill = "";
+    let strokeWidth = ((size / n) > 1) ? 1 : 0;
+
+    let coordinates = [
+        {
+            x1: n * size + space,
+            x2: 2 * n * size + space,
+            y1: 0,
+            y2: n * size,
+        },
+        {
+            x1: 0,
+            x2: n * size,
+            y1: n * size + space,
+            y2: 2 * n * size + space,
+        },
+        {
+            x1: n * size + space,
+            x2: 2 * n * size + space,
+            y1: n * size + space,
+            y2: 2 * n * size + space,
+        },
+        {
+            x1: 2 * n * size + 2 * space,
+            x2: 3 * n * size + 2 * space,
+            y1: n * size + space,
+            y2: 2 * n * size + space,
+        },
+        {
+            x1: 3 * n * size + 3 * space,
+            x2: 4 * n * size + 3 * space,
+            y1: n * size + space,
+            y2: 2 * n * size + space,
+        },
+        {
+            x1: n * size + space,
+            x2: 2 * n * size + space,
+            y1: 2 * n * size + 2 * space,
+            y2: 3 * n * size + 2 * space,
+        }
+    ];
+    
+    for (let i = 0; i < 6; i++) {
+        let j = 0;
+        let x1 = coordinates[i].x1;
+        let x2 = coordinates[i].x2;
+        let y1 = coordinates[i].y1;
+        let y2 = coordinates[i].y2;
+
+        let yCount = 0;
+        for (let y = y1; y < y2; y += size) {
+            let k = 0;
+            let xCount = 0;
+            for (let x = x1; x < x2; x += size) {
+                fill = cube[i][j][k];
+                
+                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                $(rect).attr("x", x);
+                $(rect).attr("y", y);
+                $(rect).attr("width", size);
+                $(rect).attr("height", size);
+                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(id).append(rect);
+                k++;
+                xCount++;
+                if (xCount === n) {
+                    break;
+                }
+            }
+            j++;
+            yCount++;
+            if (yCount === n) {
+                break;
+            }
+        }
+    }
+}
+
 function getHHmmsshh(ms, penalty = 0, stats = false) {
     if (ms === "DNF" || ms === "-") {
         return ms;
@@ -1627,6 +1718,291 @@ function cleanAlg(alg) {
     }
 
     return newAlg.replaceAll("r","Rw").replaceAll("l","Lw").replaceAll("u","Uw").replaceAll("d","Dw").replaceAll("f","Fw").replaceAll("b","Bw").trim();
+}
+
+function getState(n, scr) {
+    let cube = [];
+
+    for (let s = 0; s < 6; s++) {
+        let side = [];
+        for (let i = 0; i < n; i++) {
+            let line = [];
+            for (let j = 0; j < n; j++) {
+                line.push(colors[s]);
+            }
+            side.push(line);
+        }
+        cube.push(side);
+    }
+    
+    for (let s of scr.split(" ")) {
+        if (!s.includes("w")) {
+            s = "1" + s;
+        }
+        else if (s.split("")[1] === "w") {
+            s = "2" + s;
+        }
+        s = s.replace("w", "").replace("'", "3");
+        
+        if (s.includes("R")) {
+            let r = parseInt(s.split("R")[1]) || 1;
+            move(cube, "R", parseInt(s.split("R")[0]), r);
+        }
+        else if (s.includes("L")) {
+            let r = parseInt(s.split("L")[1]) || 1;
+            move(cube, "L", parseInt(s.split("L")[0]), r);
+        }
+        else if (s.includes("U")) {
+            let r = parseInt(s.split("U")[1]) || 1;
+            move(cube, "U", parseInt(s.split("U")[0]), r);
+        }
+        else if (s.includes("D")) {
+            let r = parseInt(s.split("D")[1]) || 1;
+            move(cube, "D", parseInt(s.split("D")[0]), r);
+        }
+        else if (s.includes("F")) {
+            let r = parseInt(s.split("F")[1]) || 1;
+            move(cube, "F", parseInt(s.split("F")[0]), r);
+        }
+        else if (s.includes("B")) {
+            let r = parseInt(s.split("B")[1]) || 1;
+            move(cube, "B", parseInt(s.split("B")[0]), r);
+        }
+        else {
+            let r = parseInt(s.split("")[2]) || 1;
+            move(cube, s.split("")[1], 0, r);
+        }
+    }
+    
+    return cube;
+}
+
+function move(cube, xyz, w, r) {
+    let r1 = r;
+    let r2 = 4 - r;
+
+    if (xyz === "R") {
+        /*  */
+        rotateFace(cube, 4, 2);
+        /*  */
+        rotateFace(cube, 3, r1);
+        if (w === cube[0].length) {
+            rotateFace(cube, 1, r2);
+        }
+        for (let i = 0; i < r; i++) {
+            for (let k = 0; k < cube[0].length; k++) {
+                for (let j = cube[0].length - 1; j >= cube[0].length - w; j--) {
+                    let temp = cube[0][k][j];
+                    cube[0][k][j] = cube[2][k][j];
+                    cube[2][k][j] = cube[5][k][j];
+                    cube[5][k][j] = cube[4][k][j];
+                    cube[4][k][j] = temp;
+                }
+            }
+        }
+        /*  */
+        rotateFace(cube, 4, 2);
+        /*  */
+    }
+    else if (xyz === "L") {
+        /*  */
+        rotateFace(cube, 4, 2);
+        /*  */
+        rotateFace(cube, 1, r1);
+        if (w === cube[0].length) {
+            rotateFace(cube, 3, r2);
+        }
+        for (let i = 0; i < r; i++) {
+            for (let k = 0; k < cube[0].length; k++) {
+                for (let j = 0; j < w; j++) {
+                    let temp = cube[0][k][j];
+                    cube[0][k][j] = cube[4][k][j];
+                    cube[4][k][j] = cube[5][k][j];
+                    cube[5][k][j] = cube[2][k][j];
+                    cube[2][k][j] = temp;
+                }
+            }
+        }
+        /*  */
+        rotateFace(cube, 4, 2);
+        /*  */
+    }
+    else if (xyz === "U") {
+        rotateFace(cube, 0, r1);
+        if (w === cube[0].length) {
+            rotateFace(cube, 5, r2);
+        }
+        for (let i = 0; i < r; i++) {
+            for (let k = 0; k < w; k++) {
+                for (let j = 0; j < cube[0].length; j++) {
+                    let temp = cube[2][k][j];
+                    cube[2][k][j] = cube[3][k][j];
+                    cube[3][k][j] = cube[4][k][j];
+                    cube[4][k][j] = cube[1][k][j];
+                    cube[1][k][j] = temp;
+                }
+            }
+        }
+    }
+    else if (xyz === "D") {
+        rotateFace(cube, 5, r1);
+        if (w === cube[0].length) {
+            rotateFace(cube, 0, r2);
+        }
+        for (let i = 0; i < r; i++) {
+            for (let k = cube[0].length - 1; k > cube[0].length - 1 - w; k--) {
+                for (let j = 0; j < cube[0].length; j++) {
+                    let temp = cube[2][k][j];
+                    cube[2][k][j] = cube[1][k][j];
+                    cube[1][k][j] = cube[4][k][j];
+                    cube[4][k][j] = cube[3][k][j];
+                    cube[3][k][j] = temp;
+                }
+            }
+        }
+    }
+    else if (xyz === "F") {
+        /*  */
+        rotateFace(cube, 0, 3);
+        rotateFace(cube, 5, 1);
+        rotateFace(cube, 3, 2);
+        /*  */
+        rotateFace(cube, 2, r1);
+        if (w === cube[0].length) {
+            rotateFace(cube, 4, r2);
+        }
+        for (let i = 0; i < r; i++) {
+            for (let k = 0; k < cube[0].length; k++) {
+                for (let j = cube[0].length - 1; j >= cube[0].length - w; j--) {
+                    let temp = cube[0][k][j];
+                    cube[0][k][j] = cube[1][k][j];
+                    cube[1][k][j] = cube[5][k][j];
+                    cube[5][k][j] = cube[3][k][j];
+                    cube[3][k][j] = temp;
+                }
+            }
+        }
+        /*  */
+        rotateFace(cube, 0, 1);
+        rotateFace(cube, 5, 3);
+        rotateFace(cube, 3, 2);
+        /*  */
+    }
+    else if (xyz === "B") {
+        /*  */
+        rotateFace(cube, 0, 3);
+        rotateFace(cube, 5, 1);
+        rotateFace(cube, 3, 2);
+        /*  */
+        rotateFace(cube, 4, r1);
+        if (w === cube[0].length) {
+            rotateFace(cube, 2, r2);
+        }
+        for (let i = 0; i < r; i++) {
+            for (let k = 0; k < cube[0].length; k++) {
+                for (let j = 0; j < w; j++) {
+                    let temp = cube[0][k][j];
+                    cube[0][k][j] = cube[3][k][j];
+                    cube[3][k][j] = cube[5][k][j];
+                    cube[5][k][j] = cube[1][k][j];
+                    cube[1][k][j] = temp;
+                }
+            }
+        }
+        /*  */
+        rotateFace(cube, 0, 1);
+        rotateFace(cube, 5, 3);
+        rotateFace(cube, 3, 2);
+        /*  */
+    }
+    else if (xyz === "x") {
+        /*  */
+        rotateFace(cube, 4, 2);
+        /*  */
+        rotateFace(cube, 1, r2);
+        rotateFace(cube, 3, r1);
+        for (let i = 0; i < r; i++) {
+            for (let k = 0; k < cube[0].length; k++) {
+                for (let j = 0; j < cube[0].length; j++) {
+                    let temp = cube[0][k][j];
+                    cube[0][k][j] = cube[2][k][j];
+                    cube[2][k][j] = cube[5][k][j];
+                    cube[5][k][j] = cube[4][k][j];
+                    cube[4][k][j] = temp;
+                }
+            }
+        }
+        /*  */
+        rotateFace(cube, 4, 2);
+        /*  */
+    }
+    else if (xyz === "y") {
+        rotateFace(cube, 0, r2);
+        rotateFace(cube, 5, r1);
+        for (let i = 0; i < r; i++) {
+            for (let k = 0; k < cube[0].length; k++) {
+                for (let j = 0; j < cube[0].length; j++) {
+                    let temp = cube[2][k][j];
+                    cube[2][k][j] = cube[3][k][j];
+                    cube[3][k][j] = cube[4][k][j];
+                    cube[4][k][j] = cube[1][k][j];
+                    cube[1][k][j] = temp;
+                }
+            }
+        }
+    }
+    else if (xyz === "z") {
+        /*  */
+        rotateFace(cube, 0, 3);
+        rotateFace(cube, 5, 1);
+        rotateFace(cube, 3, 2);
+        /*  */
+        rotateFace(cube, 2, r1);
+        if (w === cube[0].length) {
+            rotateFace(cube, 4, r2);
+        }
+        for (let i = 0; i < r; i++) {
+            for (let k = 0; k < cube[0].length; k++) {
+                for (let j = 0; j < cube[0].length; j++) {
+                    let temp = cube[0][k][j];
+                    cube[0][k][j] = cube[1][k][j];
+                    cube[1][k][j] = cube[5][k][j];
+                    cube[5][k][j] = cube[3][k][j];
+                    cube[3][k][j] = temp;
+                }
+            }
+        }
+        /*  */
+        rotateFace(cube, 0, 1);
+        rotateFace(cube, 5, 3);
+        rotateFace(cube, 3, 2);
+        /*  */
+    }
+
+    return cube;
+}
+
+function rotateFace(cube, face, r) {
+    for (let i = 0; i < r; i++) {
+        rotate(cube[face]);
+    }
+    return cube;
+}
+
+function rotate(matrix) {
+    const n = matrix.length;
+    const x = Math.floor(n/ 2);
+    const y = n - 1;
+    for (let i = 0; i < x; i++) {
+        for (let j = i; j < y - i; j++) {
+            k = matrix[i][j];
+            matrix[i][j] = matrix[y - j][i];
+            matrix[y - j][i] = matrix[y - i][y - j];
+            matrix[y - i][y - j] = matrix[j][y - i];
+            matrix[j][y - i] = k;
+        }
+    }
+    return matrix;
 }
 
 function getCubeState333() {

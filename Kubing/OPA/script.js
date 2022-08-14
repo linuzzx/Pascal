@@ -110,8 +110,9 @@ function scr() {
 }
 
 function drawScramble() {
-    $("#svgDrawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='444' scramble=\""+
-                scramble+"\"></scramble-display>");
+    /* $("#svgDrawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='444' scramble=\""+
+                scramble+"\"></scramble-display>"); */
+    drawScrambleNxN("#svgDrawScramble", 4, scramble);
 
     if (settings["drawScramble"]) {
         $("#svgDrawScramble").css("display", "block");
@@ -305,23 +306,7 @@ function getScramble4x4(num) {
     return scr.trim();
 }
 
-function getHHmmsshh(ms, penalty = 0, stats = false) {
-    /* if (ms === "DNF" || ms === "-") {
-        return ms;
-    }
-    else if (ms === undefined) {
-        return "-";
-    }
-    else if (penalty === -1 && !stats) {
-        return "DNF";
-    }
-    else if (penalty === 2000) {
-        ms += 2000;
-    }
-    else if (ms === Infinity) {
-        return "DNF";
-    } */
-
+/* function getHHmmsshh(ms, penalty = 0, stats = false) {
     let timeStr = "";
     let cs = Math.floor((ms % 1000) / 10);
     let s = Math.floor((ms / 1000) % 60);
@@ -358,15 +343,8 @@ function getHHmmsshh(ms, penalty = 0, stats = false) {
         }
     }
     
-    /* if (penalty === 2000) {
-        timeStr += "+";
-    }
-    else if (penalty === -1 && stats) {
-        timeStr = "DNF (" + timeStr + ")";
-    } */
-    
     return timeStr;
-}
+} */
 
 function drawGraph() {
     $("#svgGraph").empty();
@@ -510,9 +488,10 @@ function adjustSize() {
     $("#svgGraph").css("bottom", $("#svgGraph").css("right"));
     $("#svgGraph").attr("viewBox", "-10 -10 " + ($("#svgGraph").width() + 10) + " " + ($("#svgGraph").height() + 10));
 
+    $("#svgDrawScramble").height(3 * $("#svgDrawScramble").width() / 4);
     $("#svgDrawScramble").css("left", "50%");
     $("#svgDrawScramble").css("transform", "translate(-50%)");
-    $("#svgDrawScramble").css("bottom", $("#svgGraph").css("right"));
+    $("#svgDrawScramble").css("bottom", "1%");
 
     $("#tblHeader th, #tblHeader td, #tblTimes th, #tblTimes td").width($("#tblTimes").width() / 3);
     $("#tblTimesParent").css("overflow-y", "scroll");
