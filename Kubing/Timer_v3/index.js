@@ -190,26 +190,27 @@ function getScramble() {
 }
 
 function drawScramble() {
+    $("#drawScramble").html("<svg id='cube' preserveAspectRatio='xMaxYMax meet' width='" + svgWidth + "' height='" + svgHeight + "'></svg>");
     switch (curScrType) {
         case "333":
-            draw333Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 3, scramble);
             break;
         case "222":
-            draw222Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 2, scramble);
             break;
-        /*case "444":
-            draw444Svg($("#cube"),scramble);
+        case "444":
+            drawScrambleNxN("#cube", 4, scramble);
             break;
         case "555":
-            draw555Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 5, scramble);
             break;
         case "666":
-            draw666Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 6, scramble);
             break;
         case "777":
-            draw777Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 7, scramble);
             break;
-        case "clock":
+        /*case "clock":
             drawClockSvg($("#cube"),scramble);
             break;
         case "minx":
@@ -225,7 +226,7 @@ function drawScramble() {
             drawSq1Svg($("#cube"),scramble);
             break;
         default:
-            $("#drawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='"+curScrType+"' scramble=\""+
+            $("#drawScramble").html("<svg id='cube' preserveAspectRatio='xMaxYMax meet' width='" + svgWidth + "' height='" + svgHeight + "'></svg><scramble-display event='"+curScrType+"' scramble=\""+
                 scramble.replaceAll("<span>","").replaceAll("</span>","").replaceAll("</br>"," ")+
                 "\"></scramble-display>");
             break;
@@ -1253,9 +1254,13 @@ function initActions() {
     keyActions();
     touchActions();
 
+    svgWidth = $("#right").width() * 0.75;
+    svgHeight = svgWidth * 3/4;
+
     curScrType = $("#scrambleType").val();
 
     getScramble();
+
 
     $("#timeList").parent().css("overflow-y", "scroll");
 
@@ -1367,11 +1372,14 @@ function adjustSize() {
         $("#content").css("grid-template-columns", "");
     }*/
 
-    let svgWidth = $("#right").width() * 0.75;
-    let svgHeight = svgWidth * 3/4;
+    svgWidth = $("#right").width() * 0.75;
+    svgHeight = svgWidth * 3/4;
 
-    $(".svgScramble").attr("width", svgWidth);
-    $(".svgScramble").attr("height", svgHeight);
+    $("#cube").attr("width", svgWidth);
+    $("#cube").attr("height", svgHeight);
+
+    $("#drawScramble").attr("width", svgWidth);
+    $("#drawScramble").attr("height", svgHeight);
 
     let h = $("#content").height() - $("#notTimeList").height();
     $("#timeList").parent().css("max-height", h);
