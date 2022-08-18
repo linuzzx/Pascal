@@ -25,6 +25,26 @@ h1 {
     text-align: center;
 }
 
+#question {
+    position: absolute;
+    top: 1%;
+    left: 1%;
+    font-size: 3vw;
+}
+
+#questionTips {
+    position: relative;
+    display: none;
+    z-index: 2;
+    background-color: #181818;
+    font-size: large;
+    width: 50%;
+}
+
+#question:hover #questionTips {
+    display: block;
+}
+
 #settings {
     text-align: right;
     margin: 1%;
@@ -92,6 +112,7 @@ label {
 #btnClear {
     position: relative;
     left: 10%;
+    z-index: 1;
 }
 
 #svgGraph {

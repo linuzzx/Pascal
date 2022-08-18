@@ -482,6 +482,8 @@ function getSettings() {
 }
 
 function adjustSize() {
+    let w = $(window).width();
+    let h = $(window).height();
     $("#svgGraph").width("25%");
     $("#svgGraph").height($("#svgGraph").width() * 2 / 4);
     $("#svgGraph").css("right", "0.5%");

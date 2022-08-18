@@ -18,20 +18,31 @@
 </head>
 <body>
     <div id="gridRows">
-        <div id="settings">
-            <!--label for="cbButtons">Buttons </label>
-            <input type="checkbox" id="cbButtons" onchange="toggleTimer(this.checked)"><br-->
-            <!--label for="cbHold">Hold space 0.55s </label>
-            <input type="checkbox" id="cbHold" onchange="toggleHold(this.checked)"><br-->
-            <label for="cbInspection">Change color at 8, 12, 15 </label>
-            <input type="checkbox" id="cbInspection" onchange="toggleInspection(this.checked)"><br>
-            <label for="cbDrawScramble">Draw scramble </label>
-            <input type="checkbox" id="cbDrawScramble" onchange="toggleDrawScramble(this.checked)"><br>
-            <!-- <label for="cbGraph">Dark graph </label>
-            <input type="checkbox" id="cbGraph" onchange="toggleGraph(this.checked)"><br> -->
+        <div>
+            <div id="settings">
+                <!--label for="cbButtons">Buttons </label>
+                <input type="checkbox" id="cbButtons" onchange="toggleTimer(this.checked)"><br-->
+                <!--label for="cbHold">Hold space 0.55s </label>
+                <input type="checkbox" id="cbHold" onchange="toggleHold(this.checked)"><br-->
+                <label for="cbInspection">Change color at 8, 12, 15 </label>
+                <input type="checkbox" id="cbInspection" onchange="toggleInspection(this.checked)"><br>
+                <label for="cbDrawScramble">Draw scramble </label>
+                <input type="checkbox" id="cbDrawScramble" onchange="toggleDrawScramble(this.checked)"><br>
+                <!-- <label for="cbGraph">Dark graph </label>
+                <input type="checkbox" id="cbGraph" onchange="toggleGraph(this.checked)"><br> -->
+            </div>
         </div>
         <div id="gridColumns">
             <div>
+                <h1 id="question">?
+                    <ol id="questionTips">
+                        <li>Scramble the cube with the given scramble</li>
+                        <li>Time your tracing (spacebar to start/stop)</li>
+                        <li>Press 1/2 for odd/even (or parity/no parity)</li>
+                        <li>From the already scrambled state, apply the next (shorter) scramble. Note: You can apply the scramble from anywhere, but this can mess up draw scramble</li>
+                        <li>Repeat steps 2.-4. as many times as you want</li>
+                    </ol>
+                </h1>
                 <button id="btnClear" class="btn btn-secondary" onclick="clearList()">Clear time list</button>
                 <table id="tblHeader">
                     <tr><th>#</th><th>Time</th><th>Success</th></tr>

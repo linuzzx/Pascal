@@ -1,18 +1,17 @@
 html {
     background-image: linear-gradient(to bottom, #181818, #464646);
     background-attachment: fixed;
-    height: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
 }
 
 body {
     background: transparent;
-    height: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    text-align: center;
 }
 
 h1 {
@@ -20,4 +19,105 @@ h1 {
     margin: 0;
     cursor: default;
     font-weight: normal;
+}
+
+#content {
+    text-align: center;
+}
+
+#settings {
+    text-align: right;
+    margin: 1%;
+    height: 100%;
+}
+
+#timer {
+    font-size: 7vh;
+}
+
+#gridRows {
+    display: grid;
+    grid-template-rows: 1fr 6fr 1fr;
+    height: 100%;
+}
+
+#gridColumns {
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    height: 100%;
+}
+
+label {
+    color: #aaaaaa;
+}
+
+#tblTimes, #tblHeader {
+    border-collapse: collapse;
+    color: #aaaaaa;
+    overflow-y: scroll;
+    table-layout: fixed;
+    border-collapse: collapse;
+    text-align: center;
+    width: 75%;
+}
+
+#tblTimes, #tblHeader, #tblStats, tr, th, td {
+    border-spacing: 1vh;
+}
+
+#tblTimesParent {
+    height: 50vh;
+    max-height: 50vh;
+}
+
+#tblStats {
+    position: absolute;
+    bottom: 0.5%;
+    width: 20%;
+    border-collapse: collapse;
+    color: #aaaaaa;
+    table-layout: fixed;
+    margin: 1%;
+}
+
+#tdBest, #tdRate, #tdMean {
+    text-align: left;
+}
+
+#tblTimes tr:hover th, #tblTimes tr:hover td {
+    cursor: pointer;
+    background-color: #454545;
+}
+
+#btnClear {
+    position: relative;
+    left: 10%;
+}
+
+#svgGraph {
+    position: absolute;
+}
+
+#svgDrawScramble {
+    position: absolute;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 0;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+   
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+  
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: transparent; 
 }

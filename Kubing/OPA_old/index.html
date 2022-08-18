@@ -11,14 +11,56 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+    <script src="../Tools/tools.js"></script>
+    <script src="https://cdn.cubing.net/js/scramble-display" type="module"></script>
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1 id="scramble"></h1><br>
-    <button class="btn btn-secondary" onclick="scr()">Scramble</button>
-    <button class="btn btn-secondary" onclick="checkParity()">Check</button>
-    <button class="btn btn-secondary" onclick="restart()">Restart</button><br><br>
-    <h1 id="answer"></h1>
+    <div id="gridRows">
+        <div id="settings">
+            <!--label for="cbButtons">Buttons </label>
+            <input type="checkbox" id="cbButtons" onchange="toggleTimer(this.checked)"><br-->
+            <!--label for="cbHold">Hold space 0.55s </label>
+            <input type="checkbox" id="cbHold" onchange="toggleHold(this.checked)"><br-->
+            <label for="cbInspection">Change color at 8, 12, 15 </label>
+            <input type="checkbox" id="cbInspection" onchange="toggleInspection(this.checked)"><br>
+            <label for="cbDrawScramble">Draw scramble </label>
+            <input type="checkbox" id="cbDrawScramble" onchange="toggleDrawScramble(this.checked)"><br>
+            <!-- <label for="cbGraph">Dark graph </label>
+            <input type="checkbox" id="cbGraph" onchange="toggleGraph(this.checked)"><br> -->
+        </div>
+        <div id="gridColumns">
+            <div>
+                <button id="btnClear" class="btn btn-secondary" onclick="clearList()">Clear time list</button>
+                <table id="tblHeader">
+                    <tr><th>#</th><th>Time</th><th>Success</th></tr>
+                </table><br>
+                <div id="tblTimesParent">
+                    <table id="tblTimes"></table>
+                </div>
+            </div>
+            <div id="content">
+                <h1 id="scramble"></h1><br>
+                <!--div id="btns">
+                    <button id="btnScramble" class="btn btn-secondary" onclick="scr()">Scramble</button>
+                    <button id="btnCheck" class="btn btn-secondary" onclick="checkParity()">Check</button>
+                    <button id="btnRestart" class="btn btn-secondary" onclick="restart()">Restart</button><br><br>
+                </div-->
+                <h1 id="timer">0.00</h1><br><br>
+                <h1 id="answer"></h1>
+            </div>
+            <div></div>
+        </div>
+        <div>
+            <table id="tblStats">
+                <tr><th>Best time:</th><th id="tdBest">-</th></tr>
+                <tr><th>Success rate:</th><th id="tdRate">-</th></tr>
+                <tr><th>Mean time:</th><th id="tdMean">-</th></tr>
+            </table>
+            <svg id="svgDrawScramble"></svg>
+            <svg id="svgGraph"></svg>
+        </div>
+    </div>
 </body>
 </html>
