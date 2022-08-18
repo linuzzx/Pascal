@@ -418,6 +418,62 @@ function applyMove(turn) {
             doLw();
             doLw();
             break;
+        case "Uw":
+            doY();
+            doD();
+            break;
+        case "Uw'":
+            doYi();
+            doDi();
+            break;
+        case "Uw2":
+            doY();
+            doY();
+            doD();
+            doD();
+            break;
+        case "Dw":
+            doYi();
+            doU();
+            break;
+        case "Dw'":
+            doY();
+            doUi();
+            break;
+        case "Dw2":
+            doY();
+            doY();
+            doU();
+            doU();
+            break;
+        case "Fw":
+            doZ();
+            doB();
+            break;
+        case "Fw'":
+            doZi();
+            doBi();
+            break;
+        case "Fw2":
+            doZ();
+            doZ();
+            doB();
+            doB();
+            break;
+        case "Bw":
+            doZi();
+            doF();
+            break;
+        case "Bw'":
+            doZ();
+            doFi();
+            break;
+        case "Bw2":
+            doZ();
+            doZ();
+            doF();
+            doF();
+            break;
     }
 }
 
