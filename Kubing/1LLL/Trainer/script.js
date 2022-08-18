@@ -364,11 +364,19 @@ function applyMove(turn) {
         case "x'":
             doXi();
             break;
+        case "x2":
+            doX();
+            doX();
+            break;
         case "y":
             doY();
             break;
         case "y'":
             doYi();
+            break;
+        case "y2":
+            doY();
+            doY();
             break;
         case "z":
             doZ();
@@ -376,11 +384,19 @@ function applyMove(turn) {
         case "z'":
             doZi();
             break;
+        case "z2":
+            doZ();
+            doZ();
+            break;
         case "M":
             doM();
             break;
         case "M'":
             doMi();
+            break;
+        case "M2":
+            doM();
+            doM();
             break;
         case "Rw":
             doRw();
@@ -388,11 +404,19 @@ function applyMove(turn) {
         case "Rw'":
             doRwi();
             break;
+        case "Rw2":
+            doRw();
+            doRw();
+            break;
         case "Lw":
             doLw();
             break;
         case "Lw'":
             doLwi();
+            break;
+        case "Lw2":
+            doLw();
+            doLw();
             break;
     }
 }
