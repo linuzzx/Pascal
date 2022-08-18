@@ -97,11 +97,11 @@ function listImages() {
 function setAlgset(algset) {
     localStorage.setItem("currentAlgset", algset);
     currentAlgset = algset;
-
-    if (currentAlgset === 57) {
+    
+    if (currentAlgset === 57 || currentAlgset === "57") {
         $("#btnDropdown").text("Pll");
     }
-    else if (currentAlgset === 58) {
+    else if (currentAlgset === 58 || currentAlgset === "58") {
         $("#btnDropdown").text("Custom");
     }
     else {
