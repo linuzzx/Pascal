@@ -3,6 +3,9 @@ let scene, camera, renderer;
 let cubies = [];
 let planes = [];
 
+let positions = [];
+let rotations = [];
+
 let cube;
 let planeCube;
 
@@ -202,6 +205,13 @@ function init() {
             planeCube.add(plane);
             planes.push(plane);
         }
+    }
+
+    positions = [];
+    rotations = [];
+    for (let p of planes) {
+        positions.push(p.position);
+        rotations.push(p.rotation);
     }
 
     //scene.add(cube);
@@ -744,6 +754,13 @@ function getAxis(t) {
 
 function resetState() {
     prevTurn = "";
+
+    let i = 0;
+    for (let p of planes) {
+        p.position = positions[i];
+        p.rotation = rotations[i];
+        i++;
+    }
 
     let u = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y > 1.5});
     let d = planes.filter(cd => {return cd.getWorldPosition(new THREE.Vector3()).y < -1.5});
