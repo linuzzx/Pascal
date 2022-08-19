@@ -188,6 +188,10 @@ function nextCase() {
     adjustSize();
 }
 
+function redoCase() {
+    applyScramble(inverse(currentAlg));
+}
+
 function addCustomAlgButton() {
     let out = "";
 
@@ -254,12 +258,12 @@ function toggleSolution() {
 
 function showSolution() {
     $("#solutionAlg").css("visibility", "visible");
-    $("#btnShowSolution").text("Hide solution");
+    $("#btnShowSolution").text("Hide solution [spacebar]");
 }
 
 function hideSolution() {
     $("#solutionAlg").css("visibility", "hidden");
-    $("#btnShowSolution").text("Show solution");
+    $("#btnShowSolution").text("Show solution [spacebar]");
 }
 
 function inverse(alg) {
@@ -320,6 +324,6 @@ function keyListener(e) {
     }
     // Backspace
     else if (e.which === 8) {
-        applyScramble(inverse(currentAlg));
+        redoCase();
     }
 }
