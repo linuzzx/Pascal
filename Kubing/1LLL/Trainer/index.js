@@ -119,7 +119,7 @@ function setAlgset(algset) {
         let out = "";
         
         for (let i=1; i<cbCount; i++) {
-            out += "<label>"+i+"<input type='checkbox' value='"+i+"' onchange='setSubsets()'></label>";
+            out += "<label>"+i+"<input type='checkbox' value='"+i+"' onchange='setSubsets(); this.blur()'></label>";
         }
 
         $("#cbSubsetDiv").html(out);
