@@ -79,6 +79,12 @@ function listImages() {
     let i = 0;
     for (let a of algs) {
         let algorithm = Object.values(a)[0][0];
+        if (a.name !== "Custom") {
+            algorithm = algorithm.split("/")[0].replaceAll("(", "").replaceAll(")", "");
+        }
+        else {
+            algorithm = "";
+        }
 
         let c = $("#canvas"+i)[0];
         let ctx = c.getContext("2d");
@@ -138,14 +144,14 @@ function setSubsets() {
     if (checkedCBs.length === 0) {
         for (let i=1; i<Object.keys(algs[algset]).length; i++) {
             for (let a of algs[algset][i]) {
-                algList.push(a);
+                algList.push(a.split("/")[0].replaceAll("(", "").replaceAll(")", ""));
             }
         }
     }
     else {
         for (let c of checkedCBs) {
             for (let a of algs[algset][c]) {
-                algList.push(a);
+                algList.push(a.split("/")[0].replaceAll("(", "").replaceAll(")", ""));
             }
         }
     }
@@ -155,13 +161,13 @@ function setSubsets() {
 }
 
 function nextCase() {
-    currentAlg = algList[nextAlg];
+    currentAlg = algList[nextAlg].split("/")[0].replaceAll("(", "").replaceAll(")", "");
     
     if (currentAlg) {
         const scramble = inverse(currentAlg);
         applyScramble(scramble);
         $("#setupAlg").html(scramble);
-        $("#solutionAlg").html(algList[nextAlg]);
+        $("#solutionAlg").html(currentAlg);
         $("#btnRemoveAllCustom").prop("disabled", false);
         addCustomAlgButton();
         nextAlg++;

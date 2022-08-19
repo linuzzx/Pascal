@@ -408,6 +408,42 @@ function applyMove(turn) {
             doM();
             doM();
             break;
+        case "S":
+            doZ();
+            doB();
+            doFi();
+            break;
+        case "S'":
+            doZi();
+            doBi();
+            doF();
+            break;
+        case "S2":
+            doZ();
+            doZ();
+            doB();
+            doB();
+            doFi();
+            doFi();
+            break;
+        case "E":
+            doYi();
+            doDi();
+            doU();
+            break;
+        case "E'":
+            doY();
+            doD();
+            doUi();
+            break;
+        case "E2":
+            doY();
+            doY();
+            doD();
+            doD();
+            doU();
+            doU();
+            break;
         case "Rw":
             doRw();
             break;
