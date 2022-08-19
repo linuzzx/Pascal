@@ -228,6 +228,7 @@ function removeAllCustomAlgs() {
         while (algs[algs.length-1][1].length > 0) {
             algs[algs.length-1][1].pop();
         }
+        $("#solutionAlg").html("");
         addCustomAlgButton();
         setAlgset(currentAlgset);
         saveCustomAlgs();
