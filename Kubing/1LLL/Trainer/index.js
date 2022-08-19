@@ -161,9 +161,10 @@ function setSubsets() {
 }
 
 function nextCase() {
-    currentAlg = algList[nextAlg].split("/")[0].replaceAll("(", "").replaceAll(")", "");
+    currentAlg = algList[nextAlg];
     
     if (currentAlg) {
+        currentAlg = algList[nextAlg].split("/")[0].replaceAll("(", "").replaceAll(")", "");
         const scramble = inverse(currentAlg);
         applyScramble(scramble);
         $("#setupAlg").html(scramble);
