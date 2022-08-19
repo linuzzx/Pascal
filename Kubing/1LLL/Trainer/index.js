@@ -31,7 +31,7 @@ $(window).resize(function(){
 function showContent() {
     let out = "";
     const select = "<div><label for='selectAlgset'>Choose algset</label><select id='selectAlgset' onchange='setAlgset(this.value)'></select></div>";
-    const cubeDiv = "<div id='cubeDisplay'><h1 id='setupAlg'></h1><canvas id='cubeCanvas' width='400' height='400' style='margin: auto;'></canvas><button onclick='showSolution()'>Show solution</button><h1 id='solutionAlg'></h1></div>";
+    const cubeDiv = "<div id='cubeDisplay'><h1 id='setupAlg'></h1><canvas id='cubeCanvas' width='400' height='400' style='margin: auto;'></canvas><button onclick='showSolution(); this.blur()'>Show solution</button><h1 id='solutionAlg'></h1></div>";
 
     if ($(window).width() >= $(window).height()) {
         //out = cubeDiv + select;
@@ -63,7 +63,7 @@ function listCases() {
 
     let j = 0;
     for (let a of algs) {
-        dOut += "<span value='"+j+"' class='dropdown-item'' onclick='setAlgset("+j+")'><img id='algImg"+j+"' src='' alt=''>&nbsp;&nbsp;"+a.name+"</span>";
+        dOut += "<span value='"+j+"' class='dropdown-item'' onclick='setAlgset("+j+"); this.blur()'><img id='algImg"+j+"' src='' alt=''>&nbsp;&nbsp;"+a.name+"</span>";
         j++;
     }
     
@@ -125,7 +125,7 @@ function setAlgset(algset) {
         $("#cbSubsetDiv").html(out);
     }
     else {
-        $("#cbSubsetDiv").html("<button id='btnRemoveAllCustom' onclick='removeAllCustomAlgs()'>Remove all from custom</button>");
+        $("#cbSubsetDiv").html("<button id='btnRemoveAllCustom' onclick='removeAllCustomAlgs(); this.blur()'>Remove all from custom</button>");
     }
 
     setSubsets();
@@ -192,10 +192,10 @@ function addCustomAlgButton() {
     let out = "";
 
     if (!algs[algs.length-1][1].includes(currentAlg)) {
-        out = "<button id='customAlgButton' onclick='addCustomAlg()'>Add to custom</button>";
+        out = "<button id='customAlgButton' onclick='addCustomAlg(); this.blur()'>Add to custom</button>";
     }
     else {
-        out = "<button id='customAlgButton' onclick='removeCustomAlg()'>Remove from custom</button>";
+        out = "<button id='customAlgButton' onclick='removeCustomAlg(); this.blur()'>Remove from custom</button>";
     }
     
     $("#addToCustom").html(out);

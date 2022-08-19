@@ -20,7 +20,7 @@
             </button>
             <div id="dropdownAlgset" class="dropdown-menu"></div>
             <div id="cbSubsetDiv"></div>
-            <select id='selectAlgset' onchange='setAlgset(this.value)'></select>
+            <select id='selectAlgset' onchange='setAlgset(this.value); this.blur()'></select>
         </div>
         <div>
         </div>
@@ -31,8 +31,8 @@
             <h1 id='solutionAlg'></h1>
             <div id="addToCustom"></div>
             <div id="buttonDiv">
-                <button id="btnShowSolution" onclick='toggleSolution()'>Show solution</button>
-                <button onclick='nextCase()'>Next case</button>
+                <button id="btnShowSolution" onclick='toggleSolution(); this.blur()'>Show solution</button>
+                <button onclick='nextCase(); this.blur()'>Next case</button>
             </div>
         </div>
     </div>
