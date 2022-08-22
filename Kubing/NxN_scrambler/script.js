@@ -1,4 +1,10 @@
 $(() => {
+    $(window).on("keypress", e => {
+        if (e.which === 32) {
+            scramble();
+        }
+    });
+
     if ($(window).width() > $(window).height()) {
         $("#svgScramble").width("40%");
     }
@@ -6,6 +12,8 @@ $(() => {
         $("#svgScramble").width("90%");
     }
     $("#svgScramble").height(3 * $("#svgScramble").width() / 4);
+    $("#inpN").val(3);
+    scramble();
 });
 
 function scramble() {
