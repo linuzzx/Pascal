@@ -1,100 +1,93 @@
-let allMoves = ["u", "d", "r", "l", "f", "b"];
-
 function getMovesWithoutRotations(mvs) {
-    /* for (let i = 0; i < mvs.split(" ").length; i++) {
-        let rot = mvs.split(" ")[i];
-        if (rot.includes("x") || rot.includes("y") || rot.includes("z")) {
-            let old = mvs.split(" ").slice(0, i).join(" ").trim();
-            let rest = mvs.split(" ").slice(i + 1).join(" ").trim();console.log(rot);
-            allMoves = rotate(allMoves.join(" "), rot, true).split(" ");
-            mvs = old + " " + rotate(rest, rot);
-            console.log(mvs);
+    let mainMoves = ["U", "D", "R", "L", "F", "B"];
+    
+    function doRotation(m, rot) {
+        switch (rot) {
+            case "x":
+                m = m
+                .replaceAll(mainMoves[5], mainMoves[0].toLowerCase())
+                .replaceAll(mainMoves[4], mainMoves[1].toLowerCase())
+                .replaceAll(mainMoves[1], mainMoves[5].toLowerCase())
+                .replaceAll(mainMoves[0], mainMoves[4].toLowerCase());
+                break;
+            case "x'":
+                m = m
+                .replaceAll(mainMoves[5], mainMoves[1].toLowerCase())
+                .replaceAll(mainMoves[4], mainMoves[0].toLowerCase())
+                .replaceAll(mainMoves[1], mainMoves[4].toLowerCase())
+                .replaceAll(mainMoves[0], mainMoves[5].toLowerCase());
+                break;
+            case "x2":
+                m = m
+                .replaceAll(mainMoves[5], mainMoves[4].toLowerCase())
+                .replaceAll(mainMoves[4], mainMoves[5].toLowerCase())
+                .replaceAll(mainMoves[1], mainMoves[0].toLowerCase())
+                .replaceAll(mainMoves[0], mainMoves[1].toLowerCase());
+                break;
+            case "y":
+                m = m
+                .replaceAll(mainMoves[5], mainMoves[3].toLowerCase())
+                .replaceAll(mainMoves[4], mainMoves[2].toLowerCase())
+                .replaceAll(mainMoves[3], mainMoves[4].toLowerCase())
+                .replaceAll(mainMoves[2], mainMoves[5].toLowerCase());
+                break;
+            case "y'":
+                m = m
+                .replaceAll(mainMoves[5], mainMoves[2].toLowerCase())
+                .replaceAll(mainMoves[4], mainMoves[3].toLowerCase())
+                .replaceAll(mainMoves[3], mainMoves[5].toLowerCase())
+                .replaceAll(mainMoves[2], mainMoves[4].toLowerCase());
+                break;
+            case "y2":
+                m = m
+                .replaceAll(mainMoves[5], mainMoves[4].toLowerCase())
+                .replaceAll(mainMoves[4], mainMoves[5].toLowerCase())
+                .replaceAll(mainMoves[3], mainMoves[2].toLowerCase())
+                .replaceAll(mainMoves[2], mainMoves[3].toLowerCase());
+                break;
+            case "z":
+                m = m
+                .replaceAll(mainMoves[3], mainMoves[1].toLowerCase())
+                .replaceAll(mainMoves[2], mainMoves[0].toLowerCase())
+                .replaceAll(mainMoves[1], mainMoves[2].toLowerCase())
+                .replaceAll(mainMoves[0], mainMoves[3].toLowerCase());
+                break;
+            case "z'":
+                m = m
+                .replaceAll(mainMoves[3], mainMoves[0].toLowerCase())
+                .replaceAll(mainMoves[2], mainMoves[1].toLowerCase())
+                .replaceAll(mainMoves[1], mainMoves[3].toLowerCase())
+                .replaceAll(mainMoves[0], mainMoves[2].toLowerCase());
+                break;
+            case "z2":
+                m = m
+                .replaceAll(mainMoves[3], mainMoves[2].toLowerCase())
+                .replaceAll(mainMoves[2], mainMoves[3].toLowerCase())
+                .replaceAll(mainMoves[1], mainMoves[0].toLowerCase())
+                .replaceAll(mainMoves[0], mainMoves[1].toLowerCase());
+                break;
         }
-    } */
+    
+        return m.toUpperCase();
+    }
+
     mvs = mvs.replaceAll("x", "_x").replaceAll("y", "_y").replaceAll("z", "_z");
     let newMoves = [];
+    if (mvs.split("_")[0].trim() !== "") {
+        newMoves.push(mvs.split("_")[0].trim());
+    }
     for (let r of mvs.split("_").slice(1)) {
         let rot = r.split(" ")[0];
         let rest = r.split(" ").slice(1).join(" ").trim();
-        allMoves = rotate(allMoves.slice().join(" ").toUpperCase(), rot, true).split(" ");
-        newMoves.push(rotate(rest, rot));
+        mainMoves = doRotation(mainMoves.slice().join(" "), rot).split(" ");
+        newMoves.push((rest
+            .replaceAll("U", mainMoves[0].toLowerCase())
+            .replaceAll("D", mainMoves[1].toLowerCase())
+            .replaceAll("R", mainMoves[2].toLowerCase())
+            .replaceAll("L", mainMoves[3].toLowerCase())
+            .replaceAll("F", mainMoves[4].toLowerCase())
+            .replaceAll("B", mainMoves[5].toLowerCase())).toUpperCase());
     }
-
-    return newMoves.join(" ");
-}
-
-function rotate(m, rot, arr = false) {
-    switch (rot) {
-        case "x":
-            m = m
-            .replaceAll("B", allMoves[0])
-            .replaceAll("F", allMoves[1])
-            .replaceAll("D", allMoves[5])
-            .replaceAll("U", allMoves[4]);
-            break;
-        case "x'":
-            m = m
-            .replaceAll("B", allMoves[1])
-            .replaceAll("F", allMoves[0])
-            .replaceAll("D", allMoves[4])
-            .replaceAll("U", allMoves[5]);
-            break;
-        case "x2":
-            m = m
-            .replaceAll("B", allMoves[4])
-            .replaceAll("F", allMoves[5])
-            .replaceAll("D", allMoves[0])
-            .replaceAll("U", allMoves[1]);
-            break;
-        case "y":
-            m = m
-            .replaceAll("B", allMoves[3])
-            .replaceAll("F", allMoves[2])
-            .replaceAll("L", allMoves[4])
-            .replaceAll("R", allMoves[5]);
-            break;
-        case "y'":
-            m = m
-            .replaceAll("B", allMoves[2])
-            .replaceAll("F", allMoves[3])
-            .replaceAll("L", allMoves[5])
-            .replaceAll("R", allMoves[4]);
-            break;
-        case "y2":
-            m = m
-            .replaceAll("B", allMoves[4])
-            .replaceAll("F", allMoves[5])
-            .replaceAll("L", allMoves[2])
-            .replaceAll("R", allMoves[3]);
-            break;
-        case "z":
-            m = m
-            .replaceAll("L", allMoves[1])
-            .replaceAll("R", allMoves[0])
-            .replaceAll("D", allMoves[2])
-            .replaceAll("U", allMoves[3]);
-            break;
-        case "z'":
-            m = m
-            .replaceAll("L", allMoves[0])
-            .replaceAll("R", allMoves[1])
-            .replaceAll("D", allMoves[3])
-            .replaceAll("U", allMoves[2]);
-            break;
-        case "z2":
-            m = m
-            .replaceAll("L", allMoves[2])
-            .replaceAll("R", allMoves[3])
-            .replaceAll("D", allMoves[0])
-            .replaceAll("U", allMoves[1]);
-            break;
-    }
-
-    return arr ? m.toLowerCase() : m
-        .replaceAll("u", "U")
-        .replaceAll("d", "D")
-        .replaceAll("r", "R")
-        .replaceAll("l", "L")
-        .replaceAll("f", "F")
-        .replaceAll("b", "B");
+    
+    return newMoves.join(" ").trim();
 }
