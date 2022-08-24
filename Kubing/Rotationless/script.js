@@ -89,5 +89,5 @@ function getMovesWithoutRotations(mvs) {
             .replaceAll("B", mainMoves[5].toLowerCase())).toUpperCase());
     }
     
-    return newMoves.join(" ").trim();
+    return newMoves.join(" ").replaceAll("W", "w").trim();
 }

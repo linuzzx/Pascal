@@ -1515,7 +1515,7 @@ function getMovesWithoutRotations(mvs) {
             .replaceAll("B", mainMoves[5].toLowerCase())).toUpperCase());
     }
     
-    return newMoves.join(" ").trim();
+    return newMoves.join(" ").replaceAll("W", "w").trim();
 }
 
 function getHHmmsshh(ms, penalty = 0, stats = false) {
