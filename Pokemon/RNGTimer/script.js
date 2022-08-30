@@ -58,7 +58,7 @@ function startTimer() {
 }
 
 function beep() {
-    let vol = 40;
+    /* let vol = 40;
     let freq = 1700;
     let duration = 100;
     let a = new AudioContext();
@@ -70,7 +70,10 @@ function beep() {
     u.connect(a.destination);
     u.gain.value = vol * 0.01;
     v.start(a.currentTime);
-    v.stop(a.currentTime + duration * 0.001);
+    v.stop(a.currentTime + duration * 0.001); */
+
+    const audio = new Audio("beep.wav");
+    audio.play();
 
     $("#timer").css("background-color", "blue");
     setTimeout(() => {
