@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RNG Timer</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="radDevices">
+        <label for="radGBA">GBA</label>
+        <input type="radio" name="radDevice" id="radGBA" value="gba">
+        <label for="radNDSGBA">NDS-GBA</label>
+        <input type="radio" name="radDevice" id="radNDSGBA" value="ndsgba" checked>
+        <label for="radNDS">NDS</label>
+        <input type="radio" name="radDevice" id="radNDS" value="nds">
+    </div>
+
+    <br><br>
+
+    <label for="inpPretimer">Pre timer (ms) </label>
+    <input type="number" id="inpPretimer" min="1" step="1" value="5000">
+    <label for="inpFrame">Frame </label>
+    <input type="number" id="inpFrame" min="1" step="1" value="1000">
+
+    <br><br>
+
+    <label for="inpCalibration">Calibration </label>
+    <input type="number" id="inpCalibration" step="1" value="0" onchange="updateCalibration()">
+    <label for="inpFrameHit">Frame hit </label>
+    <input type="number" id="inpFrameHit" min="1" step="1" value="" onchange="updateFrameHit()">
+    <button id="btnUpdate" onclick="updateTimer()">Update</button><br><br>
+    <button id="btnStart" onclick="startTimer()">Start</button>
+    <button id="btnStop" onclick="stopTimer()">Stop</button>
+    <h1 id="timer">5.000</h1>
+</body>
+</html>
