@@ -20,7 +20,7 @@ $(() => {
 
     frameHit = $("#inpFrame").val();
     framerate = $("#radDevices input[type='radio']:checked").val() === "gba" ? GBA_FRAMERATE : $("input[type='radio']:checked").val() === "ndsgba" ? NDS_GBA_FRAMERATE : NDS_FRAMERATE;
-    $("#timer").text(getHHmmsshh($("#inpPretimer").val()));
+    $("#timer").text(getHHMMssmmm($("#inpPretimer").val()));
     calibration = 0;
 
     $("#radDevices input[type='radio']").on("change", ()=> {
@@ -34,11 +34,17 @@ function startTimer() {
     let start = new Date().getTime();
     $("#btnStart").css("display", "none");
     $("#btnStop").css("display", "block");
-    let time = $("#inpPretimer").val();
-    let pre = true;
-    let i = time >= beeps * beepTime ? beeps - 1 : Math.floor(time / beepTime);
+    let preTime = parseFloat($("#inpPretimer").val());
+    let time = parseFloat($("#inpFrame").val()) * framerate + calibration;
+    let totalTime = preTime + time;
+    
+    let pre = preTime !== 0;
+    let curTime = pre ? preTime : time;
+
+    let i = curTime >= beeps * beepTime ? beeps - 1 : Math.floor(curTime / beepTime);
+
     interval = setInterval(() => {
-        let newTime = Math.round(time - (new Date().getTime() - start));
+        let newTime = Math.round(curTime - (new Date().getTime() - start));
         if (newTime <= beepTime * i) {
             beep();
             i--;
@@ -46,14 +52,14 @@ function startTimer() {
         if (newTime <= 0) {
             if (pre) {
                 pre = false;
-                time = $("#inpFrame").val() * framerate + calibration;
-                i = time >= beeps * beepTime ? beeps - 1 : Math.floor(time / beeps);
+                curTime = totalTime;
+                i = curTime >= beeps * beepTime ? beeps - 1 : Math.floor(curTime / beepTime);
             }
             else {
                 stopTimer();
             }
         }
-        $("#timer").text(getHHmmsshh(newTime));
+        $("#timer").text(getHHMMssmmm(newTime));
     }, 1);
 }
 
@@ -84,7 +90,7 @@ function beep() {
 function stopTimer() {
     clearInterval(interval);
     setTimeout(() => {
-        $("#timer").text(getHHmmsshh($("#inpPretimer").val()));
+        $("#timer").text(getHHMMssmmm($("#inpPretimer").val()));
     }, 10);
     $("#btnStart").css("display", "block");
     $("#btnStop").css("display", "none");
@@ -114,7 +120,7 @@ function changeDevice() {
     $("#inpCalibration").val(calibration);
 }
 
-function getHHmmsshh(ms) {
+function getHHMMssmmm(ms) {
     let timeStr = "";
     let s = Math.floor((ms / 1000) % 60);
     let m = Math.floor((ms / 60000) % 60);
