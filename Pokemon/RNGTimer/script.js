@@ -37,7 +37,7 @@ function startTimer() {
     let preTime = parseFloat($("#inpPretimer").val());
     let time = parseFloat($("#inpFrame").val()) * framerate + calibration;
     let totalTime = preTime + time;
-    
+
     let pre = preTime !== 0;
     let curTime = pre ? preTime : time;
 
@@ -84,7 +84,7 @@ function beep() {
     $("#timer").css("background-color", "blue");
     setTimeout(() => {
         $("#timer").css("background-color", "");
-    }, 50);
+    }, framerate);
 }
 
 function stopTimer() {
