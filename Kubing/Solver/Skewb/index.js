@@ -21,8 +21,9 @@ function solveCube(scr) {
                 $("#searchDepth").html("<h1>" + e.data[1] + "</h1>");
             }
             else if (e.data.length === 3) {
-                let sol = e.data[2][0];
-                sol !== "" ? $("#solution").append("<h1><b>Solution:</b> " + sol + "</h1><div><svg class='svgStep' id='svg_sol'></svg></div>") : "";
+                let solInfo = e.data[0];
+                let sol = e.data[2];
+                solInfo !== "" ? $("#solution").append(solInfo) : "";
                 sol !== "" ? drawSkewbSvg("#svg_sol", [scr, sol].filter(s => {return s !== ""}).join(" ")) : "";
                 scrollDown();
                 adjustSize();
