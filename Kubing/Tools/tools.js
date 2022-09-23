@@ -585,6 +585,95 @@ let colors222 = [
 // Draw scramble
 {
     let stroke = "#1E1E1E";
+
+    function drawScrambleNxN(id, n, scr) {
+        $(id).empty();
+    
+        let cube = getState(n, scr);
+    
+        let width = $(id).width();
+        let height = 3 * width / 4;
+        let space = width / 20;
+        let size = ((width - 3 * space) / 4) / n;
+        let fill = "";
+        let strokeWidth = ((size / n) > 1) ? 1 : 0;
+    
+        let coordinates = [
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: 0,
+                y2: n * size,
+            },
+            {
+                x1: 0,
+                x2: n * size,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: 2 * n * size + 2 * space,
+                x2: 3 * n * size + 2 * space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: 3 * n * size + 3 * space,
+                x2: 4 * n * size + 3 * space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: 2 * n * size + 2 * space,
+                y2: 3 * n * size + 2 * space,
+            }
+        ];
+        
+        for (let i = 0; i < 6; i++) {
+            let j = 0;
+            let x1 = coordinates[i].x1;
+            let x2 = coordinates[i].x2;
+            let y1 = coordinates[i].y1;
+            let y2 = coordinates[i].y2;
+    
+            let yCount = 0;
+            for (let y = y1; y < y2; y += size) {
+                let k = 0;
+                let xCount = 0;
+                for (let x = x1; x < x2; x += size) {
+                    fill = cube[i][j][k];
+                    
+                    let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                    $(rect).attr("x", x);
+                    $(rect).attr("y", y);
+                    $(rect).attr("width", size);
+                    $(rect).attr("height", size);
+                    $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                    
+                    $(id).append(rect);
+                    k++;
+                    xCount++;
+                    if (xCount === n) {
+                        break;
+                    }
+                }
+                j++;
+                yCount++;
+                if (yCount === n) {
+                    break;
+                }
+            }
+        }
+    }
+
     function draw333Svg(svgID, scr) {
         resetDrawSvg(svgID);
         applyMoves(scr);
@@ -1332,95 +1421,6 @@ let colors222 = [
         const svg = $(svgID);
 
         $(svgID).parent().html(svg);
-    }
-}
-
-function drawScrambleNxN(id, n, scr) {
-    $(id).empty();
-
-    let cube = getState(n, scr);
-
-    let stroke = "#1E1E1E";
-    let width = $(id).width();
-    let height = 3 * width / 4;
-    let space = width / 20;
-    let size = ((width - 3 * space) / 4) / n;
-    let fill = "";
-    let strokeWidth = ((size / n) > 1) ? 1 : 0;
-
-    let coordinates = [
-        {
-            x1: n * size + space,
-            x2: 2 * n * size + space,
-            y1: 0,
-            y2: n * size,
-        },
-        {
-            x1: 0,
-            x2: n * size,
-            y1: n * size + space,
-            y2: 2 * n * size + space,
-        },
-        {
-            x1: n * size + space,
-            x2: 2 * n * size + space,
-            y1: n * size + space,
-            y2: 2 * n * size + space,
-        },
-        {
-            x1: 2 * n * size + 2 * space,
-            x2: 3 * n * size + 2 * space,
-            y1: n * size + space,
-            y2: 2 * n * size + space,
-        },
-        {
-            x1: 3 * n * size + 3 * space,
-            x2: 4 * n * size + 3 * space,
-            y1: n * size + space,
-            y2: 2 * n * size + space,
-        },
-        {
-            x1: n * size + space,
-            x2: 2 * n * size + space,
-            y1: 2 * n * size + 2 * space,
-            y2: 3 * n * size + 2 * space,
-        }
-    ];
-    
-    for (let i = 0; i < 6; i++) {
-        let j = 0;
-        let x1 = coordinates[i].x1;
-        let x2 = coordinates[i].x2;
-        let y1 = coordinates[i].y1;
-        let y2 = coordinates[i].y2;
-
-        let yCount = 0;
-        for (let y = y1; y < y2; y += size) {
-            let k = 0;
-            let xCount = 0;
-            for (let x = x1; x < x2; x += size) {
-                fill = cube[i][j][k];
-                
-                let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-                $(rect).attr("x", x);
-                $(rect).attr("y", y);
-                $(rect).attr("width", size);
-                $(rect).attr("height", size);
-                $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
-                
-                $(id).append(rect);
-                k++;
-                xCount++;
-                if (xCount === n) {
-                    break;
-                }
-            }
-            j++;
-            yCount++;
-            if (yCount === n) {
-                break;
-            }
-        }
     }
 }
 
