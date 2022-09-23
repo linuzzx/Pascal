@@ -897,26 +897,6 @@ let colors222 = [
         }
     }
 
-    function draw444Svg(svgID, scr) {
-        resetDrawSvg(svgID);
-        drawMissingSvg(svgID);
-    }
-
-    function draw555Svg(svgID, scr) {
-        resetDrawSvg(svgID);
-        drawMissingSvg(svgID);
-    }
-
-    function draw666Svg(svgID, scr) {
-        resetDrawSvg(svgID);
-        drawMissingSvg(svgID);
-    }
-
-    function draw777Svg(svgID, scr) {
-        resetDrawSvg(svgID);
-        drawMissingSvg(svgID);
-    }
-
     function drawClockSvg(svgID, scr) {
         resetDrawSvg(svgID);
         drawMissingSvg(svgID);
