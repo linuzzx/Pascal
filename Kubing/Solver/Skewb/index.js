@@ -95,7 +95,7 @@ function drawSkewb(svgID, scr) {
     let cleanSkewbCe = [ce1, ce2, ce3, ce4, ce5, ce6];
     let skewbCe = [ce1, ce2, ce3, ce4, ce5, ce6];
     
-    let cube = getSkewbState(scr);console.log(cube);
+    let cube = getSkewbState(scr);
 
     let width = $(svgID).width();
     let height = 3 * width / 4;
