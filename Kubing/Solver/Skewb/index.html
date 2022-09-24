@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="draw333Svg('#svgCube', $(this).val())"></h1>
+    <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="drawSkewb('#svgSkewb', $(this).val())"></h1>
     <div><svg id="svgSkewb"></svg></div>
-    <button id="btnScramble" onclick="$('#inpScramble').val(getScrambleSkewb()); drawSkewbSvg('#svgCube', $('#inpScramble').val())">Scramble</button>
+    <button id="btnScramble" onclick="$('#inpScramble').val(getScrambleSkewb()); drawSkewb('#svgSkewb', $('#inpScramble').val())">Scramble</button>
     <button id="btnSolve" onclick="solveCube($('#inpScramble').val())">Solve</button>
     <div id="solution"></div>
     <div id="searchDepth"></div>
