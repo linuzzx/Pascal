@@ -24,7 +24,6 @@ function solveCube(scr) {
                 let solInfo = e.data[0];
                 let sol = e.data[2];
                 solInfo !== "" ? $("#solution").append(solInfo) : "";
-                sol !== "" ? drawSkewb("#svg_sol", [scr, sol].filter(s => {return s !== ""}).join(" ")) : "";
                 scrollDown();
                 adjustSize();
                 step++;
@@ -96,7 +95,7 @@ function drawSkewb(svgID, scr) {
     let cleanSkewbCe = [ce1, ce2, ce3, ce4, ce5, ce6];
     let skewbCe = [ce1, ce2, ce3, ce4, ce5, ce6];
     
-    let cube = getSkewbState(scr);
+    let cube = getSkewbState(scr);console.log(cube);
 
     let width = $(svgID).width();
     let height = 3 * width / 4;
@@ -152,7 +151,7 @@ function drawSkewb(svgID, scr) {
     let cBlue = [cube[4], cube[2], cube[22], cube[20], cube[28]];
     let cRed = [cube[7], cube[5], cube[19], cube[17], cube[27]];
     let cOrange = [cube[1], cube[11], cube[13], cube[23], cube[25]];
-    let colors = [cWhite, cYellow, cGreen, cBlue, cRed, cOrange];
+    let colors = [cWhite, cOrange, cGreen, cRed, cBlue, cYellow];
 
     for (let i = 0; i < 6; i++) {
         let j = 0;
@@ -161,31 +160,22 @@ function drawSkewb(svgID, scr) {
         let y1 = coordinates[i].y1;
         let y2 = coordinates[i].y2;
 
-        let points = x1+","+y1+" "+(x2-x1)+","+y1+" "+x1+","+(y2-y1)+" "+x1+","+y1;
+        let points = [
+            x1+","+y1+" "+(x1+(x2-x1)/2)+","+y1+" "+x1+","+(y1+(y2-y1)/2)+" "+x1+","+y1,
+            x2+","+y1+" "+x2+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y1+" "+x2+","+y1,
+            x2+","+y2+" "+(x1+(x2-x1)/2)+","+y2+" "+x2+","+(y1+(y2-y1)/2)+" "+x2+","+y2,
+            x1+","+y2+" "+x1+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y2+" "+x1+","+y2,
+            (x1+(x2-x1)/2)+","+y1+" "+x2+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y2+" "+x1+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y1
+        ];
 
-        let yCount = 0;
-        for (let y = y1; y < y2; y += size) {
-            let k = 0;
-            let xCount = 0;
-            for (let x = x1; x < x2; x += size) {
-                fill = getColor(colors[i].shift());
+        for (let p of points) {
+            fill = getColor(colors[i].shift());
                 
-                let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-                $(poly).attr("points", points);
-                $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
-                
-                $(svgID).append(poly);
-                k++;
-                xCount++;
-                if (xCount === n) {
-                    break;
-                }
-            }
-            j++;
-            yCount++;
-            if (yCount === n) {
-                break;
-            }
+            let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            $(poly).attr("points", p);
+            $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+            
+            $(svgID).append(poly);
         }
     }
 
@@ -255,79 +245,77 @@ function drawSkewb(svgID, scr) {
         skewbCe = cleanSkewbCe.slice();
     }
     
-    {
-        function _r() {
-            let tempCo = skewbCo.slice();
-    
-            skewbCo[6] = new Corner(tempCo[6].c3, tempCo[6].c1, tempCo[6].c2);
-            skewbCo[1] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
-            skewbCo[7] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
-            skewbCo[5] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
-    
-            let tempCe = skewbCe.slice();
-    
-            skewbCe[3] = new Center(tempCe[5].c);
-            skewbCe[4] = new Center(tempCe[3].c);
-            skewbCe[5] = new Center(tempCe[4].c);
-        }
-        function _ri() {
-            _r();
-            _r();
-        }
-        function _l() {
-            let tempCo = skewbCo.slice();
-    
-            skewbCo[4] = new Corner(tempCo[4].c3, tempCo[4].c1, tempCo[4].c2);
-            skewbCo[3] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
-            skewbCo[5] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
-            skewbCo[7] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
-    
-            let tempCe = skewbCe.slice();
-    
-            skewbCe[1] = new Center(tempCe[5].c);
-            skewbCe[2] = new Center(tempCe[1].c);
-            skewbCe[5] = new Center(tempCe[2].c);
-        }
-        function _li() {
-            _l();
-            _l();
-        }
-        function _b() {
-            let tempCo = skewbCo.slice();
-    
-            skewbCo[7] = new Corner(tempCo[7].c3, tempCo[7].c1, tempCo[7].c2);
-            skewbCo[0] = new Corner(tempCo[6].c2, tempCo[6].c3, tempCo[6].c1);
-            skewbCo[4] = new Corner(tempCo[0].c2, tempCo[0].c3, tempCo[0].c1);
-            skewbCo[6] = new Corner(tempCo[4].c2, tempCo[4].c3, tempCo[4].c1);
-    
-            let tempCe = skewbCe.slice();
-    
-            skewbCe[1] = new Center(tempCe[4].c);
-            skewbCe[4] = new Center(tempCe[5].c);
-            skewbCe[5] = new Center(tempCe[1].c);
-        }
-        function _bi() {
-            _b();
-            _b();
-        }
-        function _u() {
-            let tempCo = skewbCo.slice();
-    
-            skewbCo[0] = new Corner(tempCo[0].c3, tempCo[0].c1, tempCo[0].c2);
-            skewbCo[1] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
-            skewbCo[3] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
-            skewbCo[7] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
-    
-            let tempCe = skewbCe.slice();
-    
-            skewbCe[0] = new Center(tempCe[4].c);
-            skewbCe[1] = new Center(tempCe[0].c);
-            skewbCe[4] = new Center(tempCe[1].c);
-        }
-        function _ui() {
-            _u();
-            _u();
-        }
+    function _r() {
+        let tempCo = skewbCo.slice();
+
+        skewbCo[6] = new Corner(tempCo[6].c3, tempCo[6].c1, tempCo[6].c2);
+        skewbCo[1] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
+        skewbCo[7] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
+        skewbCo[5] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+
+        let tempCe = skewbCe.slice();
+
+        skewbCe[3] = new Center(tempCe[5].c);
+        skewbCe[4] = new Center(tempCe[3].c);
+        skewbCe[5] = new Center(tempCe[4].c);
+    }
+    function _ri() {
+        _r();
+        _r();
+    }
+    function _l() {
+        let tempCo = skewbCo.slice();
+
+        skewbCo[4] = new Corner(tempCo[4].c3, tempCo[4].c1, tempCo[4].c2);
+        skewbCo[3] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+        skewbCo[5] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
+        skewbCo[7] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
+
+        let tempCe = skewbCe.slice();
+
+        skewbCe[1] = new Center(tempCe[5].c);
+        skewbCe[2] = new Center(tempCe[1].c);
+        skewbCe[5] = new Center(tempCe[2].c);
+    }
+    function _li() {
+        _l();
+        _l();
+    }
+    function _b() {
+        let tempCo = skewbCo.slice();
+
+        skewbCo[7] = new Corner(tempCo[7].c3, tempCo[7].c1, tempCo[7].c2);
+        skewbCo[0] = new Corner(tempCo[6].c2, tempCo[6].c3, tempCo[6].c1);
+        skewbCo[4] = new Corner(tempCo[0].c2, tempCo[0].c3, tempCo[0].c1);
+        skewbCo[6] = new Corner(tempCo[4].c2, tempCo[4].c3, tempCo[4].c1);
+
+        let tempCe = skewbCe.slice();
+
+        skewbCe[1] = new Center(tempCe[4].c);
+        skewbCe[4] = new Center(tempCe[5].c);
+        skewbCe[5] = new Center(tempCe[1].c);
+    }
+    function _bi() {
+        _b();
+        _b();
+    }
+    function _u() {
+        let tempCo = skewbCo.slice();
+
+        skewbCo[0] = new Corner(tempCo[0].c3, tempCo[0].c1, tempCo[0].c2);
+        skewbCo[1] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+        skewbCo[3] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
+        skewbCo[7] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
+
+        let tempCe = skewbCe.slice();
+
+        skewbCe[0] = new Center(tempCe[4].c);
+        skewbCe[1] = new Center(tempCe[0].c);
+        skewbCe[4] = new Center(tempCe[1].c);
+    }
+    function _ui() {
+        _u();
+        _u();
     }
 }
 
@@ -341,7 +329,7 @@ function scrollDown() {
 }
 
 function adjustSize() {
-    $("svg").height(3 * $("#svgCube").width() / 4);
+    $("svg").height(3 * $("#svgSkewb").width() / 4);
     $("#inpScramble").css("font-size", "3vh");
     $("button").css("font-size", "3vh");
 }
