@@ -78,12 +78,14 @@ function beep() {
     v.start(a.currentTime);
     v.stop(a.currentTime + duration * 0.001); */
 
-    const audio = new Audio("beep.wav");
-    audio.play();
+    /* const audio = new Audio("beep.wav");
+    audio.play(); */
 
-    $("#timer").css("background-color", "blue");
+    // $("#timer").css("background-color", "blue");
+    $("html").css("background-color", "blue");
     setTimeout(() => {
-        $("#timer").css("background-color", "");
+        // $("#timer").css("background-color", "");
+        $("html").css("background-color", "");
     }, framerate);
 }
 
