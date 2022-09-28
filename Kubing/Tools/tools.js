@@ -1643,6 +1643,251 @@ let colors222 = [
         }
     }
 
+    // Pyraminx
+    function drawScramblePyraminx(svgID, scr) {
+        $(svgID).empty();
+        let n = 3;
+    
+        let moves = ["U", "U'", "R", "R'", "L", "L'", "B", "B'"];
+        let tipsMoves = ["u", "u'", "r", "r'", "l", "l'", "b", "b'"];
+    
+        let cG = "1";
+        let cB = "2";
+        let cR = "3";
+        let cY = "4";
+
+        /* 
+                g
+            r   y   b        
+        */
+
+        let pyraF = [cG, cG, cG, cG, cG, cG, cG, cG, cG];
+        let pyraR = [cB, cB, cB, cB, cB, cB, cB, cB, cB];
+        let pyraL = [cR, cR, cR, cR, cR, cR, cR, cR, cR];
+        let pyraD = [cY, cY, cY, cY, cY, cY, cY, cY, cY];
+    
+        let cleanPyraminx = [pyraF, pyraR, pyraL, pyraD];
+        let pyraminx = [pyraF, pyraR, pyraL, pyraD];
+        
+        let cube = getPyraminxState(scr);
+    
+        let width = $(svgID).width();
+        let height = 3 * width / 4;
+        let space = width / 20;
+        let size = ((width - 3 * space) / 4) / n;
+        let fill = "";
+        let stroke = "#1E1E1E";
+        let strokeWidth = ((size / n) > 1) ? 1 : 0;
+    
+        let coordinates = [
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: 0,
+                y2: n * size,
+            },
+            {
+                x1: 0,
+                x2: n * size,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: 2 * n * size + 2 * space,
+                x2: 3 * n * size + 2 * space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: 3 * n * size + 3 * space,
+                x2: 4 * n * size + 3 * space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: 2 * n * size + 2 * space,
+                y2: 3 * n * size + 2 * space,
+            }
+        ];
+        
+    
+        let cWhite = [cube[0], cube[3], cube[6], cube[9], cube[24]];
+        let cYellow = [cube[12], cube[15], cube[18], cube[21], cube[29]];
+        let cGreen = [cube[10], cube[8], cube[16], cube[14], cube[26]];
+        let cBlue = [cube[4], cube[2], cube[22], cube[20], cube[28]];
+        let cRed = [cube[7], cube[5], cube[19], cube[17], cube[27]];
+        let cOrange = [cube[1], cube[11], cube[13], cube[23], cube[25]];
+        let colors = [cWhite, cOrange, cGreen, cRed, cBlue, cYellow];
+    
+        for (let i = 0; i < 6; i++) {
+            let j = 0;
+            let x1 = coordinates[i].x1;
+            let x2 = coordinates[i].x2;
+            let y1 = coordinates[i].y1;
+            let y2 = coordinates[i].y2;
+    
+            let points = [
+                x1+","+y1+" "+(x1+(x2-x1)/2)+","+y1+" "+x1+","+(y1+(y2-y1)/2)+" "+x1+","+y1,
+                x2+","+y1+" "+x2+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y1+" "+x2+","+y1,
+                x2+","+y2+" "+(x1+(x2-x1)/2)+","+y2+" "+x2+","+(y1+(y2-y1)/2)+" "+x2+","+y2,
+                x1+","+y2+" "+x1+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y2+" "+x1+","+y2,
+                (x1+(x2-x1)/2)+","+y1+" "+x2+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y2+" "+x1+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y1
+            ];
+    
+            for (let p of points) {
+                fill = getPyraminxColor(colors[i].shift());
+                    
+                let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+                $(poly).attr("points", p);
+                $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(poly);
+            }
+        }
+    
+        function getPyraminxColor(n) {
+            switch (n) {
+                case "1":
+                    return "white";
+                case "2":
+                    return "yellow";
+                case "3":
+                    return "#00FF00";
+                case "4":
+                    return "blue";
+            }
+        }
+    
+        function cleanMoves(m) {
+            while (m.includes("&nbsp;&nbsp;")) {
+                m.replaceAll("&nbsp;&nbsp;", "&nbsp;");
+            }
+        
+            return m.trim();
+        }
+    
+        function getPyraminxState(sol) {
+            resetCubeState();
+            sol = cleanMoves(sol);
+            let arr = Array.isArray(sol) ? sol : sol.trim().split(" ");
+            for (let a of arr) {
+                switch (a.replaceAll("*","")) {
+                    case "R":
+                        _r();
+                        break;
+                    case "R'":
+                        _ri();
+                        break;
+                    case "L":
+                        _l();
+                        break;
+                    case "L'":
+                        _li();
+                        break;
+                    case "B":
+                        _b();
+                        break;
+                    case "B'":
+                        _bi();
+                        break;
+                    case "U":
+                        _u();
+                        break;
+                    case "U'":
+                        _ui();
+                        break;
+                }
+            }
+        
+            return skewbCo.map(s => s.c1 + s.c2 + s.c3).join("") + skewbCe.map(s => s.c).join("");
+        }
+        
+        function resetCubeState() {
+            pyraminx = cleanPyraminx.slice();
+        }
+        
+        function _r() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[6] = new Corner(tempCo[6].c3, tempCo[6].c1, tempCo[6].c2);
+            skewbCo[1] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
+            skewbCo[7] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
+            skewbCo[5] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[3] = new Center(tempCe[5].c);
+            skewbCe[4] = new Center(tempCe[3].c);
+            skewbCe[5] = new Center(tempCe[4].c);
+        }
+        function _ri() {
+            _r();
+            _r();
+        }
+        function _l() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[4] = new Corner(tempCo[4].c3, tempCo[4].c1, tempCo[4].c2);
+            skewbCo[3] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+            skewbCo[5] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
+            skewbCo[7] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[1] = new Center(tempCe[5].c);
+            skewbCe[2] = new Center(tempCe[1].c);
+            skewbCe[5] = new Center(tempCe[2].c);
+        }
+        function _li() {
+            _l();
+            _l();
+        }
+        function _b() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[7] = new Corner(tempCo[7].c3, tempCo[7].c1, tempCo[7].c2);
+            skewbCo[0] = new Corner(tempCo[6].c2, tempCo[6].c3, tempCo[6].c1);
+            skewbCo[4] = new Corner(tempCo[0].c2, tempCo[0].c3, tempCo[0].c1);
+            skewbCo[6] = new Corner(tempCo[4].c2, tempCo[4].c3, tempCo[4].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[1] = new Center(tempCe[4].c);
+            skewbCe[4] = new Center(tempCe[5].c);
+            skewbCe[5] = new Center(tempCe[1].c);
+        }
+        function _bi() {
+            _b();
+            _b();
+        }
+        function _u() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[0] = new Corner(tempCo[0].c3, tempCo[0].c1, tempCo[0].c2);
+            skewbCo[1] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+            skewbCo[3] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
+            skewbCo[7] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[0] = new Center(tempCe[4].c);
+            skewbCe[1] = new Center(tempCe[0].c);
+            skewbCe[4] = new Center(tempCe[1].c);
+        }
+        function _ui() {
+            _u();
+            _u();
+        }
+    }
+
     function drawMissingSvg(svgID) {
         resetDrawSvg(svgID);
         let x = "50%";

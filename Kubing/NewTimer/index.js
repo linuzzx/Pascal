@@ -190,26 +190,29 @@ function getScramble() {
 }
 
 function drawScramble() {
+    $("#cube").empty();
+    resetDrawSvg("#cube");
+
     switch (curScrType) {
         case "333":
-            draw333Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 3, scramble);
             break;
         case "222":
-            draw222Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 2, scramble);
             break;
-        /*case "444":
-            draw444Svg($("#cube"),scramble);
+        case "444":
+            drawScrambleNxN("#cube", 4, scramble);
             break;
         case "555":
-            draw555Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 5, scramble);
             break;
         case "666":
-            draw666Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 6, scramble);
             break;
         case "777":
-            draw777Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 7, scramble);
             break;
-        case "clock":
+        /* case "clock":
             drawClockSvg($("#cube"),scramble);
             break;
         case "minx":
@@ -217,17 +220,18 @@ function drawScramble() {
             break;
         case "pyram":
             drawPyraSvg($("#cube"),scramble);
-            break;
+            break; */
         case "skewb":
-            drawSkewbSvg($("#cube"),scramble);
-            break;*/
+            drawScrambleSkewb("#cube",scramble);
+            break;
         case "sq1":
-            drawSq1Svg($("#cube"),scramble);
+            drawScrambleSq1("#cube",scramble);
             break;
         default:
-            $("#drawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='"+curScrType+"' scramble=\""+
+            drawMissingSvg("#cube");
+            /* $("#drawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='"+curScrType+"' scramble=\""+
                 scramble.replaceAll("<span>","").replaceAll("</span>","").replaceAll("</br>"," ")+
-                "\"></scramble-display>");
+                "\"></scramble-display>"); */
             break;
     }
 }
