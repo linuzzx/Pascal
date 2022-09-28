@@ -912,13 +912,10 @@ let colors222 = [
         drawMissingSvg(svgID);
     }
 
-    function drawSkewbSvg(svgID, scr) {
+    // Sq1
+    function drawScrambleSq1(svgID, scr) {
         resetDrawSvg(svgID);
-        drawMissingSvg(svgID);
-    }
-
-    //Sq1
-    {
+    
         let sq1 = ["a2","b","c1","c2","d","e1","e2","f","g1","g2","h","a1","i2","j","k1","k2","l","m1","m2","n","o1","o2","p","i1"];
         let sq1T = [];
         let sq1B = [];
@@ -941,6 +938,258 @@ let colors222 = [
             colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,colorT,
             colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB,colorB
         ];
+
+        let svgW = $(svgID).width() / 2;
+        let svgH = svgW;
+
+        if ($("#drawScrambleSq1").length) {
+            $("#drawScrambleSq1").remove();
+        }
+
+        let svgs = "<div id='drawScrambleSq1' class='svgScramble'><svg id='sq1T'></svg><svg id='sq1B'></svg><div style='display: grid;place-items: center'><svg id='sq1E'></svg></div></div>";
+
+        $(svgID).parent().append(svgs)
+        $("#sq1T").attr("width", svgW);
+        $("#sq1T").attr("height", svgH);
+        $("#sq1B").attr("width", svgW);
+        $("#sq1B").attr("height", svgH);
+        $("#sq1E").attr("width", svgW*0.7);
+        $("#sq1E").attr("height", svgH*0.7 / 3);
+
+        sSq1 = scr;
+        turnSq1();
+
+        let svgWidth = $(svgID).width() / 2;
+
+        let cx = svgWidth/2;
+        let cy = svgWidth/2;
+
+        let w = svgWidth;
+
+        let cp0 = [0.2*w,0.2*w];
+        let cp1 = rotateSq1(cx, cy, cp0[0], cp0[1], 330);
+        let cp2 = rotateSq1(cx, cy, cp1[0], cp1[1], 330);
+        let cp3 = rotateSq1(cx, cy, cp2[0], cp2[1], 330);
+        let cp4 = rotateSq1(cx, cy, cp3[0], cp3[1], 330);
+        let cp5 = rotateSq1(cx, cy, cp4[0], cp4[1], 330);
+        let cp6 = rotateSq1(cx, cy, cp5[0], cp5[1], 330);
+        let cp7 = rotateSq1(cx, cy, cp6[0], cp6[1], 330);
+        let cp8 = rotateSq1(cx, cy, cp7[0], cp7[1], 330);
+        let cp9 = rotateSq1(cx, cy, cp8[0], cp8[1], 330);
+        let cp10 = rotateSq1(cx, cy, cp9[0], cp9[1], 330);
+        let cp11 = rotateSq1(cx, cy, cp10[0], cp10[1], 330);
+
+        let cps = [
+            cp0,cp1,cp2,cp3,cp4,cp5,cp6,cp7,cp8,cp9,cp10,cp11
+        ];
+        
+        let ep1 = intersectSq1(cx,cy,cp1[0],cp1[1],cp0[0],cp0[1],cp3[0],cp3[1]);
+        let ep2 = rotateSq1(cx, cy, ep1[0], ep1[1], 330);
+        let ep3 = rotateSq1(cx, cy, ep2[0], ep2[1], 330);
+        let ep4 = rotateSq1(cx, cy, ep3[0], ep3[1], 330);
+        let ep5 = rotateSq1(cx, cy, ep4[0], ep4[1], 330);
+        let ep6 = rotateSq1(cx, cy, ep5[0], ep5[1], 330);
+        let ep7 = rotateSq1(cx, cy, ep6[0], ep6[1], 330);
+        let ep8 = rotateSq1(cx, cy, ep7[0], ep7[1], 330);
+        let ep9 = rotateSq1(cx, cy, ep8[0], ep8[1], 330);
+        let ep10 = rotateSq1(cx, cy, ep9[0], ep9[1], 330);
+        let ep11 = rotateSq1(cx, cy, ep10[0], ep10[1], 330);
+        let ep0 = rotateSq1(cx, cy, ep11[0], ep11[1], 330);
+
+        let eps = [
+            ep0,ep1,ep2,ep3,ep4,ep5,ep6,ep7,ep8,ep9,ep10,ep11
+        ];
+
+        let icp0 = [0.25*w,0.25*w];
+        let icp1 = rotateSq1(cx, cy, icp0[0], icp0[1], 330);
+        let icp2 = rotateSq1(cx, cy, icp1[0], icp1[1], 330);
+        let icp3 = rotateSq1(cx, cy, icp2[0], icp2[1], 330);
+        let icp4 = rotateSq1(cx, cy, icp3[0], icp3[1], 330);
+        let icp5 = rotateSq1(cx, cy, icp4[0], icp4[1], 330);
+        let icp6 = rotateSq1(cx, cy, icp5[0], icp5[1], 330);
+        let icp7 = rotateSq1(cx, cy, icp6[0], icp6[1], 330);
+        let icp8 = rotateSq1(cx, cy, icp7[0], icp7[1], 330);
+        let icp9 = rotateSq1(cx, cy, icp8[0], icp8[1], 330);
+        let icp10 = rotateSq1(cx, cy, icp9[0], icp9[1], 330);
+        let icp11 = rotateSq1(cx, cy, icp10[0], icp10[1], 330);
+
+        let icps = [
+            icp0,icp1,icp2,icp3,icp4,icp5,icp6,icp7,icp8,icp9,icp10,icp11
+        ];
+        
+        let iep1 = intersectSq1(cx,cy,icp1[0],icp1[1],icp0[0],icp0[1],icp3[0],icp3[1]);
+        let iep2 = rotateSq1(cx, cy, iep1[0], iep1[1], 330);
+        let iep3 = rotateSq1(cx, cy, iep2[0], iep2[1], 330);
+        let iep4 = rotateSq1(cx, cy, iep3[0], iep3[1], 330);
+        let iep5 = rotateSq1(cx, cy, iep4[0], iep4[1], 330);
+        let iep6 = rotateSq1(cx, cy, iep5[0], iep5[1], 330);
+        let iep7 = rotateSq1(cx, cy, iep6[0], iep6[1], 330);
+        let iep8 = rotateSq1(cx, cy, iep7[0], iep7[1], 330);
+        let iep9 = rotateSq1(cx, cy, iep8[0], iep8[1], 330);
+        let iep10 = rotateSq1(cx, cy, iep9[0], iep9[1], 330);
+        let iep11 = rotateSq1(cx, cy, iep10[0], iep10[1], 330);
+        let iep0 = rotateSq1(cx, cy, iep11[0], iep11[1], 330);
+
+        let ieps = [
+            iep0,iep1,iep2,iep3,iep4,iep5,iep6,iep7,iep8,iep9,iep10,iep11
+        ];
+
+        $("#sq1T").empty();
+        $("#sq1B").empty();
+        $("#sq1E").empty();
+
+        //OuterColors
+        for (let i=0; i<cps.length; i++) {
+            let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            let polyT = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            let color = colorsSq1[sq1.indexOf(sq1T[i])];
+            let iColor = iColorsSq1[sq1.indexOf(sq1T[i])];
+            if (sq1T[i].split("").length === 2) {
+                if (sq1T[i].split("")[1] === "1") {
+                    if (i === cps.length-1) {
+                        $(poly).attr("points", cps[0][0]+","+cps[0][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
+                    }
+                    else {
+                        $(poly).attr("points", cps[i+1][0]+","+cps[i+1][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
+                    }
+                }
+                else {
+                    if (i === cps.length-1) {
+                        $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
+                    }
+                    else {
+                        $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
+                    }
+                }
+            }
+            else {
+                if (i === cps.length-1) {
+                    $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
+                    $(polyT).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[0][0]+","+ieps[0][1]);
+                }
+                else {
+                    $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
+                    $(polyT).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
+                }
+            }
+
+            $(poly).attr("style", "fill:"+color+";stroke:"+stroke+";stroke-width:1");
+            $(polyT).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
+
+            $("#sq1T").append(poly);
+            $("#sq1T").append(polyT);
+        }
+
+        //InnerColors
+        for (let i=0; i<icps.length; i++) {
+            let polyT = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            let iColor = iColorsSq1[sq1.indexOf(sq1T[i])];
+
+            if (sq1T[i].split("").length === 2) {
+                if (sq1T[i].split("")[1] === "1") {
+                    if (i === cps.length-1) {
+                        $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[0][0]+","+icps[0][1]+" "+ieps[1][0]+","+ieps[1][1]);
+                    }
+                    else if (i === cps.length-2) {
+                        $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[0][0]+","+ieps[0][1]);
+                    }
+                    else {
+                        $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[i+2][0]+","+ieps[i+2][1]);
+                    }
+                }
+            }
+
+            $(polyT).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
+
+            $("#sq1T").append(polyT);
+        }
+
+        //OuterColors
+        for (let i=0; i<cps.length; i++) {
+            let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            let polyB = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            let color = colorsSq1[sq1.indexOf(sq1B[i])];
+            let iColor = iColorsSq1[sq1.indexOf(sq1B[i])];
+            if (sq1B[i].split("").length === 2) {
+                if (sq1B[i].split("")[1] === "1") {
+                    if (i === cps.length-1) {
+                        $(poly).attr("points", cps[0][0]+","+cps[0][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
+                    }
+                    else {
+                        $(poly).attr("points", cps[i+1][0]+","+cps[i+1][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
+                    }
+                }
+                else {
+                    if (i === cps.length-1) {
+                        $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
+                    }
+                    else {
+                        $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
+                    }
+                }
+            }
+            else {
+                if (i === cps.length-1) {
+                    $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
+                    $(polyB).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[0][0]+","+ieps[0][1]);
+                }
+                else {
+                    $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
+                    $(polyB).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
+                }
+            }
+
+            $(poly).attr("style", "fill:"+color+";stroke:"+stroke+";stroke-width:1");
+            $(polyB).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
+
+            $("#sq1B").append(poly);
+            $("#sq1B").append(polyB);
+        }
+
+        //InnerColors
+        for (let i=0; i<icps.length; i++) {
+            let polyB = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            let iColor = iColorsSq1[sq1.indexOf(sq1B[i])];
+
+            if (sq1B[i].split("").length === 2) {
+                if (sq1B[i].split("")[1] === "1") {
+                    if (i === icps.length-1) {
+                        $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[0][0]+","+icps[0][1]+" "+ieps[1][0]+","+ieps[1][1]);
+                    }
+                    else if (i === icps.length-2) {
+                        $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[0][0]+","+ieps[0][1]);
+                    }
+                    else {
+                        $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[i+2][0]+","+ieps[i+2][1]);
+                    }
+                }
+            }
+
+            $(polyB).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
+
+            $("#sq1B").append(polyB);
+        }
+
+        let sq1EW = $("#sq1E").width();
+        let sq1EH = sq1EW/3;
+
+        let rectE1 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+        $(rectE1).attr("x", 0);
+        $(rectE1).attr("y", 0);
+        $(rectE1).attr("width", sq1EW/3);
+        $(rectE1).attr("height", sq1EH);
+        $(rectE1).attr("style", "fill:"+colorE+";stroke:"+stroke+";stroke-width:1");
+        $("#sq1E").append(rectE1);
+
+        let eW = eFlipped? sq1EW/3: 2*sq1EW/3;
+        let eC = eFlipped? colorEF: colorE;
+        let rectE2 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+        $(rectE2).attr("x", sq1EW/3);
+        $(rectE2).attr("y", 0);
+        $(rectE2).attr("width", eW);
+        $(rectE2).attr("height", sq1EH);
+        $(rectE2).attr("style", "fill:"+eC+";stroke:"+stroke+";stroke-width:1");
+        $("#sq1E").append(rectE2);
 
         function rotateSq1(cx, cy, x, y, angle) {
             let radians = (Math.PI / 180) * angle,
@@ -1119,261 +1368,278 @@ let colors222 = [
             sq1B = sq1.slice(12,24);
             eFlipped = false;
         }
+    }
 
-        function drawSq1Svg(svgID, scr) {
-            resetDrawSvg(svgID);
-
-            let svgW = $(svgID).width() / 2;
-            let svgH = svgW;
-
-            if ($("#drawScrambleSq1").length) {
-                $("#drawScrambleSq1").remove();
+    // Skewb
+    function drawScrambleSkewb(svgID, scr) {
+        $(svgID).empty();
+        let n = 3;
+    
+        let moves = ["U", "U'", "R", "R'", "L", "L'", "B", "B'"];
+    
+        let cW = "1";
+        let cY = "2";
+        let cG = "3";
+        let cB = "4";
+        let cR = "5";
+        let cO = "6";
+    
+        class Corner {
+            constructor(c1, c2, c3) {
+                this.c1 = c1;
+                this.c2 = c2;
+                this.c3 = c3;
             }
-
-            let svgs = "<div id='drawScrambleSq1' class='svgScramble'><svg id='sq1T'></svg><svg id='sq1B'></svg><div style='display: grid;place-items: center'><svg id='sq1E'></svg></div></div>";
-
-            $(svgID).parent().append(svgs)
-            $("#sq1T").attr("width", svgW);
-            $("#sq1T").attr("height", svgH);
-            $("#sq1B").attr("width", svgW);
-            $("#sq1B").attr("height", svgH);
-            $("#sq1E").attr("width", svgW*0.7);
-            $("#sq1E").attr("height", svgH*0.7 / 3);
-
-            sSq1 = scr;
-            turnSq1();
-
-            let svgWidth = $(svgID).width() / 2;
-
-            let cx = svgWidth/2;
-            let cy = svgWidth/2;
-
-            let w = svgWidth;
-
-            let cp0 = [0.2*w,0.2*w];
-            let cp1 = rotateSq1(cx, cy, cp0[0], cp0[1], 330);
-            let cp2 = rotateSq1(cx, cy, cp1[0], cp1[1], 330);
-            let cp3 = rotateSq1(cx, cy, cp2[0], cp2[1], 330);
-            let cp4 = rotateSq1(cx, cy, cp3[0], cp3[1], 330);
-            let cp5 = rotateSq1(cx, cy, cp4[0], cp4[1], 330);
-            let cp6 = rotateSq1(cx, cy, cp5[0], cp5[1], 330);
-            let cp7 = rotateSq1(cx, cy, cp6[0], cp6[1], 330);
-            let cp8 = rotateSq1(cx, cy, cp7[0], cp7[1], 330);
-            let cp9 = rotateSq1(cx, cy, cp8[0], cp8[1], 330);
-            let cp10 = rotateSq1(cx, cy, cp9[0], cp9[1], 330);
-            let cp11 = rotateSq1(cx, cy, cp10[0], cp10[1], 330);
-
-            let cps = [
-                cp0,cp1,cp2,cp3,cp4,cp5,cp6,cp7,cp8,cp9,cp10,cp11
+        }
+    
+        class Center {
+            constructor(c) {
+                this.c = c;
+            }
+        }
+    
+        let ce1 = new Center(cW);
+        let ce2 = new Center(cO);
+        let ce3 = new Center(cG);
+        let ce4 = new Center(cR);
+        let ce5 = new Center(cB);
+        let ce6 = new Center(cY);
+    
+        let co1 = new Corner(cW, cO, cB);
+        let co2 = new Corner(cW, cB, cR);
+        let co3 = new Corner(cW, cR, cG);
+        let co4 = new Corner(cW, cG, cO);
+        let co5 = new Corner(cY, cO, cG);
+        let co6 = new Corner(cY, cG, cR);
+        let co7 = new Corner(cY, cR, cB);
+        let co8 = new Corner(cY, cB, cO);
+    
+        let cleanSkewbCo = [co1, co2, co3, co4, co5, co6, co7, co8];
+        let skewbCo = [co1, co2, co3, co4, co5, co6, co7, co8];
+        let cleanSkewbCe = [ce1, ce2, ce3, ce4, ce5, ce6];
+        let skewbCe = [ce1, ce2, ce3, ce4, ce5, ce6];
+        
+        let cube = getSkewbState(scr);
+    
+        let width = $(svgID).width();
+        let height = 3 * width / 4;
+        let space = width / 20;
+        let size = ((width - 3 * space) / 4) / n;
+        let fill = "";
+        let stroke = "#1E1E1E";
+        let strokeWidth = ((size / n) > 1) ? 1 : 0;
+    
+        let coordinates = [
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: 0,
+                y2: n * size,
+            },
+            {
+                x1: 0,
+                x2: n * size,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: 2 * n * size + 2 * space,
+                x2: 3 * n * size + 2 * space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: 3 * n * size + 3 * space,
+                x2: 4 * n * size + 3 * space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: 2 * n * size + 2 * space,
+                y2: 3 * n * size + 2 * space,
+            }
+        ];
+        
+    
+        let cWhite = [cube[0], cube[3], cube[6], cube[9], cube[24]];
+        let cYellow = [cube[12], cube[15], cube[18], cube[21], cube[29]];
+        let cGreen = [cube[10], cube[8], cube[16], cube[14], cube[26]];
+        let cBlue = [cube[4], cube[2], cube[22], cube[20], cube[28]];
+        let cRed = [cube[7], cube[5], cube[19], cube[17], cube[27]];
+        let cOrange = [cube[1], cube[11], cube[13], cube[23], cube[25]];
+        let colors = [cWhite, cOrange, cGreen, cRed, cBlue, cYellow];
+    
+        for (let i = 0; i < 6; i++) {
+            let j = 0;
+            let x1 = coordinates[i].x1;
+            let x2 = coordinates[i].x2;
+            let y1 = coordinates[i].y1;
+            let y2 = coordinates[i].y2;
+    
+            let points = [
+                x1+","+y1+" "+(x1+(x2-x1)/2)+","+y1+" "+x1+","+(y1+(y2-y1)/2)+" "+x1+","+y1,
+                x2+","+y1+" "+x2+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y1+" "+x2+","+y1,
+                x2+","+y2+" "+(x1+(x2-x1)/2)+","+y2+" "+x2+","+(y1+(y2-y1)/2)+" "+x2+","+y2,
+                x1+","+y2+" "+x1+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y2+" "+x1+","+y2,
+                (x1+(x2-x1)/2)+","+y1+" "+x2+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y2+" "+x1+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y1
             ];
-            
-            let ep1 = intersectSq1(cx,cy,cp1[0],cp1[1],cp0[0],cp0[1],cp3[0],cp3[1]);
-            let ep2 = rotateSq1(cx, cy, ep1[0], ep1[1], 330);
-            let ep3 = rotateSq1(cx, cy, ep2[0], ep2[1], 330);
-            let ep4 = rotateSq1(cx, cy, ep3[0], ep3[1], 330);
-            let ep5 = rotateSq1(cx, cy, ep4[0], ep4[1], 330);
-            let ep6 = rotateSq1(cx, cy, ep5[0], ep5[1], 330);
-            let ep7 = rotateSq1(cx, cy, ep6[0], ep6[1], 330);
-            let ep8 = rotateSq1(cx, cy, ep7[0], ep7[1], 330);
-            let ep9 = rotateSq1(cx, cy, ep8[0], ep8[1], 330);
-            let ep10 = rotateSq1(cx, cy, ep9[0], ep9[1], 330);
-            let ep11 = rotateSq1(cx, cy, ep10[0], ep10[1], 330);
-            let ep0 = rotateSq1(cx, cy, ep11[0], ep11[1], 330);
-
-            let eps = [
-                ep0,ep1,ep2,ep3,ep4,ep5,ep6,ep7,ep8,ep9,ep10,ep11
-            ];
-
-            let icp0 = [0.25*w,0.25*w];
-            let icp1 = rotateSq1(cx, cy, icp0[0], icp0[1], 330);
-            let icp2 = rotateSq1(cx, cy, icp1[0], icp1[1], 330);
-            let icp3 = rotateSq1(cx, cy, icp2[0], icp2[1], 330);
-            let icp4 = rotateSq1(cx, cy, icp3[0], icp3[1], 330);
-            let icp5 = rotateSq1(cx, cy, icp4[0], icp4[1], 330);
-            let icp6 = rotateSq1(cx, cy, icp5[0], icp5[1], 330);
-            let icp7 = rotateSq1(cx, cy, icp6[0], icp6[1], 330);
-            let icp8 = rotateSq1(cx, cy, icp7[0], icp7[1], 330);
-            let icp9 = rotateSq1(cx, cy, icp8[0], icp8[1], 330);
-            let icp10 = rotateSq1(cx, cy, icp9[0], icp9[1], 330);
-            let icp11 = rotateSq1(cx, cy, icp10[0], icp10[1], 330);
-
-            let icps = [
-                icp0,icp1,icp2,icp3,icp4,icp5,icp6,icp7,icp8,icp9,icp10,icp11
-            ];
-            
-            let iep1 = intersectSq1(cx,cy,icp1[0],icp1[1],icp0[0],icp0[1],icp3[0],icp3[1]);
-            let iep2 = rotateSq1(cx, cy, iep1[0], iep1[1], 330);
-            let iep3 = rotateSq1(cx, cy, iep2[0], iep2[1], 330);
-            let iep4 = rotateSq1(cx, cy, iep3[0], iep3[1], 330);
-            let iep5 = rotateSq1(cx, cy, iep4[0], iep4[1], 330);
-            let iep6 = rotateSq1(cx, cy, iep5[0], iep5[1], 330);
-            let iep7 = rotateSq1(cx, cy, iep6[0], iep6[1], 330);
-            let iep8 = rotateSq1(cx, cy, iep7[0], iep7[1], 330);
-            let iep9 = rotateSq1(cx, cy, iep8[0], iep8[1], 330);
-            let iep10 = rotateSq1(cx, cy, iep9[0], iep9[1], 330);
-            let iep11 = rotateSq1(cx, cy, iep10[0], iep10[1], 330);
-            let iep0 = rotateSq1(cx, cy, iep11[0], iep11[1], 330);
-
-            let ieps = [
-                iep0,iep1,iep2,iep3,iep4,iep5,iep6,iep7,iep8,iep9,iep10,iep11
-            ];
-
-            $("#sq1T").empty();
-            $("#sq1B").empty();
-            $("#sq1E").empty();
-
-            //OuterColors
-            for (let i=0; i<cps.length; i++) {
+    
+            for (let p of points) {
+                fill = getSkewbColor(colors[i].shift());
+                    
                 let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-                let polyT = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-                let color = colorsSq1[sq1.indexOf(sq1T[i])];
-                let iColor = iColorsSq1[sq1.indexOf(sq1T[i])];
-                if (sq1T[i].split("").length === 2) {
-                    if (sq1T[i].split("")[1] === "1") {
-                        if (i === cps.length-1) {
-                            $(poly).attr("points", cps[0][0]+","+cps[0][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
-                        }
-                        else {
-                            $(poly).attr("points", cps[i+1][0]+","+cps[i+1][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
-                        }
-                    }
-                    else {
-                        if (i === cps.length-1) {
-                            $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
-                        }
-                        else {
-                            $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
-                        }
-                    }
-                }
-                else {
-                    if (i === cps.length-1) {
-                        $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
-                        $(polyT).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[0][0]+","+ieps[0][1]);
-                    }
-                    else {
-                        $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
-                        $(polyT).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
-                    }
-                }
-
-                $(poly).attr("style", "fill:"+color+";stroke:"+stroke+";stroke-width:1");
-                $(polyT).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
-
-                $("#sq1T").append(poly);
-                $("#sq1T").append(polyT);
+                $(poly).attr("points", p);
+                $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                
+                $(svgID).append(poly);
             }
-
-            //InnerColors
-            for (let i=0; i<icps.length; i++) {
-                let polyT = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-                let iColor = iColorsSq1[sq1.indexOf(sq1T[i])];
-
-                if (sq1T[i].split("").length === 2) {
-                    if (sq1T[i].split("")[1] === "1") {
-                        if (i === cps.length-1) {
-                            $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[0][0]+","+icps[0][1]+" "+ieps[1][0]+","+ieps[1][1]);
-                        }
-                        else if (i === cps.length-2) {
-                            $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[0][0]+","+ieps[0][1]);
-                        }
-                        else {
-                            $(polyT).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[i+2][0]+","+ieps[i+2][1]);
-                        }
-                    }
-                }
-
-                $(polyT).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
-
-                $("#sq1T").append(polyT);
+        }
+    
+        function getSkewbColor(n) {
+            switch (n) {
+                case "1":
+                    return "white";
+                case "2":
+                    return "yellow";
+                case "3":
+                    return "#00FF00";
+                case "4":
+                    return "blue";
+                case "5":
+                    return "red";
+                case "6":
+                    return "#FFAA00";
             }
-
-            //OuterColors
-            for (let i=0; i<cps.length; i++) {
-                let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-                let polyB = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-                let color = colorsSq1[sq1.indexOf(sq1B[i])];
-                let iColor = iColorsSq1[sq1.indexOf(sq1B[i])];
-                if (sq1B[i].split("").length === 2) {
-                    if (sq1B[i].split("")[1] === "1") {
-                        if (i === cps.length-1) {
-                            $(poly).attr("points", cps[0][0]+","+cps[0][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
-                        }
-                        else {
-                            $(poly).attr("points", cps[i+1][0]+","+cps[i+1][1]+" "+cx+","+cy+" "+eps[i][0]+","+eps[i][1]);
-                        }
-                    }
-                    else {
-                        if (i === cps.length-1) {
-                            $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
-                        }
-                        else {
-                            $(poly).attr("points", cps[i][0]+","+cps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
-                        }
-                    }
-                }
-                else {
-                    if (i === cps.length-1) {
-                        $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[0][0]+","+eps[0][1]);
-                        $(polyB).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[0][0]+","+ieps[0][1]);
-                    }
-                    else {
-                        $(poly).attr("points", eps[i][0]+","+eps[i][1]+" "+cx+","+cy+" "+eps[i+1][0]+","+eps[i+1][1]);
-                        $(polyB).attr("points", ieps[i][0]+","+ieps[i][1]+" "+cx+","+cy+" "+ieps[i+1][0]+","+ieps[i+1][1]);
-                    }
-                }
-
-                $(poly).attr("style", "fill:"+color+";stroke:"+stroke+";stroke-width:1");
-                $(polyB).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
-
-                $("#sq1B").append(poly);
-                $("#sq1B").append(polyB);
+        }
+    
+        function cleanMoves(m) {
+            while (m.includes("&nbsp;&nbsp;")) {
+                m.replaceAll("&nbsp;&nbsp;", "&nbsp;");
             }
-
-            //InnerColors
-            for (let i=0; i<icps.length; i++) {
-                let polyB = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-                let iColor = iColorsSq1[sq1.indexOf(sq1B[i])];
-
-                if (sq1B[i].split("").length === 2) {
-                    if (sq1B[i].split("")[1] === "1") {
-                        if (i === icps.length-1) {
-                            $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[0][0]+","+icps[0][1]+" "+ieps[1][0]+","+ieps[1][1]);
-                        }
-                        else if (i === icps.length-2) {
-                            $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[0][0]+","+ieps[0][1]);
-                        }
-                        else {
-                            $(polyB).attr("points", cx+","+cy+" "+ieps[i][0]+","+ieps[i][1]+" "+icps[i+1][0]+","+icps[i+1][1]+" "+ieps[i+2][0]+","+ieps[i+2][1]);
-                        }
-                    }
+        
+            return m.trim();
+        }
+    
+        function getSkewbState(sol) {
+            resetCubeState();
+            sol = cleanMoves(sol);
+            let arr = Array.isArray(sol) ? sol : sol.trim().split(" ");
+            for (let a of arr) {
+                switch (a.replaceAll("*","")) {
+                    case "R":
+                        _r();
+                        break;
+                    case "R'":
+                        _ri();
+                        break;
+                    case "L":
+                        _l();
+                        break;
+                    case "L'":
+                        _li();
+                        break;
+                    case "B":
+                        _b();
+                        break;
+                    case "B'":
+                        _bi();
+                        break;
+                    case "U":
+                        _u();
+                        break;
+                    case "U'":
+                        _ui();
+                        break;
                 }
-
-                $(polyB).attr("style", "fill:"+iColor+";stroke:"+stroke+";stroke-width:1");
-
-                $("#sq1B").append(polyB);
             }
-
-            let sq1EW = $("#sq1E").width();
-            let sq1EH = sq1EW/3;
-
-            let rectE1 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(rectE1).attr("x", 0);
-            $(rectE1).attr("y", 0);
-            $(rectE1).attr("width", sq1EW/3);
-            $(rectE1).attr("height", sq1EH);
-            $(rectE1).attr("style", "fill:"+colorE+";stroke:"+stroke+";stroke-width:1");
-            $("#sq1E").append(rectE1);
-
-            let eW = eFlipped? sq1EW/3: 2*sq1EW/3;
-            let eC = eFlipped? colorEF: colorE;
-            let rectE2 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(rectE2).attr("x", sq1EW/3);
-            $(rectE2).attr("y", 0);
-            $(rectE2).attr("width", eW);
-            $(rectE2).attr("height", sq1EH);
-            $(rectE2).attr("style", "fill:"+eC+";stroke:"+stroke+";stroke-width:1");
-            $("#sq1E").append(rectE2);
+        
+            return skewbCo.map(s => s.c1 + s.c2 + s.c3).join("") + skewbCe.map(s => s.c).join("");
+        }
+        
+        function resetCubeState() {
+            skewbCo = cleanSkewbCo.slice();
+            skewbCe = cleanSkewbCe.slice();
+        }
+        
+        function _r() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[6] = new Corner(tempCo[6].c3, tempCo[6].c1, tempCo[6].c2);
+            skewbCo[1] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
+            skewbCo[7] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
+            skewbCo[5] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[3] = new Center(tempCe[5].c);
+            skewbCe[4] = new Center(tempCe[3].c);
+            skewbCe[5] = new Center(tempCe[4].c);
+        }
+        function _ri() {
+            _r();
+            _r();
+        }
+        function _l() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[4] = new Corner(tempCo[4].c3, tempCo[4].c1, tempCo[4].c2);
+            skewbCo[3] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+            skewbCo[5] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
+            skewbCo[7] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[1] = new Center(tempCe[5].c);
+            skewbCe[2] = new Center(tempCe[1].c);
+            skewbCe[5] = new Center(tempCe[2].c);
+        }
+        function _li() {
+            _l();
+            _l();
+        }
+        function _b() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[7] = new Corner(tempCo[7].c3, tempCo[7].c1, tempCo[7].c2);
+            skewbCo[0] = new Corner(tempCo[6].c2, tempCo[6].c3, tempCo[6].c1);
+            skewbCo[4] = new Corner(tempCo[0].c2, tempCo[0].c3, tempCo[0].c1);
+            skewbCo[6] = new Corner(tempCo[4].c2, tempCo[4].c3, tempCo[4].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[1] = new Center(tempCe[4].c);
+            skewbCe[4] = new Center(tempCe[5].c);
+            skewbCe[5] = new Center(tempCe[1].c);
+        }
+        function _bi() {
+            _b();
+            _b();
+        }
+        function _u() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[0] = new Corner(tempCo[0].c3, tempCo[0].c1, tempCo[0].c2);
+            skewbCo[1] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+            skewbCo[3] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
+            skewbCo[7] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[0] = new Center(tempCe[4].c);
+            skewbCe[1] = new Center(tempCe[0].c);
+            skewbCe[4] = new Center(tempCe[1].c);
+        }
+        function _ui() {
+            _u();
+            _u();
         }
     }
 
