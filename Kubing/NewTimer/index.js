@@ -213,19 +213,19 @@ function drawScramble() {
             drawScrambleNxN("#cube", 7, scramble);
             break;
         /* case "clock":
-            drawClockSvg($("#cube"),scramble);
+            drawScrambleClock("#cube", scramble);
             break;
         case "minx":
-            drawMegaSvg($("#cube"),scramble);
+            drawScrambleMega("#cube", scramble);
             break;
         case "pyram":
-            drawPyraSvg($("#cube"),scramble);
+            drawScramblePyra("#cube", scramble);
             break; */
         case "skewb":
-            drawScrambleSkewb("#cube",scramble);
+            drawScrambleSkewb("#cube", scramble);
             break;
         case "sq1":
-            drawScrambleSq1("#cube",scramble);
+            drawScrambleSq1("#cube", scramble);
             break;
         default:
             drawMissingSvg("#cube");
