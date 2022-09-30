@@ -48,7 +48,7 @@ function solveCube(scr) {
             // Check score to update moves and depth
             getScore([scr, bestSol].join(" ").trim());
             let moves = step === "HTR" ? movesFinal.slice() : step === "DR" ? movesHTR.slice() : step === "EO" ? movesDR.slice() : movesAll.slice();
-            let depth = (step === "HTR" ? 6 : step === "DR" ? 5 : /* step === "EO" ? 4 : */ 3) + iterations;
+            let depth = (step === "HTR" ? 6 : step === "DR" ? 5 : /* step === "EO" ? 4 : */ 2) + iterations;
             console.log("Step:", step);
             console.log("Depth:", depth);
             if (score > bestScore) {
@@ -138,15 +138,15 @@ function getScore(scr) {
     }
     else {
         if (isHTR(scr)) {
-            score += 100;
+            score += 500;
             step = "HTR";
         }
         else if (isDR(scr)) {
-            score += 50;
+            score += 200;
             step = "DR";
         }
         else if (isEO(scr)) {
-            score += 25;
+            score += 100;
             step = "EO";
         }
         else {
