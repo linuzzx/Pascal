@@ -2362,6 +2362,72 @@ function getState(n, scr) {
     return cube;
 }
 
+function getNumberState(n, scr) {
+    let cube = [];
+
+    for (let s = 0; s < 6; s++) {
+        let side = [];
+        for (let i = 0; i < n; i++) {
+            let line = [];
+            for (let j = 0; j < n; j++) {
+                line.push(colors[s]);
+            }
+            side.push(line);
+        }
+        cube.push(side);
+    }
+    
+    for (let s of scr.split(" ")) {
+        if (!s.includes("w")) {
+            s = "1" + s;
+        }
+        else if (s.split("")[1] === "w") {
+            s = "2" + s;
+        }
+        s = s.replace("w", "").replace("'", "3");
+        
+        if (s.includes("R")) {
+            let r = parseInt(s.split("R")[1]) || 1;
+            move(cube, "R", parseInt(s.split("R")[0]), r);
+        }
+        else if (s.includes("L")) {
+            let r = parseInt(s.split("L")[1]) || 1;
+            move(cube, "L", parseInt(s.split("L")[0]), r);
+        }
+        else if (s.includes("U")) {
+            let r = parseInt(s.split("U")[1]) || 1;
+            move(cube, "U", parseInt(s.split("U")[0]), r);
+        }
+        else if (s.includes("D")) {
+            let r = parseInt(s.split("D")[1]) || 1;
+            move(cube, "D", parseInt(s.split("D")[0]), r);
+        }
+        else if (s.includes("F")) {
+            let r = parseInt(s.split("F")[1]) || 1;
+            move(cube, "F", parseInt(s.split("F")[0]), r);
+        }
+        else if (s.includes("B")) {
+            let r = parseInt(s.split("B")[1]) || 1;
+            move(cube, "B", parseInt(s.split("B")[0]), r);
+        }
+        else {
+            let r = parseInt(s.split("")[2]) || 1;
+            move(cube, s.split("")[1], 0, r);
+        }
+    }
+
+    let cubeNumber = "";
+    for (let f of cube) {
+        for (let r of f) {
+            for (let t of r) {
+                cubeNumber += t.replace("white", "1").replace("yellow", "2").replace("#00FF00", "3").replace("blue", "4").replace("red", "5").replace("#FFAA00", "6");
+            }
+        }
+    }
+    
+    return cubeNumber;
+}
+
 function move(cube, xyz, w, r) {
     let r1 = r;
     let r2 = 4 - r;
