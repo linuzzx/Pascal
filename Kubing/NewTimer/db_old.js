@@ -1,4 +1,5 @@
 const dbName = "einarkl_timer";
+const storeName = "sessions";
 const version = 1;
 const readwrite = "readwrite";
 const readonly = "readonly";
@@ -20,29 +21,30 @@ let arrays = {
     10000 : []
 };
 
-function openDB(func, storeName, arg1 = false, arg2 = false, arg3 = false) {
+function openDB(func,arg1 = null, arg2 = null, arg3 = null) {
     const request = indexedDB.open(dbName);
     
     request.onupgradeneeded = e => {
         db = e.target.result;
 
-        const store = db.createObjectStore("sessions");
+        const store = db.createObjectStore(storeName);
+        store.createIndex("timeIDX", "totalTime", {unique: false});
     }
     
     request.onsuccess = e => {
         db = e.target.result;
         if (func) {
-            if (arg3 !== null) {
-                func(storeName,arg1,arg2,arg3);
+            if (arg3) {
+                func(arg1,arg2,arg3);
             }
-            else if (arg2 !== null) {
-                func(storeName,arg1,arg2);
+            else if (arg2) {
+                func(arg1,arg2);
             }
-            else if (arg1 !== null) {
-                func(storeName,arg1);
+            else if (arg1) {
+                func(arg1);
             }
             else {
-                func(storeName);
+                func();
             }
         }
     }
@@ -52,30 +54,14 @@ function openDB(func, storeName, arg1 = false, arg2 = false, arg3 = false) {
     }
 }
 
-function editDB(storeName, key, val, dontGetAll = false) {
+function editDB(key, val, dontGetAll = false) {
     const tx = db.transaction(storeName, readwrite);
     const store = tx.objectStore(storeName);
     store.put(val, key);
     
-    if (!preventGetAll) {
-        getAllFromDB();
-    }
-    preventGetAll = false;
-}
-
-function saveToDB(storeName, sol, dontGetAll = false) {
-    const tx = db.transaction(storeName, readwrite);
-    const store = tx.objectStore(storeName);
-    store.put(val);
-    
     if (!dontGetAll) {
         getAllFromDB();
     }
-}
-
-function createSolDB(storeName, dontGetAll = false) {console.log("hei");
-    const store = db.createObjectStore(storeName);
-    store.createIndex("timeIDX", "totalTime", {unique: false});
 }
 
 function addToDB(key, val, dontGetAll = false) {
@@ -88,7 +74,7 @@ function addToDB(key, val, dontGetAll = false) {
     }
 }
 
-function getFromDB(storeName, key) {
+function getFromDB(key) {
     var tx = db.transaction(storeName);
     var store = tx.objectStore(storeName);
     var request = store.get(key);
@@ -108,7 +94,6 @@ function getFromDB(storeName, key) {
 }
 
 function getAllFromDB(exporting = false) {
-    let storeName = "sessions";
     const tx = db.transaction(storeName, readonly);
     const store = tx.objectStore(storeName);
     const request = store.getAll();
@@ -116,26 +101,6 @@ function getAllFromDB(exporting = false) {
     
     request.onsuccess = e => {
         data = e.target.result;
-        getAllFromDB2(data, exporting);
-    }
-
-    request.onerror = e => {
-        console.log(e);
-    }
-}
-
-function getAllFromDB2(dt, exporting = false) {
-    let storeName = "solutions" + (curSession+1);
-    const tx = db.transaction(storeName, readonly);
-    const store = tx.objectStore(storeName);
-    const request = store.getAll();
-    let data = {
-        "sessions": dt,
-        "solutions": []
-    };
-    console.log(exporting);
-    request.onsuccess = e => {
-        data.solutions = e.target.result;
         // List opp data
         if (exporting) {
             getExportData(data);
@@ -151,7 +116,7 @@ function getAllFromDB2(dt, exporting = false) {
     }
 }
 
-function removeFromDB(storeName, key) {
+function removeFromDB(key) {
     const request = db.transaction(storeName, readwrite)
     .objectStore(storeName)
     .delete(key);
@@ -165,7 +130,7 @@ function removeFromDB(storeName, key) {
     };
 }
 
-function removeAllFromDB(storeName) {
+function removeAllFromDB() {
     doNotCreateNew = true;
     const request = db.transaction(storeName, readwrite)
     .objectStore(storeName)
