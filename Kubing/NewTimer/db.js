@@ -30,6 +30,8 @@ function openDB(func, storeName, arg1 = false, arg2 = false, arg3 = false) {
         const store1 = db.createObjectStore("sessions");
         const store2 = db.createObjectStore("solutions");
         store2.createIndex("timeIDX", "time", {unique: false});
+
+        localStorage.removeItem("einarkl_timer_settings");
     }
     
     request.onsuccess = e => {
@@ -82,11 +84,14 @@ function addSolutionsToDB(val) {
     
     let i = 0;
     for (let s of val) {
-        store.add({time: s.time + (s.penalty === -1 ? Infinity : s.penalty)}, i);
+        store.add({
+            time: s.time + (s.penalty === -1 ? Infinity : s.penalty),
+            avg: {}
+        }, i);
         i++;
     }
-    
-    getStats();
+
+    getCurStats();
 }
 
 function getFromDB(key) {
@@ -159,6 +164,54 @@ function removeAllFromDB(s = storeName) {
     };
 }
 
-function getStats() {
-    updateStats();
+function getCurStats() {
+    const tx = db.transaction("solutions", readwrite);
+    const store = tx.objectStore("solutions");
+    const request = store.getAll();
+    let data;
+    
+    request.onsuccess = e => {
+        data = e.target.result;
+
+        for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
+            averages["cur"][n] = getAvg(data.slice(data.map(t => t.time).length-parseInt(n)), parseInt(n));
+        }
+
+        let i = 0;
+        for (let t of data) {
+            let ao5 = getAvg(data.map(s => s.time).slice(i - 4, i + 1), 5);
+            let ao12 = getAvg(data.map(s => s.time).slice(i - 11, i + 1), 12);
+            let sol = {time: t.time, ao5: ao5, ao12: ao12};
+            store.put(sol, i);
+            i++;
+        }
+
+        getBestStats();
+    }
+
+    request.onerror = e => {
+        console.log(e);
+    }
+}
+
+function getBestStats() {
+    const tx = db.transaction("solutions", readonly);
+    const store = tx.objectStore("solutions");
+    const idx = store.index("timeIDX");
+    const request = idx.getAll();
+    let data;
+    
+    request.onsuccess = e => {
+        data = e.target.result.map(t => t.time);
+
+        for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
+            averages["best"][n] = getAvg(data.slice(0, parseInt(n)), parseInt(n));
+        }
+    
+        updateStats();
+    }
+
+    request.onerror = e => {
+        console.log(e);
+    }
 }

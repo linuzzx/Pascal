@@ -52,22 +52,38 @@ let doNotCreateNew = false;
 
 let settings;
 
-//Average arrays
-let mo3s = [];
-let ao5s = [];
-let ao12s = [];
-let ao25s = [];
-let ao50s = [];
-let ao100s = [];
-let ao200s = [];
-let ao500s = [];
-let ao1000s = [];
-let ao2000s = [];
-let ao5000s = [];
-let ao10000s = [];
-
-
 let showingOuterInner = false;
+
+let averages = {
+    "cur" : {
+        "3" : Infinity,
+        "5" : Infinity,
+        "12" : Infinity,
+        "25" : Infinity,
+        "50" : Infinity,
+        "100" : Infinity,
+        "200" : Infinity,
+        "500" : Infinity,
+        "1000" : Infinity,
+        "2000" : Infinity,
+        "5000" : Infinity,
+        "10000" : Infinity
+    },
+    "best" : {
+        "3" : Infinity,
+        "5" : Infinity,
+        "12" : Infinity,
+        "25" : Infinity,
+        "50" : Infinity,
+        "100" : Infinity,
+        "200" : Infinity,
+        "500" : Infinity,
+        "1000" : Infinity,
+        "2000" : Infinity,
+        "5000" : Infinity,
+        "10000" : Infinity
+    }
+}
 
 $(function () {
     initActions();
@@ -442,20 +458,6 @@ function changeSession() {
 
 function updateSession() {
     updateScrType();
-    /*getStats2(curSession, 3)
-    .then(getStats2(curSession, 5))
-    .then(getStats2(curSession, 12))
-    .then(getStats2(curSession, 25))
-    .then(getStats2(curSession, 50))
-    .then(getStats2(curSession, 100))
-    .then(getStats2(curSession, 200))
-    .then(getStats2(curSession, 500))
-    .then(getStats2(curSession, 1000))
-    .then(getStats2(curSession, 2000))
-    .then(getStats2(curSession, 5000))
-    .then(getStats2(curSession, 10000));*/
-    //getStats();
-    // updateStats();
     addSolutionsToDB(sessionList[curSession].solutions);
 }
 
@@ -509,21 +511,14 @@ function updateStats() {
             let i5 = i - 4;
             let i12 = i - 11;
             let c = s.comment !== "" ? "*" : "&nbsp;";
+
+            let sols = sessionList[curSession].solutions;
             
             let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time, s.penalty)+"</td>";
-            let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAo5(sessionList[curSession], i))+"</td>";
-            let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAo12(sessionList[curSession], i))+"</td>";
+            // getAo5(sessionList[curSession], i)
+            let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAvg(sols.map(t => t.time).slice(i5, i+1), 5))+"</td>";
+            let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAvg(sols.map(t => t.time).slice(i12, i+1), 12))+"</td>";
             $("#timeList").append("<tr><td>"+(i + 1) + c +"</td>"+single+ao5+ao12+"</tr>");
-            getMo3(sessionList[curSession], i);
-            getAo25(sessionList[curSession], i);
-            getAo50(sessionList[curSession], i);
-            getAo100(sessionList[curSession], i);
-            /*getAo200(sessionList[curSession], i);
-            getAo500(sessionList[curSession], i);
-            getAo1000(sessionList[curSession], i);
-            getAo2000(sessionList[curSession], i);
-            getAo5000(sessionList[curSession], i);
-            getAo10000(sessionList[curSession], i);*/
         }
 
         if (listLatestFirst) {
@@ -550,42 +545,11 @@ function updateStats() {
             showInfo(i, 1, true);
         });
         
-        if (arr.length >= 3) {
-            addToPBList(3, mo3s);
+        for (let n of []) {
+            if (arr.length >= n) {
+                addToPBList(n, mo3s);
+            }
         }
-        if (arr.length >= 5) {
-            addToPBList(5, ao5s);
-        }
-        if (arr.length >= 12) {
-            addToPBList(12, ao12s);
-        }
-        if (arr.length >= 25) {
-            addToPBList(25, ao25s);
-        }
-        if (arr.length >= 50) {
-            addToPBList(50, ao50s);
-        }
-        if (arr.length >= 100) {
-            addToPBList(100, ao100s);
-        }
-        /*if (arr.length >= 200) {
-            addToPBList(200, ao200s);
-        }
-        if (arr.length >= 500) {
-            addToPBList(500, ao500s);
-        }
-        if (arr.length >= 1000) {
-            addToPBList(1000, ao1000s);
-        }
-        if (arr.length >= 2000) {
-            addToPBList(2000, ao2000s);
-        }
-        if (arr.length >= 5000) {
-            addToPBList(5000, ao5000s);
-        }
-        if (arr.length >= 10000) {
-            addToPBList(10000, ao10000s);
-        }*/
     }
     adjustSize();
 }
@@ -637,40 +601,7 @@ function showInfo(i, num, pb = null) {
             info += "Mo3: " + getHHmmsshh(mo3s[i]) + "<br/><br/>"
         }
         else {
-            let ao;
-            if (num === 5) {
-                ao = ao5s[i];
-            }
-            else if (num === 12) {
-                ao = ao12s[i];
-            }
-            else if (num === 25) {
-                ao = ao25s[i];
-            }
-            else if (num === 50) {
-                ao = ao50s[i];
-            }
-            else if (num === 100) {
-                ao = ao100s[i];
-            }
-            else if (num === 200) {
-                ao = ao200s[i];
-            }
-            else if (num === 500) {
-                ao = ao500s[i];
-            }
-            else if (num === 1000) {
-                ao = ao1000s[i];
-            }
-            else if (num === 2000) {
-                ao = ao2000s[i];
-            }
-            else if (num === 5000) {
-                ao = ao25s[i];
-            }
-            else if (num === 10000) {
-                ao = ao10000s[i];
-            }
+            let ao = averages["cur"][num+""];
             info += "Ao" + num + ": " + getHHmmsshh(ao) + "<br/><br/>";
         }
 
@@ -778,117 +709,19 @@ function getDDMMYYYY(ms) {
     return day + "." + month + "." + year + " " + hours + ":" + minutes + "." + seconds;
 }
 
-function getMo3(s, i) {
-    const num = 3;
-    return getAvg(s, i, num);
-}
-
-function getAo5(s, i) {
-    const num = 5;
-    return getAvg(s, i, num);
-}
-
-function getAo12(s, i) {
-    const num = 12;
-    return getAvg(s, i, num);
-}
-
-function getAo25(s, i) {
-    const num = 25;
-    return getAvg(s, i, num);
-}
-
-function getAo50(s, i) {
-    const num = 50;
-    return getAvg(s, i, num);
-}
-
-function getAo100(s, i) {
-    const num = 100;
-    return getAvg(s, i, num);
-}
-
-function getAo200(s, i) {
-    const num = 200;
-    return getAvg(s, i, num);
-}
-
-function getAo500(s, i) {
-    const num = 500;
-    return getAvg(s, i, num);
-}
-
-function getAo1000(s, i) {
-    const num = 1000;
-    return getAvg(s, i, num);
-}
-
-function getAo2000(s, i) {
-    const num = 2000;
-    return getAvg(s, i, num);
-}
-
-function getAo5000(s, i) {
-    const num = 5000;
-    return getAvg(s, i, num);
-}
-
-function getAo10000(s, i) {
-    const num = 10000;
-    return getAvg(s, i, num);
-}
-
-function getAvg(s, i, num) {
-    let avgArr;
+function getAvg(arr, num) {
+    arr = arr.sort();
     let toRemove = Math.ceil(0.05 * num);
     
-    if (num === 3) {
-        avgArr = mo3s;
-    }
-    else if (num === 5) {
-        avgArr = ao5s;
-    }
-    else if (num === 12) {
-        avgArr = ao12s;
-    }
-    else if (num === 25) {
-        avgArr = ao25s;
-    }
-    else if (num === 50) {
-        avgArr = ao50s;
-    }
-    else if (num === 100) {
-        avgArr = ao100s;
-    }
-    else if (num === 200) {
-        avgArr = ao200s;
-    }
-    else if (num === 500) {
-        avgArr = ao500s;
-    }
-    else if (num === 1000) {
-        avgArr = ao1000s;
-    }
-    else if (num === 2000) {
-        avgArr = ao2000s;
-    }
-    else if (num === 5000) {
-        avgArr = ao5000s;
-    }
-    else if (num === 10000) {
-        avgArr = ao10000s;
-    }
-
-    if (i >= (num-1)) {
+    if (arr.length >= num) {
         let avg = 0;
-        let arr = s.solutions.map(s => s.time + (s.penalty === -1 ? Infinity : s.penalty)).slice(i-(num-1),i+1).sort(function(a, b) {return a-b;});
 
         let nArr;
         if (num === 3) {
             nArr = arr.slice();
         }
         else {
-            nArr = arr.slice(toRemove,(num-toRemove));
+            nArr = arr.slice(toRemove, (num-toRemove));console.log(nArr);
         }
 
         for (let a of nArr) {
@@ -898,11 +731,9 @@ function getAvg(s, i, num) {
         avg /= nArr.length;
         
         if (avg === Infinity) {
-            avgArr.push("DNF");
             return ("DNF");
         }
         else {
-            avgArr.push(avg*10);
             return avg*10;
         }
     }
@@ -911,80 +742,37 @@ function getAvg(s, i, num) {
     }
 }
 
-function getBestAvg(num) {
-    let arr;
-
-    if (num === 3) {
-        arr = mo3s.slice();
-    }
-    else if (num === 5) {
-        arr = ao5s.slice();
-    }
-    else if (num === 12) {
-        arr = ao12s.slice();
-    }
-    else if (num === 25) {
-        arr = ao25s.slice();
-    }
-    else if (num === 50) {
-        arr = ao50s.slice();
-    }
-    else if (num === 100) {
-        arr = ao100s.slice();
-    }
-    else if (num === 200) {
-        arr = ao200s.slice();
-    }
-    else if (num === 500) {
-        arr = ao500s.slice();
-    }
-    else if (num === 1000) {
-        arr = ao1000s.slice();
-    }
-    else if (num === 2000) {
-        arr = ao2000s.slice();
-    }
-    else if (num === 5000) {
-        arr = ao5000s.slice();
-    }
-    else if (num === 10000) {
-        arr = ao10000s.slice();
-    }
-
-    let bAvg = Infinity;
-    
-    if (listLatestFirst) {
-        for (let i = arr.length -1; i >= 0; i--) {
-            let a = arr[i];
-            if (a < bAvg) {
-                bAvg = a;
-            }
-        }
-    }
-    else {
-        for (let a of arr) {
-            if (a < bAvg) {
-                bAvg = a;
-            }
-        }
-    }
-
-    return bAvg;
-}
-
 function emptyAvgArrays() {
-    mo3s = [];
-    ao5s = [];
-    ao12s = [];
-    ao25s = [];
-    ao50s = [];
-    ao100s = [];
-    ao200s = [];
-    ao500s = [];
-    ao1000s = [];
-    ao2000s = [];
-    ao5000s = [];
-    ao10000s = [];
+    averages = {
+        "cur" : {
+            "3" : Infinity,
+            "5" : Infinity,
+            "12" : Infinity,
+            "25" : Infinity,
+            "50" : Infinity,
+            "100" : Infinity,
+            "200" : Infinity,
+            "500" : Infinity,
+            "1000" : Infinity,
+            "2000" : Infinity,
+            "5000" : Infinity,
+            "10000" : Infinity
+        },
+        "best" : {
+            "3" : Infinity,
+            "5" : Infinity,
+            "12" : Infinity,
+            "25" : Infinity,
+            "50" : Infinity,
+            "100" : Infinity,
+            "200" : Infinity,
+            "500" : Infinity,
+            "1000" : Infinity,
+            "2000" : Infinity,
+            "5000" : Infinity,
+            "10000" : Infinity
+        }
+    }
 }
 
 function changeListingOrder() {
