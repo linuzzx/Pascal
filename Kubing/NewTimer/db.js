@@ -29,7 +29,19 @@ function openDB(func, storeName, arg1 = false, arg2 = false, arg3 = false) {
 
         const store1 = db.createObjectStore("sessions");
         const store2 = db.createObjectStore("solutions");
-        store2.createIndex("timeIDX", "time", {unique: false});
+        store2.createIndex("totalTimeIDX", "totalTime", {unique: false});
+        store2.createIndex("ao3IDX", "ao3", {unique: false});
+        store2.createIndex("ao5IDX", "ao5", {unique: false});
+        store2.createIndex("ao12IDX", "ao12", {unique: false});
+        store2.createIndex("ao25IDX", "ao25", {unique: false});
+        store2.createIndex("ao50IDX", "ao50", {unique: false});
+        store2.createIndex("ao100IDX", "ao100", {unique: false});
+        store2.createIndex("ao200IDX", "ao200", {unique: false});
+        store2.createIndex("ao500IDX", "ao500", {unique: false});
+        store2.createIndex("ao1000IDX", "ao1000", {unique: false});
+        store2.createIndex("ao2000IDX", "ao2000", {unique: false});
+        store2.createIndex("ao5000IDX", "ao5000", {unique: false});
+        store2.createIndex("ao10000IDX", "ao10000", {unique: false});
 
         localStorage.removeItem("einarkl_timer_settings");
     }
@@ -85,7 +97,12 @@ function addSolutionsToDB(val) {
     let i = 0;
     for (let s of val) {
         store.add({
-            time: s.time + (s.penalty === -1 ? Infinity : s.penalty),
+            totalTime: s.time + (s.penalty === -1 ? Infinity : s.penalty),
+            time: s.time,
+            penalty: s.penalty,
+            comment: s.comment,
+            date: s.date,
+            index: i,
             avg: {}
         }, i);
         i++;
@@ -116,6 +133,28 @@ function getFromDB(key) {
 function getAllFromDB(exporting = false) {
     const tx = db.transaction(storeName, readonly);
     const store = tx.objectStore(storeName);
+    const request = store.getAll();
+    let data;
+    
+    request.onsuccess = e => {
+        data = e.target.result;
+        // List opp data
+        if (exporting) {
+            getExportData(data);
+        }
+        else {
+            getData(data);
+        }
+    }
+
+    request.onerror = e => {
+        console.log(e);
+    }
+}
+
+function getAllSolutionsFromDB(exporting = false) {
+    const tx = db.transaction("solutions", readonly);
+    const store = tx.objectStore("solutions");
     const request = store.getAll();
     let data;
     
@@ -174,14 +213,43 @@ function getCurStats() {
         data = e.target.result;
 
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
-            averages["cur"][n] = getAvg(data.slice(data.map(t => t.time).length-parseInt(n)), parseInt(n));
+            averages["cur"][n] = getAvg(data.map(t => t.totalTime).slice(data.length-parseInt(n)), parseInt(n));
         }
-
+        
         let i = 0;
         for (let t of data) {
-            let ao5 = getAvg(data.map(s => s.time).slice(i - 4, i + 1), 5);
-            let ao12 = getAvg(data.map(s => s.time).slice(i - 11, i + 1), 12);
-            let sol = {time: t.time, ao5: ao5, ao12: ao12};
+            let ao3 = getAvg(data.map(s => s.totalTime).slice(i - 2), 3);
+            let ao5 = getAvg(data.map(s => s.totalTime).slice(i - 4), 5);
+            let ao12 = getAvg(data.map(s => s.totalTime).slice(i - 11), 12);
+            let ao25 = getAvg(data.map(s => s.totalTime).slice(i - 24), 25);
+            let ao50 = getAvg(data.map(s => s.totalTime).slice(i - 49), 50);
+            let ao100 = getAvg(data.map(s => s.totalTime).slice(i - 99), 100);
+            let ao200 = getAvg(data.map(s => s.totalTime).slice(i - 199), 200);
+            let ao500 = getAvg(data.map(s => s.totalTime).slice(i - 499), 500);
+            let ao1000 = getAvg(data.map(s => s.totalTime).slice(i - 999), 1000);
+            let ao2000 = getAvg(data.map(s => s.totalTime).slice(i - 1999), 2000);
+            let ao5000 = getAvg(data.map(s => s.totalTime).slice(i - 4999), 5000);
+            let ao10000 = getAvg(data.map(s => s.totalTime).slice(i - 9999), 10000);
+            let sol = {
+                totalTime: t.totalTime,
+                time: t.time,
+                penalty: t.penalty,
+                comment: t.comment,
+                date: t.date,
+                index: t.index,
+                ao3: ao3,
+                ao5: ao5,
+                ao12: ao12,
+                ao25: ao25,
+                ao50: ao50,
+                ao100: ao100,
+                ao200: ao200,
+                ao500: ao500,
+                ao1000: ao1000,
+                ao2000: ao2000,
+                ao5000: ao5000,
+                ao10000: ao10000
+            };
             store.put(sol, i);
             i++;
         }
@@ -195,19 +263,23 @@ function getCurStats() {
 }
 
 function getBestStats() {
+    for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
+        getBestAvgFromDB(n);
+    }
+}
+
+function getBestAvgFromDB(n) {
     const tx = db.transaction("solutions", readonly);
     const store = tx.objectStore("solutions");
-    const idx = store.index("timeIDX");
+    const idx = store.index("ao" + n + "IDX");
     const request = idx.getAll();
     let data;
     
     request.onsuccess = e => {
-        data = e.target.result.map(t => t.time);
+        data = e.target.result;
+        averages["best"][n] = data[0]["ao" + n];
+        averages["bestLastIDX"][n] = data[0]["index"];
 
-        for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
-            averages["best"][n] = getAvg(data.slice(0, parseInt(n)), parseInt(n));
-        }
-    
         updateStats();
     }
 

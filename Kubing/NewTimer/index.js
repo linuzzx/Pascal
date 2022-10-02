@@ -1,10 +1,11 @@
 class Solution {
-    constructor(time, penalty, scramble, comment, date) {
+    constructor(time, penalty, scramble, comment, date, totalTime) {
         this.time = time;
         this.penalty = penalty;
         this.scramble = scramble;
         this.comment = comment;
         this.date = date;
+        this.totalTime = totalTime;
     }
 }
 
@@ -45,6 +46,8 @@ let rawTime = -1;
 let curSingle = -1;
 let bestSingle = -1;
 
+let solutionsSorted = [];
+
 let sessionList = [];
 
 let doNotScramble = false;
@@ -82,6 +85,20 @@ let averages = {
         "2000" : Infinity,
         "5000" : Infinity,
         "10000" : Infinity
+    },
+    "bestLastIDX" : {
+        "3" : 0,
+        "5" : 0,
+        "12" : 0,
+        "25" : 0,
+        "50" : 0,
+        "100" : 0,
+        "200" : 0,
+        "500" : 0,
+        "1000" : 0,
+        "2000" : 0,
+        "5000" : 0,
+        "10000" : 0
     }
 }
 
@@ -225,39 +242,40 @@ function getScramble() {
 }
 
 function drawScramble() {
+    resetDrawSvg("#cube");
     switch (curScrType) {
         case "333":
-            draw333Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 3, scramble);
             break;
         case "222":
-            draw222Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 2, scramble);
             break;
-        /*case "444":
-            draw444Svg($("#cube"),scramble);
+        case "444":
+            drawScrambleNxN("#cube", 4, scramble);
             break;
         case "555":
-            draw555Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 5, scramble);
             break;
         case "666":
-            draw666Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 6, scramble);
             break;
         case "777":
-            draw777Svg($("#cube"),scramble);
+            drawScrambleNxN("#cube", 7, scramble);
             break;
-        case "clock":
-            drawClockSvg($("#cube"),scramble);
+        /*case "clock":
+            drawClockSvg("#cube",scramble);
             break;
         case "minx":
-            drawMegaSvg($("#cube"),scramble);
+            drawMegaSvg("#cube",scramble);
             break;
         case "pyram":
-            drawPyraSvg($("#cube"),scramble);
-            break;
-        case "skewb":
-            drawSkewbSvg($("#cube"),scramble);
+            drawPyraSvg("#cube",scramble);
             break;*/
+        case "skewb":
+            drawScrambleSkewb("#cube",scramble);
+            break;
         case "sq1":
-            drawSq1Svg($("#cube"),scramble);
+            drawScrambleSq1("#cube",scramble);
             break;
         default:
             $("#drawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='"+curScrType+"' scramble=\""+
@@ -270,7 +288,7 @@ function drawScramble() {
 function saveSolution() {
     //Add solution to solutions
     const date = Date.now().toString().split("").slice(0, 10).join("");
-    const newSolution = new Solution(rawTime, 0, scramble, "", date);
+    const newSolution = new Solution(rawTime, 0, scramble, "", date, rawTime);
     sessionList[curSession].solutions.push(newSolution);
     
     openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
@@ -494,6 +512,7 @@ function updateScrType() {
 function updateStats() {
     let solArr = sessionList[curSession].solutions.map(s => s.time);
     let arr = solArr.slice();
+    let sols = sessionList[curSession].solutions;
     
     // pbList
     $("#pbList").empty();
@@ -502,7 +521,7 @@ function updateStats() {
     // timeList
     $("#timeList").empty();
 
-    emptyAvgArrays();
+    // emptyAvgArrays();
 
     if (arr.length !== 0) {
         // timeList
@@ -511,13 +530,10 @@ function updateStats() {
             let i5 = i - 4;
             let i12 = i - 11;
             let c = s.comment !== "" ? "*" : "&nbsp;";
-
-            let sols = sessionList[curSession].solutions;
             
             let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time, s.penalty)+"</td>";
-            // getAo5(sessionList[curSession], i)
-            let ao5 = "<td class='cellToClick' onclick='showInfo("+i5+", 5)'>"+getHHmmsshh(getAvg(sols.map(t => t.time).slice(i5, i+1), 5))+"</td>";
-            let ao12 = "<td class='cellToClick' onclick='showInfo("+i12+", 12)'>"+getHHmmsshh(getAvg(sols.map(t => t.time).slice(i12, i+1), 12))+"</td>";
+            let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAvg(sols.map(t => t.totalTime).slice(i5, i+1), 5))+"</td>";
+            let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAvg(sols.map(t => t.totalTime).slice(i12, i+1), 12))+"</td>";
             $("#timeList").append("<tr><td>"+(i + 1) + c +"</td>"+single+ao5+ao12+"</tr>");
         }
 
@@ -526,37 +542,35 @@ function updateStats() {
         }
 
         // pbList
-        let rArr = arr.reverse();
-        curSingle = rArr[0];
+        curSingle = arr[arr.length - 1];
 
-        let sArr = arr.sort(function(a, b){return a-b});
-        bestSingle = sArr[0];
+        bestSingle = solutionsSorted[0].totalTime;
 
         $("#curSingle").text(getHHmmsshh(curSingle));
         $("#bestSingle").text(getHHmmsshh(bestSingle));
         
         $("#curSingle").on("click", function() {
-            let i = solArr.indexOf(curSingle);
+            let i = sols.length - 1;
             showInfo(i, 1, true);
         });
         
         $("#bestSingle").on("click", function() {
-            let i = solArr.indexOf(bestSingle);
+            let i = sols.map(s => s.totalTime).indexOf(bestSingle);
             showInfo(i, 1, true);
         });
         
-        for (let n of []) {
-            if (arr.length >= n) {
-                addToPBList(n, mo3s);
+        for (let n of [3, 5, 12, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000]) {
+            if (sols.length >= n) {
+                addToPBList(sols.map(s => s.totalTime), n);
             }
         }
     }
     adjustSize();
 }
 
-function addToPBList(num, arr) {
-    let curAvg = arr[arr.length-1];
-    let bestAvg = getBestAvg(num);
+function addToPBList(arr, num) {
+    let curAvg = getAvg(arr.slice(arr.length - num), num);
+    let bestAvg = averages["best"][num];
 
     let avgName = num === 3 ? "Mo3" : "Ao" + num;
     let curAvgID = num === 3 ? "curMo3" : "curAo" + num;
@@ -574,8 +588,8 @@ function addToPBList(num, arr) {
     }
 
     $("#"+bestAvgID).on("click", function() {
-        let i = arr.indexOf(bestAvg);
-        showInfo(i, num, true);
+        let i = averages["bestLastIDX"][num];
+        showInfo(i, num, true, "best");
     });
 }
 
@@ -586,8 +600,8 @@ function reverseTable(table) {
     });
 }
 
-function showInfo(i, num, pb = null) {
-    if (i < 0) {
+function showInfo(i, num, pb = null, avg = "cur") {
+    if (i < num - 1) {
         return;
     }
     let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
@@ -598,11 +612,10 @@ function showInfo(i, num, pb = null) {
     }
     else {
         if (num === 3) {
-            info += "Mo3: " + getHHmmsshh(mo3s[i]) + "<br/><br/>"
+            info += "Mo3: " + getHHmmsshh(averages[avg]["3"]) + "<br/><br/>"
         }
         else {
-            let ao = averages["cur"][num+""];
-            info += "Ao" + num + ": " + getHHmmsshh(ao) + "<br/><br/>";
+            info += "Ao" + num + ": " + getHHmmsshh(averages[avg][num+""]) + "<br/><br/>";
         }
 
         let arr = [];
@@ -611,9 +624,8 @@ function showInfo(i, num, pb = null) {
         let nRemove = num === 1 || num === 3 ? 0 : Math.ceil(0.05 * num);
 
         for (let j = 0; j < num; j++) {
-            let s = sessionList[curSession].solutions[i+j];
-            let p = s.penalty === -1 ? Infinity : s.penalty;
-            arr.push(s.time + p);
+            let s = sessionList[curSession].solutions[i-j];
+            arr.push(s.totalTime);
         }
         arr.sort(function (a, b) {
             return a-b;
@@ -628,7 +640,7 @@ function showInfo(i, num, pb = null) {
         }
         
         for (let n = 0; n < num; n++) {
-            let s = sessionList[curSession].solutions[i+n];
+            let s = sessionList[curSession].solutions[i+n-num+1];
             let p = s.penalty === -1 ? Infinity : s.penalty;
             let c = s.comment !== "" ? "[" + s.comment + "]" : s.comment;
 
@@ -662,7 +674,10 @@ function showInfo(i, num, pb = null) {
 }
 
 function changePenalty(i) {
-    sessionList[curSession].solutions[i].penalty = parseInt($('input[name="penalty"]:checked').val());
+    let t = sessionList[curSession].solutions[i].time;
+    let p = parseInt($('input[name="penalty"]:checked').val());
+    sessionList[curSession].solutions[i].penalty = p;
+    sessionList[curSession].solutions[i].totalTime = t + (p === -1 ? Infinity : p);
 
     doNotScramble = true;
     openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
@@ -721,7 +736,7 @@ function getAvg(arr, num) {
             nArr = arr.slice();
         }
         else {
-            nArr = arr.slice(toRemove, (num-toRemove));console.log(nArr);
+            nArr = arr.slice(toRemove, (num-toRemove));
         }
 
         for (let a of nArr) {
@@ -771,6 +786,20 @@ function emptyAvgArrays() {
             "2000" : Infinity,
             "5000" : Infinity,
             "10000" : Infinity
+        },
+        "bestLastIDX" : {
+            "3" : 0,
+            "5" : 0,
+            "12" : 0,
+            "25" : 0,
+            "50" : 0,
+            "100" : 0,
+            "200" : 0,
+            "500" : 0,
+            "1000" : 0,
+            "2000" : 0,
+            "5000" : 0,
+            "10000" : 0
         }
     }
 }
@@ -844,7 +873,7 @@ async function importFromCSTimer() {
                         curScrType = sessionScrType;
 
                         $.each(sessions, function(k, solve){
-                            const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3]);
+                            const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3], (solve[0][1] + solve[0][0] === -1 ? Infinity : solve[0][0]));
                             sessionSolutions.push(newSolution);
                         });
                         
@@ -1184,6 +1213,4 @@ function adjustSize() {
         let d = $('#timeList').parent();
         d.scrollTop(0);
     }
-
-    drawScramble();
 }
