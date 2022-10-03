@@ -725,7 +725,7 @@ function getDDMMYYYY(ms) {
 }
 
 function getAvg(arr, num) {
-    arr = arr.sort();
+    arr = arr.sort((a, b) => {return a - b});
     let toRemove = Math.ceil(0.05 * num);
     
     if (arr.length >= num) {

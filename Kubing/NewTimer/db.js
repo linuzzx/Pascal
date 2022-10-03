@@ -204,6 +204,7 @@ function removeAllFromDB(s = storeName) {
 }
 
 function getCurStats() {
+    
     const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     const request = store.getAll();
@@ -263,8 +264,22 @@ function getCurStats() {
 }
 
 function getBestStats() {
-    for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
-        getBestAvgFromDB(n);
+    const tx = db.transaction("solutions", readonly);
+    const store = tx.objectStore("solutions");
+    const idx = store.index("totalTimeIDX");
+    const request = idx.getAll();
+    let data;
+    
+    request.onsuccess = e => {
+        data = e.target.result;
+        solutionsSorted = data;
+        for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
+            getBestAvgFromDB(n);
+        }
+    }
+
+    request.onerror = e => {
+        console.log(e);
     }
 }
 
@@ -277,9 +292,12 @@ function getBestAvgFromDB(n) {
     
     request.onsuccess = e => {
         data = e.target.result;
-        averages["best"][n] = data[0]["ao" + n];
-        averages["bestLastIDX"][n] = data[0]["index"];
-
+        if (data[0]) {
+            let b = data[0]["ao" + n];
+            let i = data[0]["index"];
+            averages["best"][n] = b === "-" ? "DNF" : b;
+            averages["bestLastIDX"][n] = b === "-" ? (n - 1) : i;
+        }
         updateStats();
     }
 
