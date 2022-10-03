@@ -524,7 +524,6 @@ function updateStats() {
     if (arr.length !== 0) {
         // timeList
         let solsToShow = sols.length > 100 ? sols.slice(sols.length - 100) : sols;
-        // for (let s of sessionList[curSession].solutions) {
         for (let s of solsToShow) {
             let i = sessionList[curSession].solutions.indexOf(s);
             let i5 = i - 4;
@@ -532,8 +531,6 @@ function updateStats() {
             let c = s.comment !== "" ? "*" : "&nbsp;";
             
             let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time, s.penalty)+"</td>";
-            /* let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAvg(sols.map(t => t.totalTime).slice(i5, i+1), 5))+"</td>";
-            let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAvg(sols.map(t => t.totalTime).slice(i12, i+1), 12))+"</td>"; */
             let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAvgSorted(i, 5))+"</td>";
             let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAvgSorted(i, 12))+"</td>";
             $("#timeList").append("<tr><td>"+(i + 1) + c +"</td>"+single+ao5+ao12+"</tr>");

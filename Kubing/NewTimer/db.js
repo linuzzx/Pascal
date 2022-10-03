@@ -226,46 +226,7 @@ function getCurStats() {
 
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
             averages["cur"][n] = getAvg(data.map(t => t.totalTime).slice(data.length-parseInt(n)), parseInt(n));
-            // averages["cur"][n] = getAvgSorted(data.length - 1, parseInt(n));
         }
-        
-        /* let i = 0;
-        for (let t of data) {
-            let ao3 = getAvg(data.map(s => s.totalTime).slice(i - 2), 3);
-            let ao5 = getAvg(data.map(s => s.totalTime).slice(i - 4), 5);
-            let ao12 = getAvg(data.map(s => s.totalTime).slice(i - 11), 12);
-            let ao25 = getAvg(data.map(s => s.totalTime).slice(i - 24), 25);
-            let ao50 = getAvg(data.map(s => s.totalTime).slice(i - 49), 50);
-            let ao100 = getAvg(data.map(s => s.totalTime).slice(i - 99), 100);
-            let ao200 = getAvg(data.map(s => s.totalTime).slice(i - 199), 200);
-            let ao500 = getAvg(data.map(s => s.totalTime).slice(i - 499), 500);
-            let ao1000 = getAvg(data.map(s => s.totalTime).slice(i - 999), 1000);
-            let ao2000 = getAvg(data.map(s => s.totalTime).slice(i - 1999), 2000);
-            let ao5000 = getAvg(data.map(s => s.totalTime).slice(i - 4999), 5000);
-            let ao10000 = getAvg(data.map(s => s.totalTime).slice(i - 9999), 10000);
-            let sol = {
-                totalTime: t.totalTime,
-                time: t.time,
-                penalty: t.penalty,
-                comment: t.comment,
-                date: t.date,
-                index: t.index,
-                ao3: ao3,
-                ao5: ao5,
-                ao12: ao12,
-                ao25: ao25,
-                ao50: ao50,
-                ao100: ao100,
-                ao200: ao200,
-                ao500: ao500,
-                ao1000: ao1000,
-                ao2000: ao2000,
-                ao5000: ao5000,
-                ao10000: ao10000
-            };
-            store.put(sol, i);
-            i++;
-        } */
 
         getBestStats();
     }
