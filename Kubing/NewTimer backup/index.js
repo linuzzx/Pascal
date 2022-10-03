@@ -47,14 +47,11 @@ let curSingle = -1;
 let bestSingle = -1;
 
 let solutionsSorted = [];
-let solutionsUnsorted = [];
 
 let sessionList = [];
 
 let doNotScramble = false;
 let doNotCreateNew = false;
-
-let updateFromIndex = 0;
 
 let settings;
 
@@ -292,7 +289,6 @@ function saveSolution() {
     const newSolution = new Solution(rawTime, 0, scramble, "", date, rawTime);
     sessionList[curSession].solutions.push(newSolution);
     
-    updateFromIndex = sessionList[curSession].solutions.length - 1;
     openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
 }
 
@@ -478,8 +474,7 @@ function changeSession() {
 
 function updateSession() {
     updateScrType();
-    addSolutionsToDB(sessionList[curSession].solutions, updateFromIndex);
-    updateFromIndex = 0;
+    addSolutionsToDB(sessionList[curSession].solutions);
 }
 
 function changeScrType() {
@@ -705,7 +700,6 @@ function stripHTML(html){
 
 function deleteSolve(i) {
     if (confirm("Are you sure you want do delete the time?")) {
-        updateFromIndex = i;
         sessionList[curSession].solutions.splice(i, 1);
 
         doNotScramble = true;

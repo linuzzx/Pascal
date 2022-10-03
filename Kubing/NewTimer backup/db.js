@@ -89,15 +89,13 @@ function addToDB(key, val, dontGetAll = false) {
     }
 }
 
-function addSolutionsToDB(val, ind) {
-    if (ind === 0) {
-        removeAllFromDB("solutions");
-    }
+function addSolutionsToDB(val) {
+    removeAllFromDB("solutions");
     const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     
-    for (let i = ind; i < val.length; i++) {
-        let s = val[i];
+    let i = 0;
+    for (let s of val) {
         store.add({
             totalTime: s.time + (s.penalty === -1 ? Infinity : s.penalty),
             time: s.time,
@@ -118,9 +116,10 @@ function addSolutionsToDB(val, ind) {
             ao5000: "-",
             ao10000: "-"
         }, i);
+        i++;
     }
 
-    getCurStats(ind);
+    getCurStats();
 }
 
 function getFromDB(key) {
@@ -215,7 +214,8 @@ function removeAllFromDB(s = storeName) {
     };
 }
 
-function getCurStats(ind) {
+function getCurStats() {
+    
     const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     const request = store.getAll();
@@ -223,13 +223,12 @@ function getCurStats(ind) {
     
     request.onsuccess = e => {
         data = e.target.result;
-        solutionsUnsorted = data;
 
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
             averages["cur"][n] = getAvg(data.map(t => t.totalTime).slice(data.length-parseInt(n)), parseInt(n));
         }
 
-        getBestStats(ind);
+        getBestStats();
     }
 
     request.onerror = e => {
@@ -237,7 +236,7 @@ function getCurStats(ind) {
     }
 }
 
-function getBestStats(ind) {
+function getBestStats() {
     const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     const idx = store.index("totalTimeIDX");
@@ -248,9 +247,8 @@ function getBestStats(ind) {
         data = e.target.result;
         solutionsSorted = data;
         
-        for (let i = ind; i < data.length; i++) {
-            // let t = data[i];
-            let t = solutionsUnsorted[i];
+        let i = 0;
+        for (let t of data) {
             let ao3 = getAvgSorted(i, 3);
             let ao5 = getAvgSorted(i, 5);
             let ao12 = getAvgSorted(i, 12);
@@ -269,7 +267,7 @@ function getBestStats(ind) {
                 penalty: t.penalty,
                 comment: t.comment,
                 date: t.date,
-                index: t.index,
+                index: i,
                 ao3: ao3,
                 ao5: ao5,
                 ao12: ao12,
@@ -283,7 +281,8 @@ function getBestStats(ind) {
                 ao5000: ao5000,
                 ao10000: ao10000
             };
-            store.put(sol, t.index);
+            store.put(sol, data[i].index);
+            i++;
         }
 
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
