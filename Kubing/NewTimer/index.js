@@ -278,9 +278,7 @@ function drawScramble() {
             drawScrambleSq1("#cube",scramble);
             break;
         default:
-            $("#drawScramble").html("<svg class='svgScramble' id='cube' preserveAspectRatio='xMaxYMax meet'></svg><scramble-display event='"+curScrType+"' scramble=\""+
-                scramble.replaceAll("<span>","").replaceAll("</span>","").replaceAll("</br>"," ")+
-                "\"></scramble-display>");
+            drawMissingSvg("#cube");
             break;
     }
 }
