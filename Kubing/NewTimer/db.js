@@ -103,7 +103,18 @@ function addSolutionsToDB(val) {
             comment: s.comment,
             date: s.date,
             index: i,
-            avg: {}
+            ao3: "-",
+            ao5: "-",
+            ao12: "-",
+            ao25: "-",
+            ao50: "-",
+            ao100: "-",
+            ao200: "-",
+            ao500: "-",
+            ao1000: "-",
+            ao2000: "-",
+            ao5000: "-",
+            ao10000: "-"
         }, i);
         i++;
     }
