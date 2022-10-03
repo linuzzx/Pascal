@@ -525,15 +525,19 @@ function updateStats() {
 
     if (arr.length !== 0) {
         // timeList
-        for (let s of sessionList[curSession].solutions) {
+        let solsToShow = sols.length > 100 ? sols.slice(sols.length - 100) : sols;
+        // for (let s of sessionList[curSession].solutions) {
+        for (let s of solsToShow) {
             let i = sessionList[curSession].solutions.indexOf(s);
             let i5 = i - 4;
             let i12 = i - 11;
             let c = s.comment !== "" ? "*" : "&nbsp;";
             
             let single = "<td class='cellToClick' onclick='showInfo("+i+", 1)'>"+getHHmmsshh(s.time, s.penalty)+"</td>";
-            let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAvg(sols.map(t => t.totalTime).slice(i5, i+1), 5))+"</td>";
-            let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAvg(sols.map(t => t.totalTime).slice(i12, i+1), 12))+"</td>";
+            /* let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAvg(sols.map(t => t.totalTime).slice(i5, i+1), 5))+"</td>";
+            let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAvg(sols.map(t => t.totalTime).slice(i12, i+1), 12))+"</td>"; */
+            let ao5 = "<td class='cellToClick' onclick='showInfo("+i+", 5)'>"+getHHmmsshh(getAvgSorted(i, 5))+"</td>";
+            let ao12 = "<td class='cellToClick' onclick='showInfo("+i+", 12)'>"+getHHmmsshh(getAvgSorted(i, 12))+"</td>";
             $("#timeList").append("<tr><td>"+(i + 1) + c +"</td>"+single+ao5+ao12+"</tr>");
         }
 
@@ -569,7 +573,8 @@ function updateStats() {
 }
 
 function addToPBList(arr, num) {
-    let curAvg = getAvg(arr.slice(arr.length - num), num);
+    // let curAvg = getAvg(arr.slice(arr.length - num), num);
+    let curAvg = getAvgSorted(arr.length-1, num);
     let bestAvg = averages["best"][num];
 
     let avgName = num === 3 ? "Mo3" : "Ao" + num;
@@ -757,6 +762,39 @@ function getAvg(arr, num) {
     }
 }
 
+function getAvgSorted(i, num) {
+    let arr = solutionsSorted.filter(t => t.index > i - num && t.index <= i)
+    let toRemove = Math.ceil(0.05 * num);
+    
+    if (arr.length >= num) {
+        let avg = 0;
+
+        let nArr;
+        if (num === 3) {
+            nArr = arr.slice();
+        }
+        else {
+            nArr = arr.slice(toRemove, (num-toRemove));
+        }
+
+        for (let a of nArr) {
+            avg += Math.floor(a.totalTime/10);
+        }
+        
+        avg /= nArr.length;
+        
+        if (avg === Infinity) {
+            return ("DNF");
+        }
+        else {
+            return avg*10;
+        }
+    }
+    else {
+        return "-";
+    }
+}
+
 function emptyAvgArrays() {
     averages = {
         "cur" : {
@@ -854,12 +892,11 @@ async function importFromCSTimer() {
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
+                resetSession();
                 startTime = Date.now();
                 sessionList = [];
-                
-                let numOfSessions = json.properties.session || json.properties.sessionN || Object.keys(json).map(k => k).filter(function(k){if (k.includes("session")) {return k};}).length;
+                let numOfSessions = json.properties.sessionN || json.properties.session || Object.keys(json).map(k => k).filter(function(k){if (k.includes("session")) {return k};}).length;
                 let sessionData = Object.values($.parseJSON(json.properties.sessionData)).splice(0, numOfSessions);
-                
                 let i = 0;
                 $.each(json, function(key, sessions) {
                     if (key.includes("session")) {
@@ -873,7 +910,7 @@ async function importFromCSTimer() {
                         curScrType = sessionScrType;
 
                         $.each(sessions, function(k, solve){
-                            const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3], (solve[0][1] + solve[0][0] === -1 ? Infinity : solve[0][0]));
+                            const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3], (solve[0][1] + solve[0][0] === -1 ? Infinity : solve[0][1]));
                             sessionSolutions.push(newSolution);
                         });
                         

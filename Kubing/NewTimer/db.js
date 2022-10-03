@@ -226,9 +226,10 @@ function getCurStats() {
 
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
             averages["cur"][n] = getAvg(data.map(t => t.totalTime).slice(data.length-parseInt(n)), parseInt(n));
+            // averages["cur"][n] = getAvgSorted(data.length - 1, parseInt(n));
         }
         
-        let i = 0;
+        /* let i = 0;
         for (let t of data) {
             let ao3 = getAvg(data.map(s => s.totalTime).slice(i - 2), 3);
             let ao5 = getAvg(data.map(s => s.totalTime).slice(i - 4), 5);
@@ -264,7 +265,7 @@ function getCurStats() {
             };
             store.put(sol, i);
             i++;
-        }
+        } */
 
         getBestStats();
     }
@@ -275,7 +276,7 @@ function getCurStats() {
 }
 
 function getBestStats() {
-    const tx = db.transaction("solutions", readonly);
+    const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     const idx = store.index("totalTimeIDX");
     const request = idx.getAll();
@@ -284,6 +285,45 @@ function getBestStats() {
     request.onsuccess = e => {
         data = e.target.result;
         solutionsSorted = data;
+        
+        let i = 0;
+        for (let t of data) {
+            let ao3 = getAvgSorted(i, 3);
+            let ao5 = getAvgSorted(i, 5);
+            let ao12 = getAvgSorted(i, 12);
+            let ao25 = getAvgSorted(i, 25);
+            let ao50 = getAvgSorted(i, 50);
+            let ao100 = getAvgSorted(i, 100);
+            let ao200 = getAvgSorted(i, 200);
+            let ao500 = getAvgSorted(i, 500);
+            let ao1000 = getAvgSorted(i, 1000);
+            let ao2000 = getAvgSorted(i, 2000);
+            let ao5000 = getAvgSorted(i, 5000);
+            let ao10000 = getAvgSorted(i, 10000);
+            let sol = {
+                totalTime: t.totalTime,
+                time: t.time,
+                penalty: t.penalty,
+                comment: t.comment,
+                date: t.date,
+                index: i,
+                ao3: ao3,
+                ao5: ao5,
+                ao12: ao12,
+                ao25: ao25,
+                ao50: ao50,
+                ao100: ao100,
+                ao200: ao200,
+                ao500: ao500,
+                ao1000: ao1000,
+                ao2000: ao2000,
+                ao5000: ao5000,
+                ao10000: ao10000
+            };
+            store.put(sol, data[i].index);
+            i++;
+        }
+
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
             getBestAvgFromDB(n);
         }
