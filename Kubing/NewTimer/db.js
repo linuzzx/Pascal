@@ -119,7 +119,7 @@ function addSolutionsToDB(val, ind) {
             ao10000: "-"
         }, i);
     }
-
+    
     getCurStats(ind);
 }
 

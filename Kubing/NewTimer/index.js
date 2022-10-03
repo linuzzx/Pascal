@@ -679,6 +679,7 @@ function showInfo(i, num, pb = null, avg = "cur") {
 }
 
 function changePenalty(i) {
+    updateFromIndex = i;
     let t = sessionList[curSession].solutions[i].time;
     let p = parseInt($('input[name="penalty"]:checked').val());
     sessionList[curSession].solutions[i].penalty = p;
