@@ -1915,6 +1915,77 @@ let colors222 = [
     }
 }
 
+function removeRedundantMoves(mvs) {
+    let change = true;
+    let moves = [["U","D"], ["F","B"], ["R","L"]];
+
+    function getAxis(m) {
+        if (m[0] === "U" || m[0] === "D") {
+            return 0;
+        }
+        else if (m[0] === "F" || m[0] === "B") {
+            return 1;
+        }
+        else if (m[0] === "R" || m[0] === "L") {
+            return 2;
+        }
+    }
+
+    function fuse(m1, m2) {
+        change = true;
+
+        let nm;
+
+        let e1 = m1.length === 1 ? "" : m1[m1.length - 1];
+        let e2 = m2.length === 1 ? "" : m2[m2.length - 1];
+        let e = e1 + e2;
+        
+        if (e === "" || e === "''") {
+            nm = m1[0] + "2";
+        }
+        else if (e === "2'" || e === "'2") {
+            nm = m1[0];
+        }
+        else if (e === "2") {
+            nm = m1[0] + "'";
+        }
+        else if (e === "22" || e === "'") {
+            nm = "";
+        }
+
+        return nm;
+    }
+
+    if (mvs.includes("w")) {
+        return mvs;
+    }
+    else {
+        let mArr = mvs.split(" ");
+        while (change) {
+            change = false;
+            mArr = mArr.filter(a => a !== "*");
+            for (let i = 1; i < mArr.length; i++) {
+                let m = mArr[i];
+                let pm = mArr[i - 1];
+                if (m[0] === pm[0]) {
+                    mArr[i] = fuse(m, pm);
+                    mArr[i - 1] = "*";
+                }
+                if (i >= 2) {
+                    let ppm = mArr[i - 2];
+                    if (getAxis(m) === getAxis(pm) && getAxis(m) === getAxis(ppm)) {
+                        if (m[0] === ppm[0]) {
+                            mArr[i] = fuse(m, ppm);
+                            mArr[i - 2] = "*";
+                        }
+                    }
+                }
+            }
+        }
+        return cleanAlg(mArr.join(" "));
+    }
+}
+
 function getMovesWithoutRotations(mvs) {
     let mainMoves = ["U", "D", "R", "L", "F", "B"];
     
@@ -1988,7 +2059,18 @@ function getMovesWithoutRotations(mvs) {
         return m.toUpperCase();
     }
 
-    mvs = mvs.replaceAll("x", "_x").replaceAll("y", "_y").replaceAll("z", "_z");
+    mvs = mvs
+            .replaceAll("Uw2", "y2 D2").replaceAll("Uw'", "y' D'").replaceAll("Uw", "y D")
+            .replaceAll("Dw2", "y2 U2").replaceAll("Dw'", "y U'").replaceAll("Dw", "y' U")
+            .replaceAll("Rw2", "x2 L2").replaceAll("Rw'", "x' L'").replaceAll("Rw", "x L")
+            .replaceAll("Lw2", "x2 R2").replaceAll("Lw'", "x R'").replaceAll("Lw", "x' R")
+            .replaceAll("Fw2", "z2 B2").replaceAll("Fw'", "z' B'").replaceAll("Fw", "z B")
+            .replaceAll("Bw2", "z2 F2").replaceAll("Bw'", "z F'").replaceAll("Bw", "z' F")
+
+            .replaceAll("M2", "x2 R2 L2").replaceAll("M'", "x R' L").replaceAll("M", "x' R L'")
+            .replaceAll("S2", "z2 F2 B2").replaceAll("S'", "z' F B'").replaceAll("S", "z F' B")
+            .replaceAll("E2", "y2 U2 D2").replaceAll("E'", "y U' D").replaceAll("E", "y' U D'")
+            .replaceAll("x", "_x").replaceAll("y", "_y").replaceAll("z", "_z");
     let newMoves = [];
     if (mvs.split("_")[0].trim() !== "") {
         newMoves.push(mvs.split("_")[0].trim());
@@ -2003,10 +2085,11 @@ function getMovesWithoutRotations(mvs) {
             .replaceAll("R", mainMoves[2].toLowerCase())
             .replaceAll("L", mainMoves[3].toLowerCase())
             .replaceAll("F", mainMoves[4].toLowerCase())
-            .replaceAll("B", mainMoves[5].toLowerCase())).toUpperCase());
+            .replaceAll("B", mainMoves[5].toLowerCase())
+        ).toUpperCase().replaceAll("W", "w"));
     }
     
-    return newMoves.join(" ").replaceAll("W", "w").trim();
+    return newMoves.join(" ").trim();
 }
 
 function getHHmmsshh(ms, penalty = 0, stats = false) {
