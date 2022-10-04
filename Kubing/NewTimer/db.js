@@ -292,7 +292,7 @@ function getBestStats(ind) {
         }
 
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
-            getBestAvgFromDB(n);
+            getBestAvgFromDB(n, n === "10000");
         }
     }
 
@@ -301,7 +301,7 @@ function getBestStats(ind) {
     }
 }
 
-function getBestAvgFromDB(n) {
+function getBestAvgFromDB(n, last) {
     const tx = db.transaction("solutions", readonly);
     const store = tx.objectStore("solutions");
     const idx = store.index("ao" + n + "IDX");
@@ -316,7 +316,9 @@ function getBestAvgFromDB(n) {
             averages["best"][n] = b === "-" ? "DNF" : b;
             averages["bestLastIDX"][n] = b === "-" ? (n - 1) : i;
         }
-        updateStats();
+        if (last) {
+            updateStats();
+        }
     }
 
     request.onerror = e => {

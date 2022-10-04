@@ -547,7 +547,6 @@ function updateStats() {
 
         // pbList
         curSingle = arr[arr.length - 1];
-
         bestSingle = solutionsSorted[0].totalTime;
 
         $("#curSingle").text(getHHmmsshh(curSingle));
@@ -894,7 +893,7 @@ async function importFromCSTimer() {
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
-                resetSession();
+                // resetSession();
                 startTime = Date.now();
                 sessionList = [];
                 let numOfSessions = json.properties.sessionN || json.properties.session || Object.keys(json).map(k => k).filter(function(k){if (k.includes("session")) {return k};}).length;
