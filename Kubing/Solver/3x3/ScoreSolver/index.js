@@ -137,6 +137,7 @@ function getScore(scr) {
         score = Infinity;
     }
     else {
+        step = "0";
         if (isHTR(scr)) {
             score += 500;
             step = "HTR";
@@ -145,12 +146,19 @@ function getScore(scr) {
             score += 200;
             step = "DR";
         }
-        else if (isEO(scr)) {
-            score += 100;
-            step = "EO";
-        }
         else {
-            step = "0";
+            if (isEO(scr)) {
+                score += 100;
+                step = "EO";
+            }
+            if (isEO(scr + " y")) {
+                score += 100;
+                step = "EO";
+            }
+            if (isEO(scr + " x")) {
+                score += 100;
+                step = "EO";
+            }
         }
 
         for (let f of faces) {
