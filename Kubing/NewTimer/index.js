@@ -933,7 +933,7 @@ async function importFromCSTimer() {
                         let sessionSolutions = [];
                         curScrType = sessionScrType;
 
-                        $.each(sessions, function(k, solve){console.log(k);
+                        $.each(sessions, function(k, solve){
                             const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3], (solve[0][1] + solve[0][0] === -1 ? Infinity : solve[0][1]), k);
                             sessionSolutions.push(newSolution);
                         });
