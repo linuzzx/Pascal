@@ -152,7 +152,7 @@ function addSolutionsToDB(val, ind) {
                 solutionsSorted = data2;
 
                 for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
-                    averages["cur"][n] = solutionsUnsorted[solutionsUnsorted.length - 1][n];
+                    averages["cur"][n] = solutionsUnsorted[solutionsUnsorted.length - 1]["ao" + n];
                 }
 
                 for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
