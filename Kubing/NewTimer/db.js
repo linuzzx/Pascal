@@ -234,6 +234,31 @@ function getCurStats(ind) {
             averages["cur"][n] = getAvg(data.map(t => t.totalTime).slice(data.length-parseInt(n)), parseInt(n));
         }
 
+        if (solutionsUnsorted.length !== 0) {
+            let t = solutionsUnsorted[ind];
+            let sol = {
+                totalTime: t.totalTime,
+                time: t.time,
+                penalty: t.penalty,
+                comment: t.comment,
+                date: t.date,
+                index: t.index,
+                ao3: averages["cur"][3],
+                ao5: averages["cur"][5],
+                ao12: averages["cur"][12],
+                ao25: averages["cur"][25n],
+                ao50: averages["cur"][50],
+                ao100: averages["cur"][100],
+                ao200: averages["cur"][200],
+                ao500: averages["cur"][500],
+                ao1000: averages["cur"][1000],
+                ao2000: averages["cur"][2000],
+                ao5000: averages["cur"][5000],
+                ao10000: averages["cur"][10000]
+            };
+            store.put(sol, t.index);
+        }
+
         getBestStats(ind);
     }
 
@@ -254,7 +279,6 @@ function getBestStats(ind) {
         solutionsSorted = data;
         
         for (let i = ind; i < data.length; i++) {
-            // let t = data[i];
             let t = solutionsUnsorted[i];
             let ao3 = getAvgSorted(i, 3);
             let ao5 = getAvgSorted(i, 5);

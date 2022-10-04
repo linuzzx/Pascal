@@ -692,6 +692,7 @@ function changePenalty(i) {
 function editComment(i) {
     let c = prompt("Comment", sessionList[curSession].solutions[i].comment);
     if (c || c === "") {
+        updateFromIndex = i;
         sessionList[curSession].solutions[i].comment = c;
         doNotScramble = true;
         openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
