@@ -47,11 +47,14 @@ let curSingle = -1;
 let bestSingle = -1;
 
 let solutionsSorted = [];
+let solutionsUnsorted = [];
 
 let sessionList = [];
 
 let doNotScramble = false;
 let doNotCreateNew = false;
+
+let updateFromIndex = 0;
 
 let settings;
 
@@ -289,6 +292,7 @@ function saveSolution() {
     const newSolution = new Solution(rawTime, 0, scramble, "", date, rawTime);
     sessionList[curSession].solutions.push(newSolution);
     
+    updateFromIndex = sessionList[curSession].solutions.length - 1;
     openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
 }
 
@@ -474,7 +478,8 @@ function changeSession() {
 
 function updateSession() {
     updateScrType();
-    addSolutionsToDB(sessionList[curSession].solutions);
+    addSolutionsToDB(sessionList[curSession].solutions, updateFromIndex);
+    updateFromIndex = 0;
 }
 
 function changeScrType() {
@@ -542,7 +547,6 @@ function updateStats() {
 
         // pbList
         curSingle = arr[arr.length - 1];
-
         bestSingle = solutionsSorted[0].totalTime;
 
         $("#curSingle").text(getHHmmsshh(curSingle));
@@ -674,6 +678,7 @@ function showInfo(i, num, pb = null, avg = "cur") {
 }
 
 function changePenalty(i) {
+    updateFromIndex = i;
     let t = sessionList[curSession].solutions[i].time;
     let p = parseInt($('input[name="penalty"]:checked').val());
     sessionList[curSession].solutions[i].penalty = p;
@@ -687,6 +692,7 @@ function changePenalty(i) {
 function editComment(i) {
     let c = prompt("Comment", sessionList[curSession].solutions[i].comment);
     if (c || c === "") {
+        updateFromIndex = i;
         sessionList[curSession].solutions[i].comment = c;
         doNotScramble = true;
         openDB(editDB, sessionList[curSession].id, sessionList[curSession]);
@@ -700,6 +706,7 @@ function stripHTML(html){
 
 function deleteSolve(i) {
     if (confirm("Are you sure you want do delete the time?")) {
+        updateFromIndex = i;
         sessionList[curSession].solutions.splice(i, 1);
 
         doNotScramble = true;
@@ -887,7 +894,7 @@ async function importFromCSTimer() {
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
-                resetSession();
+                // resetSession();
                 startTime = Date.now();
                 sessionList = [];
                 let numOfSessions = json.properties.sessionN || json.properties.session || Object.keys(json).map(k => k).filter(function(k){if (k.includes("session")) {return k};}).length;

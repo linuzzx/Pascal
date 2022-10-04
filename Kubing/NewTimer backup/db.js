@@ -89,13 +89,20 @@ function addToDB(key, val, dontGetAll = false) {
     }
 }
 
-function addSolutionsToDB(val) {
-    removeAllFromDB("solutions");
+function addSolutionsToDB(val, ind) {
+    if (ind === 0) {
+        removeAllFromDB("solutions");
+    }
+    else {
+        for (let i = ind; i < solutionsUnsorted.length; i++) {
+            removeFromDB(i, "solutions");
+        }
+    }
     const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     
-    let i = 0;
-    for (let s of val) {
+    for (let i = ind; i < val.length; i++) {
+        let s = val[i];
         store.add({
             totalTime: s.time + (s.penalty === -1 ? Infinity : s.penalty),
             time: s.time,
@@ -116,10 +123,9 @@ function addSolutionsToDB(val) {
             ao5000: "-",
             ao10000: "-"
         }, i);
-        i++;
     }
-
-    getCurStats();
+    
+    getCurStats(ind);
 }
 
 function getFromDB(key) {
@@ -185,9 +191,9 @@ function getAllSolutionsFromDB(exporting = false) {
     }
 }
 
-function removeFromDB(key) {
-    const request = db.transaction(storeName, readwrite)
-    .objectStore(storeName)
+function removeFromDB(key, st = "storeName") {
+    const request = db.transaction(st, readwrite)
+    .objectStore(st)
     .delete(key);
     
     request.onsuccess = e => {
@@ -214,8 +220,7 @@ function removeAllFromDB(s = storeName) {
     };
 }
 
-function getCurStats() {
-    
+function getCurStats(ind) {
     const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     const request = store.getAll();
@@ -223,12 +228,38 @@ function getCurStats() {
     
     request.onsuccess = e => {
         data = e.target.result;
+        solutionsUnsorted = data;
 
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
             averages["cur"][n] = getAvg(data.map(t => t.totalTime).slice(data.length-parseInt(n)), parseInt(n));
         }
 
-        getBestStats();
+        if (solutionsUnsorted.length !== 0) {
+            let t = solutionsUnsorted[ind];
+            let sol = {
+                totalTime: t.totalTime,
+                time: t.time,
+                penalty: t.penalty,
+                comment: t.comment,
+                date: t.date,
+                index: t.index,
+                ao3: averages["cur"][3],
+                ao5: averages["cur"][5],
+                ao12: averages["cur"][12],
+                ao25: averages["cur"][25n],
+                ao50: averages["cur"][50],
+                ao100: averages["cur"][100],
+                ao200: averages["cur"][200],
+                ao500: averages["cur"][500],
+                ao1000: averages["cur"][1000],
+                ao2000: averages["cur"][2000],
+                ao5000: averages["cur"][5000],
+                ao10000: averages["cur"][10000]
+            };
+            store.put(sol, t.index);
+        }
+
+        getBestStats(ind);
     }
 
     request.onerror = e => {
@@ -236,7 +267,7 @@ function getCurStats() {
     }
 }
 
-function getBestStats() {
+function getBestStats(ind) {
     const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     const idx = store.index("totalTimeIDX");
@@ -247,8 +278,8 @@ function getBestStats() {
         data = e.target.result;
         solutionsSorted = data;
         
-        let i = 0;
-        for (let t of data) {
+        for (let i = ind; i < data.length; i++) {
+            let t = solutionsUnsorted[i];
             let ao3 = getAvgSorted(i, 3);
             let ao5 = getAvgSorted(i, 5);
             let ao12 = getAvgSorted(i, 12);
@@ -267,7 +298,7 @@ function getBestStats() {
                 penalty: t.penalty,
                 comment: t.comment,
                 date: t.date,
-                index: i,
+                index: t.index,
                 ao3: ao3,
                 ao5: ao5,
                 ao12: ao12,
@@ -281,12 +312,11 @@ function getBestStats() {
                 ao5000: ao5000,
                 ao10000: ao10000
             };
-            store.put(sol, data[i].index);
-            i++;
+            store.put(sol, t.index);
         }
 
         for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
-            getBestAvgFromDB(n);
+            getBestAvgFromDB(n, n === "10000");
         }
     }
 
@@ -295,7 +325,7 @@ function getBestStats() {
     }
 }
 
-function getBestAvgFromDB(n) {
+function getBestAvgFromDB(n, last) {
     const tx = db.transaction("solutions", readonly);
     const store = tx.objectStore("solutions");
     const idx = store.index("ao" + n + "IDX");
@@ -310,7 +340,9 @@ function getBestAvgFromDB(n) {
             averages["best"][n] = b === "-" ? "DNF" : b;
             averages["bestLastIDX"][n] = b === "-" ? (n - 1) : i;
         }
-        updateStats();
+        if (last) {
+            updateStats();
+        }
     }
 
     request.onerror = e => {
