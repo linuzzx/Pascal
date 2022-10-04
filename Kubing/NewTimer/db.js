@@ -93,6 +93,11 @@ function addSolutionsToDB(val, ind) {
     if (ind === 0) {
         removeAllFromDB("solutions");
     }
+    else {
+        for (let i = ind; i < solutionsUnsorted.length; i++) {
+            removeFromDB(i, "solutions");
+        }
+    }
     const tx = db.transaction("solutions", readwrite);
     const store = tx.objectStore("solutions");
     
@@ -186,9 +191,9 @@ function getAllSolutionsFromDB(exporting = false) {
     }
 }
 
-function removeFromDB(key) {
-    const request = db.transaction(storeName, readwrite)
-    .objectStore(storeName)
+function removeFromDB(key, st = "storeName") {
+    const request = db.transaction(st, readwrite)
+    .objectStore(st)
     .delete(key);
     
     request.onsuccess = e => {
