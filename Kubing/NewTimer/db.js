@@ -128,6 +128,7 @@ function addSolutionsToDB(val, ind) {
     
     // getCurStats(ind);
     if (calcStats) {
+        calcStats = false;
         getCurStats(ind);
     }
     else {
