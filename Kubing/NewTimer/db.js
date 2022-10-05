@@ -134,9 +134,9 @@ function addSolutionsToDB(val, ind) {
             request2.onsuccess = e => {
                 data2 = e.target.result;
                 solutionsSorted = data2;
-
+                
                 for (let n of avgList) {
-                    averages["cur"][n] = solutionsUnsorted[solutionsUnsorted.length - 1]["ao" + n];
+                    averages["cur"][n] = solutionsUnsorted.length > 0 ? solutionsUnsorted[solutionsUnsorted.length - 1]["ao" + n] : Infinity;
                 }
 
                 for (let n of avgList) {
