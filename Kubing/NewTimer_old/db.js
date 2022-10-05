@@ -126,7 +126,6 @@ function addSolutionsToDB(val, ind) {
         }, i);
     }
     
-    // getCurStats(ind);
     if (calcStats) {
         calcStats = false;
         getCurStats(ind);
