@@ -1,11 +1,28 @@
 class Solution {
-    constructor(time, penalty, scramble, comment, date, totalTime) {
+    constructor(
+        time, penalty, scramble, comment, date, totalTime, index,
+        ao3 = "-", ao5 = "-", ao12 = "-", ao25 = "-", ao50 = "-", ao100 = "-",
+        ao200 = "-", ao500 = "-", ao1000 = "-", ao2000 = "-", ao5000 = "-", ao10000 = "-"
+    ) {
         this.time = time;
         this.penalty = penalty;
         this.scramble = scramble;
         this.comment = comment;
         this.date = date;
         this.totalTime = totalTime;
+        this.index = index;
+        this.ao3 = ao3;
+        this.ao5 = ao5;
+        this.ao12 = ao12;
+        this.ao25 = ao25;
+        this.ao50 = ao50;
+        this.ao100 = ao100;
+        this.ao200 = ao200;
+        this.ao500 = ao500;
+        this.ao1000 = ao1000;
+        this.ao2000 = ao2000;
+        this.ao5000 = ao5000;
+        this.ao10000 = ao10000
     }
 }
 
@@ -53,6 +70,8 @@ let sessionList = [];
 
 let doNotScramble = false;
 let doNotCreateNew = false;
+
+let calcStats;
 
 let updateFromIndex = 0;
 
@@ -288,8 +307,9 @@ function drawScramble() {
 
 function saveSolution() {
     //Add solution to solutions
+    calcStats = true;
     const date = Date.now().toString().split("").slice(0, 10).join("");
-    const newSolution = new Solution(rawTime, 0, scramble, "", date, rawTime);
+    const newSolution = new Solution(rawTime, 0, scramble, "", date, rawTime, sessionList[curSession].solutions.length);
     sessionList[curSession].solutions.push(newSolution);
     
     updateFromIndex = sessionList[curSession].solutions.length - 1;
@@ -678,6 +698,7 @@ function showInfo(i, num, pb = null, avg = "cur") {
 }
 
 function changePenalty(i) {
+    calcStats = true;
     updateFromIndex = i;
     let t = sessionList[curSession].solutions[i].time;
     let p = parseInt($('input[name="penalty"]:checked').val());
@@ -894,6 +915,7 @@ async function importFromCSTimer() {
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
+                calcStats = true;
                 // resetSession();
                 startTime = Date.now();
                 sessionList = [];
@@ -912,7 +934,7 @@ async function importFromCSTimer() {
                         curScrType = sessionScrType;
 
                         $.each(sessions, function(k, solve){
-                            const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3], (solve[0][1] + solve[0][0] === -1 ? Infinity : solve[0][1]));
+                            const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3], (solve[0][1] + solve[0][0] === -1 ? Infinity : solve[0][1]), k);
                             sessionSolutions.push(newSolution);
                         });
                         
@@ -1113,6 +1135,7 @@ function getSettings() {
 }
 
 function initActions() {
+    calcStats = false;
     getSettings();
 
     connectAndGetDataFromDB();

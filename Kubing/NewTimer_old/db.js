@@ -104,28 +104,65 @@ function addSolutionsToDB(val, ind) {
     for (let i = ind; i < val.length; i++) {
         let s = val[i];
         store.add({
-            totalTime: s.time + (s.penalty === -1 ? Infinity : s.penalty),
             time: s.time,
             penalty: s.penalty,
+            scramble: s.scramble,
             comment: s.comment,
             date: s.date,
-            index: i,
-            ao3: "-",
-            ao5: "-",
-            ao12: "-",
-            ao25: "-",
-            ao50: "-",
-            ao100: "-",
-            ao200: "-",
-            ao500: "-",
-            ao1000: "-",
-            ao2000: "-",
-            ao5000: "-",
-            ao10000: "-"
+            totalTime: s.time + (s.penalty === -1 ? Infinity : s.penalty),
+            index: s.index,
+            ao3: s.ao3,
+            ao5: s.ao5,
+            ao12: s.ao12,
+            ao25: s.ao25,
+            ao50: s.ao50,
+            ao100: s.ao100,
+            ao200: s.ao200,
+            ao500: s.ao500,
+            ao1000: s.ao1000,
+            ao2000: s.ao2000,
+            ao5000: s.ao5000,
+            ao10000: s.ao10000
         }, i);
     }
     
-    getCurStats(ind);
+    // getCurStats(ind);
+    if (calcStats) {
+        calcStats = false;
+        getCurStats(ind);
+    }
+    else {
+        const tx = db.transaction("solutions", readwrite);
+        const store = tx.objectStore("solutions");
+        const request = store.getAll();
+        let data;
+        
+        request.onsuccess = e => {
+            data = e.target.result;
+            solutionsUnsorted = data;
+
+            const tx2 = db.transaction("solutions", readwrite);
+            const store2 = tx.objectStore("solutions");
+            const idx = store.index("totalTimeIDX");
+            const request2 = idx.getAll();
+            let data2;
+            
+            request2.onsuccess = e => {
+                data2 = e.target.result;
+                solutionsSorted = data2;
+
+                for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
+                    averages["cur"][n] = solutionsUnsorted[solutionsUnsorted.length - 1]["ao" + n];
+                }
+
+                for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
+                    getBestAvgFromDB(n, n === "10000");
+                }
+
+                updateStats();
+            }
+        }
+    }
 }
 
 function getFromDB(key) {
@@ -237,16 +274,17 @@ function getCurStats(ind) {
         if (solutionsUnsorted.length !== 0) {
             let t = solutionsUnsorted[ind];
             let sol = {
-                totalTime: t.totalTime,
                 time: t.time,
                 penalty: t.penalty,
+                scramble: t.scramble,
                 comment: t.comment,
                 date: t.date,
+                totalTime: t.totalTime,
                 index: t.index,
                 ao3: averages["cur"][3],
                 ao5: averages["cur"][5],
                 ao12: averages["cur"][12],
-                ao25: averages["cur"][25n],
+                ao25: averages["cur"][25],
                 ao50: averages["cur"][50],
                 ao100: averages["cur"][100],
                 ao200: averages["cur"][200],
@@ -257,6 +295,11 @@ function getCurStats(ind) {
                 ao10000: averages["cur"][10000]
             };
             store.put(sol, t.index);
+
+            const tx2 = db.transaction("sessions", readwrite);
+            const store2 = tx2.objectStore("sessions");
+            sessionList[curSession].solutions[t.index] = sol;
+            store2.put(sessionList[curSession], sessionList[curSession].id);
         }
 
         getBestStats(ind);
@@ -293,11 +336,12 @@ function getBestStats(ind) {
             let ao5000 = getAvgSorted(i, 5000);
             let ao10000 = getAvgSorted(i, 10000);
             let sol = {
-                totalTime: t.totalTime,
                 time: t.time,
+                scramble: t.scramble,
                 penalty: t.penalty,
                 comment: t.comment,
                 date: t.date,
+                totalTime: t.totalTime,
                 index: t.index,
                 ao3: ao3,
                 ao5: ao5,
