@@ -121,6 +121,48 @@ label {
     user-select: none; /* Standard syntax */
 }
 
+#loader {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#loaderWheel {
+    border: 20px solid #626262;
+    border-radius: 50%;
+    border-top: 20px solid #2a2a2a;
+    width: 20vh;
+    height: 20vh;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+  
+/* Safari */
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+  
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 0;

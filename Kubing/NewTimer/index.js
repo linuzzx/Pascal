@@ -615,6 +615,8 @@ function addToPBList(arr, num) {
         let i = averages["bestLastIDX"][num];
         showInfo(i, num, true, "best");
     });
+    
+    $("#loader").css("visibility", "hidden");
 }
 
 function reverseTable(table) {
@@ -915,6 +917,7 @@ async function importFromCSTimer() {
 
         if (json) {
             if (confirm("Importing will override current data. Do you still want to import?")) {
+                $("#loader").css("visibility", "visible");
                 calcStats = true;
                 // resetSession();
                 startTime = Date.now();
