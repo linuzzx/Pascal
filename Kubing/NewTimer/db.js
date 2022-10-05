@@ -6,7 +6,7 @@ const readonly = "readonly";
 
 let db = null;
 
-function openDB(func, storeName, arg1 = false, arg2 = false, arg3 = false) {
+function openDB(func, arg1 = false, arg2 = false, arg3 = false) {
     const request = indexedDB.open(dbName);
     
     request.onupgradeneeded = e => {
@@ -35,16 +35,16 @@ function openDB(func, storeName, arg1 = false, arg2 = false, arg3 = false) {
         db = e.target.result;
         if (func) {
             if (arg3 !== null) {
-                func(storeName,arg1,arg2,arg3);
+                func(arg1,arg2,arg3);
             }
             else if (arg2 !== null) {
-                func(storeName,arg1,arg2);
+                func(arg1,arg2);
             }
             else if (arg1 !== null) {
-                func(storeName,arg1);
+                func(arg1);
             }
             else {
-                func(storeName);
+                func();
             }
         }
     }
