@@ -494,6 +494,7 @@ function changeSession() {
     
     resetTimer();
     
+    updateFromIndex = 0;
     checkSessions();
     $("#sessionList").blur();
 }
@@ -631,7 +632,7 @@ function reverseTable(table) {
 function showInfo(i, num, pb = null, avg = "cur") {
     if (i < num - 1) {
         return;
-    }
+    }console.log(sessionList[curSession].solutions[i]);
     let info = "Date: " + getDDMMYYYY(sessionList[curSession].solutions[i].date) + "<br/><br/>";
     if (num === 1) {
         let s = sessionList[curSession].solutions[i];
@@ -740,7 +741,7 @@ function deleteSolve(i) {
     }
 }
 
-function getDDMMYYYY(ms) {
+function getDDMMYYYY(ms) {console.log(ms);
     if (ms.toString().length === 10) {
         ms *= 1000;
     }
@@ -939,7 +940,14 @@ async function importFromCSTimer() {
                         curScrType = sessionScrType;
 
                         $.each(sessions, function(k, solve){
-                            const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3], (solve[0][1] + solve[0][0] === -1 ? Infinity : solve[0][1]), k);
+                            let penalty = solve[0][0];
+                            let time = solve[0][1];
+                            let scramble = solve[1];
+                            let comment = solve[2];
+                            let date = solve[3] !== undefined ? solve[3] : Math.floor(Date.now() / 1000);
+                            let totalTime = solve[0][1] + solve[0][0] === -1 ? Infinity : solve[0][1];
+                            // const newSolution = new Solution(solve[0][1], solve[0][0], solve[1], solve[2], solve[3], totalTime, k);
+                            const newSolution = new Solution(time, penalty, scramble, comment, date, totalTime, k);
                             sessionSolutions.push(newSolution);
                         });
                         

@@ -2110,7 +2110,7 @@ function getHHmmsshh(ms, penalty = 0, stats = false) {
     }
 
     let timeStr = "";
-    let cs = Math.round((ms % 1000) / 10);
+    let cs = Math.floor((ms % 1000) / 10);
     let s = Math.floor((ms / 1000) % 60);
     let m = Math.floor((ms / 60000) % 60);
     let h = Math.floor((ms / 3600000) % 24);
