@@ -135,9 +135,10 @@ label {
 }
 
 #loaderWheel {
-    border: 20px solid #626262;
+    border: 20px solid #2a2a2a;
     border-radius: 50%;
-    border-top: 20px solid #2a2a2a;
+    border-top: 20px solid #626262;
+    border-bottom: 20px solid #626262;
     width: 20vh;
     height: 20vh;
     -webkit-animation: spin 2s linear infinite; /* Safari */
