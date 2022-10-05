@@ -6,21 +6,6 @@ const readonly = "readonly";
 
 let db = null;
 
-let arrays = {
-    3 : [],
-    5 : [],
-    12 : [],
-    25 : [],
-    50 : [],
-    100 : [],
-    200 : [],
-    500 : [],
-    1000 : [],
-    2000 : [],
-    5000 : [],
-    10000 : []
-};
-
 function openDB(func, storeName, arg1 = false, arg2 = false, arg3 = false) {
     const request = indexedDB.open(dbName);
     
@@ -150,12 +135,12 @@ function addSolutionsToDB(val, ind) {
                 data2 = e.target.result;
                 solutionsSorted = data2;
 
-                for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
+                for (let n of avgList) {
                     averages["cur"][n] = solutionsUnsorted[solutionsUnsorted.length - 1]["ao" + n];
                 }
 
-                for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
-                    getBestAvgFromDB(n, n === "10000");
+                for (let n of avgList) {
+                    getBestAvgFromDB(n, n === avgList[avgList.length - 1]);
                 }
 
                 updateStats();
@@ -266,7 +251,7 @@ function getCurStats(ind) {
         data = e.target.result;
         solutionsUnsorted = data;
 
-        for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
+        for (let n of avgList) {
             averages["cur"][n] = getAvg(data.map(t => t.totalTime).slice(data.length-parseInt(n)), parseInt(n));
         }
 
@@ -358,8 +343,8 @@ function getBestStats(ind) {
             store.put(sol, t.index);
         }
 
-        for (let n of ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"]) {
-            getBestAvgFromDB(n, n === "10000");
+        for (let n of avgList) {
+            getBestAvgFromDB(n, n === avgList[avgList.length - 1]);
         }
     }
 

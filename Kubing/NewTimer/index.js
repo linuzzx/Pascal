@@ -79,6 +79,8 @@ let settings;
 
 let showingOuterInner = false;
 
+let avgList = ["3", "5", "12", "25", "50", "100", "200", "500", "1000", "2000", "5000", "10000"];
+
 let averages = {
     "cur" : {
         "3" : Infinity,
@@ -582,7 +584,7 @@ function updateStats() {
             showInfo(i, 1, true);
         });
         
-        for (let n of [3, 5, 12, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000]) {
+        for (let n of avgList.map(t => parseInt(t))) {
             if (sols.length >= n) {
                 addToPBList(sols.map(s => s.totalTime), n);
             }
@@ -615,7 +617,7 @@ function addToPBList(arr, num) {
         let i = averages["bestLastIDX"][num];
         showInfo(i, num, true, "best");
     });
-    
+
     $("#loader").css("visibility", "hidden");
 }
 
