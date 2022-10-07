@@ -366,11 +366,12 @@ function getReady() {
         moveArray = [];
         solved = false;
         ready = true;
-        $("#scramble").text("Turn cube to start timer");
+        
         $("#time").html("0.00");
         moveCount = 0;
         $("#moves").html(moveCount + " moves");
         $("#tps").html("");
+        $("#scramble").text("Turn cube to start timer");
     }
 }
 
@@ -408,14 +409,16 @@ function startTimer() {
 function stopTimer() {
     if (timing) {
         timing = false;
-        clearInterval(interval);
-
-        tps = moveCount / (time / 1000);
+        tps = moveArray.length / (time / 1000);
         $("#tps").html(tps.toFixed(2) + " tps");
 
-        recon(scramble, time, moveArray, tps);
+        clearInterval(interval);
 
+        recon(scramble, time, moveArray, tps);
+        
         applyScramble();
+        moveArray = [];
+        ready = false;
     }
 }
 
@@ -426,7 +429,7 @@ function recon(scr, t, mvs, tps) {
     let steps = getSteps(scr, mvs);
 
     for (let s of steps) {
-        r += s.join(" ") + "\n";
+        r += s.join(" // ") + "\n";
     }
 
     r += "\n" + mvs.length + " / " + time + " = " + tps + " tps";
@@ -442,7 +445,7 @@ function getSteps(scr, mvs) {
     for (let s of ["cross", "f2l", "oll", "pll", "auf"]) {
         loop : for (let i = startInd; i < mvs.length; i++) {
             let curMoves = mvs.slice(startInd, i + 1).join(" ");
-            let state = getCubeState333(scr + " " + curMoves);
+            let state = getCubeState333(scr + " " + mvs.slice(0, i + 1).join(" "));
 
             let fU = state.split("").slice(0,9);
             let fL = state.split("").slice(9,18);
@@ -473,42 +476,42 @@ function getSteps(scr, mvs) {
                 if (fU[4] === fU[1] && fU[4] === fU[3] && fU[4] === fU[5] && fU[4] === fU[7] &&
                     fL[4] === fL[1] && fF[4] === fF[1] && fR[4] === fR[1] && fB[4] === fB[1]) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     cross = 0;
                     break loop;
                 }
                 else if (fL[4] === fL[1] && fL[4] === fL[3] && fL[4] === fL[5] && fL[4] === fL[7] &&
                     fU[4] === fU[3] && fF[4] === fF[3] && fD[4] === fD[3] && fB[4] === fB[5]) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     cross = 1;
                     break loop;
                 }
                 else if (fF[4] === fF[1] && fF[4] === fF[3] && fF[4] === fF[5] && fF[4] === fF[7] &&
                     fU[4] === fU[7] && fR[4] === fR[3] && fD[4] === fD[1] && fL[4] === fL[5]) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     cross = 2;
                     break loop;
                 }
                 else if (fR[4] === fR[1] && fR[4] === fR[3] && fR[4] === fR[5] && fR[4] === fR[7] &&
                     fU[4] === fU[5] && fF[4] === fF[5] && fD[4] === fD[5] && fB[4] === fB[3]) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     cross = 3;
                     break loop;
                 }
                 else if (fB[4] === fB[1] && fB[4] === fB[3] && fB[4] === fB[5] && fB[4] === fB[7] &&
                     fU[4] === fU[1] && fL[4] === fL[3] && fD[4] === fD[7] && fR[4] === fR[5]) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     cross = 4;
                     break loop;
                 }
                 else if (fD[4] === fD[1] && fD[4] === fD[3] && fD[4] === fD[5] && fD[4] === fD[7] &&
                     fL[4] === fL[7] && fF[4] === fF[7] && fR[4] === fR[7] && fB[4] === fB[7]) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     cross = 5;
                     break loop;
                 }
@@ -518,38 +521,38 @@ function getSteps(scr, mvs) {
             }
             else if (s === "f2l") {
                 if (
-                    cross === 0 && fF[0]+fF[1]+fF[2]+fF[3]+fF[4]+fF[5] === "333333" &&
-                    fR[0]+fR[1]+fR[2]+fR[3]+fR[4]+fR[5] === "555555" &&
-                    fB[0]+fB[1]+fB[2]+fB[3]+fB[4]+fB[5] === "444444" &&
-                    fL[0]+fL[1]+fL[2]+fL[3]+fL[4]+fL[5] === "666666" ||
+                    cross === 0 && (fF[0]+fF[1]+fF[2]+fF[3]+fF[4]+fF[5] === "333333") &&
+                    (fR[0]+fR[1]+fR[2]+fR[3]+fR[4]+fR[5] === "555555") &&
+                    (fB[0]+fB[1]+fB[2]+fB[3]+fB[4]+fB[5] === "444444") &&
+                    (fL[0]+fL[1]+fL[2]+fL[3]+fL[4]+fL[5] === "666666") ||
                     
-                    cross === 1 && fU[0]+fU[3]+fU[6]+fU[1]+fU[4]+fU[7] === "111111" &&
-                    fF[0]+fF[3]+fF[6]+fF[1]+fF[4]+fF[7] === "333333" &&
-                    fD[0]+fD[3]+fD[6]+fD[1]+fD[4]+fD[7] === "222222" &&
-                    fB[2]+fB[5]+fB[8]+fB[1]+fB[4]+fB[7] === "444444" ||
+                    cross === 1 && (fU[0]+fU[3]+fU[6]+fU[1]+fU[4]+fU[7] === "111111") &&
+                    (fF[0]+fF[3]+fF[6]+fF[1]+fF[4]+fF[7] === "333333") &&
+                    (fD[0]+fD[3]+fD[6]+fD[1]+fD[4]+fD[7] === "222222") &&
+                    (fB[2]+fB[5]+fB[8]+fB[1]+fB[4]+fB[7] === "444444") ||
                     
-                    cross === 2 && fU[6]+fU[7]+fU[8]+fU[3]+fU[4]+fU[5] === "111111" &&
-                    fR[0]+fR[3]+fR[6]+fR[1]+fR[4]+fR[7] === "555555" &&
-                    fD[0]+fD[1]+fD[2]+fD[3]+fD[4]+fD[5] === "222222" &&
-                    fL[2]+fL[5]+fL[8]+fL[1]+fL[4]+fL[7] === "444444" ||
+                    cross === 2 && (fU[6]+fU[7]+fU[8]+fU[3]+fU[4]+fU[5] === "111111") &&
+                    (fR[0]+fR[3]+fR[6]+fR[1]+fR[4]+fR[7] === "555555") &&
+                    (fD[0]+fD[1]+fD[2]+fD[3]+fD[4]+fD[5] === "222222") &&
+                    (fL[2]+fL[5]+fL[8]+fL[1]+fL[4]+fL[7] === "444444") ||
 
-                    cross === 3 && fU[2]+fU[5]+fU[8]+fU[1]+fU[4]+fU[7] === "111111" &&
-                    fF[2]+fF[5]+fF[8]+fF[1]+fF[4]+fF[7] === "333333" &&
-                    fD[2]+fD[5]+fD[8]+fD[1]+fD[4]+fD[7] === "222222" &&
-                    fB[0]+fB[3]+fB[6]+fB[1]+fB[4]+fB[7] === "444444" ||
+                    cross === 3 && (fU[2]+fU[5]+fU[8]+fU[1]+fU[4]+fU[7] === "111111") &&
+                    (fF[2]+fF[5]+fF[8]+fF[1]+fF[4]+fF[7] === "333333") &&
+                    (fD[2]+fD[5]+fD[8]+fD[1]+fD[4]+fD[7] === "222222") &&
+                    (fB[0]+fB[3]+fB[6]+fB[1]+fB[4]+fB[7] === "444444") ||
 
-                    cross === 4 && fU[0]+fU[1]+fU[2]+fU[3]+fU[4]+fU[5] === "111111" &&
-                    fR[2]+fR[5]+fR[8]+fR[1]+fR[4]+fR[7] === "555555" &&
-                    fD[3]+fD[4]+fD[5]+fD[6]+fD[7]+fD[8] === "222222" &&
-                    fL[0]+fL[3]+fL[6]+fL[1]+fL[4]+fL[7] === "444444" ||
+                    cross === 4 && (fU[0]+fU[1]+fU[2]+fU[3]+fU[4]+fU[5] === "111111") &&
+                    (fR[2]+fR[5]+fR[8]+fR[1]+fR[4]+fR[7] === "555555") &&
+                    (fD[3]+fD[4]+fD[5]+fD[6]+fD[7]+fD[8] === "222222") &&
+                    (fL[0]+fL[3]+fL[6]+fL[1]+fL[4]+fL[7] === "444444") ||
 
-                    cross === 5 && fF[3]+fF[4]+fF[5]+fF[6]+fF[7]+fF[8] === "333333" &&
-                    fR[3]+fR[4]+fR[5]+fR[6]+fR[7]+fR[8] === "555555" &&
-                    fB[3]+fB[4]+fB[5]+fB[6]+fB[7]+fB[8] === "444444" &&
-                    fL[3]+fL[4]+fL[5]+fL[6]+fL[7]+fL[8] === "666666"
+                    cross === 5 && (fF[3]+fF[4]+fF[5]+fF[6]+fF[7]+fF[8] === "333333") &&
+                    (fR[3]+fR[4]+fR[5]+fR[6]+fR[7]+fR[8] === "555555") &&
+                    (fB[3]+fB[4]+fB[5]+fB[6]+fB[7]+fB[8] === "444444") &&
+                    (fL[3]+fL[4]+fL[5]+fL[6]+fL[7]+fL[8] === "666666")
                     ) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     break loop;
                 }
             }
@@ -558,7 +561,7 @@ function getSteps(scr, mvs) {
                 if (face[4] === face[0] && face[4] === face[1] && face[4] === face[2] && face[4] === face[3] &&
                     face[4] === face[5] && face[4] === face[6] && face[4] === face[7] && face[4] === face[8]) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     break loop;
                 }
             }
@@ -583,12 +586,12 @@ function getSteps(scr, mvs) {
                     fB[0] === fB[1] && fB[0] === fB[2] && fL[0] === fL[1] && fL[0] === fL[2]
                     ) {
                     startInd = i + 1;
-                    steps.push([curMoves, " // " + s]);
+                    steps.push([curMoves, s]);
                     break loop;
                 }
             }
             else {
-                steps.push([mvs.slice(startInd).join(" "), " // " + s]);
+                steps.push([mvs.slice(startInd).join(" "), s]);
                 break loop;
             }
         }
