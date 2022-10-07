@@ -515,9 +515,6 @@ function getSteps(scr, mvs) {
                     cross = 5;
                     break loop;
                 }
-                else {
-                    console.log("didn't solve cross");
-                }
             }
             else if (s === "f2l") {
                 if (

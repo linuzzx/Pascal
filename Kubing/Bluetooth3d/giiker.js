@@ -320,7 +320,14 @@ class Giiker extends EventEmitter {
     const {state, moves} = this._parseCubeValue(value);
     this._state = state;
     this.emit('move', moves[0]);
-    moveArray.push(moves[0].notation);
+
+    if (moveArray[moveArray.length - 1] && moveArray[moveArray.length - 1] === moves[0].notation) {
+      moveArray[moveArray.length - 1] = moveArray[moveArray.length - 1][0] + "2";
+    }
+    else {
+      moveArray.push(moves[0].notation);
+    }
+    
     applyMove(moves[0].notation);
     
     if (ready && !timing) {
