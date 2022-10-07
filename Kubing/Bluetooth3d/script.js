@@ -601,10 +601,15 @@ function getSteps(scr, mvs) {
                     fruruf = true;
                     startInd = i + 1;
                     steps.push([curMoves, "setup to fruruf"]);
+                    break loop;
                 }
             }
             else if (s === "pll") {
+                let face = faces[oppFace(cross)];
                 if (
+                    face[4] === face[0] && face[4] === face[1] && face[4] === face[2] && face[4] === face[3] &&
+                    face[4] === face[5] && face[4] === face[6] && face[4] === face[7] && face[4] === face[8] &&
+
                     cross === 0 && fF[6] === fF[7] && fF[6] === fF[8] && fR[6] === fR[7] && fR[6] === fR[8] &&
                     fB[6] === fB[7] && fB[6] === fB[8] && fL[6] === fL[7] && fL[6] === fL[8] ||
 
