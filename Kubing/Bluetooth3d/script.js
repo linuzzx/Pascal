@@ -442,6 +442,7 @@ function getSteps(scr, mvs) {
     let startInd = 0;
     let cross = -1;
     let pairs = 0;
+    let fruruf = false;
     for (let s of ["cross", "f2l", "oll", "pll", "auf"]) {
         loop : for (let i = startInd; i < mvs.length; i++) {
             let curMoves = mvs.slice(startInd, i + 1).join(" ");
@@ -555,11 +556,51 @@ function getSteps(scr, mvs) {
             }
             else if (s === "oll") {
                 let face = faces[oppFace(cross)];
+                let c = face[4];
                 if (face[4] === face[0] && face[4] === face[1] && face[4] === face[2] && face[4] === face[3] &&
                     face[4] === face[5] && face[4] === face[6] && face[4] === face[7] && face[4] === face[8]) {
                     startInd = i + 1;
-                    steps.push([curMoves, s]);
+                    if (!fruruf) {
+                        steps.push([curMoves, s]);
+                    }
                     break loop;
+                }
+                else if (
+                    !fruruf &&
+                    cross === 0 &&
+                    (fD[0]+fD[1]+fD[2]+fD[4]+fD[7]+fB[6]+fB[8]+fR[7]+fL[7] === "222222222" ||
+                    fD[2]+fD[3]+fD[4]+fD[5]+fD[8]+fL[6]+fL[8]+fF[7]+fB[7] === "222222222" ||
+                    fD[1]+fD[4]+fD[6]+fD[7]+fD[8]+fF[6]+fF[8]+fR[7]+fL[7] === "222222222" ||
+                    fD[0]+fD[3]+fD[4]+fD[5]+fD[6]+fR[6]+fR[8]+fF[7]+fB[7] === "222222222") ||
+                    cross === 1 &&
+                    (fR[0]+fR[1]+fR[2]+fR[4]+fR[7]+fD[2]+fD[8]+fF[5]+fB[3] === "555555555" ||
+                    fR[2]+fR[3]+fR[4]+fR[5]+fR[8]+fF[2]+fF[8]+fU[5]+fD[5] === "555555555" ||
+                    fR[1]+fR[4]+fR[6]+fR[7]+fR[8]+fU[2]+fU[8]+fR[5]+fL[3] === "555555555" ||
+                    fR[0]+fR[3]+fR[4]+fR[5]+fR[6]+fB[0]+fB[6]+fU[5]+fD[5] === "555555555") ||
+                    cross === 2 &&
+                    (fB[0]+fB[1]+fB[2]+fB[4]+fB[7]+fD[6]+fD[8]+fR[5]+fL[3] === "444444444" ||
+                    fB[2]+fB[3]+fB[4]+fB[5]+fB[8]+fR[2]+fR[8]+fU[1]+fD[7] === "444444444" ||
+                    fB[1]+fB[4]+fB[6]+fB[7]+fB[8]+fU[0]+fU[2]+fR[5]+fL[3] === "444444444" ||
+                    fB[0]+fB[3]+fB[4]+fB[5]+fB[6]+fL[0]+fL[6]+fU[1]+fD[7] === "444444444") ||
+                    cross === 3 &&
+                    (fL[0]+fL[1]+fL[2]+fL[4]+fL[7]+fD[0]+fD[6]+fF[3]+fB[5] === "666666666" ||
+                    fL[2]+fL[3]+fL[4]+fL[5]+fL[8]+fB[2]+fB[8]+fU[3]+fD[3] === "666666666" ||
+                    fL[1]+fL[4]+fL[6]+fL[7]+fL[8]+fU[0]+fU[6]+fF[3]+fB[5] === "666666666" ||
+                    fL[0]+fL[3]+fL[4]+fL[5]+fL[6]+fF[0]+fF[6]+fU[3]+fD[3] === "666666666") ||
+                    cross === 4 &&
+                    (fF[0]+fF[1]+fF[2]+fF[4]+fF[7]+fD[0]+fD[2]+fR[3]+fL[5] === "333333333" ||
+                    fF[2]+fF[3]+fF[4]+fF[5]+fF[8]+fL[2]+fL[8]+fU[7]+fD[1] === "333333333" ||
+                    fF[1]+fF[4]+fF[6]+fF[7]+fF[8]+fU[6]+fU[8]+fR[3]+fL[5] === "333333333" ||
+                    fF[0]+fF[3]+fF[4]+fF[5]+fF[6]+fR[0]+fR[6]+fU[7]+fD[1] === "333333333") ||
+                    cross === 5 &&
+                    (fU[0]+fU[1]+fU[2]+fU[4]+fU[7]+fF[0]+fF[2]+fR[1]+fL[1] === "111111111" ||
+                    fU[2]+fU[3]+fU[4]+fU[5]+fU[8]+fL[0]+fL[2]+fF[1]+fB[1] === "111111111" ||
+                    fU[1]+fU[4]+fU[6]+fU[7]+fU[8]+fB[0]+fB[2]+fR[1]+fL[1] === "111111111" ||
+                    fU[0]+fU[3]+fU[4]+fU[5]+fU[6]+fR[0]+fR[2]+fF[1]+fB[1] === "111111111")
+                ) {
+                    fruruf = true;
+                    startInd = i + 1;
+                    steps.push([curMoves, "setup to fruruf"]);
                 }
             }
             else if (s === "pll") {
@@ -583,7 +624,7 @@ function getSteps(scr, mvs) {
                     fB[0] === fB[1] && fB[0] === fB[2] && fL[0] === fL[1] && fL[0] === fL[2]
                     ) {
                     startInd = i + 1;
-                    steps.push([curMoves, s]);
+                    fruruf ? steps.push([curMoves, "fruruf"]) : steps.push([curMoves, s]);
                     break loop;
                 }
             }
