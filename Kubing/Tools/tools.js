@@ -1651,9 +1651,9 @@ let colors222 = [
         let moves = ["U", "U'", "R", "R'", "L", "L'", "B", "B'"];
         let tipsMoves = ["u", "u'", "r", "r'", "l", "l'", "b", "b'"];
     
-        let cG = "1";
-        let cB = "2";
-        let cR = "3";
+        let cR = "1";
+        let cG = "2";
+        let cB = "3";
         let cY = "4";
 
         /* 
@@ -1661,108 +1661,103 @@ let colors222 = [
             r   y   b        
         */
 
+        let pyraL = [cR, cR, cR, cR, cR, cR, cR, cR, cR];
         let pyraF = [cG, cG, cG, cG, cG, cG, cG, cG, cG];
         let pyraR = [cB, cB, cB, cB, cB, cB, cB, cB, cB];
-        let pyraL = [cR, cR, cR, cR, cR, cR, cR, cR, cR];
         let pyraD = [cY, cY, cY, cY, cY, cY, cY, cY, cY];
     
-        let cleanPyraminx = [pyraF, pyraR, pyraL, pyraD];
-        let pyraminx = [pyraF, pyraR, pyraL, pyraD];
+        let cleanPyraminx = [pyraL, pyraF, pyraR, pyraD];
+        let pyraminx = [pyraL, pyraF, pyraR, pyraD];
         
-        let cube = getPyraminxState(scr);
+        let pyra = cleanPyraminx;//getPyraminxState(scr);
     
-        let width = $(svgID).width();
-        let height = 3 * width / 4;
+        let height = $(svgID).height();
+        let width = 2 * height / Math.sqrt(3);
         let space = width / 20;
-        let size = ((width - 3 * space) / 4) / n;
+        let size = (height - space) / 2;
+        let t = size / 3;
         let fill = "";
         let stroke = "#1E1E1E";
         let strokeWidth = ((size / n) > 1) ? 1 : 0;
     
         let coordinates = [
             {
-                x1: n * size + space,
-                x2: 2 * n * size + space,
-                y1: 0,
-                y2: n * size,
-            },
-            {
                 x1: 0,
-                x2: n * size,
-                y1: n * size + space,
-                y2: 2 * n * size + space,
+                y1: 0
             },
             {
-                x1: n * size + space,
-                x2: 2 * n * size + space,
-                y1: n * size + space,
-                y2: 2 * n * size + space,
+                x1: size + space,
+                y1: 0
             },
             {
-                x1: 2 * n * size + 2 * space,
-                x2: 3 * n * size + 2 * space,
-                y1: n * size + space,
-                y2: 2 * n * size + space,
+                x1: size + 2 * space,
+                y1: 0
             },
             {
-                x1: 3 * n * size + 3 * space,
-                x2: 4 * n * size + 3 * space,
-                y1: n * size + space,
-                y2: 2 * n * size + space,
-            },
-            {
-                x1: n * size + space,
-                x2: 2 * n * size + space,
-                y1: 2 * n * size + 2 * space,
-                y2: 3 * n * size + 2 * space,
+                x1: 0.5 * size + space,
+                y1: space + size * Math.sqrt(3) / 2
             }
         ];
         
+        let cRed = [pyra[0], pyra[1], pyra[2], pyra[3], pyra[4], pyra[5], pyra[6], pyra[7], pyra[8]];
+        let cGreen = [pyra[9], pyra[10], pyra[11], pyra[12], pyra[13], pyra[14], pyra[15], pyra[16], pyra[17]];
+        let cBlue = [pyra[18], pyra[19], pyra[20], pyra[21], pyra[22], pyra[23], pyra[24], pyra[25], pyra[26]];
+        let cYellow = [pyra[27], pyra[28], pyra[29], pyra[30], pyra[31], pyra[32], pyra[33], pyra[34], pyra[35]];
+        let colors = [cRed, cGreen, cBlue, cYellow];
     
-        let cWhite = [cube[0], cube[3], cube[6], cube[9], cube[24]];
-        let cYellow = [cube[12], cube[15], cube[18], cube[21], cube[29]];
-        let cGreen = [cube[10], cube[8], cube[16], cube[14], cube[26]];
-        let cBlue = [cube[4], cube[2], cube[22], cube[20], cube[28]];
-        let cRed = [cube[7], cube[5], cube[19], cube[17], cube[27]];
-        let cOrange = [cube[1], cube[11], cube[13], cube[23], cube[25]];
-        let colors = [cWhite, cOrange, cGreen, cRed, cBlue, cYellow];
-    
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 4; i++) {
             let j = 0;
             let x1 = coordinates[i].x1;
-            let x2 = coordinates[i].x2;
             let y1 = coordinates[i].y1;
-            let y2 = coordinates[i].y2;
     
             let points = [
-                x1+","+y1+" "+(x1+(x2-x1)/2)+","+y1+" "+x1+","+(y1+(y2-y1)/2)+" "+x1+","+y1,
-                x2+","+y1+" "+x2+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y1+" "+x2+","+y1,
-                x2+","+y2+" "+(x1+(x2-x1)/2)+","+y2+" "+x2+","+(y1+(y2-y1)/2)+" "+x2+","+y2,
-                x1+","+y2+" "+x1+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y2+" "+x1+","+y2,
-                (x1+(x2-x1)/2)+","+y1+" "+x2+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y2+" "+x1+","+(y1+(y2-y1)/2)+" "+(x1+(x2-x1)/2)+","+y1
+                x1+","+y1+" "+(x1+t)+","+y1+" "+(x1+0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+x1+","+y1,
+                (x1+t)+","+y1+" "+(x1+1.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+t)+","+y1,
+                (x1+t)+","+y1+" "+(x1+2*t)+","+y1+" "+(x1+1.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+t)+","+y1,
+                (x1+2*t)+","+y1+" "+(x1+2.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+1.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+2*t)+","+y1,
+                (x1+2*t)+","+y1+" "+(x1+3*t)+","+y1+" "+(x1+2.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+2*t)+","+y1,
+                (x1+0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+1.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+t/2)+","+(y1+t*Math.sqrt(3)/2),
+                (x1+1.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+2*t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+1.5*t)+","+(y1+t*Math.sqrt(3)/2),
+                (x1+1.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+2.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+2*t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+1.5*t)+","+(y1+t*Math.sqrt(3)/2),
+                (x1+t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+2*t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+1.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+(x1+t)+","+(y1+2*t*Math.sqrt(3)/2)
             ];
     
-            for (let p of points) {
-                fill = getPyraminxColor(colors[i].shift());
+            let pointsF = [
+                x1+","+y1+" "+(x1+0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1-0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+x1+","+y1,
+                (x1-0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+x1+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1-1*t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1-0.5*t)+","+(y1+t*Math.sqrt(3)/2),
+                (x1-0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+x1+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1-0.5*t)+","+(y1+t*Math.sqrt(3)/2),
+                (x1+0.5*t)+","+(y1+t*Math.sqrt(3)/2)+" "+(x1+t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+x1+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+0.5*t)+","+(y1+t*Math.sqrt(3)/2),
+                (x1-1*t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1-0.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+(x1-1.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+(x1-1*t)+","+(y1+2*t*Math.sqrt(3)/2),
+                (x1-1*t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+x1+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1-0.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+(x1-1*t)+","+(y1+2*t*Math.sqrt(3)/2),
+                x1+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+0.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+(x1-0.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+x1+","+(y1+2*t*Math.sqrt(3)/2),
+                x1+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+0.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+x1+","+(y1+2*t*Math.sqrt(3)/2),
+                (x1+t)+","+(y1+2*t*Math.sqrt(3)/2)+" "+(x1+1.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+(x1+0.5*t)+","+(y1+3*t*Math.sqrt(3)/2)+" "+(x1+t)+","+(y1+2*t*Math.sqrt(3)/2),
+            ];
+
+            let pts = i === 1 ? pointsF : points;
+    
+            for (let p of pts) {
+                fill = getPyraminxColor(pyra/* colors */[i][j]);
                     
                 let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
                 $(poly).attr("points", p);
                 $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
                 
                 $(svgID).append(poly);
+                j++;
             }
         }
     
         function getPyraminxColor(n) {
             switch (n) {
                 case "1":
-                    return "white";
+                    return "#FF0000";
                 case "2":
-                    return "yellow";
-                case "3":
                     return "#00FF00";
-                case "4":
+                case "3":
                     return "blue";
+                case "4":
+                    return "yellow";
             }
         }
     
@@ -1781,28 +1776,28 @@ let colors222 = [
             for (let a of arr) {
                 switch (a.replaceAll("*","")) {
                     case "R":
-                        _r();
+                        _R();
                         break;
                     case "R'":
-                        _ri();
+                        _Ri();
                         break;
                     case "L":
-                        _l();
+                        _L();
                         break;
                     case "L'":
-                        _li();
+                        _Li();
                         break;
                     case "B":
-                        _b();
+                        _B();
                         break;
                     case "B'":
-                        _bi();
+                        _Bi();
                         break;
                     case "U":
-                        _u();
+                        _U();
                         break;
                     case "U'":
-                        _ui();
+                        _Ui();
                         break;
                 }
             }
