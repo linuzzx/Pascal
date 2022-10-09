@@ -361,7 +361,7 @@ let colors222 = [
         for (let t of tips) {
             let r = Math.round(Math.random() * 1);
             if (r === 1) {
-                scr += " " + t + movesExtra[Math.floor(Math.random() * movesExtra.length)];
+                scr += t + movesExtra[Math.floor(Math.random() * movesExtra.length)] + " ";
             }
         }
 
@@ -1669,7 +1669,7 @@ let colors222 = [
         let cleanPyraminx = [pyraL, pyraF, pyraR, pyraD];
         let pyraminx = [pyraL, pyraF, pyraR, pyraD];
         
-        let pyra = cleanPyraminx;//getPyraminxState(scr);
+        let pyra = getPyraminxState(scr);
     
         let height = $(svgID).height();
         let width = 2 * height / Math.sqrt(3);
@@ -1699,11 +1699,10 @@ let colors222 = [
             }
         ];
         
-        let cRed = [pyra[0], pyra[1], pyra[2], pyra[3], pyra[4], pyra[5], pyra[6], pyra[7], pyra[8]];
-        let cGreen = [pyra[9], pyra[10], pyra[11], pyra[12], pyra[13], pyra[14], pyra[15], pyra[16], pyra[17]];
-        let cBlue = [pyra[18], pyra[19], pyra[20], pyra[21], pyra[22], pyra[23], pyra[24], pyra[25], pyra[26]];
-        let cYellow = [pyra[27], pyra[28], pyra[29], pyra[30], pyra[31], pyra[32], pyra[33], pyra[34], pyra[35]];
-        let colors = [cRed, cGreen, cBlue, cYellow];
+        let cRed = [pyra[0][0], pyra[0][1], pyra[0][2], pyra[0][3], pyra[0][4], pyra[0][5], pyra[0][6], pyra[0][7], pyra[0][8]];
+        let cGreen = [pyra[1][0], pyra[1][1], pyra[1][2], pyra[1][3], pyra[1][4], pyra[1][5], pyra[1][6], pyra[1][7], pyra[1][8]];
+        let cBlue = [pyra[2][0], pyra[2][1], pyra[2][2], pyra[2][3], pyra[2][4], pyra[2][5], pyra[2][6], pyra[2][7], pyra[2][8]];
+        let cYellow = [pyra[3][0], pyra[3][1], pyra[3][2], pyra[3][3], pyra[3][4], pyra[3][5], pyra[3][6], pyra[3][7], pyra[3][8]];
     
         for (let i = 0; i < 4; i++) {
             let j = 0;
@@ -1737,7 +1736,7 @@ let colors222 = [
             let pts = i === 1 ? pointsF : points;
     
             for (let p of pts) {
-                fill = getPyraminxColor(pyra/* colors */[i][j]);
+                fill = getPyraminxColor(pyra[i][j]);
                     
                 let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
                 $(poly).attr("points", p);
@@ -1799,88 +1798,206 @@ let colors222 = [
                     case "U'":
                         _Ui();
                         break;
+                    case "r":
+                        _r();
+                        break;
+                    case "r'":
+                        _ri();
+                        break;
+                    case "l":
+                        _l();
+                        break;
+                    case "l'":
+                        _li();
+                        break;
+                    case "b":
+                        _b();
+                        break;
+                    case "b'":
+                        _bi();
+                        break;
+                    case "u":
+                        _u();
+                        break;
+                    case "u'":
+                        _ui();
+                        break;
                 }
             }
         
-            return skewbCo.map(s => s.c1 + s.c2 + s.c3).join("") + skewbCe.map(s => s.c).join("");
+            return pyraminx;
         }
         
         function resetCubeState() {
             pyraminx = cleanPyraminx.slice();
         }
         
+        function _R() {
+            let p = pyraminx;
+            let tempTip = p[1][8];
+            let tempCe = p[1][7];
+            let tempE1 = p[1][6];
+            let tempE2 = p[1][3];
+
+            p[1][8] = p[3][4];
+            p[3][4] = p[2][8];
+            p[2][8] = tempTip;
+
+            p[1][7] = p[3][3];
+            p[3][3] = p[2][6];
+            p[2][6] = tempCe;
+
+            p[1][6] = p[3][7];
+            p[3][7] = p[2][5];
+            p[2][5] = tempE1;
+
+            p[1][3] = p[3][2];
+            p[3][2] = p[2][7];
+            p[2][7] = tempE2;
+        }
+        function _Ri() {
+            _R();
+            _R();
+        }
+        function _L() {
+            let p = pyraminx;
+            let tempTip = p[1][4];
+            let tempCe = p[1][5];
+            let tempE1 = p[1][6];
+            let tempE2 = p[1][1];
+
+            p[1][4] = p[0][8];
+            p[0][8] = p[3][0];
+            p[3][0] = tempTip;
+
+            p[1][5] = p[0][6];
+            p[0][6] = p[3][1];
+            p[3][1] = tempCe;
+
+            p[1][6] = p[0][7];
+            p[0][7] = p[3][5];
+            p[3][5] = tempE1;
+
+            p[1][1] = p[0][5];
+            p[0][5] = p[3][2];
+            p[3][2] = tempE2;
+        }
+        function _Li() {
+            _L();
+            _L();
+        }
+        function _B() {
+            let p = pyraminx;
+            let tempTip = p[3][8];
+            let tempCe = p[3][6];
+            let tempE1 = p[3][7];
+            let tempE2 = p[3][5];
+
+            p[3][8] = p[0][0];
+            p[0][0] = p[2][4];
+            p[2][4] = tempTip;
+
+            p[3][6] = p[0][1];
+            p[0][1] = p[2][3];
+            p[2][3] = tempCe;
+
+            p[3][7] = p[0][5];
+            p[0][5] = p[2][2];
+            p[2][2] = tempE1;
+
+            p[3][5] = p[0][2];
+            p[0][2] = p[2][7];
+            p[2][7] = tempE2;
+        }
+        function _Bi() {
+            _B();
+            _B();
+        }
+        function _U() {
+            let p = pyraminx;
+            let tempTip = p[1][0];
+            let tempCe = p[1][2];
+            let tempE1 = p[1][1];
+            let tempE2 = p[1][3];
+
+            p[1][0] = p[2][0];
+            p[2][0] = p[0][4];
+            p[0][4] = tempTip;
+
+            p[1][2] = p[2][1];
+            p[2][1] = p[0][3];
+            p[0][3] = tempCe;
+
+            p[1][1] = p[2][5];
+            p[2][5] = p[0][2];
+            p[0][2] = tempE1;
+
+            p[1][3] = p[2][2];
+            p[2][2] = p[0][7];
+            p[0][7] = tempE2;
+        }
+        function _Ui() {
+            _U();
+            _U();
+        }
         function _r() {
-            let tempCo = skewbCo.slice();
-    
-            skewbCo[6] = new Corner(tempCo[6].c3, tempCo[6].c1, tempCo[6].c2);
-            skewbCo[1] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
-            skewbCo[7] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
-            skewbCo[5] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
-    
-            let tempCe = skewbCe.slice();
-    
-            skewbCe[3] = new Center(tempCe[5].c);
-            skewbCe[4] = new Center(tempCe[3].c);
-            skewbCe[5] = new Center(tempCe[4].c);
+            let p = pyraminx;
+            let tempTip = p[1][8];
+
+            p[1][8] = p[3][4];
+            p[3][4] = p[2][8];
+            p[2][8] = tempTip;
         }
         function _ri() {
             _r();
             _r();
         }
         function _l() {
-            let tempCo = skewbCo.slice();
-    
-            skewbCo[4] = new Corner(tempCo[4].c3, tempCo[4].c1, tempCo[4].c2);
-            skewbCo[3] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
-            skewbCo[5] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
-            skewbCo[7] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
-    
-            let tempCe = skewbCe.slice();
-    
-            skewbCe[1] = new Center(tempCe[5].c);
-            skewbCe[2] = new Center(tempCe[1].c);
-            skewbCe[5] = new Center(tempCe[2].c);
+            let p = pyraminx;
+            let tempTip = p[1][4];
+
+            p[1][4] = p[0][8];
+            p[0][8] = p[3][0];
+            p[3][0] = tempTip;
         }
         function _li() {
             _l();
             _l();
         }
         function _b() {
-            let tempCo = skewbCo.slice();
-    
-            skewbCo[7] = new Corner(tempCo[7].c3, tempCo[7].c1, tempCo[7].c2);
-            skewbCo[0] = new Corner(tempCo[6].c2, tempCo[6].c3, tempCo[6].c1);
-            skewbCo[4] = new Corner(tempCo[0].c2, tempCo[0].c3, tempCo[0].c1);
-            skewbCo[6] = new Corner(tempCo[4].c2, tempCo[4].c3, tempCo[4].c1);
-    
-            let tempCe = skewbCe.slice();
-    
-            skewbCe[1] = new Center(tempCe[4].c);
-            skewbCe[4] = new Center(tempCe[5].c);
-            skewbCe[5] = new Center(tempCe[1].c);
+            let p = pyraminx;
+            let tempTip = p[3][8];
+
+            p[3][8] = p[0][0];
+            p[0][0] = p[2][4];
+            p[2][4] = tempTip;
         }
         function _bi() {
             _b();
             _b();
         }
         function _u() {
-            let tempCo = skewbCo.slice();
-    
-            skewbCo[0] = new Corner(tempCo[0].c3, tempCo[0].c1, tempCo[0].c2);
-            skewbCo[1] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
-            skewbCo[3] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
-            skewbCo[7] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
-    
-            let tempCe = skewbCe.slice();
-    
-            skewbCe[0] = new Center(tempCe[4].c);
-            skewbCe[1] = new Center(tempCe[0].c);
-            skewbCe[4] = new Center(tempCe[1].c);
+            let p = pyraminx;
+            let tempTip = p[1][0];
+
+            p[1][0] = p[2][0];
+            p[2][0] = p[0][4];
+            p[0][4] = tempTip;
         }
         function _ui() {
             _u();
             _u();
         }
+    }
+
+    // Megaminx
+    function drawScrambleMegaminx(svgID, scr) {
+
+    }
+
+    // Clock
+    function drawScrambleClock(svgID, scr) {
+
     }
 
     function drawMissingSvg(svgID) {
