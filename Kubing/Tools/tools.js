@@ -1646,7 +1646,6 @@ let colors222 = [
     // Pyraminx
     function drawScramblePyraminx(svgID, scr) {
         $(svgID).empty();
-        let n = 3;
     
         let moves = ["U", "U'", "R", "R'", "L", "L'", "B", "B'"];
         let tipsMoves = ["u", "u'", "r", "r'", "l", "l'", "b", "b'"];
@@ -1655,11 +1654,6 @@ let colors222 = [
         let cG = "2";
         let cB = "3";
         let cY = "4";
-
-        /* 
-                g
-            r   y   b        
-        */
 
         let pyraL = [cR, cR, cR, cR, cR, cR, cR, cR, cR];
         let pyraF = [cG, cG, cG, cG, cG, cG, cG, cG, cG];
@@ -1678,7 +1672,7 @@ let colors222 = [
         let t = size / 3;
         let fill = "";
         let stroke = "#1E1E1E";
-        let strokeWidth = ((size / n) > 1) ? 1 : 0;
+        let strokeWidth = 1;
     
         let coordinates = [
             {
@@ -1997,7 +1991,373 @@ let colors222 = [
 
     // Clock
     function drawScrambleClock(svgID, scr) {
+        $(svgID).empty();
+    
+        let cleanClock = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+        let clock = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+        let pins = [[0, 0, 0, 0], [1, 1, 1, 1]];
+        let clockFace = 1;
+        
+        getClockState(scr);
+console.log(clock);
+        let width = $(svgID).width();
+        let height = 3 * width / 4;
+        $(svgID).height(height);
+        let space = width / 30;
+        let size = ((width - space) / 2) / 3;
+        let fill = "";
+        let stroke = "#000000";
+        let strokeWidth = 2;
+        let light = "#55CCFF";
+        let dark = "#3375B2";
+        let pinUp = "#ffff00";
+        let pinDown = "#885500";
+        let hand = "#ffff00";
+        let handStroke = "#FF0000";
 
+        for (let i = 0; i < 2; i++) {
+            // Background
+            let colors = [light, dark];
+            let colors2 = [dark, light];
+            let cx = strokeWidth + i * ((width + space) / 2 - strokeWidth) + (width - space) / 4;
+            let cy = height / 2;
+            let r = (width - space - 4 * strokeWidth) / 4;
+            let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            $(circ).attr("cx", cx);
+            $(circ).attr("cy", cy);
+            $(circ).attr("r", r);
+            $(circ).attr("style", "fill:"+colors[i]+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+            $(svgID).append(circ);
+
+            let square = Math.sqrt(2 * Math.pow(r, 2)) + 2 * space;
+            let squareStartX = cx - square / 2;
+            let squareStartY = cy - square / 2;
+
+            // Corners
+            for (let j = 0; j < 3; j++) {
+                for (let k = 0; k < 3; k++) {
+                    let r2 = square / 5;
+                    let cx2 = squareStartX + (square / 6 + (square / 3) * k);
+                    let cy2 = squareStartY + (square / 6 + (square / 3) * j);
+                    
+                    if ((j === 0 || j === 2) && (k === 0 || k === 2)) {
+                        let c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                        $(c).attr("cx", cx2);
+                        $(c).attr("cy", cy2);
+                        $(c).attr("r", r2);
+                        $(c).attr("style", "fill:"+colors[i]+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                        $(svgID).append(c);
+                    }
+                }
+            }
+
+            // Background again to remove corner strokes
+            let cx1 = strokeWidth + i * ((width + space) / 2 - strokeWidth) + (width - space) / 4;
+            let cy1 = height / 2;
+            let r1 = (width - space - 4 * strokeWidth) / 4 - strokeWidth / 2;
+            let circ1 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            $(circ1).attr("cx", cx1);
+            $(circ1).attr("cy", cy1);
+            $(circ1).attr("r", r1);
+            $(circ1).attr("style", "fill:"+colors[i]);
+            $(svgID).append(circ1);
+            
+            // Inner clocks
+            for (let j = 0; j < 3; j++) {
+                for (let k = 0; k < 3; k++) {
+                    let r2 = square / 9;
+                    let cx2 = squareStartX + (square / 6 + (square / 3) * k);
+                    let cy2 = squareStartY + (square / 6 + (square / 3) * j);
+                    let circ2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    $(circ2).attr("cx", cx2);
+                    $(circ2).attr("cy", cy2);
+                    $(circ2).attr("r", r2);
+                    $(circ2).attr("style", "fill:"+colors2[i]+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                    $(svgID).append(circ2);
+
+                    // Dots
+                    for (let l = 0; l < 12; l++) {
+                        let r3 = 1;
+                        let a = (30 * Math.PI/180) * (1 + l);
+                        let cx3 = cx2 + (r2 + 3 * r3) * Math.sin(a);
+                        let cy3 = cy2 + (r2 + 3 * r3) * Math.cos(a);
+                        let circ3 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                        $(circ3).attr("cx", cx3);
+                        $(circ3).attr("cy", cy3);
+                        $(circ3).attr("r", r3);
+                        $(circ3).attr("style", "fill:"+colors2[i]+";stroke:"+stroke+";stroke-width:"+0);
+                        $(svgID).append(circ3);
+                    }
+
+                    // Clock hand circles
+                    let circ4 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    $(circ4).attr("cx", cx2);
+                    $(circ4).attr("cy", cy2);
+                    $(circ4).attr("r", 3);
+                    $(circ4).attr("style", "fill:"+hand+";stroke:"+handStroke+";stroke-width:"+2);
+                    $(svgID).append(circ4);
+                }
+            }
+
+            // Pins
+            let colorPins = [pinDown, pinUp];
+            let pinPos = [
+                [squareStartX + square / 3, squareStartY + square / 3],
+                [squareStartX + 2 * square / 3, squareStartY + square / 3],
+                [squareStartX + square / 3, squareStartY + 2 * square / 3],
+                [squareStartX + 2 * square / 3, squareStartY + 2 * square / 3]
+            ];
+            let r5 = 4;
+            for (let j = 0; j < pins[i].length; j++) {
+                let cx5 = pinPos[j][0];
+                let cy5 = pinPos[j][1];
+                let circ5 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                $(circ5).attr("cx", cx5);
+                $(circ5).attr("cy", cy5);
+                $(circ5).attr("r", r5);
+                $(circ5).attr("style", "fill:"+colorPins[pins[i][j]]+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                $(svgID).append(circ5);
+
+                if (pins[i][j] === 1) {
+                    let cx6 = cx5;
+                    let cy6 = cy5 - r5;
+                    let circ6 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    $(circ6).attr("cx", cx6);
+                    $(circ6).attr("cy", cy6);
+                    $(circ6).attr("r", r5);
+                    $(circ6).attr("style", "fill:"+colorPins[pins[i][j]]+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                    $(svgID).append(circ6);
+                }
+            }
+            
+            let m = 0;
+            // Clock hands
+            for (let j = 0; j < 3; j++) {
+                for (let k = 0; k < 3; k++) {
+                    let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+                    
+                    let points = [];
+                    for (let l = 0; l < 12; l++) {
+                        let cx8 = squareStartX + (square / 6 + (square / 3) * k);
+                        let cy8 = squareStartY + (square / 6 + (square / 3) * j);
+                        let r9 = 3;
+                        let sq = Math.sqrt(2 * Math.pow(r9, 2));
+                        let sqX1 = cx8 - sq / 2;
+                        let sqY1 = cy8 - sq / 2;
+                        let sqX2 = cx8 + sq / 2;
+                        let sqY2 = cy8 - sq / 2;
+                        /* 
+                        x1 = (x0 – xc)cos(θ) – (y0 – yc)sin(θ) + xc
+                        y1 = (x0 – xc)sin(θ) + (y0 – yc)cos(θ) + yc
+                        */
+                        /* let px1 = (sqX1-cx8) * Math.cos((30 * Math.PI/180) * l) - (sqY1-cy8) * Math.sin((30 * Math.PI/180) * l);
+                        let py1 = (sqX1-cx8) * Math.sin((30 * Math.PI/180) * l) + (sqY1-cy8) * Math.cos((30 * Math.PI/180) * l);
+
+                        let px2 = cx8 * Math.cos((30 * Math.PI/180) * l) - (cy8-2.5*sq) * Math.sin((30 * Math.PI/180) * l);
+                        let py2 = cx8 * Math.sin((30 * Math.PI/180) * l) + (cy8-2.5*sq) * Math.cos((30 * Math.PI/180) * l);
+
+                        let px3 = (sqX2-cx8) * Math.cos((30 * Math.PI/180) * l) - (sqY2-cy8) * Math.sin((30 * Math.PI/180) * l);
+                        let py3 = (sqX2-cx8) * Math.sin((30 * Math.PI/180) * l) + (sqY2-cy8) * Math.cos((30 * Math.PI/180) * l); */
+                        let px1 = rotatePoint(sqX1, cx8, sqY1, cy8, (30 * Math.PI/180) * l).x;
+                        let py1 = rotatePoint(sqX1, cx8, sqY1, cy8, (30 * Math.PI/180) * l).y;
+
+                        let px2 = rotatePoint(cx8, cx8, cy8-2.5*sq, cy8, (30 * Math.PI/180) * l).x;
+                        let py2 = rotatePoint(cx8, cx8, cy8-2.5*sq, cy8, (30 * Math.PI/180) * l).y;
+
+                        let px3 = rotatePoint(sqX2, cx8, sqY2, cy8, (30 * Math.PI/180) * l).x;
+                        let py3 = rotatePoint(sqX2, cx8, sqY2, cy8, (30 * Math.PI/180) * l).y;
+                        
+                        points.push([
+                            {
+                                x: px1,
+                                y: py1
+                            },
+                            {
+                                x: px2,
+                                y: py2
+                            },
+                            {
+                                x: px3,
+                                y: py3
+                            },
+                            {
+                                x: px1,
+                                y: py1
+                            }
+                        ]);
+                    }
+                    
+                    $(poly).attr("points", points[clock[i][m]].map(p => p.x + "," + p.y).join(" "));
+                    $(poly).attr("style", "fill:"+hand+";stroke:"+handStroke+";stroke-width:"+1);
+                    
+                    $(svgID).append(poly);
+                    m++;
+                }
+            }
+
+            // Clock hand circles again to remove stroke
+            for (let j = 0; j < 3; j++) {
+                for (let k = 0; k < 3; k++) {
+                    let cx7 = squareStartX + (square / 6 + (square / 3) * k);
+                    let cy7 = squareStartY + (square / 6 + (square / 3) * j);
+                    let circ7 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    $(circ7).attr("cx", cx7);
+                    $(circ7).attr("cy", cy7);
+                    $(circ7).attr("r", 3);
+                    $(circ7).attr("style", "fill:"+hand);
+                    $(svgID).append(circ7);
+                }
+            }
+        }
+    
+        function cleanMoves(m) {
+            while (m.includes("&nbsp;&nbsp;")) {
+                m.replaceAll("&nbsp;&nbsp;", "&nbsp;");
+            }
+        
+            return m.trim();
+        }
+    
+        function getClockState(sol) {
+            // Dark side first when scrambling
+            resetClockState();
+            sol = cleanMoves(sol);
+            let arr = Array.isArray(sol) ? sol : sol.trim().split(" ");
+            for (let a of arr) {
+                let n = a.split("").slice(a.split("").length - 2).join("");
+                if (a.length === 4) {
+                    switch (a.substring(2)) {
+                        case "UR":
+                            addToClock(1, n);
+                            addToClock(2, n);
+                            addToClock(4, n);
+                            addToClock(5, n);
+                            break;
+                        case "DR":
+                            addToClock(4, n);
+                            addToClock(5, n);
+                            addToClock(7, n);
+                            addToClock(8, n);
+                            break;
+                        case "DL":
+                            addToClock(3, n);
+                            addToClock(4, n);
+                            addToClock(6, n);
+                            addToClock(7, n);
+                            break;
+                        case "UL":
+                            addToClock(0, n);
+                            addToClock(1, n);
+                            addToClock(3, n);
+                            addToClock(4, n);
+                            break;
+                    }
+                }
+                else if (a.length === 3) {
+                    switch (a.substring(1)) {
+                        case "U":
+                            addToClock(0, n);
+                            addToClock(1, n);
+                            addToClock(2, n);
+                            addToClock(3, n);
+                            addToClock(4, n);
+                            addToClock(5, n);
+                            break;
+                        case "R":
+                            addToClock(1, n);
+                            addToClock(2, n);
+                            addToClock(4, n);
+                            addToClock(5, n);
+                            addToClock(7, n);
+                            addToClock(8, n);
+                            break;
+                        case "D":
+                            addToClock(3, n);
+                            addToClock(4, n);
+                            addToClock(5, n);
+                            addToClock(6, n);
+                            addToClock(7, n);
+                            addToClock(8, n);
+                            break;
+                        case "L":
+                            addToClock(0, n);
+                            addToClock(1, n);
+                            addToClock(3, n);
+                            addToClock(4, n);
+                            addToClock(6, n);
+                            addToClock(7, n);
+                            break;
+                    }
+                }
+                else if (a === "y2") {
+                    clockFace = 0;
+                }
+                else if (a.includes("ALL")) {
+                    addToClock(0, n);
+                    addToClock(1, n);
+                    addToClock(2, n);
+                    addToClock(3, n);
+                    addToClock(4, n);
+                    addToClock(5, n);
+                    addToClock(6, n);
+                    addToClock(7, n);
+                    addToClock(8, n);
+                }
+                else {
+                    switch (a) {
+                        case "UR":
+                            pins[0][1] = 1;
+                            pins[1][0] = 0;
+                            break;
+                        case "DR":
+                            pins[0][3] = 1;
+                            pins[1][2] = 0;
+                            break;
+                        case "DL":
+                            pins[0][2] = 1;
+                            pins[1][3] = 0;
+                            break;
+                        case "UL":
+                            pins[0][0] = 1;
+                            pins[1][1] = 0;
+                            break;
+                    }
+                }
+            }
+        }
+
+        function addToClock(i, n)  {
+            if (n.includes("+")) {
+                n = parseInt(n.replace("+", ""));
+            }
+            else if (n.includes("-")) {
+                n = parseInt("-" + n.replace("-", ""));
+            }
+            
+            clock[clockFace][i] = clock[clockFace][i] + n;
+            if (clock[clockFace][i] < 0) {
+                clock[clockFace][i] = clock[clockFace][i] + 12;
+            }
+            else if (clock[clockFace][i] > 11) {
+                clock[clockFace][i] = clock[clockFace][i] - 12;
+            }
+            if (i === 0 || i === 2 || i === 6 || i === 8) {
+                let face = clockFace === 0 ? 1 : 0;
+                clock[face][i] = clock[face][i] - n;
+                if (clock[face][i] < 0) {
+                    clock[face][i] = clock[face][i] + 12;
+                }
+                else if (clock[face][i] > 11) {
+                    clock[face][i] = clock[face][i] - 12;
+                }
+            }
+        }
+        
+        function resetClockState() {
+            clockFace = 1;
+            clock = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]];
+            pins = pins = [[0, 0, 0, 0], [1, 1, 1, 1]];
+        }
     }
 
     function drawMissingSvg(svgID) {
@@ -3321,4 +3681,10 @@ function mirror(alg) {
         _li();
         _mi();
     }
+}
+
+function rotatePoint(pointToRotateX, centerOfRotationX, pointToRotateY, centerOfRotationY, angleInRadians) {
+    let x1 = (pointToRotateX - centerOfRotationX) * Math.cos(angleInRadians) - (pointToRotateY - centerOfRotationY) * Math.sin(angleInRadians) + centerOfRotationX;
+    let y1 = (pointToRotateX - centerOfRotationX) * Math.sin(angleInRadians) + (pointToRotateY - centerOfRotationY) * Math.cos(angleInRadians) + centerOfRotationY;
+    return {x: x1, y: y1};
 }
