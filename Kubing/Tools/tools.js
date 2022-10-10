@@ -2146,18 +2146,7 @@ let colors222 = [
                         let sqY1 = cy8 - sq / 2;
                         let sqX2 = cx8 + sq / 2;
                         let sqY2 = cy8 - sq / 2;
-                        /* 
-                        x1 = (x0 – xc)cos(θ) – (y0 – yc)sin(θ) + xc
-                        y1 = (x0 – xc)sin(θ) + (y0 – yc)cos(θ) + yc
-                        */
-                        /* let px1 = (sqX1-cx8) * Math.cos((30 * Math.PI/180) * l) - (sqY1-cy8) * Math.sin((30 * Math.PI/180) * l);
-                        let py1 = (sqX1-cx8) * Math.sin((30 * Math.PI/180) * l) + (sqY1-cy8) * Math.cos((30 * Math.PI/180) * l);
-
-                        let px2 = cx8 * Math.cos((30 * Math.PI/180) * l) - (cy8-2.5*sq) * Math.sin((30 * Math.PI/180) * l);
-                        let py2 = cx8 * Math.sin((30 * Math.PI/180) * l) + (cy8-2.5*sq) * Math.cos((30 * Math.PI/180) * l);
-
-                        let px3 = (sqX2-cx8) * Math.cos((30 * Math.PI/180) * l) - (sqY2-cy8) * Math.sin((30 * Math.PI/180) * l);
-                        let py3 = (sqX2-cx8) * Math.sin((30 * Math.PI/180) * l) + (sqY2-cy8) * Math.cos((30 * Math.PI/180) * l); */
+                        
                         let px1 = rotatePoint(sqX1, cx8, sqY1, cy8, (30 * Math.PI/180) * l).x;
                         let py1 = rotatePoint(sqX1, cx8, sqY1, cy8, (30 * Math.PI/180) * l).y;
 
