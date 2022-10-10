@@ -287,7 +287,7 @@ function drawScramble() {
             drawScrambleNxN("#cube", 7, scramble);
             break;
         case "clock":
-            drawClockSvg("#cube",scramble);
+            drawScrambleClock("#cube",scramble);
             break;
         /*case "minx":
             drawScrambleMegaminx("#cube",scramble);
