@@ -290,10 +290,10 @@ function drawScramble() {
             drawClockSvg("#cube",scramble);
             break;
         /*case "minx":
-            drawMegaSvg("#cube",scramble);
+            drawScrambleMegaminx("#cube",scramble);
             break;*/
         case "pyram":
-            drawPyraSvg("#cube",scramble);
+            drawScramblePyraminx("#cube",scramble);
             break;
         case "skewb":
             drawScrambleSkewb("#cube",scramble);
