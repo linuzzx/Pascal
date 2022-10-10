@@ -1999,7 +1999,7 @@ let colors222 = [
         let clockFace = 1;
         
         getClockState(scr);
-console.log(clock);
+        
         let width = $(svgID).width();
         let height = 3 * width / 4;
         $(svgID).height(height);
@@ -2226,7 +2226,7 @@ console.log(clock);
             for (let a of arr) {
                 let n = a.split("").slice(a.split("").length - 2).join("");
                 if (a.length === 4) {
-                    switch (a.substring(2)) {
+                    switch (a.substring(0, 2)) {
                         case "UR":
                             addToClock(1, n);
                             addToClock(2, n);
@@ -2254,7 +2254,7 @@ console.log(clock);
                     }
                 }
                 else if (a.length === 3) {
-                    switch (a.substring(1)) {
+                    switch (a.substring(0, 1)) {
                         case "U":
                             addToClock(0, n);
                             addToClock(1, n);
@@ -2343,12 +2343,13 @@ console.log(clock);
             }
             if (i === 0 || i === 2 || i === 6 || i === 8) {
                 let face = clockFace === 0 ? 1 : 0;
-                clock[face][i] = clock[face][i] - n;
-                if (clock[face][i] < 0) {
-                    clock[face][i] = clock[face][i] + 12;
+                let j = i === 0 ? 2 : i === 2 ? 0 : i === 6 ? 8 : 6;
+                clock[face][j] = clock[face][j] - n;
+                if (clock[face][j] < 0) {
+                    clock[face][j] = clock[face][j] + 12;
                 }
-                else if (clock[face][i] > 11) {
-                    clock[face][i] = clock[face][i] - 12;
+                else if (clock[face][j] > 11) {
+                    clock[face][j] = clock[face][j] - 12;
                 }
             }
         }
