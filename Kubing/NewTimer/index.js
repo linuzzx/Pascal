@@ -286,15 +286,15 @@ function drawScramble() {
         case "777":
             drawScrambleNxN("#cube", 7, scramble);
             break;
-        /*case "clock":
+        case "clock":
             drawClockSvg("#cube",scramble);
             break;
-        case "minx":
+        /*case "minx":
             drawMegaSvg("#cube",scramble);
-            break;
+            break;*/
         case "pyram":
             drawPyraSvg("#cube",scramble);
-            break;*/
+            break;
         case "skewb":
             drawScrambleSkewb("#cube",scramble);
             break;
