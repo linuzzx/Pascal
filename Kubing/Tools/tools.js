@@ -897,21 +897,6 @@ let colors222 = [
         }
     }
 
-    function drawClockSvg(svgID, scr) {
-        resetDrawSvg(svgID);
-        drawMissingSvg(svgID);
-    }
-
-    function drawMegaSvg(svgID, scr) {
-        resetDrawSvg(svgID);
-        drawMissingSvg(svgID);
-    }
-
-    function drawPyraSvg(svgID, scr) {
-        resetDrawSvg(svgID);
-        drawMissingSvg(svgID);
-    }
-
     // Sq1
     function drawScrambleSq1(svgID, scr) {
         resetDrawSvg(svgID);
@@ -1986,7 +1971,7 @@ let colors222 = [
 
     // Megaminx
     function drawScrambleMegaminx(svgID, scr) {
-
+        drawMissingSvg(svgID);
     }
 
     // Clock
