@@ -242,7 +242,7 @@ function getScramble() {
                 scramble = getScrambleClock();
                 break;
             case "minx":
-                scramble = getScrambleMega();
+                scramble = getScrambleMega(true);
                 break;
             case "pyram":
                 scramble = getScramblePyra();
@@ -289,9 +289,9 @@ function drawScramble() {
         case "clock":
             drawScrambleClock("#cube",scramble);
             break;
-        /*case "minx":
+        case "minx":
             drawScrambleMegaminx("#cube",scramble);
-            break;*/
+            break;
         case "pyram":
             drawScramblePyraminx("#cube",scramble);
             break;

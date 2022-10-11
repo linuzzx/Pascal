@@ -230,10 +230,6 @@ let colors222 = [
         return scr.trim();
     }
 
-    function getScramble333NEW() {
-        return "Under production";
-    }
-
     function getScramble222() {
         let scr = "";
         let moves = ["R", "F", "U"];
@@ -259,22 +255,6 @@ let colors222 = [
         return scr.trim();
     }
 
-    function getScramble444() {
-        return "Under production";
-    }
-
-    function getScramble555() {
-        return "Under production";
-    }
-
-    function getScramble666() {
-        return "Under production";
-    }
-
-    function getScramble777() {
-        return "Under production";
-    }
-
     function getScrambleClock() {
         let c = ["UR","DR","DL","UL"];
         let e = ["U","R","D","L"];
@@ -298,20 +278,20 @@ let colors222 = [
         return scr.trim();
     }
 
-    function getScrambleMega() {
+    function getScrambleMega(format = false) {
         let movesExtra = ["++", "--"];
         let scr = "";
 
         for (let j=0; j<7; j++) {
-            scr += "<span>";
+            scr += format ? "<span>" : "";
             let last = "";
             for (let i=0; i<11; i++) {
                 if (i === 10) {
                     if (last === "++") {
-                        scr += "U";
+                        scr += format ? "U" : "U ";
                     }
                     else {
-                        scr += "U'";
+                        scr += format ? "U'" : "U' ";
                     }
                 }
                 else {
@@ -326,7 +306,7 @@ let colors222 = [
                 }
             }
             if (j < 6) {
-                scr += "</span></br>";
+                scr += format ? "</span></br>" : "";
             }
         }
         
@@ -1971,7 +1951,148 @@ let colors222 = [
 
     // Megaminx
     function drawScrambleMegaminx(svgID, scr) {
-        drawMissingSvg(svgID);
+        $(svgID).empty();
+    
+        let cleanMega = [
+            ["1", "1", "1", "1", "1", "1", "1", "1", "1", "1"],
+            ["2", "2", "2", "2", "2", "2", "2", "2", "2", "2"],
+            ["3", "3", "3", "3", "3", "3", "3", "3", "3", "3"],
+            ["4", "4", "4", "4", "4", "4", "4", "4", "4", "4"],
+            ["5", "5", "5", "5", "5", "5", "5", "5", "5", "5"],
+            ["6", "6", "6", "6", "6", "6", "6", "6", "6", "6"],
+            ["a", "a", "a", "a", "a", "a", "a", "a", "a", "a"],
+            ["b", "b", "b", "b", "b", "b", "b", "b", "b", "b"],
+            ["c", "c", "c", "c", "c", "c", "c", "c", "c", "c"],
+            ["d", "d", "d", "d", "d", "d", "d", "d", "d", "d"],
+            ["e", "e", "e", "e", "e", "e", "e", "e", "e", "e"],
+            ["f", "f", "f", "f", "f", "f", "f", "f", "f", "f"]
+        ];
+        let mega = cleanMega.slice();
+
+        let cleanMegaCenters = ["1", "2", "3", "4", "5", "6", "a", "b", "c", "d", "e", "f"];
+        let megaCenters = cleanMegaCenters.slice();
+        
+        getMegaState(scr);
+        
+        let width = $(svgID).width();
+        let height = width / 2;
+        $(svgID).height(height);
+        let space = width / 30;
+        let size = ((width - space) / 2) / 3;
+        let fill = "";
+        let stroke = "#000000";
+        let strokeWidth = 2;
+        let megaColors = ["#FFFFFF", "#006600", "#DD0000", "#0000B3", "#FFCC00", "#8A1AFF", "#999999", "#71E600", "#FF99FF", "#FFFFB3", "#88DDFF", "#FF8433"];
+        
+        for (let i = 0; i < mega.length; i++) {
+            
+        }
+    
+        function cleanMoves(m) {
+            while (m.includes("&nbsp;&nbsp;")) {
+                m.replaceAll("&nbsp;&nbsp;", "&nbsp;");
+            }
+        
+            return m.trim();
+        }
+    
+        function getMegaState(sol) {
+            resetMegaState();
+            sol = cleanMoves(sol);
+            let arr = Array.isArray(sol) ? sol : sol.trim().split(" ");
+            for (let a of arr) {
+                switch (a) {
+                    case "U":
+                        _U();
+                        break;
+                    case "U'":
+                        _U();
+                        _U();
+                        _U();
+                        _U();
+                        break;
+                    case "R++":
+                        _R();
+                        break;
+                    case "R--":
+                        _R();
+                        _R();
+                        _R();
+                        _R();
+                        break;
+                    case "D++":
+                        _D();
+                        break;
+                    case "D--":
+                        _D();
+                        _D();
+                        _D();
+                        _D();
+                        break;
+                }
+            }
+        }
+        
+        function resetMegaState() {
+            mega = cleanMega.slice();
+        }
+
+        function _U() {
+            let temp = mega.slice();
+
+            mega[0][2] = temp[0][0];
+            mega[0][3] = temp[0][1];
+            mega[0][4] = temp[0][2];
+            mega[0][5] = temp[0][3];
+            mega[0][6] = temp[0][4];
+            mega[0][7] = temp[0][5];
+            mega[0][8] = temp[0][6];
+            mega[0][9] = temp[0][7];
+            mega[0][0] = temp[0][8];
+            mega[0][1] = temp[0][9];
+
+            mega[1][0] = temp[2][0];
+            mega[1][1] = temp[2][1];
+            mega[1][2] = temp[2][2];
+
+            mega[2][0] = temp[3][0];
+            mega[2][1] = temp[3][1];
+            mega[2][2] = temp[3][2];
+
+            mega[3][0] = temp[4][0];
+            mega[3][1] = temp[4][1];
+            mega[3][2] = temp[4][2];
+
+            mega[4][0] = temp[5][0];
+            mega[4][1] = temp[5][1];
+            mega[4][2] = temp[5][2];
+
+            mega[5][0] = temp[1][0];
+            mega[5][1] = temp[1][1];
+            mega[5][2] = temp[1][2];
+        }
+
+        function _R() {
+            let temp = mega.slice();
+            let tempCe = megaCenters.slice();
+
+            megaCenters[0] = temp[10];
+            megaCenters[1] = temp[10];
+            megaCenters[2] = temp[10];
+            megaCenters[3] = temp[10];
+            megaCenters[4] = temp[10];
+            megaCenters[6] = temp[10];
+            megaCenters[7] = temp[10];
+            megaCenters[9] = temp[10];
+            megaCenters[10] = temp[10];
+            megaCenters[11] = temp[10];
+        }
+
+        function _D() {
+            let temp = mega.slice();
+            let tempCe = megaCenters.slice();
+
+        }
     }
 
     // Clock
@@ -2131,7 +2252,7 @@ let colors222 = [
                         let sqY1 = cy8 - sq / 2;
                         let sqX2 = cx8 + sq / 2;
                         let sqY2 = cy8 - sq / 2;
-                        
+
                         let px1 = rotatePoint(sqX1, cx8, sqY1, cy8, (30 * Math.PI/180) * l).x;
                         let py1 = rotatePoint(sqX1, cx8, sqY1, cy8, (30 * Math.PI/180) * l).y;
 
