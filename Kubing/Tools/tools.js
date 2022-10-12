@@ -1978,14 +1978,83 @@ let colors222 = [
         let height = width / 2;
         $(svgID).height(height);
         let space = width / 30;
-        let size = ((width - space) / 2) / 3;
+        let a = 25;
+        let diag = a * (1 + Math.sqrt(5)) / 2;
+        let megaH = a * Math.sqrt(5 + 2*Math.sqrt(5)) / 2;
+        let megaHs = megaH - (Math.sqrt(a*a-(diag/2)*(diag/2)));
+        let size = width / 6;
+        let ang = 360 / 5;
         let fill = "";
         let stroke = "#000000";
-        let strokeWidth = 2;
+        let strokeWidth = 1;
         let megaColors = ["#FFFFFF", "#006600", "#DD0000", "#0000B3", "#FFCC00", "#8A1AFF", "#999999", "#71E600", "#FF99FF", "#FFFFB3", "#88DDFF", "#FF8433"];
-        
-        for (let i = 0; i < mega.length; i++) {
+        let cxU = size*1.5;
+        let cyU = height / 2;
+        let points = [
+            [{
+                x: rotatePoint(cxU, cyU-a, cxU, cyU, 0, false).x,
+                y: rotatePoint(cxU, cyU-a, cxU, cyU, 0, false).y
+            },
+            {
+                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 1, false).x,
+                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 1, false).y
+            },
+            {
+                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 2, false).x,
+                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 2, false).y
+            },
+            {
+                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 3, false).x,
+                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 3, false).y
+            },
+            {
+                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 4, false).x,
+                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 4, false).y
+            },
+            {
+                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 5, false).x,
+                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 5, false).y
+            }]
+        ];
+        let centerCoordinates = [
+            {cx: cxU, cy: cyU},
+            {
+                cx: rotatePoint(cxU, cyU, points[0][2].x, points[0][2].x, ang * 1, false).x,
+                cy: rotatePoint(cxU, cyU, points[0][2].x, points[0][2].x, ang * 1, false).y
+            },
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2},
+            {cx: size*1.5, cy: height/2}
+        ];
+
+        for (let i = 0; i < 1/* 12 */; i++) {
+            let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            let cx = centerCoordinates[i].cx;
+            let cy = centerCoordinates[i].cy;
+            fill = megaColors[i];
             
+            
+            $(poly).attr("points", points[i].map(p => p.x + "," + p.y).join(" "));
+            $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
+            
+            $(svgID).append(poly);
+            
+            let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            $(circ).attr("style", "cx:"+cx+";cy:"+cy+";r:2;fill:limegreen");
+            $(svgID).append(circ);
+        }
+        for (let i = 0; i < centerCoordinates.length; i++) {
+            let p = centerCoordinates[i]
+            let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            $(circ).attr("style", "cx:"+p.x+";cy:"+p.y+";r:2;fill:"+megaColors[i]);
+            $(svgID).append(circ);
         }
     
         function cleanMoves(m) {
@@ -2077,21 +2146,153 @@ let colors222 = [
             let tempCe = megaCenters.slice();
 
             megaCenters[0] = temp[10];
-            megaCenters[1] = temp[10];
-            megaCenters[2] = temp[10];
-            megaCenters[3] = temp[10];
-            megaCenters[4] = temp[10];
-            megaCenters[6] = temp[10];
-            megaCenters[7] = temp[10];
-            megaCenters[9] = temp[10];
-            megaCenters[10] = temp[10];
-            megaCenters[11] = temp[10];
+            megaCenters[1] = temp[11];
+            megaCenters[2] = temp[6];
+            megaCenters[3] = temp[9];
+            megaCenters[4] = temp[1];
+            megaCenters[6] = temp[3];
+            megaCenters[7] = temp[2];
+            megaCenters[9] = temp[6];
+            megaCenters[10] = temp[4];
+            megaCenters[11] = temp[0];
+
+            mega[8][0] = temp[8][6];
+            mega[8][1] = temp[8][7];
+            mega[8][2] = temp[8][8];
+            mega[8][3] = temp[8][9];
+            mega[8][4] = temp[8][0];
+            mega[8][5] = temp[8][1];
+            mega[8][6] = temp[8][2];
+            mega[8][7] = temp[8][3];
+            mega[8][8] = temp[8][4];
+            mega[8][9] = temp[8][5];
+
+            mega[0][1] = temp[10][7];
+            mega[0][2] = temp[10][8];
+            mega[0][3] = temp[10][9];
+            mega[0][4] = temp[10][0];
+            mega[0][5] = temp[10][1];
+            mega[0][6] = temp[10][2];
+            mega[0][7] = temp[10][3];
+
+            mega[1][1] = temp[11][9];
+            mega[1][2] = temp[11][0];
+            mega[1][3] = temp[11][1];
+            mega[1][4] = temp[11][2];
+            mega[1][5] = temp[11][3];
+            mega[1][6] = temp[11][4];
+            mega[1][7] = temp[11][5];
+
+            mega[10][7] = temp[4][5];
+            mega[10][8] = temp[4][6];
+            mega[10][9] = temp[4][7];
+            mega[10][0] = temp[4][8];
+            mega[10][1] = temp[4][9];
+            mega[10][2] = temp[4][0];
+            mega[10][3] = temp[4][1];
+
+            mega[11][9] = temp[0][1];
+            mega[11][0] = temp[0][2];
+            mega[11][1] = temp[0][3];
+            mega[11][2] = temp[0][4];
+            mega[11][3] = temp[0][5];
+            mega[11][4] = temp[0][6];
+            mega[11][5] = temp[0][7];
+
+            mega[4][5] = temp[1][1];
+            mega[4][6] = temp[1][2];
+            mega[4][7] = temp[1][3];
+            mega[4][8] = temp[1][4];
+            mega[4][9] = temp[1][5];
+            mega[4][0] = temp[1][6];
+            mega[4][1] = temp[1][7];
+            
+            mega[2][0] = temp[6][0];
+            mega[2][1] = temp[6][1];
+            mega[2][2] = temp[6][2];
+            mega[2][3] = temp[6][3];
+            mega[2][4] = temp[6][4];
+            mega[2][5] = temp[6][5];
+            mega[2][6] = temp[6][6];
+            mega[2][7] = temp[6][7];
+            mega[2][8] = temp[6][8];
+            mega[2][9] = temp[6][9];
+            
+            mega[3][0] = temp[9][2];
+            mega[3][1] = temp[9][3];
+            mega[3][2] = temp[9][4];
+            mega[3][3] = temp[9][5];
+            mega[3][4] = temp[9][6];
+            mega[3][5] = temp[9][7];
+            mega[3][6] = temp[9][8];
+            mega[3][7] = temp[9][9];
+            mega[3][8] = temp[9][0];
+            mega[3][9] = temp[9][1];
+            
+            mega[7][0] = temp[2][2];
+            mega[7][1] = temp[2][3];
+            mega[7][2] = temp[2][4];
+            mega[7][3] = temp[2][5];
+            mega[7][4] = temp[2][6];
+            mega[7][5] = temp[2][7];
+            mega[7][6] = temp[2][8];
+            mega[7][7] = temp[2][9];
+            mega[7][8] = temp[2][0];
+            mega[7][9] = temp[2][1];
+            
+            mega[9][0] = temp[7][4];
+            mega[9][1] = temp[7][5];
+            mega[9][2] = temp[7][6];
+            mega[9][3] = temp[7][7];
+            mega[9][4] = temp[7][8];
+            mega[9][5] = temp[7][9];
+            mega[9][6] = temp[7][0];
+            mega[9][7] = temp[7][1];
+            mega[9][8] = temp[7][2];
+            mega[9][9] = temp[7][3];
         }
 
         function _D() {
             let temp = mega.slice();
             let tempCe = megaCenters.slice();
 
+            megaCenters[1] = temp[4];
+            megaCenters[2] = temp[5];
+            megaCenters[3] = temp[1];
+            megaCenters[4] = temp[2];
+            megaCenters[5] = temp[3];
+            megaCenters[7] = temp[9];
+            megaCenters[8] = temp[10];
+            megaCenters[9] = temp[11];
+            megaCenters[10] = temp[7];
+            megaCenters[11] = temp[8];
+
+            mega[6][0] = temp[6][6];
+            mega[6][1] = temp[6][7];
+            mega[6][2] = temp[6][8];
+            mega[6][3] = temp[6][9];
+            mega[6][4] = temp[6][0];
+            mega[6][5] = temp[6][1];
+            mega[6][6] = temp[6][2];
+            mega[6][7] = temp[6][3];
+            mega[6][8] = temp[6][4];
+            mega[6][9] = temp[6][5];
+
+            for (let i = 3; i < 10; i++) {
+                mega[1][i] = temp[4][i];
+                mega[2][i] = temp[5][i];
+                mega[3][i] = temp[1][i];
+                mega[4][i] = temp[2][i];
+                mega[5][i] = temp[3][i];
+            }
+
+            for (let i = 0; i < 10; i++) {
+                mega[7][i] = temp[4][i];
+                mega[8][i] = temp[5][i];
+                mega[9][i] = temp[1][i];
+                mega[10][i] = temp[2][i];
+                mega[11][i] = temp[3][i];
+            }
         }
     }
 
@@ -2253,14 +2454,14 @@ let colors222 = [
                         let sqX2 = cx8 + sq / 2;
                         let sqY2 = cy8 - sq / 2;
 
-                        let px1 = rotatePoint(sqX1, cx8, sqY1, cy8, (30 * Math.PI/180) * l).x;
-                        let py1 = rotatePoint(sqX1, cx8, sqY1, cy8, (30 * Math.PI/180) * l).y;
+                        let px1 = rotatePoint(sqX1, sqY1, cx8, cy8, 30 * l, false).x;
+                        let py1 = rotatePoint(sqX1, sqY1, cx8, cy8, 30 * l, false).y;
 
-                        let px2 = rotatePoint(cx8, cx8, cy8-2.5*sq, cy8, (30 * Math.PI/180) * l).x;
-                        let py2 = rotatePoint(cx8, cx8, cy8-2.5*sq, cy8, (30 * Math.PI/180) * l).y;
+                        let px2 = rotatePoint(cx8, cy8-2.5*sq, cx8, cy8, 30 * l, false).x;
+                        let py2 = rotatePoint(cx8, cy8-2.5*sq, cx8, cy8, 30 * l, false).y;
 
-                        let px3 = rotatePoint(sqX2, cx8, sqY2, cy8, (30 * Math.PI/180) * l).x;
-                        let py3 = rotatePoint(sqX2, cx8, sqY2, cy8, (30 * Math.PI/180) * l).y;
+                        let px3 = rotatePoint(sqX2, sqY2, cx8, cy8, 30 * l, false).x;
+                        let py3 = rotatePoint(sqX2, sqY2, cx8, cy8, 30 * l, false).y;
                         
                         points.push([
                             {
@@ -3779,8 +3980,17 @@ function mirror(alg) {
     }
 }
 
-function rotatePoint(pointToRotateX, centerOfRotationX, pointToRotateY, centerOfRotationY, angleInRadians) {
-    let x1 = (pointToRotateX - centerOfRotationX) * Math.cos(angleInRadians) - (pointToRotateY - centerOfRotationY) * Math.sin(angleInRadians) + centerOfRotationX;
-    let y1 = (pointToRotateX - centerOfRotationX) * Math.sin(angleInRadians) + (pointToRotateY - centerOfRotationY) * Math.cos(angleInRadians) + centerOfRotationY;
+function rotatePoint(pointToRotateX, pointToRotateY, centerOfRotationX, centerOfRotationY, angle, radians = true) {
+    let x1;
+    let y1;
+    if (radians) {
+        x1 = (pointToRotateX - centerOfRotationX) * Math.cos(angle) - (pointToRotateY - centerOfRotationY) * Math.sin(angle) + centerOfRotationX;
+        y1 = (pointToRotateX - centerOfRotationX) * Math.sin(angle) + (pointToRotateY - centerOfRotationY) * Math.cos(angle) + centerOfRotationY;
+    }
+    else {
+        angle = (angle * Math.PI/180);
+        x1 = (pointToRotateX - centerOfRotationX) * Math.cos(angle) - (pointToRotateY - centerOfRotationY) * Math.sin(angle) + centerOfRotationX;
+        y1 = (pointToRotateX - centerOfRotationX) * Math.sin(angle) + (pointToRotateY - centerOfRotationY) * Math.cos(angle) + centerOfRotationY;
+    }
     return {x: x1, y: y1};
 }
