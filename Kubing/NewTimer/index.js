@@ -1272,9 +1272,6 @@ function adjustSize() {
     let svgWidth = $("#right").width() * 0.75;
     let svgHeight = svgWidth * 3/4;
 
-    $(".svgScramble").attr("width", svgWidth);
-    $(".svgScramble").attr("height", svgHeight);
-
     let h = $("#content").height() - $("#notTimeList").height();
     $("#timeList").parent().css("max-height", h);
     $("#innerTimeStats div").height("100%");

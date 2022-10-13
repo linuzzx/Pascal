@@ -1633,9 +1633,9 @@ let colors222 = [
         
         let pyra = getPyraminxState(scr);
     
-        let height = $(svgID).height();
-        let width = 2 * height / Math.sqrt(3);
-        $(svgID).width(width);
+        let width = $(svgID).width() * 0.8;
+        let height = Math.sqrt(3) * width / 2;
+        $(svgID).height(height);
         let space = width / 20;
         let size = (height - space) / 2;
         let t = size / 3;
