@@ -2112,7 +2112,7 @@ let colors222 = [
             }
         }
         
-        /* for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 12; i++) {
             let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
             fill = megaColors[i];
             
@@ -2121,8 +2121,20 @@ let colors222 = [
             $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
             
             $(svgID).append(poly);
-        } */
+        }
     
+        // Bokstaver for U og F
+        for (let i = 0; i < 2; i++) {
+            let text = document.createElementNS('http://www.w3.org/2000/svg', "text");
+            $(text).attr("x", points[i][0].x);
+            $(text).attr("y", points[i][0].y);
+            $(text).attr("style", "font-size:"+(a*0.5)+";font-family:monospace;font-weight:bold;fill:black;text-anchor:middle;dominant-baseline:middle;");
+            let textNode = document.createTextNode(["U", "F"][i]);
+            text.appendChild(textNode);
+
+            $(svgID).append(text);
+        }
+
         function cleanMoves(m) {
             while (m.includes("&nbsp;&nbsp;")) {
                 m.replaceAll("&nbsp;&nbsp;", "&nbsp;");
