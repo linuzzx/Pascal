@@ -2084,9 +2084,8 @@ let colors222 = [
             }
         }
         
-        let eL = a / 5;
+        let eL = ((points[0][3].x + points[0][4].x) / 2) / 5;
         let cL = 2 * eL;
-        let cR;
         for (let i = 0; i < mega.length; i++) {
             let mCe = megaCenters[i];
             let polyCe = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
