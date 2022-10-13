@@ -2084,7 +2084,36 @@ let colors222 = [
             }
         }
         
-        for (let i = 0; i < 12; i++) {
+        let eL = a / 5;
+        let cL = 2 * eL;
+        let cR;
+        for (let i = 0; i < mega.length; i++) {
+            let mCe = megaCenters[i];
+            let polyCe = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+            fill = getMegaColor(mCe);
+            
+            let pointsCe = [
+
+            ];
+            $(polyCe).attr("points", pointsCe.map(p => p.x + "," + p.y).join(" "));
+            $(polyCe).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
+            
+            $(svgID).append(polyCe);
+
+            for (let j = 0; j < 11; j++) {
+                let m = mega[i][j];
+                let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
+                fill = getMegaColor(m);
+                
+                
+                $(poly).attr("points", points[i].slice(1).map(p => p.x + "," + p.y).join(" "));
+                $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
+                
+                $(svgID).append(poly);
+            }
+        }
+        
+        /* for (let i = 0; i < 12; i++) {
             let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
             fill = megaColors[i];
             
@@ -2093,7 +2122,7 @@ let colors222 = [
             $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
             
             $(svgID).append(poly);
-        }
+        } */
     
         function cleanMoves(m) {
             while (m.includes("&nbsp;&nbsp;")) {
@@ -2332,6 +2361,10 @@ let colors222 = [
                 mega[10][i] = temp[2][i];
                 mega[11][i] = temp[3][i];
             }
+        }
+
+        function getMegaColor(c) {
+            return megaColors[["1", "2", "3", "4", "5", "6", "a", "b", "c", "d", "e", "f"].indexOf(c)];
         }
     }
 
