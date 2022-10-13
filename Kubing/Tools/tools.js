@@ -573,6 +573,7 @@ let colors222 = [
     
         let width = $(id).width();
         let height = 3 * width / 4;
+        $(svgID).height(height);
         let space = width / 20;
         let size = ((width - 3 * space) / 4) / n;
         let fill = "";
@@ -906,6 +907,7 @@ let colors222 = [
 
         let svgW = $(svgID).width() / 2;
         let svgH = svgW;
+        $(svgID).height(svgH);
 
         if ($("#drawScrambleSq1").length) {
             $("#drawScrambleSq1").remove();
@@ -1388,6 +1390,7 @@ let colors222 = [
     
         let width = $(svgID).width();
         let height = 3 * width / 4;
+        $(svgID).height(height);
         let space = width / 20;
         let size = ((width - 3 * space) / 4) / n;
         let fill = "";
@@ -1632,6 +1635,7 @@ let colors222 = [
     
         let height = $(svgID).height();
         let width = 2 * height / Math.sqrt(3);
+        $(svgID).width(width);
         let space = width / 20;
         let size = (height - space) / 2;
         let t = size / 3;
@@ -1973,12 +1977,14 @@ let colors222 = [
         let megaCenters = cleanMegaCenters.slice();
         
         getMegaState(scr);
+        console.log(mega);
+        console.log(megaCenters);
         
         let width = $(svgID).width();
-        let height = width / 2;
+        let height = width * 0.6;
         $(svgID).height(height);
         let space = width / 30;
-        let a = 25;
+        let a = width / 10;
         let diag = a * (1 + Math.sqrt(5)) / 2;
         let megaH = a * Math.sqrt(5 + 2*Math.sqrt(5)) / 2;
         let megaHs = megaH - (Math.sqrt(a*a-(diag/2)*(diag/2)));
@@ -1988,73 +1994,105 @@ let colors222 = [
         let stroke = "#000000";
         let strokeWidth = 1;
         let megaColors = ["#FFFFFF", "#006600", "#DD0000", "#0000B3", "#FFCC00", "#8A1AFF", "#999999", "#71E600", "#FF99FF", "#FFFFB3", "#88DDFF", "#FF8433"];
-        let cxU = size*1.5;
-        let cyU = height / 2;
-        let points = [
-            [{
-                x: rotatePoint(cxU, cyU-a, cxU, cyU, 0, false).x,
-                y: rotatePoint(cxU, cyU-a, cxU, cyU, 0, false).y
-            },
-            {
-                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 1, false).x,
-                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 1, false).y
-            },
-            {
-                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 2, false).x,
-                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 2, false).y
-            },
-            {
-                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 3, false).x,
-                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 3, false).y
-            },
-            {
-                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 4, false).x,
-                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 4, false).y
-            },
-            {
-                x: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 5, false).x,
-                y: rotatePoint(cxU, cyU-a, cxU, cyU, ang * 5, false).y
-            }]
-        ];
-        let centerCoordinates = [
-            {cx: cxU, cy: cyU},
-            {
-                cx: rotatePoint(cxU, cyU, points[0][2].x, points[0][2].x, ang * 1, false).x,
-                cy: rotatePoint(cxU, cyU, points[0][2].x, points[0][2].x, ang * 1, false).y
-            },
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2},
-            {cx: size*1.5, cy: height/2}
-        ];
 
-        for (let i = 0; i < 1/* 12 */; i++) {
+        let points = [];
+        let pntM;
+        let pnt;
+        let cxM;
+        let cyM;
+        let cx5;
+        let cx2;
+        let cy2;
+
+        for (let i = 0; i < 12; i++) {
+            let c = [0, 4, 3, 2, 1, 5, 0, 4, 3, 2, 1, 5][i];
+            if (i === 0) {
+                cxM = size*1.5;
+                cyM = height / 2;
+                pntM = [
+                    {x: cxM, y: cyM},
+                    {x: rotatePoint(cxM, cyM-a, cxM, cyM, 0, false).x, y: rotatePoint(cxM, cyM-a, cxM, cyM, 0, false).y},
+                    {x: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 1, false).x, y: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 1, false).y},
+                    {x: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 2, false).x, y: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 2, false).y},
+                    {x: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 3, false).x, y: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 3, false).y},
+                    {x: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 4, false).x, y: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 4, false).y},
+                    {x: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 5, false).x, y: rotatePoint(cxM, cyM-a, cxM, cyM, ang * 5, false).y}
+                ];
+
+                pnt = pntM.slice();
+        
+                points.push(pnt);
+            }
+            else if (i === 6) {
+                cxM = 2 * cx2 - cx5;
+                cyM = cy2;
+                pntM = [
+                    {x: cxM, y: cyM},
+                    {x: rotatePoint(cxM, cyM+a, cxM, cyM, 0, false).x, y: rotatePoint(cxM, cyM+a, cxM, cyM, 0, false).y},
+                    {x: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 1, false).x, y: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 1, false).y},
+                    {x: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 2, false).x, y: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 2, false).y},
+                    {x: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 3, false).x, y: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 3, false).y},
+                    {x: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 4, false).x, y: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 4, false).y},
+                    {x: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 5, false).x, y: rotatePoint(cxM, cyM+a, cxM, cyM, ang * 5, false).y}
+                ];
+
+                pnt = pntM.slice();
+
+                points.push(pnt);
+            }
+            else if (i === 1 || i === 7) {
+                let cx = rotatePoint(cxM, cyM, (pntM[3].x+pntM[4].x)/2, pntM[3].y, 180, false).x;
+                let cy = rotatePoint(cxM, cyM, (pntM[3].x+pntM[4].x)/2, pntM[3].y, 180, false).y;
+                let point = [
+                    {x: cx, y: cy},
+                    {x: pntM[c].x, y: pntM[c].y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 1, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 1, false).y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 2, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 2, false).y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 3, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 3, false).y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 4, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 4, false).y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 5, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 5, false).y}
+                ];
+
+                pnt = point.slice();
+
+                points.push(pnt);
+            }
+            else {
+                let cx = rotatePoint(pnt[0].x, pnt[0].y, cxM, cyM, -ang, false).x;
+                let cy = rotatePoint(pnt[0].x, pnt[0].y, cxM, cyM, -ang, false).y;
+                let point = [
+                    {x: cx, y: cy},
+                    {x: pntM[c].x, y: pntM[c].y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 1, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 1, false).y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 2, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 2, false).y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 3, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 3, false).y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 4, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 4, false).y},
+                    {x: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 5, false).x, y: rotatePoint(pntM[c].x, pntM[c].y, cx, cy, ang * 5, false).y}
+                ];
+
+                if (i === 2) {
+                    cx2 = cx;
+                    cy2 = cy;
+                }
+                else if (i === 5) {
+                    cx5 = cx;
+                }
+
+                pnt = point.slice();
+
+                points.push(pnt);
+            }
+        }
+        
+        for (let i = 0; i < 12; i++) {
             let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-            let cx = centerCoordinates[i].cx;
-            let cy = centerCoordinates[i].cy;
             fill = megaColors[i];
             
             
-            $(poly).attr("points", points[i].map(p => p.x + "," + p.y).join(" "));
+            $(poly).attr("points", points[i].slice(1).map(p => p.x + "," + p.y).join(" "));
             $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
             
             $(svgID).append(poly);
-            
-            let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            $(circ).attr("style", "cx:"+cx+";cy:"+cy+";r:2;fill:limegreen");
-            $(svgID).append(circ);
-        }
-        for (let i = 0; i < centerCoordinates.length; i++) {
-            let p = centerCoordinates[i]
-            let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            $(circ).attr("style", "cx:"+p.x+";cy:"+p.y+";r:2;fill:"+megaColors[i]);
-            $(svgID).append(circ);
         }
     
         function cleanMoves(m) {
@@ -2104,6 +2142,7 @@ let colors222 = [
         
         function resetMegaState() {
             mega = cleanMega.slice();
+            megaCenters = cleanMegaCenters.slice();
         }
 
         function _U() {
@@ -2145,16 +2184,16 @@ let colors222 = [
             let temp = mega.slice();
             let tempCe = megaCenters.slice();
 
-            megaCenters[0] = temp[10];
-            megaCenters[1] = temp[11];
-            megaCenters[2] = temp[6];
-            megaCenters[3] = temp[9];
-            megaCenters[4] = temp[1];
-            megaCenters[6] = temp[3];
-            megaCenters[7] = temp[2];
-            megaCenters[9] = temp[6];
-            megaCenters[10] = temp[4];
-            megaCenters[11] = temp[0];
+            megaCenters[0] = tempCe[10];
+            megaCenters[1] = tempCe[11];
+            megaCenters[2] = tempCe[6];
+            megaCenters[3] = tempCe[9];
+            megaCenters[4] = tempCe[1];
+            megaCenters[6] = tempCe[3];
+            megaCenters[7] = tempCe[2];
+            megaCenters[9] = tempCe[7];
+            megaCenters[10] = tempCe[4];
+            megaCenters[11] = tempCe[0];
 
             mega[8][0] = temp[8][6];
             mega[8][1] = temp[8][7];
@@ -2256,16 +2295,16 @@ let colors222 = [
             let temp = mega.slice();
             let tempCe = megaCenters.slice();
 
-            megaCenters[1] = temp[4];
-            megaCenters[2] = temp[5];
-            megaCenters[3] = temp[1];
-            megaCenters[4] = temp[2];
-            megaCenters[5] = temp[3];
-            megaCenters[7] = temp[9];
-            megaCenters[8] = temp[10];
-            megaCenters[9] = temp[11];
-            megaCenters[10] = temp[7];
-            megaCenters[11] = temp[8];
+            megaCenters[1] = tempCe[4];
+            megaCenters[2] = tempCe[5];
+            megaCenters[3] = tempCe[1];
+            megaCenters[4] = tempCe[2];
+            megaCenters[5] = tempCe[3];
+            megaCenters[7] = tempCe[9];
+            megaCenters[8] = tempCe[10];
+            megaCenters[9] = tempCe[11];
+            megaCenters[10] = tempCe[7];
+            megaCenters[11] = tempCe[8];
 
             mega[6][0] = temp[6][6];
             mega[6][1] = temp[6][7];
