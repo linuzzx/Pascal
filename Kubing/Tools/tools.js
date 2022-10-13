@@ -566,12 +566,12 @@ let colors222 = [
 {
     let stroke = "#1E1E1E";
 
-    function drawScrambleNxN(id, n, scr) {
-        $(id).empty();
+    function drawScrambleNxN(svgID, n, scr) {
+        $(svgID).empty();
     
         let cube = getState(n, scr);
     
-        let width = $(id).width();
+        let width = $(svgID).width();
         let height = 3 * width / 4;
         $(svgID).height(height);
         let space = width / 20;
@@ -639,7 +639,7 @@ let colors222 = [
                     $(rect).attr("height", size);
                     $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
                     
-                    $(id).append(rect);
+                    $(svgID).append(rect);
                     k++;
                     xCount++;
                     if (xCount === n) {
