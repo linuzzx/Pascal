@@ -2490,7 +2490,8 @@ let colors222 = [
             mega[6][8] = temp[6][4];
             mega[6][9] = temp[6][5];
 
-            for (let i = 3; i < 10; i++) {
+            // for (let i = 3; i < 10; i++) {
+            for (let i of [0, 1, 5, 6, 7, 8, 9]) {
                 mega[1][i] = temp[4][i];
                 mega[2][i] = temp[5][i];
                 mega[3][i] = temp[1][i];
@@ -2499,11 +2500,11 @@ let colors222 = [
             }
 
             for (let i = 0; i < 10; i++) {
-                mega[7][i] = temp[4][i];
-                mega[8][i] = temp[5][i];
-                mega[9][i] = temp[1][i];
-                mega[10][i] = temp[2][i];
-                mega[11][i] = temp[3][i];
+                mega[7][i] = temp[9][i];
+                mega[8][i] = temp[10][i];
+                mega[9][i] = temp[11][i];
+                mega[10][i] = temp[7][i];
+                mega[11][i] = temp[8][i];
             }
         }
 
