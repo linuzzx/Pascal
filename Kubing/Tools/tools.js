@@ -2091,28 +2091,149 @@ let colors222 = [
             let polyCe = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
             fill = getMegaColor(mCe);
             
-            let pointsCe = [
-
-            ];
+            let facePoints = points[i].slice();
+            let pointsCe = [];
+            for (let i = 1; i < facePoints.length; i++) {
+                let px = (facePoints[0].x + facePoints[i].x) / 2;
+                let py = (facePoints[0].y + facePoints[i].y) / 2;
+                pointsCe.push({x: px, y: py});
+            }
             $(polyCe).attr("points", pointsCe.map(p => p.x + "," + p.y).join(" "));
             $(polyCe).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
             
             $(svgID).append(polyCe);
+            
+            // Defining corner coordinates
+            let pointsCo = [];
+            let tempPoints = facePoints.slice(1);
+            let lp = tempPoints.pop();
+            let nlp = tempPoints.pop();
+            tempPoints.unshift(nlp);
+            tempPoints.push(lp);
 
-            for (let j = 0; j < 11; j++) {
+            for (let j = 0; j < 1; j++) {
+                let px0;
+                let py0;
+                let px1;
+                let py1;
+                let px2;
+                let py2;
+                let px3;
+                let py3;
+
+                px0 = tempPoints[j].x;
+                py0 = tempPoints[j].y;
+
+                px1 = (tempPoints[j].x + (tempPoints[j].x + tempPoints[j + 1].x) / 2) / 2;
+                py1 = (tempPoints[j].y + (tempPoints[j].y + tempPoints[j + 1].y) / 2) / 2;
+                /* px1 = pointsCe[4].x - ((pointsCe[3].x - pointsCe[4].x) / 2);
+                py1 = pointsCe[4].y - ((pointsCe[3].y - pointsCe[4].y) / 2); */
+
+                px2 = pointsCe[4].x;
+                py2 = pointsCe[4].y;
+                
+                px3 = (tempPoints[j].x + (tempPoints[j].x + tempPoints[4].x) / 2) / 2;
+                py3 = (tempPoints[j].y + (tempPoints[j].y + tempPoints[4].y) / 2) / 2;
+                /* px3 = rotatePoint(px1, py1, (px0 + px2) / 2, (py0 + py2) / 2, 180, false).x;
+                py3 = rotatePoint(px1, py1, (px0 + px2) / 2, (py0 + py2) / 2, 180, false).y; */
+
+                pointsCo.push({
+                    x0: px0, y0: py0,
+                    x1: px1, y1: py1,
+                    x2: px2, y2: py2,
+                    x3: px3, y3: py3,
+                    x4: px0, y4: py0,
+                });
+            }
+
+            for (let j = 1; j < 5; j++) {
+                let xy0 = rotatePoint(pointsCo[0].x0, pointsCo[0].y0, facePoints[0].x, facePoints[0].y, ang * j, false);
+                let xy1 = rotatePoint(pointsCo[0].x1, pointsCo[0].y1, facePoints[0].x, facePoints[0].y, ang * j, false);
+                let xy2 = rotatePoint(pointsCo[0].x2, pointsCo[0].y2, facePoints[0].x, facePoints[0].y, ang * j, false);
+                let xy3 = rotatePoint(pointsCo[0].x3, pointsCo[0].y3, facePoints[0].x, facePoints[0].y, ang * j, false);
+                pointsCo.push({
+                    x0: xy0.x, y0: xy0.y,
+                    x1: xy1.x, y1: xy1.y,
+                    x2: xy2.x, y2: xy2.y,
+                    x3: xy3.x, y3: xy3.y,
+                    x4: xy0.x, y4: xy0.y,
+                });
+            }
+
+            // Defining edge coordinates
+            let pointsE = [];
+            for (let j = 0; j < 1; j++) {
+                let px0;
+                let py0;
+                let px1;
+                let py1;
+                let px2;
+                let py2;
+                let px3;
+                let py3;
+
+                px0 = pointsCo[0].x1;
+                py0 = pointsCo[0].y1;
+
+                px1 = pointsCo[1].x3;
+                py1 = pointsCo[1].y3;
+
+                px2 = pointsCe[0].x;
+                py2 = pointsCe[0].y;
+
+                px3 = pointsCe[4].x;
+                py3 = pointsCe[4].y;
+
+                pointsE.push({
+                    x0: px0, y0: py0,
+                    x1: px1, y1: py1,
+                    x2: px2, y2: py2,
+                    x3: px3, y3: py3,
+                    x4: px0, y4: py0
+                });
+            }
+
+            for (let j = 1; j < 5; j++) {
+                let xy0 = rotatePoint(pointsE[0].x0, pointsE[0].y0, facePoints[0].x, facePoints[0].y, ang * j, false);
+                let xy1 = rotatePoint(pointsE[0].x1, pointsE[0].y1, facePoints[0].x, facePoints[0].y, ang * j, false);
+                let xy2 = rotatePoint(pointsE[0].x2, pointsE[0].y2, facePoints[0].x, facePoints[0].y, ang * j, false);
+                let xy3 = rotatePoint(pointsE[0].x3, pointsE[0].y3, facePoints[0].x, facePoints[0].y, ang * j, false);
+                pointsE.push({
+                    x0: xy0.x, y0: xy0.y,
+                    x1: xy1.x, y1: xy1.y,
+                    x2: xy2.x, y2: xy2.y,
+                    x3: xy3.x, y3: xy3.y,
+                    x4: xy0.x, y4: xy0.y,
+                });
+            }
+
+            // Combining points
+            let pointsPieces = [];
+            for (let j = 0; j < pointsCo.length; j++) {
+                pointsPieces.push(pointsCo[j]);
+                pointsPieces.push(pointsE[j]);
+            }
+            
+            for (let j = 0; j < pointsPieces.length; j++) {
                 let m = mega[i][j];
                 let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
                 fill = getMegaColor(m);
                 
-                
-                $(poly).attr("points", points[i].slice(1).map(p => p.x + "," + p.y).join(" "));
+                let pnts = 
+                    pointsPieces[j].x0+","+pointsPieces[j].y0+" "+
+                    pointsPieces[j].x1+","+pointsPieces[j].y1+" "+
+                    pointsPieces[j].x2+","+pointsPieces[j].y2+" "+
+                    pointsPieces[j].x3+","+pointsPieces[j].y3+" "+
+                    pointsPieces[j].x4+","+pointsPieces[j].y4;
+                    
+                $(poly).attr("points", pnts);
                 $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
                 
                 $(svgID).append(poly);
             }
         }
         
-        for (let i = 0; i < 12; i++) {
+        /* for (let i = 0; i < 12; i++) {
             let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
             fill = megaColors[i];
             
@@ -2121,7 +2242,7 @@ let colors222 = [
             $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
             
             $(svgID).append(poly);
-        }
+        } */
     
         // Bokstaver for U og F
         for (let i = 0; i < 2; i++) {
