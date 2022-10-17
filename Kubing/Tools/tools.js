@@ -2309,6 +2309,10 @@ let colors222 = [
         function _U() {
             let temp = mega.slice();
 
+            for (let i = 0; i < mega.length; i++) {
+                temp[i] = mega[i].slice();
+            }
+
             mega[0][2] = temp[0][0];
             mega[0][3] = temp[0][1];
             mega[0][4] = temp[0][2];
@@ -2320,30 +2324,34 @@ let colors222 = [
             mega[0][0] = temp[0][8];
             mega[0][1] = temp[0][9];
 
-            mega[1][0] = temp[2][0];
-            mega[1][1] = temp[2][1];
             mega[1][2] = temp[2][2];
+            mega[1][3] = temp[2][3];
+            mega[1][4] = temp[2][4];
 
-            mega[2][0] = temp[3][0];
-            mega[2][1] = temp[3][1];
             mega[2][2] = temp[3][2];
+            mega[2][3] = temp[3][3];
+            mega[2][4] = temp[3][4];
 
-            mega[3][0] = temp[4][0];
-            mega[3][1] = temp[4][1];
             mega[3][2] = temp[4][2];
+            mega[3][3] = temp[4][3];
+            mega[3][4] = temp[4][4];
 
-            mega[4][0] = temp[5][0];
-            mega[4][1] = temp[5][1];
             mega[4][2] = temp[5][2];
+            mega[4][3] = temp[5][3];
+            mega[4][4] = temp[5][4];
 
-            mega[5][0] = temp[1][0];
-            mega[5][1] = temp[1][1];
             mega[5][2] = temp[1][2];
+            mega[5][3] = temp[1][3];
+            mega[5][4] = temp[1][4];
         }
 
         function _R() {
             let temp = mega.slice();
             let tempCe = megaCenters.slice();
+
+            for (let i = 0; i < mega.length; i++) {
+                temp[i] = mega[i].slice();
+            }
 
             megaCenters[0] = tempCe[10];
             megaCenters[1] = tempCe[11];
@@ -2455,6 +2463,10 @@ let colors222 = [
         function _D() {
             let temp = mega.slice();
             let tempCe = megaCenters.slice();
+
+            for (let i = 0; i < mega.length; i++) {
+                temp[i] = mega[i].slice();
+            }
 
             megaCenters[1] = tempCe[4];
             megaCenters[2] = tempCe[5];
