@@ -950,7 +950,7 @@ let colors222 = [
             cp0,cp1,cp2,cp3,cp4,cp5,cp6,cp7,cp8,cp9,cp10,cp11
         ];
         
-        let ep1 = intersectSq1(cx,cy,cp1[0],cp1[1],cp0[0],cp0[1],cp3[0],cp3[1]);
+        let ep1 = intersectLines(cx,cy,cp1[0],cp1[1],cp0[0],cp0[1],cp3[0],cp3[1]);
         let ep2 = rotateSq1(cx, cy, ep1[0], ep1[1], 330);
         let ep3 = rotateSq1(cx, cy, ep2[0], ep2[1], 330);
         let ep4 = rotateSq1(cx, cy, ep3[0], ep3[1], 330);
@@ -984,7 +984,7 @@ let colors222 = [
             icp0,icp1,icp2,icp3,icp4,icp5,icp6,icp7,icp8,icp9,icp10,icp11
         ];
         
-        let iep1 = intersectSq1(cx,cy,icp1[0],icp1[1],icp0[0],icp0[1],icp3[0],icp3[1]);
+        let iep1 = intersectLines(cx,cy,icp1[0],icp1[1],icp0[0],icp0[1],icp3[0],icp3[1]);
         let iep2 = rotateSq1(cx, cy, iep1[0], iep1[1], 330);
         let iep3 = rotateSq1(cx, cy, iep2[0], iep2[1], 330);
         let iep4 = rotateSq1(cx, cy, iep3[0], iep3[1], 330);
@@ -1165,35 +1165,6 @@ let colors222 = [
                 nx = (cos * (x - cx)) + (sin * (y - cy)) + cx,
                 ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
             return [nx, ny];
-        }
-        
-        function intersectSq1(x1, y1, x2, y2, x3, y3, x4, y4) {
-        
-            // Check if none of the lines are of length 0
-            if ((x1 === x2 && y1 === y2) || (x3 === x4 && y3 === y4)) {
-                return false
-            }
-        
-            denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
-        
-            // Lines are parallel
-            if (denominator === 0) {
-                return false
-            }
-        
-            let ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator
-            let ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator
-        
-            // is the intersection along the segments
-            if (ua < 0 || ua > 1 || ub < 0 || ub > 1) {
-                return false
-            }
-        
-            // Return a object with the x and y coordinates of the intersection
-            let x = x1 + ua * (x2 - x1)
-            let y = y1 + ua * (y2 - y1)
-        
-            return [x,y]
         }
 
         function turnSq1() {
@@ -2124,18 +2095,16 @@ let colors222 = [
                 px0 = tempPoints[j].x;
                 py0 = tempPoints[j].y;
 
-                px1 = (tempPoints[j].x + (tempPoints[j].x + tempPoints[j + 1].x) / 2) / 2;
-                py1 = (tempPoints[j].y + (tempPoints[j].y + tempPoints[j + 1].y) / 2) / 2;
-                /* px1 = pointsCe[4].x - ((pointsCe[3].x - pointsCe[4].x) / 2);
-                py1 = pointsCe[4].y - ((pointsCe[3].y - pointsCe[4].y) / 2); */
+                let ep1 = rotatePoint(pointsCe[3].x, pointsCe[3].y, pointsCe[4].x, pointsCe[4].y, 180, false);
+                px1 = intersectLines(px0, py0, tempPoints[1].x, tempPoints[1].y, pointsCe[3].x, pointsCe[3].y, ep1.x, ep1.y)[0];
+                py1 = intersectLines(px0, py0, tempPoints[1].x, tempPoints[1].y, pointsCe[3].x, pointsCe[3].y, ep1.x, ep1.y)[1];
 
                 px2 = pointsCe[4].x;
                 py2 = pointsCe[4].y;
                 
-                px3 = (tempPoints[j].x + (tempPoints[j].x + tempPoints[4].x) / 2) / 2;
-                py3 = (tempPoints[j].y + (tempPoints[j].y + tempPoints[4].y) / 2) / 2;
-                /* px3 = rotatePoint(px1, py1, (px0 + px2) / 2, (py0 + py2) / 2, 180, false).x;
-                py3 = rotatePoint(px1, py1, (px0 + px2) / 2, (py0 + py2) / 2, 180, false).y; */
+                let ep3 = rotatePoint(pointsCe[0].x, pointsCe[0].y, pointsCe[4].x, pointsCe[4].y, 180, false);
+                px3 = intersectLines(px0, py0, tempPoints[4].x, tempPoints[4].y, pointsCe[0].x, pointsCe[0].y, ep3.x, ep3.y)[0];
+                py3 = intersectLines(px0, py0, tempPoints[4].x, tempPoints[4].y, pointsCe[0].x, pointsCe[0].y, ep3.x, ep3.y)[1];
 
                 pointsCo.push({
                     x0: px0, y0: py0,
@@ -2232,17 +2201,6 @@ let colors222 = [
                 $(svgID).append(poly);
             }
         }
-        
-        /* for (let i = 0; i < 12; i++) {
-            let poly = document.createElementNS('http://www.w3.org/2000/svg', "polygon");
-            fill = megaColors[i];
-            
-            
-            $(poly).attr("points", points[i].slice(1).map(p => p.x + "," + p.y).join(" "));
-            $(poly).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+1);
-            
-            $(svgID).append(poly);
-        } */
     
         // Bokstaver for U og F
         for (let i = 0; i < 2; i++) {
@@ -4221,4 +4179,33 @@ function rotatePoint(pointToRotateX, pointToRotateY, centerOfRotationX, centerOf
         y1 = (pointToRotateX - centerOfRotationX) * Math.sin(angle) + (pointToRotateY - centerOfRotationY) * Math.cos(angle) + centerOfRotationY;
     }
     return {x: x1, y: y1};
+}
+        
+function intersectLines(x1, y1, x2, y2, x3, y3, x4, y4) {
+
+    // Check if none of the lines are of length 0
+    if ((x1 === x2 && y1 === y2) || (x3 === x4 && y3 === y4)) {
+        return false
+    }
+
+    denominator = ((y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1))
+
+    // Lines are parallel
+    if (denominator === 0) {
+        return false
+    }
+
+    let ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denominator
+    let ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator
+
+    // is the intersection along the segments
+    if (ua < 0 || ua > 1 || ub < 0 || ub > 1) {
+        return false
+    }
+
+    // Return a object with the x and y coordinates of the intersection
+    let x = x1 + ua * (x2 - x1)
+    let y = y1 + ua * (y2 - y1)
+
+    return [x,y]
 }
