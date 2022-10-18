@@ -1,7 +1,6 @@
 let step = "0";
 $(() => {
-    // drawScrambleNxN('#svgCube', 3, $("#inpScramble").val());
-    drawScrambleMegaminx("#svgCube", $("#inpScramble").val());
+    drawScrambleNxN('#svgCube', 3, $("#inpScramble").val());
 
     adjustSize();
 });

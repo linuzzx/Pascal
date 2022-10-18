@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="drawScrambleMegaminx('#svgCube', $(this).val())"></h1>
+    <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="drawScrambleNxN('#svgCube', 3, $(this).val())"></h1>
     <div><svg id="svgCube"></svg></div>
-    <button id="btnScramble" onclick="$('#inpScramble').val(getScrambleMega()); drawScrambleMegaminx('#svgCube', $('#inpScramble').val())">Scramble</button>
+    <button id="btnScramble" onclick="$('#inpScramble').val(getScrambleNxN(3)); drawScrambleNxN('#svgCube', 3, $('#inpScramble').val())">Scramble</button>
     <button id="btnSolve" onclick="solveCube($('#inpScramble').val())">Solve</button>
     <div id="solution"></div>
     <div id="searchDepth"></div>
