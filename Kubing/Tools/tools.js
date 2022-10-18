@@ -1948,8 +1948,6 @@ let colors222 = [
         let megaCenters = cleanMegaCenters.slice();
         
         getMegaState(scr);
-        console.log(mega);
-        console.log(megaCenters);
         
         let width = $(svgID).width();
         let height = width * 0.6;
