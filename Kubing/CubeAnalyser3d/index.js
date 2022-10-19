@@ -6,7 +6,8 @@ let movesArray = [];
 let planes = [];
 let scene, camera, renderer;
 let anim = false;
-let playMoveTime = 0.15;
+let stdTime = 0.15;
+let playMoveTime;
 let tween;
 
 $(function() {
@@ -284,7 +285,7 @@ function playMoves() {
 
     anim = true;
     let mvs = (moves).split(" ");
-    let playTime = $("#inputTime").val() === "" ? playMoveTime * 1000 : timeToMs($("#inputTime").val()) / mvs.length;
+    playMoveTime = $("#inputTime").val() === "" ? stdTime * 1000 : timeToMs($("#inputTime").val()) / mvs.length;
 
     let i = 0;
     let interval = setInterval(() => {
@@ -300,7 +301,7 @@ function playMoves() {
             applyMove(mvs[i]);
         }
         i++;
-    }, playTime);
+    }, playMoveTime);
 }
 
 function timeToMs(val) {
@@ -592,7 +593,7 @@ function doMove(cubies, xyz, angle) {
     
     if (anim) {
         tween = gsap.to(tempCube.rotation, {
-            duration: playMoveTime,
+            duration: stdTime,
             x: xyz === "x" ? angle : 0,
             y: xyz === "y" ? angle : 0,
             z: xyz === "z" ? angle : 0
