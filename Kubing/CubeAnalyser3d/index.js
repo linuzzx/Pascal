@@ -286,7 +286,7 @@ function playMoves() {
     anim = true;
     let mvs = (moves).split(" ");
     playMoveTime = $("#inputTime").val() === "" ? stdTime * 1000 : timeToMs($("#inputTime").val()) / mvs.length;
-
+console.log(playMoveTime);
     let i = 0;
     let interval = setInterval(() => {
         if (i === mvs.length) {
@@ -593,7 +593,7 @@ function doMove(cubies, xyz, angle) {
     
     if (anim) {
         tween = gsap.to(tempCube.rotation, {
-            duration: stdTime,
+            duration: playMoveTime / 1000,
             x: xyz === "x" ? angle : 0,
             y: xyz === "y" ? angle : 0,
             z: xyz === "z" ? angle : 0
