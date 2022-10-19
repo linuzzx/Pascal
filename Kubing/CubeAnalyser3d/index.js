@@ -529,6 +529,30 @@ function applyMove(turn) {
         case "M2'":
             doM2i();
             break;
+        case "S":
+            doS();
+            break;
+        case "S'":
+            doSi();
+            break;
+        case "S2":
+            doS2();
+            break;
+        case "S2'":
+            doS2i();
+            break;
+        case "E":
+            doE();
+            break;
+        case "E'":
+            doEi();
+            break;
+        case "E2":
+            doE2();
+            break;
+        case "E2'":
+            doE2i();
+            break;
         case "Rw":
             doRw();
             break;
@@ -782,6 +806,46 @@ function doM2() {
 function doM2i() {
     let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).x < 1 &&  cu.getWorldPosition(new THREE.Vector3()).x > -1});
     doMove(c, "x", -Math.PI);
+}
+
+function doS() {
+    let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).z < 1 &&  cu.getWorldPosition(new THREE.Vector3()).z > -1});
+    doMove(c, "z", -Math.PI / 2);
+}
+
+function doSi() {
+    let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).z < 1 &&  cu.getWorldPosition(new THREE.Vector3()).z > -1});
+    doMove(c, "z", Math.PI / 2);
+}
+
+function doS2() {
+    let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).z < 1 &&  cu.getWorldPosition(new THREE.Vector3()).z > -1});
+    doMove(c, "z", -Math.PI);
+}
+
+function doS2i() {
+    let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).z < 1 &&  cu.getWorldPosition(new THREE.Vector3()).z > -1});
+    doMove(c, "z", Math.PI);
+}
+
+function doE() {
+    let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y < 1 &&  cu.getWorldPosition(new THREE.Vector3()).y > -1});
+    doMove(c, "y", Math.PI / 2);
+}
+
+function doEi() {
+    let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y < 1 &&  cu.getWorldPosition(new THREE.Vector3()).y > -1});
+    doMove(c, "y", -Math.PI / 2);
+}
+
+function doE2() {
+    let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y < 1 &&  cu.getWorldPosition(new THREE.Vector3()).y > -1});
+    doMove(c, "y", Math.PI);
+}
+
+function doE2i() {
+    let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y < 1 &&  cu.getWorldPosition(new THREE.Vector3()).y > -1});
+    doMove(c, "y", -Math.PI);
 }
 
 function doRw() {
