@@ -1,0 +1,61 @@
+html {
+    background: #353535;
+    height: 100%;
+    margin: 0;
+    padding: 1%;
+}
+
+body {
+    background: #353535;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 1%;
+    color: black;
+}
+
+#cubeDisplayDiv {
+    
+}
+
+#cubeDisplay {
+    position: absolute;
+    height: 100%;
+    margin: auto;
+    left: -25%;
+}
+
+#analysisDiv {
+    display: grid;
+    height: 100%;
+    grid-template-rows: 1fr 2fr 7fr 2fr;
+    grid-gap: 2%;
+    z-index: 1;
+}
+
+#btnPlay {
+    position: absolute;
+    z-index: 1;
+}
+
+textarea {
+    font-size: xx-large;
+    padding: 0 1%;
+}
+
+#inputTime {
+    font-size: xx-large;
+    padding: 0 1%;
+}
+
+#tpsDisplay {
+    font-size: xx-large;
+    padding: 0 1%;
+}
+
+#tpsDiv {
+    background: #f1f1f1;
+    padding: 2%;
+}
