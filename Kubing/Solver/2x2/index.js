@@ -1,8 +1,64 @@
-let cube2x2 = "wwwwooooggggrrrrbbbbyyyy".split("");
+let cube2x2 = "164145153136263235254246".split("");
+let cleanCube2x2 = "164145153136263235254246".split("");
 let moves = ["R", "R2", "R'", "U", "U2", "U'", "F", "F2", "F'"];
+let scramble = "";
+
+$(() => {
+    drawScrambleNxN("#svgCube", 2, "");
+});
+
+function scrambleCube(scr) {
+    scramble = scr;
+    doTurns(scr);
+    drawScrambleNxN("#svgCube", 2, scr);
+}
 
 function resetCubeState() {
-    cube2x2 = "wwwwooooggggrrrrbbbbyyyy".split("");
+    cube2x2 = "164145153136263235254246".split("");
+}
+
+function solveCube() {
+    let solution = "";
+    outerloop : while (!isSolved()) {
+        let state = getState2x2(scramble);
+        let ind = solutions2x2.findIndex(s => s.state === state);
+        if (ind !== -1) {
+            solution = cleanMoves(scramble + " " + solutions2x2[ind].solution);
+            break outerloop;
+        }
+        let solLength = 1;
+        let arr = moves.slice();
+        while (ind === -1) {
+            if (solLength === 1) {
+                for (let m of arr) {
+                    state = getState2x2(scramble + " " + m);
+                    ind = solutions2x2.findIndex(s => s.state === state);
+                    if (ind !== -1) {
+                        solution = cleanMoves(scramble + " " + m + " " + solutions2x2[ind].solution);
+                        break outerloop;
+                    }
+                }
+            }
+            else {
+                let tArr = arr.slice();
+                for (let m1 of arr) {
+                    let prevMove = m1.split(" ")[m1.split(" ").length - 1][0];
+                    for (let m2 of moves.filter(m => {return m[0] !== prevMove})) {
+                        tArr.push(m1 + " " + m2);
+                        state = getState2x2(scramble + " " + m1 + " " + m2);
+                        ind = solutions2x2.findIndex(s => s.state === state);
+                        if (ind !== -1) {
+                            solution = cleanMoves(scramble + " " + m1 + " " + m2 + " " + solutions2x2[ind].solution);
+                            break outerloop;
+                        }
+                    }
+                }
+                arr = tArr.slice();
+            }
+            solLength++;
+        }
+    }
+    console.log("Solution:", solution)
 }
 
 function moveR() {
@@ -117,49 +173,38 @@ function doTurns(turns) {
     }
 }
 
-function solve() {
-    let scrambledState = cube2x2.slice();
-
-    if (isSolved()) {
-        $("#solution").text("Solved!");
-        return;
-    }
-    for (let i = 0; i < permutationList.length; i++) {
-        $("#solution").text("Solving at depth " + (i + 1));
-        cube2x2 = scrambledState.slice();
-
-        for (let p of permutationList[i]) {
-            doTurns(p);
-            if (isSolved()) {
-                $("#solution").text(p);
-
-                cube2x2 = scrambledState.slice();
-                printNiceCube();
-                return;
-            }
-        }
-    }
+function isSolved() {
+    return ((
+        cube2x2[0] + cube2x2[3] + cube2x2[9] + cube2x2[6] +
+        cube2x2[1] + cube2x2[11] + cube2x2[10] + cube2x2[8] +
+        cube2x2[7] + cube2x2[5] + cube2x2[4] + cube2x2[2] +
+        cube2x2[23] + cube2x2[13] + cube2x2[14] + cube2x2[16] +
+        cube2x2[17] + cube2x2[19] + cube2x2[20] + cube2x2[22] +
+        cube2x2[12] + cube2x2[15] + cube2x2[21] + cube2x2[18]
+    ) === cleanCube2x2);
 }
 
-function isSolved() {
-    for (let i = 0; i < 24; i+=4) {
-        if (!cube2x2.slice(i, i + 4).every((val, ind, arr) => val === arr[0])) {
-            return false;
-        }
-    }
+function getState2x2(mvs) {
+    resetCubeState();
+    doTurns(mvs);
 
-    return true;
+    return (
+        cube2x2[0] + cube2x2[3] + cube2x2[9] + cube2x2[6] +
+        cube2x2[1] + cube2x2[11] + cube2x2[10] + cube2x2[8] +
+        cube2x2[7] + cube2x2[5] + cube2x2[4] + cube2x2[2] +
+        cube2x2[23] + cube2x2[13] + cube2x2[14] + cube2x2[16] +
+        cube2x2[17] + cube2x2[19] + cube2x2[20] + cube2x2[22] +
+        cube2x2[12] + cube2x2[15] + cube2x2[21] + cube2x2[18]
+    );
 }
 
 function printNiceCube() {
-    let niceCube = "&nbsp;&nbsp;" + cube2x2[0] + cube2x2[1] + "<br/>" +
-                    "&nbsp;&nbsp;" + cube2x2[3] + cube2x2[2] + "<br/>" +
-                    cube2x2[4] + cube2x2[5] + cube2x2[8] + cube2x2[9] + cube2x2[12] + cube2x2[13] + cube2x2[16] + cube2x2[17] + "<br/>" +
-                    cube2x2[7] + cube2x2[6] + cube2x2[11] + cube2x2[10] + cube2x2[15] + cube2x2[14] + cube2x2[19] + cube2x2[18] + "<br/>" +
-                    "&nbsp;&nbsp;" + cube2x2[20] + cube2x2[21] + "<br/>" +
-                    "&nbsp;&nbsp;" + cube2x2[23] + cube2x2[22];
+    let niceCube = "&nbsp;&nbsp;" + cube2x2[0] + cube2x2[3] + "<br/>" +
+                    "&nbsp;&nbsp;" + cube2x2[9] + cube2x2[6] + "<br/>" +
+                    cube2x2[1] + cube2x2[11] + cube2x2[10] + cube2x2[8] + cube2x2[7] + cube2x2[5] + cube2x2[4] + cube2x2[2] + "<br/>" +
+                    cube2x2[23] + cube2x2[13] + cube2x2[14] + cube2x2[16] + cube2x2[17] + cube2x2[19] + cube2x2[20] + cube2x2[22] + "<br/>" +
+                    "&nbsp;&nbsp;" + cube2x2[12] + cube2x2[15] + "<br/>" +
+                    "&nbsp;&nbsp;" + cube2x2[21] + cube2x2[18];
 
     $("#drawCube").html(niceCube);
 }
-
-printNiceCube()
