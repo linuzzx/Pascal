@@ -362,7 +362,7 @@ function updateTPS() {
 
     const tps = (moveCount / timeToMs($("#inputTime").val()) * 1000).toFixed(2);
 
-    $("#tps").html(tps + " TPS (HTM)");
+    $("#tps").html(tps + " TPS (" + moveCount + " HTM)");
 }
 
 function updateURL() {
