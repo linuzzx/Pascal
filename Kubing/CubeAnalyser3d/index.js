@@ -20,7 +20,7 @@ $(function() {
 });
 
 $(window).resize(() => {
-    adjustSize();
+    // adjustSize();
 });
 
 function init() {
