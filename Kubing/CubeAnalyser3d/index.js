@@ -898,13 +898,13 @@ function adjustSize() {
     if ($("body").width() >= $("body").height()) {
         $("body").css("grid-template-columns", "1fr 1fr");
         $("body").css("grid-template-rows", "");
-        $("input, textarea, h1").css("font-size", "5vh");
+        $("input, textarea, h1, button").css("font-size", "5vh");
         renderer.setSize( $("#cubeDisplayDiv").width(), $("#cubeDisplayDiv").width() );
     }
     else {
         $("body").css("grid-template-columns", "");
         $("body").css("grid-template-rows", "1fr 2fr");
-        $("input, textarea, h1").css("font-size", "5vw");
+        $("input, textarea, h1, button").css("font-size", "5vw");
         renderer.setSize( $("#cubeDisplayDiv").height(), $("#cubeDisplayDiv").height() );
     }
 }
