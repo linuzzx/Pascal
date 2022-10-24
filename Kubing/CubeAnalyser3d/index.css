@@ -7,30 +7,36 @@ html {
 
 body {
     background: #353535;
+    width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
     grid-gap: 1%;
     color: black;
 }
 
 #cubeDisplayDiv {
-    
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 #cubeDisplay {
     position: absolute;
-    height: 100%;
+    left: 50%;
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+#cubeDisplay > canvas {
     margin: auto;
-    left: -25%;
 }
 
 #analysisDiv {
+    overflow-y: scroll;
     display: grid;
-    height: 100%;
-    grid-template-rows: 1fr 2fr 7fr 2fr;
+    grid-template-rows: 1fr 3fr 7fr 1fr;
     grid-gap: 2%;
     z-index: 1;
 }
@@ -58,4 +64,26 @@ textarea {
 #tpsDiv {
     background: #f1f1f1;
     padding: 2%;
+}
+
+/*Scrollbar*/
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888888;
+    border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555555; 
 }

@@ -16,11 +16,16 @@ $(function() {
     updateTPS();
     //listCubeTypes();
     init();
+    adjustSize();
+});
+
+$(window).resize(() => {
+    adjustSize();
 });
 
 function init() {
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera( 65, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    camera = new THREE.PerspectiveCamera( 60, 1, 0.1, 1000 );
 
     cube = new THREE.Object3D();
     planeCube = new THREE.Object3D();
@@ -153,7 +158,7 @@ function init() {
     
     renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setClearColor( 0x000000, 0 );
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize($("#cubeDisplayDiv").width(), $("#cubeDisplayDiv").width());
     $("#cubeDisplay").append( renderer.domElement );
 
     origo = new THREE.Vector3(0, 0, 0);
@@ -887,4 +892,17 @@ function doLw2() {
 function doLw2i() {
     let c = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).x < 1});
     doMove(c, "x", -Math.PI);
+}
+
+function adjustSize() {
+    if ($("body").width() >= $("body").height()) {
+        $("body").css("grid-template-columns", "1fr 1fr");
+        $("body").css("grid-template-rows", "");
+        renderer.setSize( $("#cubeDisplayDiv").width(), $("#cubeDisplayDiv").width() );
+    }
+    else {
+        $("body").css("grid-template-columns", "");
+        $("body").css("grid-template-rows", "1fr 2fr");
+        renderer.setSize( $("#cubeDisplayDiv").height(), $("#cubeDisplayDiv").height() );
+    }
 }
