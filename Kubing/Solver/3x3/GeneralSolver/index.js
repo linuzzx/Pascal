@@ -29,6 +29,6 @@ function logSolution(solution) {
 }
 
 function adjustSize() {
-    $("#inpScramble").css("font-size", "3vh");
+    $("#inpScramble, #inpEndState").css("font-size", "3vh");
     $("button").css("font-size", "3vh");
 }

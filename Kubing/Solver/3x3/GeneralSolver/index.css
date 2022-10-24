@@ -27,7 +27,7 @@ body {
     text-align: center;
 }
 
-#inpScramble {
+#inpScramble, #inpEndState {
     width: 95vw;
 }
 
