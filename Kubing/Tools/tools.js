@@ -3624,8 +3624,8 @@ function move(cube, xyz, w, r) {
         /*  */
     }
     else if (xyz === "y") {
-        rotateFace(cube, 0, r2);
-        rotateFace(cube, 5, r1);
+        rotateFace(cube, 0, r1);
+        rotateFace(cube, 5, r2);
         for (let i = 0; i < r; i++) {
             for (let k = 0; k < cube[0].length; k++) {
                 for (let j = 0; j < cube[0].length; j++) {
@@ -3645,6 +3645,7 @@ function move(cube, xyz, w, r) {
         rotateFace(cube, 3, 2);
         /*  */
         rotateFace(cube, 2, r1);
+        rotateFace(cube, 4, r2);
         if (w === cube[0].length) {
             rotateFace(cube, 4, r2);
         }
