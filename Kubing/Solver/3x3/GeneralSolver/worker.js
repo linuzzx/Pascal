@@ -14,13 +14,13 @@ onmessage = e => {
 
     // startState = getState(scramble);
     
-    solve();
+    solve(scramble, endState);
 }
 
-function solve() {
+function solve(scramble, endState) {
     let solution = "";
     getState(scramble);
-
+    
     if (endState !== solvedCubeState) {
         convertState();
     }
@@ -61,7 +61,7 @@ function getState(moves) {
 }
 
 function convertState() {
-    let endStateArr = endState.split("");
+    let endStateArr = endState;
     let uFace = endStateArr.substring(0, 9);
     let lFace = endStateArr.substring(9, 18);
     let fFace = endStateArr.substring(18, 27);
@@ -79,6 +79,10 @@ function convertState() {
         identifyEdge([dFace[1], fFace[7]]), identifyEdge([dFace[3], lFace[7]]), identifyEdge([dFace[5], rFace[7]]), identifyEdge([dFace[7], bFace[7]]),
         identifyEdge([fFace[3], lFace[5]]), identifyEdge([fFace[5], rFace[3]]), identifyEdge([bFace[3], rFace[5]]), identifyEdge([bFace[5], lFace[3]])
     ];
+
+    console.log(convCenters);
+    console.log(convCorners);
+    console.log(convEdges);
 }
 
 function identifyCenter(ce) {
