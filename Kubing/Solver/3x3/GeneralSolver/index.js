@@ -11,9 +11,12 @@ function solveCube(scramble) {
 
 function getSolution(solution) {
     console.log(solution);
+    if (solution = -1) {
+        $("#solution").html("<h1>Illegal end state</h1>");
+    }
 }
 
-function solve(scramble, callback, endState = "111111111666666666333333333555555555444444444222222222") {
+function solve(scramble, callback, endState = "wwwwwwwwwooooooooogggggggggrrrrrrrrrbbbbbbbbbyyyyyyyyy") {
     let worker = new Worker("./worker.js");
     worker.postMessage([scramble, endState]);
     worker.onmessage = e => {
