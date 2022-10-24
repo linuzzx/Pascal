@@ -69,12 +69,16 @@ function convertState() {
     let bFace = endStateArr.substring(36, 45);
     let dFace = endStateArr.substring(45, 54);
 
-    let convCenters = [uFace[4], lFace[4], fFace[4], rFace[4], bFace[4], dFace[4]];
+    let convCenters = [identifyCenter(uFace[4]), identifyCenter(lFace[4]), identifyCenter(fFace[4]), identifyCenter(rFace[4]), identifyCenter(bFace[4]), identifyCenter(dFace[4])];
     let convCorners = [
-        identifyCorner([uFace[0], lFace[0], bFace[2]]), [uFace[2], bFace[0], rFace[2]], [uFace[6], fFace[0], lFace[2]], [uFace[8], rFace[0], fFace[2]],
-        [dFace[0], lFace[8], fFace[6]], [dFace[2], fFace[8], rFace[6]], [dFace[6], bFace[8], lFace[6]], [dFace[8], rFace[8], bFace[6]]
+        identifyCorner([uFace[0], lFace[0], bFace[2]]), identifyCorner([uFace[2], bFace[0], rFace[2]]), identifyCorner([uFace[6], fFace[0], lFace[2]]), identifyCorner([uFace[8], rFace[0], fFace[2]]),
+        identifyCorner([dFace[0], lFace[8], fFace[6]]), identifyCorner([dFace[2], fFace[8], rFace[6]]), identifyCorner([dFace[6], bFace[8], lFace[6]]), identifyCorner([dFace[8], rFace[8], bFace[6]])
     ];
-    let convEdges = [];
+    let convEdges = [
+        identifyEdge([uFace[1], bFace[1]]), identifyEdge([uFace[3], lFace[1]]), identifyEdge([uFace[5], rFace[1]]), identifyEdge([uFace[7], fFace[1]]),
+        identifyEdge([dFace[1], fFace[7]]), identifyEdge([dFace[3], lFace[7]]), identifyEdge([dFace[5], rFace[7]]), identifyEdge([dFace[7], bFace[7]]),
+        identifyEdge([fFace[3], lFace[5]]), identifyEdge([fFace[5], rFace[3]]), identifyEdge([bFace[3], rFace[5]]), identifyEdge([bFace[5], lFace[3]])
+    ];
 }
 
 function identifyCenter(ce) {
@@ -94,7 +98,7 @@ function identifyCenter(ce) {
     }
 }
 
-function identifyCorner(c) {console.log(c);
+function identifyCorner(c) {
     let cp, co;
     if (c.includes("w") && c.includes("o") && c.includes("b")) {
         cp = 1;
@@ -132,7 +136,56 @@ function identifyCorner(c) {console.log(c);
 }
 
 function identifyEdge(e) {
-
+    let ep, eo;
+    if (e.includes("w") && e.includes("b")) {
+        ep = 1;
+        eo = 100 * e.indexOf("w");
+    }
+    else if (e.includes("w") && e.includes("o")) {
+        ep = 2;
+        eo = 100 * e.indexOf("w");
+    }
+    else if (e.includes("w") && e.includes("r")) {
+        ep = 3;
+        eo = 100 * e.indexOf("w");
+    }
+    else if (e.includes("w") && e.includes("g")) {
+        ep = 4;
+        eo = 100 * e.indexOf("w");
+    }
+    else if (e.includes("y") && e.includes("g")) {
+        ep = 5;
+        eo = 100 * e.indexOf("y");
+    }
+    else if (e.includes("y") && e.includes("o")) {
+        ep = 6;
+        eo = 100 * e.indexOf("y");
+    }
+    else if (e.includes("y") && e.includes("r")) {
+        ep = 7;
+        eo = 100 * e.indexOf("y");
+    }
+    else if (e.includes("y") && e.includes("b")) {
+        ep = 8;
+        eo = 100 * e.indexOf("y");
+    }
+    else if (e.includes("g") && e.includes("o")) {
+        ep = 9;
+        eo = 100 * e.indexOf("g");
+    }
+    else if (e.includes("g") && e.includes("r")) {
+        ep = 10;
+        eo = 100 * e.indexOf("g");
+    }
+    else if (e.includes("b") && e.includes("r")) {
+        ep = 11;
+        eo = 100 * e.indexOf("b");
+    }
+    else if (e.includes("b") && e.includes("o")) {
+        ep = 12;
+        eo = 100 * e.indexOf("b");
+    }
+    return ep + eo;
 }
 
 function printState() {

@@ -6,7 +6,7 @@ $(() => {
 });
 
 function solveCube(scramble) {
-    solve(scramble, getSolution);
+    solve(scramble, $("#inpEndState").val());
 }
 
 function getSolution(solution) {
