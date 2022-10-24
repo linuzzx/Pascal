@@ -11,7 +11,7 @@ function solveCube(scramble) {
 
 function getSolution(solution) {
     console.log(solution);
-    if (solution = -1) {
+    if (solution === -1) {
         $("#solution").html("<h1>Illegal end state</h1>");
     }
 }

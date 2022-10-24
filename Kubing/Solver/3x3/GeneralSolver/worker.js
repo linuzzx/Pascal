@@ -13,7 +13,7 @@ onmessage = e => {
     endState = e.data[1];
 
     // startState = getState(scramble);
-
+    
     solve();
 }
 
@@ -69,11 +69,11 @@ function convertState() {
     let bFace = endStateArr.substring(36, 45);
     let dFace = endStateArr.substring(45, 54);
 
-    let convCenters = [
-        [uFace[0], lFace[0], bFace[2]], [uFace[2], bFace[0], rFace[2]], [uFace[6], fFace[0], lFace[2]], [uFace[8], rFace[0], fFace[2]],
+    let convCenters = [uFace[4], lFace[4], fFace[4], rFace[4], bFace[4], dFace[4]];
+    let convCorners = [
+        identifyCorner([uFace[0], lFace[0], bFace[2]]), [uFace[2], bFace[0], rFace[2]], [uFace[6], fFace[0], lFace[2]], [uFace[8], rFace[0], fFace[2]],
         [dFace[0], lFace[8], fFace[6]], [dFace[2], fFace[8], rFace[6]], [dFace[6], bFace[8], lFace[6]], [dFace[8], rFace[8], bFace[6]]
     ];
-    let convCorners = [];
     let convEdges = [];
 }
 
@@ -94,32 +94,41 @@ function identifyCenter(ce) {
     }
 }
 
-function identifyCorner(c) {
+function identifyCorner(c) {console.log(c);
     let cp, co;
     if (c.includes("w") && c.includes("o") && c.includes("b")) {
         cp = 1;
+        co = 100 * c.indexOf("w");
     }
     else if (c.includes("w") && c.includes("b") && c.includes("r")) {
         cp = 2;
+        co = 100 * c.indexOf("w");
     }
     else if (c.includes("w") && c.includes("g") && c.includes("o")) {
         cp = 3;
+        co = 100 * c.indexOf("w");
     }
     else if (c.includes("w") && c.includes("r") && c.includes("g")) {
         cp = 4;
+        co = 100 * c.indexOf("w");
     }
     else if (c.includes("y") && c.includes("o") && c.includes("g")) {
         cp = 5;
+        co = 100 * c.indexOf("y");
     }
     else if (c.includes("y") && c.includes("g") && c.includes("r")) {
         cp = 6;
+        co = 100 * c.indexOf("y");
     }
     else if (c.includes("y") && c.includes("b") && c.includes("o")) {
         cp = 7;
+        co = 100 * c.indexOf("y");
     }
     else if (c.includes("y") && c.includes("r") && c.includes("b")) {
         cp = 8;
+        co = 100 * c.indexOf("y");
     }
+    return cp + co;
 }
 
 function identifyEdge(e) {
