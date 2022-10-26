@@ -7,12 +7,20 @@ $(() => {
 });
 
 function solveCube(scramble) {
+    $("#btnSolve").attr("disabled", true);
+    $("#btnScramble").attr("disabled", true);
+    $("#inpScramble").attr("disabled", true);
+    $("#inpEndState").attr("disabled", true);
     start = Date.now();
     solve(scramble, getSolution, $("#inpEndState").val());
 }
 
 function getSolution(solution) {
     if (solution[0] === 1) {
+        $("#btnSolve").attr("disabled", false);
+        $("#btnScramble").attr("disabled", false);
+        $("#inpScramble").attr("disabled", false);
+        $("#inpEndState").attr("disabled", false);
         let sol = removeRedundantMoves(solution[1]);
         $("#solution").html("<h1><b>Solution:</b> " + sol + "</h1><h1><b>Moves:</b> " + sol.split(" ").length + "</h1><br>");
         $("#searchDepth").html("<h1>" + (Date.now() - start) + " ms</h1>");
@@ -20,6 +28,13 @@ function getSolution(solution) {
     else if (solution[0] === 0) {
         $("#solution").html("<h1>" + solution[1] + "</h1>");
         $("#searchDepth").html("");
+    }
+    else if (solution[0] === -1) {
+        $("#solution").html("<h1>" + solution[1] + "</h1>");
+        $("#btnSolve").attr("disabled", false);
+        $("#btnScramble").attr("disabled", false);
+        $("#inpScramble").attr("disabled", false);
+        $("#inpEndState").attr("disabled", false);
     }
     
 }
