@@ -24,6 +24,8 @@ function getSolution(solution) {
         let sol = removeRedundantMoves(cleanMoves(solution[1]));
         $("#solution").html("<h1><b>Solution:</b> " + sol + "</h1><h1><b>Moves:</b> " + sol.split(" ").length + "</h1><br>");
         $("#searchDepth").html("<h1>" + (Date.now() - start) + " ms</h1>");
+        ///////////////////////////////////////////////////////////////////
+        drawScrambleNxN("#svgCube", 3, $("#inpScramble").val() + " " + sol);
     }
     else if (solution[0] === 0) {
         $("#solution").html("<h1>" + solution[1] + "</h1>");
@@ -46,6 +48,7 @@ function getSolution(solution) {
 }
 
 function cleanMoves(moves) {
+    moves = moves.trim();
     moves = moves.replaceAll(" ", ";");
 
     while (moves.includes(";;")) {
