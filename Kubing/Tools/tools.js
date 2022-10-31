@@ -3776,66 +3776,65 @@ function getCenters() {
     ];
 }
 
-function mirror(alg) {
-    let newAlg = alg;
+function mirror(alg, axis) {
+    let newAlg = "";
+    let moves = {
+        "M" : ["R", "L"],
+        "S" : ["F", "B"],
+        "E" : ["U", "D"]
+    }
 
-    //U
-    newAlg.replaceAll("U2","/")
-    newAlg.replaceAll("U'","i")
-    newAlg.replaceAll("U","U'")
-    newAlg.replaceAll("/","U2")
-    newAlg.replaceAll("i","U")
+    for (let i = 0; i < alg.split(" ").length; i++) {
+        let a = alg.split(" ")[i];
+        let w = a.includes("w") ? "w" : "";
+        if (moves[axis][0].includes(a[0])) {
+            if (a.includes("2'")) {
+                newAlg += getOpp(a[0]) + w + "2 ";
+            }
+            else if (a[a.length - 1] === "2") {
+                newAlg += getOpp(a[0]) + w + "2 ";
+            }
+            else if (a[a.length - 1] === "'") {
+                newAlg += getOpp(a[0]) + w + " ";
+            }
+            else {
+                newAlg += getOpp(a[0]) + w + "' ";
+            }
+        }
+        else if (a[0] !== axis) {
+            if (a.includes("2'")) {
+                newAlg += a[0] + w + "2 ";
+            }
+            else if (a[a.length - 1] === "2") {
+                newAlg += a[0] + w + "2 ";
+            }
+            else if (a[a.length - 1] === "'") {
+                newAlg += a[0] + w + " ";
+            }
+            else {
+                newAlg += a[0] + w + "' ";
+            }
+        }
+    }
 
-    //D
-    newAlg.replaceAll("D2","/")
-    newAlg.replaceAll("D'","i")
-    newAlg.replaceAll("D","D'")
-    newAlg.replaceAll("/","D2")
-    newAlg.replaceAll("i","D")
+    function getOpp(m) {
+        switch (m) {
+            case "R":
+                return "L";
+            case "L":
+                return "R";
+            case "U":
+                return "D";
+            case "D":
+                return "U";
+            case "F":
+                return "B";
+            case "B":
+                return "F";
+        }
+    }
 
-    //F
-    newAlg.replaceAll("F2","/")
-    newAlg.replaceAll("F'","i")
-    newAlg.replaceAll("F","F'")
-    newAlg.replaceAll("/","F2")
-    newAlg.replaceAll("i","F")
-
-    //B
-    newAlg.replaceAll("B2","/")
-    newAlg.replaceAll("B'","i")
-    newAlg.replaceAll("B","B'")
-    newAlg.replaceAll("/","B2")
-    newAlg.replaceAll("i","B")
-
-    //L
-    newAlg.replaceAll("L2","/")
-    newAlg.replaceAll("L'","i")
-    newAlg.replaceAll("L","R'")
-    newAlg.replaceAll("/","R2")
-    newAlg.replaceAll("i","R")
-
-    //R
-    newAlg.replaceAll("R2","/")
-    newAlg.replaceAll("R'","i")
-    newAlg.replaceAll("R","L'")
-    newAlg.replaceAll("/","L2")
-    newAlg.replaceAll("i","L")
-
-    //S
-    newAlg.replaceAll("S2","/")
-    newAlg.replaceAll("S'","i")
-    newAlg.replaceAll("S","S'")
-    newAlg.replaceAll("/","S2")
-    newAlg.replaceAll("i","S")
-
-    //E
-    newAlg.replaceAll("E2","/")
-    newAlg.replaceAll("E'","i")
-    newAlg.replaceAll("E","E'")
-    newAlg.replaceAll("/","E2")
-    newAlg.replaceAll("i","E")
-
-    return newAlg;
+    return newAlg.trim();
 }
 
 {
