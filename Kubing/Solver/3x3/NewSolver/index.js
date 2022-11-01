@@ -66,10 +66,6 @@ function solve(scramble, callback, endState = "wwwwwwwwwooooooooogggggggggrrrrrr
     }
 }
 
-function logSolution(solution) {
-    console.log(solution);
-}
-
 function adjustSize() {
     $("#inpScramble, #inpEndState").css("font-size", "3vh");
     $("button").css("font-size", "3vh");
