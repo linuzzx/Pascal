@@ -1,12 +1,21 @@
 let scramble;
 let endState;
 let solvedCubeState = "wwwwwwwwwooooooooogggggggggrrrrrrrrrbbbbbbbbbyyyyyyyyy";
+
 let centers = [1, 2, 3, 4, 5, 6];
 let corners = [1, 2, 3, 4, 5, 6, 7, 8];
 let edges = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+let cornersO = [0, 0, 0, 0, 0, 0, 0, 0];
+let edgesO = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 let convertedCenters = [1, 2, 3, 4, 5, 6];
 let convertedCorners = [1, 2, 3, 4, 5, 6, 7, 8];
 let convertedEdges = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+let convCornersO = [0, 0, 0, 0, 0, 0, 0, 0];
+let convEdgesO = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
 let centerSolution = "";
 // ubl ubr ufl ufr dfl dfr dbl dbr
 // ub ul ur uf df dl dr db fl fr br bl
@@ -1214,3 +1223,24 @@ function _lwi() {
     _li();
     _mi();
 }
+
+let moveTable = {
+    "U" : [],
+    "U2" : [],
+    "U'" : [],
+    "D" : [],
+    "D2" : [],
+    "D'" : [],
+    "R" : [],
+    "R2" : [],
+    "R'" : [],
+    "L" : [],
+    "L2" : [],
+    "L'" : [],
+    "F" : [],
+    "F2" : [],
+    "F'" : [],
+    "B" : [],
+    "B2" : [],
+    "B'" : []
+};

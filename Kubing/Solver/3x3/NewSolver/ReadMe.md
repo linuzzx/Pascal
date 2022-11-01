@@ -4,3 +4,5 @@ Lag en representasjon med:
 - hjørner
 - orientasjon
 - avstand fra løst state for hver brikke
+
+Sjekk løsning for inverse også
