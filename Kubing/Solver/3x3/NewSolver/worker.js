@@ -187,7 +187,9 @@ Final   125154132143623634652645151214136362646532345452
 function getState(moves, step = null) {
     step === "convert" ? "" : resetState();
     for (let m of moves.split(" ")) {
-        move(m);
+        if (m !== "") {
+            move(m);
+        }
     }
     
     if (step !== null) {
@@ -226,15 +228,7 @@ function getState(moves, step = null) {
             for (let e of edges) {
                 state += getEdgeColors(e).map(e1 => e1.replaceAll("w", "1").replaceAll("o", "2").replaceAll("g", "3").replaceAll("r", "4").replaceAll("b", "5").replaceAll("y", "6")).join("");
             }
-        }/* 
-        else {
-            for (let c of corners) {
-                state += numberifyPiece(getCornerColors(c), step);
-            }
-            for (let e of edges) {
-                state += numberifyPiece(getEdgeColors(e), step);
-            }
-        } */
+        }
         return state;
     }
 }
@@ -505,48 +499,7 @@ function isHTR(mvs) {
     getState(mvs, "Final");
     let state = corners.map(c => c % 100).join("");
     let ind = solutionsRealHTR.findIndex(s => s.state === state);
-    return ind !== -1;/* 
-
-    let c = [
-        getCornerColors(corners[0]), getCornerColors(corners[1]), getCornerColors(corners[2]), getCornerColors(corners[3]),
-        getCornerColors(corners[4]), getCornerColors(corners[5]), getCornerColors(corners[6]), getCornerColors(corners[7])
-    ];
-
-    let e = [
-        getEdgeColors(edges[0]), getEdgeColors(edges[1]), getEdgeColors(edges[2]), getEdgeColors(edges[3]),
-        getEdgeColors(edges[4]), getEdgeColors(edges[5]), getEdgeColors(edges[6]), getEdgeColors(edges[7]),
-        getEdgeColors(edges[8]), getEdgeColors(edges[9]), getEdgeColors(edges[10]), getEdgeColors(edges[11])
-    ];
-
-    let cU = [c[0][0], c[1][0], c[2][0], c[3][0]];
-    let cL = [c[0][1], c[2][2], c[6][2], c[4][1]];
-    let cF = [c[2][1], c[3][2], c[4][2], c[5][1]];
-    let cR = [c[3][1], c[1][2], c[5][2], c[7][1]];
-    let cB = [c[1][1], c[0][2], c[7][2], c[6][1]];
-    let cD = [c[4][0], c[5][0], c[6][0], c[7][0]];
-
-    let eU = [e[0][0], e[1][0], e[2][0], e[3][0]];
-    let eL = [e[0][1], e[2][1], e[6][1], e[4][1]];
-    let eF = [e[2][1], e[3][0], e[4][0], e[5][1]];
-    let eR = [e[3][1], e[1][1], e[5][1], e[7][1]];
-    let eB = [e[1][1], e[0][0], e[7][0], e[6][1]];
-    let eD = [e[4][0], e[5][0], e[6][0], e[7][0]];
-
-    return (
-        cU.filter(c1 => {return c1 === "w" ||  c1 === "y"}).length === 4 &&
-        cL.filter(c1 => {return c1 === "o" ||  c1 === "r"}).length === 4 &&
-        cF.filter(c1 => {return c1 === "g" ||  c1 === "b"}).length === 4 &&
-        cR.filter(c1 => {return c1 === "r" ||  c1 === "o"}).length === 4 &&
-        cB.filter(c1 => {return c1 === "b" ||  c1 === "g"}).length === 4 &&
-        cD.filter(c1 => {return c1 === "y" ||  c1 === "w"}).length === 4 &&
-
-        eU.filter(e1 => {return e1 === "w" ||  e1 === "y"}).length === 4 &&
-        eL.filter(e1 => {return e1 === "o" ||  e1 === "r"}).length === 4 &&
-        eF.filter(e1 => {return e1 === "g" ||  e1 === "b"}).length === 4 &&
-        eR.filter(e1 => {return e1 === "r" ||  e1 === "o"}).length === 4 &&
-        eB.filter(e1 => {return e1 === "b" ||  e1 === "g"}).length === 4 &&
-        eD.filter(e1 => {return e1 === "y" ||  e1 === "w"}).length === 4
-    ); */
+    return ind !== -1;
 }
 
 function printState() {
@@ -656,14 +609,12 @@ function printState() {
     console.log(cube);
 }
 
-function move(m) {
-    resetState();
-
+function move(m) {    
     centers = moveTable[m].ce.map(ce1 => centers[ce1]);
     corners = moveTable[m].c.map(c1 => corners[c1]);
     edges = moveTable[m].e.map(e1 => edges[e1]);
-    cornersO = moveTable[m].co;
-    edgesO = moveTable[m].eo;
+    cornersO = moveTable[m].co.map((co1, i) => (cornersO[i] + co1) % 3);
+    edgesO = moveTable[m].eo.map((eo1, i) => (edgesO[i] + eo1) % 2);
 }
 
 let moveTable = {
