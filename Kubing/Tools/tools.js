@@ -5251,15 +5251,15 @@ class CubePlayer extends HTMLElement {
         }
         
         function adjustSize() {
-            $("#cubePlayer").parent().css("width", "100%");
-            $("#cubePlayer").parent().css("height", "100%");
+            $("#cubePlayer").parent().css("width", "50%");
+            $("#cubePlayer").parent().css("height", "50%");
             $("#cubePlayer").parent().css("position", "relative");
 
             $("#cubePlayer").css("position", "absolute");
             $("#cubePlayer").css("left", "50%");
 
             $("#cubePlayer > canvas").css("margin", "auto");
-            
+
             $("#btnPlay").css("position", "absolute");
             $("#btnPlay").css("z-index", "1");
             
