@@ -1,18 +1,21 @@
 let step = "0";
 let start;
+let scramble;
 $(() => {
     drawScrambleNxN('#svgCube', 3, $("#inpScramble").val());
+    initThreeJS();
 
     adjustSize();
 });
 
-function solveCube(scramble) {
+function solveCube(scr) {
+    scramble = scr;
     $("#btnSolve").attr("disabled", true);
     $("#btnScramble").attr("disabled", true);
     $("#inpScramble").attr("disabled", true);
     $("#inpEndState").attr("disabled", true);
     start = Date.now();
-    solve(scramble, getSolution, $("#inpEndState").val());
+    solve(scr, getSolution, $("#inpEndState").val());
 }
 
 function getSolution(solution) {
@@ -24,8 +27,8 @@ function getSolution(solution) {
         let sol = removeRedundantMoves(cleanMoves(solution[1]));
         $("#solution").html("<h1><b>Solution:</b> " + sol + "</h1><h1><b>Moves:</b> " + sol.split(" ").length + "</h1><br>");
         $("#searchDepth").html("<h1>" + (Date.now() - start) + " ms</h1>");
-        ///////////////////////////////////////////////////////////////////
-        drawScrambleNxN("#svgCube", 3, $("#inpScramble").val() + " " + sol);
+        $("#solutionCube").html("<cube-player scramble=\""+scramble+"\" solution=\""+sol+"\" time=\"\"></cube-player>");
+        adjustSize();
     }
     else if (solution[0] === 0) {
         $("#solution").html("<h1>" + solution[1] + "</h1>");

@@ -39,6 +39,11 @@ body {
     color: white;
 }
 
+#solutionCube {
+    width: 50%;
+    height: auto;
+}
+
 table {
     color: white;
 }
