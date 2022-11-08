@@ -26,7 +26,7 @@ function getSolution(solution) {
         let sol = removeRedundantMoves(cleanMoves(solution[1]));
         $("#solution").html("<h1><b>Solution:</b> " + sol + "</h1><h1><b>Moves:</b> " + sol.split(" ").length + "</h1><br>");
         $("#searchDepth").html("<h1>" + (Date.now() - start) + " ms</h1>");
-        $("#solutionCube").html("<cube-player scramble=\""+scramble+"\" solution=\""+sol+"\" time=\"\"></cube-player>");
+        $("#solutionCube").html("<div style='width: 50%; height: 50%;'><cube-player scramble=\""+scramble+"\" solution=\""+sol+"\" time=\"\"></cube-player></div>");
         adjustSize();
     }
     else if (solution[0] === 0) {
