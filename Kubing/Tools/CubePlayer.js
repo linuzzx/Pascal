@@ -268,36 +268,6 @@ export class CubePlayer extends HTMLElement {
             }
         }
         
-        /* function playMoves() {
-            $("#btnPlay").prop('disabled', true);
-            resetState();
-            const setup = scramble;
-            const moves = solution;
-        
-            for (let m of (setup).split(" ")) {
-                mv(m);
-            }
-        
-            anim = true;
-            let mvs = (moves).split(" ");
-            playMoveTime = time === "" ? stdTime * 1000 : timeToMs(time) / mvs.length;
-            
-            let i = 0;
-            let interval = setInterval(() => {
-                if (i === mvs.length) {
-                    clearInterval(interval);
-                    anim = false;
-                    $("#btnPlay").prop('disabled', false);
-                }
-                else {
-                    if (tween) {
-                        tween.progress(1);
-                    }
-                    mv(mvs[i]);
-                }
-                i++;
-            }, playMoveTime);
-        } */
         $("#btnPlay").on("click", () => {
             $("#btnPlay").prop('disabled', true);
             resetState();
@@ -310,7 +280,7 @@ export class CubePlayer extends HTMLElement {
         
             anim = true;
             let mvs = (moves).split(" ");
-            playMoveTime = time === "" ? stdTime * 1000 : timeToMs(time) / mvs.length;
+            playMoveTime = time === "" ? stdTime * 1000 : time / mvs.length;
             
             let i = 0;
             let interval = setInterval(() => {
@@ -329,31 +299,6 @@ export class CubePlayer extends HTMLElement {
             }, playMoveTime);
         });
         
-        function timeToMs(val) {
-            let h = 0;
-            let m = 0;
-            let s = 0;
-            let hs = 0;
-        
-            if (val.split(":").length - 1 === 2) {
-                h = val.split(":")[0];
-                m = val.split(":")[1];
-                s = val.split(":")[1].split(".")[0];
-                hs = val.split(":")[1].split(".")[1];
-            }
-            else if (val.split(":").length - 1 === 1) {
-                m = val.split(":")[0];
-                s = val.split(":")[0].split(".")[0];
-                hs = val.split(":")[0].split(".")[1];
-            }
-            else {
-                s = val.split(".")[0];
-                hs = val.split(".")[1];
-            }
-        
-            return h * 3600000 + m * 60000 + s * 1000 + hs * 10;
-        }
-        
         function getMoves(moves) {
             let strSetup = "";
             let arrSetup = [];
@@ -371,66 +316,6 @@ export class CubePlayer extends HTMLElement {
         
         function checkEmpty(move) {
             return move !== "";
-        }
-        
-        function updateTPS() {
-            let moveCount = 0;
-        
-            for (let s of getMoves("#taMoves").split(" ")) {
-                if (s.includes("R") || s.includes("L") || s.includes("F") || s.includes("B") || s.includes("U") || s.includes("D")) {
-                    moveCount++;
-                }
-                else if (s.includes("M") || s.includes("S") || s.includes("E")) {
-                    moveCount += 2;
-                }
-            }
-        
-            const tps = (moveCount / timeToMs($("#inputTime").val()) * 1000).toFixed(2);
-        
-            $("#tps").html(tps + " TPS (" + moveCount + " HTM)");
-        }
-        
-        function updateURL() {
-            let rawSetup = $("#taSetup").val();
-            let rawMoves = $("#taMoves").val();
-            let rawTime = $("#inputTime").val();
-            let urlExtra = "?";
-        
-            // Må definere mellomrom, ', //, og ny linje
-            const space = "%20";
-            const inverse = "%27";
-            const slash = "%2F";
-            const newLine = "%0A";
-            const and = "%26";
-        
-            // rawSetup.replaceAll(" ", "%20").replaceAll("'", "%27").replaceAll("/", "%2F").replaceAll("\n", "%0A").replaceAll("&", "%26").replaceAll("=", "%3D");
-            // rawMoves.replaceAll(" ", "%20").replaceAll("'", "%27").replaceAll("/", "%2F").replaceAll("\n", "%0A").replaceAll("&", "%26").replaceAll("=", "%3D");
-        
-            rawSetup = encodeURIComponent(rawSetup);
-            rawMoves = encodeURIComponent(rawMoves);
-            if (rawSetup !== "") {
-                urlExtra += "setup="+rawSetup;
-                if (rawMoves !== "") {
-                    urlExtra += "&moves="+rawMoves;
-                }
-                if (rawTime !== "") {
-                    urlExtra += "&time="+rawTime;
-                }
-            }
-            else if (rawMoves !== "") {
-                urlExtra += "moves="+rawMoves;
-                if (rawTime !== "") {
-                    urlExtra += "&time="+rawTime;
-                }
-            }
-            else if (rawTime !== "") {
-                urlExtra += "time="+rawTime;
-            }
-        
-            const state = {};
-            const title = "";
-        
-            history.pushState(state, title, urlExtra);
         }
         
         function mv(turn) {
