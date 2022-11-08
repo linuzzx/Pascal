@@ -1,19 +1,9 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
+export * as $ from 'https://code.jquery.com/jquery-3.6.0.min.js';
 
 export function initThreeJS() {
-    let scriptJquery = document.createElement('script');
-    let scriptThreeJsMin = document.createElement('script');
-    let scriptThreeJs = document.createElement('script');
     let scriptGsap = document.createElement('script');
-    
-    scriptJquery.setAttribute('src','https://code.jquery.com/jquery-3.6.0.min.js');
-    scriptThreeJsMin.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js');
-    scriptThreeJs.setAttribute('src','https://threejs.org/build/three.js');
     scriptGsap.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js');
-
-    document.head.appendChild(scriptJquery);
-    document.head.appendChild(scriptThreeJsMin);
-    document.head.appendChild(scriptThreeJs);
     document.head.appendChild(scriptGsap);
 }
 
@@ -928,8 +918,8 @@ export class CubePlayer extends HTMLElement {
         }
         
         function adjustSize() {
-            $("#cubePlayer").css("width", "50%");
-            $("#cubePlayer").css("height", "50%");
+            $("#cubePlayer").css("width", "100%");
+            $("#cubePlayer").css("height", "100%");
             $("#cubePlayer").css("position", "relative");
 
 
