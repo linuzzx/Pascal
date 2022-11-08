@@ -12,7 +12,7 @@ export class CubePlayer extends HTMLElement {
         initThreeJS();
         let scramble = this.getAttribute("scramble") || "";
         let solution = this.getAttribute("solution") || "";
-        let time = this.getAttribute("time") || "";
+        let time = parseInt(this.getAttribute("time")) || "";
 
         this.innerHTML = "<button id='btnPlay'>Play</button><div id='cubePlayer'></div>";
 
