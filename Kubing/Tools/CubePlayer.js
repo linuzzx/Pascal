@@ -24,7 +24,7 @@ export class CubePlayer extends HTMLElement {
         let solution = this.getAttribute("solution") || "";
         let time = this.getAttribute("time") || "";
 
-        this.innerHTML = "<div id='cubePlayer'></div><br><button id='btnPlay'>Play</button>";
+        this.innerHTML = "<button id='btnPlay'>Play</button><br><div id='cubePlayer'></div>";
 
         let url = "Kubing/CubeAnalyser/?";
         const cubeTypes = ["3x3", "2x2", "4x4", "Square-1"]; //["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx","Pyraminx", "Skewb", "Square-1"];
@@ -928,12 +928,10 @@ export class CubePlayer extends HTMLElement {
         }
         
         function adjustSize() {
-            $("#cubePlayer").parent().css("width", "50%");
-            $("#cubePlayer").parent().css("height", "50%");
-            $("#cubePlayer").parent().css("position", "relative");
+            $("#cubePlayer").css("width", "50%");
+            $("#cubePlayer").css("height", "50%");
+            $("#cubePlayer").css("position", "relative");
 
-            $("#cubePlayer").css("position", "absolute");
-            $("#cubePlayer").css("left", "50%");
 
             $("#cubePlayer > canvas").css("margin", "auto");
 
@@ -943,12 +941,12 @@ export class CubePlayer extends HTMLElement {
             if ($("body").width() >= $("body").height()) {
                 $("body").css("grid-template-columns", "1fr 1fr");
                 $("body").css("grid-template-rows", "");
-                renderer.setSize( $("#cubePlayer").parent().width(), $("#cubePlayer").parent().width() );
+                renderer.setSize( $("#cubePlayer").width(), $("#cubePlayer").width() );
             }
             else {
                 $("body").css("grid-template-columns", "");
                 $("body").css("grid-template-rows", "1fr 2fr");
-                renderer.setSize( $("#cubePlayer").parent().height(), $("#cubePlayer").parent().height() );
+                renderer.setSize( $("#cubePlayer").height(), $("#cubePlayer").height() );
             }
         }
     }
