@@ -59,8 +59,8 @@ textarea {
 }
 
 #tpsDiv {
-    background: #f1f1f1;
-    padding: 2%;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
 }
 
 /*Scrollbar*/

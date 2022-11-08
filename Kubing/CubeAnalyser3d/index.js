@@ -9,8 +9,10 @@ let anim = false;
 let stdTime = 0.15;
 let playMoveTime;
 let tween;
+let giikerStep;
 
 $(function() {
+    playMoveTime = stdTime * 1000;
     getParams();
     updateArrays();
     updateTPS();
@@ -291,7 +293,7 @@ function playMoves() {
     anim = true;
     let mvs = (moves).split(" ");
     playMoveTime = $("#inputTime").val() === "" ? stdTime * 1000 : timeToMs($("#inputTime").val()) / mvs.length;
-console.log(playMoveTime);
+    
     let i = 0;
     let interval = setInterval(() => {
         if (i === mvs.length) {
@@ -367,7 +369,7 @@ function updateTPS() {
 
     const tps = (moveCount / timeToMs($("#inputTime").val()) * 1000).toFixed(2);
 
-    $("#tps").html(tps + " TPS (" + moveCount + " HTM)");
+    $("#tps").val(tps + " TPS (" + moveCount + " HTM)");
 }
 
 function updateURL() {
@@ -1034,5 +1036,98 @@ function adjustSize() {
         $("body").css("grid-template-rows", "1fr 2fr");
         $("input, textarea, h1, button").css("font-size", "5vw");
         renderer.setSize( $("#cubeDisplayDiv").height(), $("#cubeDisplayDiv").height() );
+    }
+}
+
+function resetInputs() {
+    $("#inputTime").val("").change();
+    $("#taSetup").val("").change();
+    $("#taMoves").val("").change();
+}
+
+async function connectToGiiker() {
+    try {
+        const giiker = await connect()
+        .then(() => {
+            $("#btnGiiker").attr("disabled", true);
+            alert("Select scramble/solution field to enter moves with Giiker");
+
+            giikerStep = "";
+
+            $("#taSetup").on("focus", () => {
+                giikerStep = "scramble";
+                $("#taSetup").css("background-color", "#33C481");
+            });
+            $("#taSetup").focusout(() => {
+                $("#taSetup").css("background-color", "#FFFFFF");
+            });
+            $("#taMoves").on("focus", () => {
+                giikerStep = "solution";
+                $("#taMoves").css("background-color", "#33C481");
+            });
+            $("#taMoves").focusout(() => {
+                $("#taMoves").css("background-color", "#FFFFFF");
+            });
+        });
+        // setVirtualCube(true);
+
+        giiker.on('connected', () => {
+            alert("Giiker cube connected");
+        });
+
+        giiker.on('move', (move) => {/* console.log(move);
+            doAlg(move.notation); */
+        });
+
+        giiker.on('disconnected', () => {
+            alert("Giiker cube disconnected");
+            $("#btnGiiker").attr("disabled", false);
+        })
+    
+    } catch(e) {
+        $("#btnGiiker").attr("disabled", false);
+    }
+}
+
+function giikerMove(move) {
+    resetState();
+    if (giikerStep === "scramble") {
+        let newScramble = $("#taSetup").val();
+
+        anim = false;
+        for (let m of newScramble.split(" ")) {
+            applyMove(m);
+        }
+
+        if (newScramble !== "" && newScramble.split(" ")[newScramble.split(" ").length - 1] === move) {
+            newScramble = newScramble.split(" ").slice(0, newScramble.split(" ").length - 1).join(" ") + " " + move.split("")[0] + "2";
+        }
+        else {
+            newScramble = (newScramble + " " + move).trim();
+        }
+        $("#taSetup").val(newScramble).change();
+
+        applyMove(move);
+    }
+    else if (giikerStep === "solution") {
+        let newSolution = $("#taMoves").val();
+
+        anim = false;
+        for (let m of $("#taSetup").val().split(" ")) {
+            applyMove(m);
+        }
+        for (let m of newSolution.split(" ")) {
+            applyMove(m);
+        }
+
+        if (newSolution !== "" && newSolution.split(" ")[newSolution.split(" ").length - 1] === move) {
+            newSolution = newSolution.split(" ").slice(0, newSolution.split(" ").length - 1).join(" ") + " " + move.split("")[0] + "2";
+        }
+        else {
+            newSolution = (newSolution + " " + move).trim();
+        }
+        $("#taMoves").val(newSolution).change();
+
+        applyMove(move);
     }
 }

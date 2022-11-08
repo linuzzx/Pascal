@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="index.css">
         <script src="https://threejs.org/build/three.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+        <script src="giiker.js"></script>
         <script src="index.js" defer></script>
     </head>
     <body>
@@ -22,12 +23,15 @@
             <button id="btnPlay" onclick="playMoves()">Play</button>
         </div>
         <div id="analysisDiv">
-            <!--<textarea type="text" id="taTitle" placeholder="Title" rows="1" onkeyup="updateURL()"></textarea>-->
-            <input type="number" id="inputTime" placeholder="Time" step="0.01" onkeyup="updateURL(); updateTPS()">
-            <textarea type="text" id="taSetup" placeholder="Setup" rows="2" onkeyup="updateURL(); updateArrays()"></textarea>
-            <textarea type="text" id="taMoves" placeholder="Moves" rows="8" onkeyup="updateURL(); updateArrays(); updateTPS()"></textarea>
+            <div style="display: grid; grid-template-columns: 3fr 1fr;">
+                <input type="number" id="inputTime" placeholder="Time" step="0.01" onchange="updateURL(); updateTPS()" onkeyup="updateURL(); updateTPS()">
+                <button id="btnGiiker" onclick="connectToGiiker()">Giiker</button>
+            </div>
+            <textarea type="text" id="taSetup" placeholder="Setup" rows="2" onchange="updateURL(); updateArrays()" onkeyup="updateURL(); updateArrays()"></textarea>
+            <textarea type="text" id="taMoves" placeholder="Moves" rows="8" onchange="updateURL(); updateArrays(); updateTPS()" onkeyup="updateURL(); updateArrays(); updateTPS()"></textarea>
             <div id="tpsDiv">
-                <h1 id="tps"></h1>
+                <input type="text" id="tps" readonly></input>
+                <button onclick="resetInputs()">Reset</button>
             </div>
             
             <!--<div id="tools">
