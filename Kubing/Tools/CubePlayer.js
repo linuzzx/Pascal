@@ -3,7 +3,7 @@ export * as $ from 'https://code.jquery.com/jquery-3.6.0.min.js';
 
 export function initThreeJS() {
     let scriptGsap = document.createElement('script');
-    scriptGsap.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js');
+    scriptGsap.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js');
     document.head.appendChild(scriptGsap);
 }
 
