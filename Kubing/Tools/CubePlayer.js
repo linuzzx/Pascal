@@ -468,8 +468,6 @@ export class CubePlayer extends HTMLElement {
         }
         
         function doMv(cubies, xyz, angle) {
-            /* let axis = xyz === "x" ? xAxis : xyz === "y" ? yAxis : zAxis;
-            let euler = calcRotationAroundAxis(xyz, angle); */
             let tempCube = new THREE.Object3D();
             
             for (let cubie of cubies) {
