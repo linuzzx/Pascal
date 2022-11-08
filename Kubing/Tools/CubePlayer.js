@@ -16,6 +16,13 @@ export class CubePlayer extends HTMLElement {
 
         this.innerHTML = "<button id='btnPlay'>Play</button><div id='cubePlayer'></div>";
 
+        if (solution === "") {
+            $("#btnPlay").attr("disabled", true);
+        }
+        else {
+            $("#btnPlay").attr("disabled", false);
+        }
+
         let planes = [];
         let scene, camera, renderer;
         let anim = false;
@@ -872,6 +879,10 @@ export class CubePlayer extends HTMLElement {
                 renderer.setSize($("#cubePlayer").parent().width(), $("#cubePlayer").parent().width());
             }
         }
+        /* resetState();
+        for (let m of scramble.split(" ")) {
+            mv(m);
+        } */
     }
 }
 
