@@ -4212,19 +4212,16 @@ function initThreeJS() {
     let scriptJquery = document.createElement('script');
     let scriptThreeJsMin = document.createElement('script');
     let scriptThreeJs = document.createElement('script');
-    let scriptThreeJsNpm = document.createElement('script');
     let scriptGsap = document.createElement('script');
     
     scriptJquery.setAttribute('src','https://code.jquery.com/jquery-3.6.0.min.js');
     scriptThreeJsMin.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js');
     scriptThreeJs.setAttribute('src','https://threejs.org/build/three.js');
-    scriptThreeJsNpm.setAttribute('src','https://www.unpkg.com/browse/three-js@79.0.0/');
     scriptGsap.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js');
 
     document.head.appendChild(scriptJquery);
     document.head.appendChild(scriptThreeJsMin);
     document.head.appendChild(scriptThreeJs);
-    document.head.appendChild(scriptThreeJsNpm);
     document.head.appendChild(scriptGsap);
 }
 
