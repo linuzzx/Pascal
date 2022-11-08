@@ -14,7 +14,7 @@ export class CubePlayer extends HTMLElement {
         let solution = this.getAttribute("solution") || "";
         let time = this.getAttribute("time") || "";
 
-        this.innerHTML = "<button id='btnPlay'>Play</button><br><div id='cubePlayer'></div>";
+        this.innerHTML = "<button id='btnPlay'>Play</button><div id='cubePlayer'></div>";
 
         let url = "Kubing/CubeAnalyser/?";
         const cubeTypes = ["3x3", "2x2", "4x4", "Square-1"]; //["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx","Pyraminx", "Skewb", "Square-1"];
@@ -868,10 +868,7 @@ export class CubePlayer extends HTMLElement {
         }
         
         function adjustSize() {
-            $("#cubePlayer").css("width", "100%");
-            $("#cubePlayer").css("height", "100%");
             $("#cubePlayer").css("position", "relative");
-
 
             $("#cubePlayer > canvas").css("margin", "auto");
 
@@ -879,14 +876,14 @@ export class CubePlayer extends HTMLElement {
             $("#btnPlay").css("z-index", "1");
             
             if ($("body").width() >= $("body").height()) {
-                $("body").css("grid-template-columns", "1fr 1fr");
-                $("body").css("grid-template-rows", "");
-                renderer.setSize( $("#cubePlayer").width(), $("#cubePlayer").width() );
+                $("#cubePlayer").css("height", $("#cubePlayer").parent().height());
+                $("#cubePlayer").css("width", $("#cubePlayer").parent().height());
+                renderer.setSize($("#cubePlayer").parent().height(), $("#cubePlayer").parent().height());
             }
             else {
-                $("body").css("grid-template-columns", "");
-                $("body").css("grid-template-rows", "1fr 2fr");
-                renderer.setSize( $("#cubePlayer").height(), $("#cubePlayer").height() );
+                $("#cubePlayer").css("width", $("#cubePlayer").width());
+                $("#cubePlayer").css("height", $("#cubePlayer").width());
+                renderer.setSize($("#cubePlayer").parent().width(), $("#cubePlayer").parent().width());
             }
         }
     }
