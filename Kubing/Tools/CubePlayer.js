@@ -16,10 +16,6 @@ export class CubePlayer extends HTMLElement {
 
         this.innerHTML = "<button id='btnPlay'>Play</button><div id='cubePlayer'></div>";
 
-        let url = "Kubing/CubeAnalyser/?";
-        const cubeTypes = ["3x3", "2x2", "4x4", "Square-1"]; //["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx","Pyraminx", "Skewb", "Square-1"];
-        let setupArray = [];
-        let movesArray = [];
         let planes = [];
         let scene, camera, renderer;
         let anim = false;
@@ -27,10 +23,7 @@ export class CubePlayer extends HTMLElement {
         let playMoveTime;
         let tween;
         let planeCube;
-        let origo, xAxis, yAxis, zAxis;
 
-        // updateArrays();
-        // updateTPS();
         init();
         adjustSize();
 
@@ -171,11 +164,6 @@ export class CubePlayer extends HTMLElement {
             renderer.setClearColor( 0x000000, 0 );
             renderer.setSize($("#cubePlayer").parent().width(), $("#cubePlayer").parent().width());
             $("#cubePlayer").append( renderer.domElement );
-        
-            origo = new THREE.Vector3(0, 0, 0);
-            xAxis = new THREE.Vector3(1, 0, 0);
-            yAxis = new THREE.Vector3(0, 1, 0);
-            zAxis = new THREE.Vector3(0, 0, 1);
         
             anim = false;
             animate();
