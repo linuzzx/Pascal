@@ -3,7 +3,6 @@ let start;
 let scramble;
 $(() => {
     drawScrambleNxN('#svgCube', 3, $("#inpScramble").val());
-    initThreeJS();
 
     adjustSize();
 });
