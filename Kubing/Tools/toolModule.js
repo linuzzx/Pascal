@@ -1,1 +1,2 @@
-export * as THREE from 'https://cdn.skypack.dev/three@0.129.0/build/three.module.js';
+export * as THREE from '/-/three@v0.129.0-etawtYd3YiVcjRaPT4iS/dist=es2019,mode=imports/optimized/three.js';
+export {default} from '/-/three@v0.129.0-etawtYd3YiVcjRaPT4iS/dist=es2019,mode=imports/optimized/three.js';
