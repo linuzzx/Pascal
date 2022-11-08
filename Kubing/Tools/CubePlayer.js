@@ -187,25 +187,6 @@ export class CubePlayer extends HTMLElement {
             renderer.render( scene, camera );
         }
         
-        function encodeURL(param) {
-            return param.replaceAll("%20", " ").replaceAll("%27", "'").replaceAll("%2F", "/").replaceAll("%0A", "\n").replaceAll("%26", "&").replaceAll("%3D", "=");
-        }
-        
-        function listCubeTypes() {
-            for (let cube of cubeTypes) {
-                if (cube === "3x3") {
-                    $('#selectCube').append($("<option></option>")
-                            .attr("value", cube)
-                            .text(cube));
-                }
-                else {
-                    $('#selectCube').append($("<option disabled></option>")
-                            .attr("value", cube)
-                            .text(cube));
-                }
-            }
-        }
-        
         function resetState() {
             let u = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y > 1.5});
             let d = planes.filter(cd => {return cd.getWorldPosition(new THREE.Vector3()).y < -1.5});
@@ -246,18 +227,6 @@ export class CubePlayer extends HTMLElement {
             }
         }
         
-        function updateArrays() {
-            resetState();
-            const setup = getMoves("#taSetup");
-            const moves = getMoves("#taMoves");
-        
-            //$("#allMoves").html(setup + " " + moves);
-        
-            for (let m of (setup + " " + moves).split(" ")) {
-                mv(m);
-            }
-        }
-        
         $("#btnPlay").on("click", () => {
             $("#btnPlay").prop('disabled', true);
             resetState();
@@ -288,25 +257,6 @@ export class CubePlayer extends HTMLElement {
                 i++;
             }, playMoveTime);
         });
-        
-        function getMoves(moves) {
-            let strSetup = "";
-            let arrSetup = [];
-            const lines = $(moves).val().split("\n");
-            for (let line of lines) {
-                arrSetup.push(line.split("//")[0]);
-            }
-        
-            strSetup = arrSetup.join(" ");
-        
-            const arr = strSetup.split(" ").filter(checkEmpty);
-        
-            return arr.join(" ");
-        }
-        
-        function checkEmpty(move) {
-            return move !== "";
-        }
         
         function mv(turn) {
             switch (turn) {
