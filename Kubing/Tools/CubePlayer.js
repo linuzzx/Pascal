@@ -15,6 +15,16 @@ export class CubePlayer extends HTMLElement {
         let time = parseInt(this.getAttribute("time")) || "";
         let cubestyle = this.getAttribute("cubestyle") || "";
         let logo = this.getAttribute("logo") || "";
+        let colors = this.getAttribute("colors") && this.getAttribute("colors").split(",").length === 6 ? this.getAttribute("colors").split(",").map(c => c.trim()) : 
+        [
+            "#ffffff",
+            "#ffaa00",
+            "#00ff00",
+            "#ff0000",
+            "#0000ff",
+            "#ffff00"
+        ];
+        let plastic = isColor(this.getAttribute("plastic")) ? this.getAttribute("plastic") : "#000000";
 
         this.innerHTML = "<button id='btnPlay'>Play</button><div id='cubePlayer'></div>";
 
@@ -32,6 +42,7 @@ export class CubePlayer extends HTMLElement {
         let playMoveTime;
         let tween;
         let planeCube, cube;
+        let white, yellow, green, blue, red, orange;
 
         init();
         adjustSize();
@@ -47,19 +58,19 @@ export class CubePlayer extends HTMLElement {
             let geometry = new THREE.BoxGeometry( 1, 1, 1 );
             let planeGeometry = new THREE.PlaneGeometry( planeSize, planeSize );
         
-            let colWhite = 0xffffff;
-            let colYellow = 0xffff00;
-            let colGreen = 0x00ff00;
-            let colBlue = 0x0000ff;
-            let colRed = 0xff0000;
-            let colOrange = 0xffaa00;
+            let colWhite = isColor(colors[0]) ? colors[0] : "#ffffff";
+            let colOrange = isColor(colors[1]) ? colors[1] : "#ffaa00";
+            let colGreen = isColor(colors[2]) ? colors[2] : "#00ff00";
+            let colRed = isColor(colors[3]) ? colors[3] : "#ff0000";
+            let colBlue = isColor(colors[4]) ? colors[4] : "#0000ff";
+            let colYellow = isColor(colors[5]) ? colors[5] : "#ffff00";
             
-            let white = new THREE.MeshBasicMaterial( { color: colWhite });
-            let yellow = new THREE.MeshBasicMaterial( { color: colYellow } );
-            let green = new THREE.MeshBasicMaterial( { color: colGreen } );
-            let blue = new THREE.MeshBasicMaterial( { color: colBlue } );
-            let red = new THREE.MeshBasicMaterial( { color: colRed } );
-            let orange = new THREE.MeshBasicMaterial( { color: colOrange } );
+            white = new THREE.MeshBasicMaterial( { color: colWhite });
+            yellow = new THREE.MeshBasicMaterial( { color: colYellow } );
+            green = new THREE.MeshBasicMaterial( { color: colGreen } );
+            blue = new THREE.MeshBasicMaterial( { color: colBlue } );
+            red = new THREE.MeshBasicMaterial( { color: colRed } );
+            orange = new THREE.MeshBasicMaterial( { color: colOrange } );
             
             let materials = [
                 red,
@@ -83,7 +94,7 @@ export class CubePlayer extends HTMLElement {
                             );
                             c.add(edges);
                             
-                            let cubie = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x000000}));
+                            let cubie = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: plastic}));
                             cubie.position.x = x * 1.01;
                             cubie.position.y = y * 1.01;
                             cubie.position.z = z * 1.01;
@@ -227,42 +238,30 @@ export class CubePlayer extends HTMLElement {
         }
         
         function resetState() {
-            let u = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y > 1.5});
-            let d = planes.filter(cd => {return cd.getWorldPosition(new THREE.Vector3()).y < -1.5});
-            let f = planes.filter(cf => {return cf.getWorldPosition(new THREE.Vector3()).z > 1.5});
-            let b = planes.filter(cb => {return cb.getWorldPosition(new THREE.Vector3()).z < -1.5});
-            let r = planes.filter(cr => {return cr.getWorldPosition(new THREE.Vector3()).x > 1.5});
-            let l = planes.filter(cl => {return cl.getWorldPosition(new THREE.Vector3()).x < -1.5});
+            let u = planes.filter(cu => {return (cu.getWorldPosition(new THREE.Vector3()).y > 1.5 && cu.geometry === "PlaneGeometry")});
+            let d = planes.filter(cd => {return (cd.getWorldPosition(new THREE.Vector3()).y < -1.5 && cd.geometry === "PlaneGeometry")});
+            let f = planes.filter(cf => {return (cf.getWorldPosition(new THREE.Vector3()).z > 1.5 && cf.geometry === "PlaneGeometry")});
+            let b = planes.filter(cb => {return (cb.getWorldPosition(new THREE.Vector3()).z < -1.5 && cb.geometry === "PlaneGeometry")});
+            let r = planes.filter(cr => {return (cr.getWorldPosition(new THREE.Vector3()).x > 1.5 && cr.geometry === "PlaneGeometry")});
+            let l = planes.filter(cl => {return (cl.getWorldPosition(new THREE.Vector3()).x < -1.5 && cl.geometry === "PlaneGeometry")});
         
-            for (let p of u) {
-                p.material.color.r = 1;
-                p.material.color.g = 1;
-                p.material.color.b = 1;
+            for (let p of u.slice(0, 9)) {
+                p.material = white;
             }
             for (let p of d) {
-                p.material.color.r = 1;
-                p.material.color.g = 1;
-                p.material.color.b = 0;
+                p.material = yellow;
             }
             for (let p of f) {
-                p.material.color.r = 0;
-                p.material.color.g = 1;
-                p.material.color.b = 0;
+                p.material = green;
             }
             for (let p of b) {
-                p.material.color.r = 0;
-                p.material.color.g = 0;
-                p.material.color.b = 1;
+                p.material = blue;
             }
             for (let p of r) {
-                p.material.color.r = 1;
-                p.material.color.g = 0;
-                p.material.color.b = 0;
+                p.material = red;
             }
             for (let p of l) {
-                p.material.color.r = 1;
-                p.material.color.g = 2/3;
-                p.material.color.b = 0;
+                p.material = orange;
             }
         }
         
@@ -928,6 +927,11 @@ export class CubePlayer extends HTMLElement {
         for (let m of scramble.split(" ")) {
             mv(m);
         } */
+
+        function isColor(color) {
+            // return /^#[0-9A-F]{6}$/i.test(color);
+            return /^#([0-9a-f]{3}){1,2}$/i.test(color);
+        }
     }
 }
 
