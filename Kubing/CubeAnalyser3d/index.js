@@ -9,9 +9,14 @@ let anim = false;
 let stdTime = 0.15;
 let playMoveTime;
 let tween;
-let giikerStep;
+let virtualStep;
+let usedGiiker;
+let locked = false;
+let virtualCube = false;
+let prevWhich = "";
 
 $(function() {
+    usedGiiker = false;
     playMoveTime = stdTime * 1000;
     getParams();
     updateArrays();
@@ -19,6 +24,19 @@ $(function() {
     //listCubeTypes();
     init();
     adjustSize();
+
+    $(window).keypress(function(e) {
+        if (virtualCube && !(locked && e.which === prevWhich)) {
+            prevWhich = e.which;
+            locked = true;
+
+            getTurn(e);
+        }
+    });
+
+    $(window).keyup(function(e) {
+        locked = false;
+    });
 });
 
 $(window).resize(() => {
@@ -1050,19 +1068,22 @@ async function connectToGiiker() {
         const giiker = await connect()
         .then(() => {
             $("#btnGiiker").attr("disabled", true);
-            alert("Select scramble/solution field to enter moves with Giiker");
+            if (!usedGiiker) {
+                alert("Select scramble/solution field to enter moves with Giiker Cube");
+                usedGiiker = true;
+            }
 
-            giikerStep = "";
+            virtualStep = "";
 
             $("#taSetup").on("focus", () => {
-                giikerStep = "scramble";
+                virtualStep = "scramble";
                 $("#taSetup").css("background-color", "#33C481");
             });
             $("#taSetup").focusout(() => {
                 $("#taSetup").css("background-color", "#FFFFFF");
             });
             $("#taMoves").on("focus", () => {
-                giikerStep = "solution";
+                virtualStep = "solution";
                 $("#taMoves").css("background-color", "#33C481");
             });
             $("#taMoves").focusout(() => {
@@ -1091,7 +1112,7 @@ async function connectToGiiker() {
 
 function giikerMove(move) {
     resetState();
-    if (giikerStep === "scramble") {
+    if (virtualStep === "scramble") {
         let newScramble = $("#taSetup").val();
 
         anim = false;
@@ -1109,7 +1130,7 @@ function giikerMove(move) {
 
         applyMove(move);
     }
-    else if (giikerStep === "solution") {
+    else if (virtualStep === "solution") {
         let newSolution = $("#taMoves").val();
 
         anim = false;
@@ -1129,5 +1150,62 @@ function giikerMove(move) {
         $("#taMoves").val(newSolution).change();
 
         applyMove(move);
+    }
+}
+
+function virtual() {
+    virtualCube = true;
+    $("#btnVirtual").text("Stop virtual");
+    $("#btnVirtual").blur();
+    $("#btnVirtual").attr("onclick", "stopVirtual()");
+
+    $("#inputTime").attr("readonly", true);
+    $("#taSetup").attr("readonly", true);
+    $("#taMoves").attr("readonly", true);
+    $("#btnGiiker").attr("disabled", true);
+    $("#btnPlay").attr("disabled", true);
+    $("#btnReset").attr("disabled", true);
+
+    virtualStep = "solution";
+
+    $("#taMoves").css("background-color", "#33C481");
+}
+
+function stopVirtual() {
+    virtualCube = false;
+    $("#btnVirtual").text("Virtual");
+    $("#btnVirtual").attr("onclick", "virtual()");
+
+    $("#inputTime").attr("readonly", false);
+    $("#taSetup").attr("readonly", false);
+    $("#taMoves").attr("readonly", false);
+    $("#btnGiiker").attr("disabled", false);
+    $("#btnPlay").attr("disabled", false);
+    $("#btnReset").attr("disabled", false);
+
+    virtualStep = "";
+
+    $("#taMoves").css("background-color", "#FFFFFF");
+}
+
+function getTurn(e) {console.log("hei");
+    let keyBinds = ["j", "f", "h", "g", "i", "k", "d", "e", "s", "l", "w", "o", ",", ".", "n", "b", "ø", "a", "å", "q", "u", "m", "v", "r"];
+    let possibleMoves = ["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];
+
+    const key = keyBinds.indexOf(String.fromCharCode(e.which).toLowerCase());
+    const move = possibleMoves[key];
+    if (move) {
+        let newSolution = $("#taMoves").val();
+        
+        if (newSolution !== "" && newSolution.split(" ")[newSolution.split(" ").length - 1] === move) {
+            newSolution = newSolution.split(" ").slice(0, newSolution.split(" ").length - 1).join(" ") + " " + move.split("")[0] + "2";
+            if (move.includes("'")) {
+                newSolution += "'";
+            }
+        }
+        else {
+            newSolution = (newSolution + " " + move).trim();
+        }
+        $("#taMoves").val(newSolution).change();
     }
 }
