@@ -1067,11 +1067,21 @@ async function connectToGiiker() {
     try {
         const giiker = await connect()
         .then(() => {
-            $("#btnGiiker").attr("disabled", true);
             if (!usedGiiker) {
                 alert("Select scramble/solution field to enter moves with Giiker Cube");
                 usedGiiker = true;
             }
+            
+            $("#btnGiiker").text("Disconnect");
+            $("#btnGiiker").blur();
+            $("#btnGiiker").attr("onclick", "stopGiiker()");
+        
+            $("#inputTime").attr("readonly", true);
+            $("#taSetup").attr("readonly", true);
+            $("#taMoves").attr("readonly", true);
+            $("#btnVirtual").attr("disabled", true);
+            $("#btnPlay").attr("disabled", true);
+            $("#btnReset").attr("disabled", true);
 
             virtualStep = "";
 
@@ -1090,7 +1100,6 @@ async function connectToGiiker() {
                 $("#taMoves").css("background-color", "#FFFFFF");
             });
         });
-        // setVirtualCube(true);
 
         giiker.on('connected', () => {
             alert("Giiker cube connected");
@@ -1108,6 +1117,21 @@ async function connectToGiiker() {
     } catch(e) {
         $("#btnGiiker").attr("disabled", false);
     }
+}
+
+function stopGiiker() {
+    $("#btnGiiker").text("Giiker");
+    $("#btnGiiker").blur();
+    $("#btnGiiker").attr("onclick", "connectToGiiker()");
+
+    $("#inputTime").attr("readonly", false);
+    $("#taSetup").attr("readonly", false);
+    $("#taMoves").attr("readonly", false);
+    $("#btnVirtual").attr("disabled", false);
+    $("#btnPlay").attr("disabled", false);
+    $("#btnReset").attr("disabled", false);
+
+    disconnect();
 }
 
 function giikerMove(move) {
@@ -1166,9 +1190,22 @@ function virtual() {
     $("#btnPlay").attr("disabled", true);
     $("#btnReset").attr("disabled", true);
 
-    virtualStep = "solution";
+    virtualStep = "";
 
-    $("#taMoves").css("background-color", "#33C481");
+    $("#taSetup").on("focus", () => {
+        virtualStep = "scramble";
+        $("#taSetup").css("background-color", "#33C481");
+    });
+    $("#taSetup").focusout(() => {
+        $("#taSetup").css("background-color", "#FFFFFF");
+    });
+    $("#taMoves").on("focus", () => {
+        virtualStep = "solution";
+        $("#taMoves").css("background-color", "#33C481");
+    });
+    $("#taMoves").focusout(() => {
+        $("#taMoves").css("background-color", "#FFFFFF");
+    });
 }
 
 function stopVirtual() {
@@ -1185,6 +1222,7 @@ function stopVirtual() {
 
     virtualStep = "";
 
+    $("#taSetup").css("background-color", "#FFFFFF");
     $("#taMoves").css("background-color", "#FFFFFF");
 }
 
@@ -1195,7 +1233,7 @@ function getTurn(e) {console.log("hei");
     const key = keyBinds.indexOf(String.fromCharCode(e.which).toLowerCase());
     const move = possibleMoves[key];
     if (move) {
-        let newSolution = $("#taMoves").val();
+        let newSolution = virtualStep === "scramble" ? $("#taSetup").val() : virtualStep === "solution" ? $("#taMoves").val() : "";
         
         if (newSolution !== "" && newSolution.split(" ")[newSolution.split(" ").length - 1] === move) {
             newSolution = newSolution.split(" ").slice(0, newSolution.split(" ").length - 1).join(" ") + " " + move.split("")[0] + "2";
@@ -1206,6 +1244,6 @@ function getTurn(e) {console.log("hei");
         else {
             newSolution = (newSolution + " " + move).trim();
         }
-        $("#taMoves").val(newSolution).change();
+        virtualStep === "scramble" ? $("#taSetup").val(newSolution).change() : virtualStep === "solution" ? $("#taMoves").val(newSolution).change() : "";
     }
 }
