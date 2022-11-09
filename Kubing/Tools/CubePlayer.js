@@ -176,7 +176,7 @@ export class CubePlayer extends HTMLElement {
             scene.add(planeCube);
 
             if (logo !== "") {
-                let logoTexture = new THREE.TextureLoader().load(logo);
+                /* let logoTexture = new THREE.TextureLoader().load(logo);
                 let logoMaterial = new THREE.MeshBasicMaterial({map: logoTexture});
                 let logoPlane = new THREE.Mesh(planeGeometry, logoMaterial);
 
@@ -185,7 +185,24 @@ export class CubePlayer extends HTMLElement {
                 logoPlane.position.z = 0;
                 logoPlane.rotateX(-Math.PI / 2);
                 scene.add(logoPlane);
-                planes.push(logoPlane);
+                planes.push(logoPlane); */
+
+                let loader = new THREE.TextureLoader();
+
+                loader.load(
+                    logo,
+                    logoTexture => {
+                        let logoMaterial = new THREE.MeshBasicMaterial({map: logoTexture});
+                        let logoPlane = new THREE.Mesh(planeGeometry, logoMaterial);
+
+                        logoPlane.position.x = 0;
+                        logoPlane.position.y = 1.525;
+                        logoPlane.position.z = 0;
+                        logoPlane.rotateX(-Math.PI / 2);
+                        scene.add(logoPlane);
+                        planes.push(logoPlane);
+                    }
+                );
             }
             
             camera.position.x = 0;
