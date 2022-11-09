@@ -10,13 +10,13 @@ let stdTime = 0.15;
 let playMoveTime;
 let tween;
 let virtualStep;
-let usedGiiker;
+let usedVirtual;
 let locked = false;
 let virtualCube = false;
 let prevWhich = "";
 
 $(function() {
-    usedGiiker = false;
+    usedVirtual = false;
     playMoveTime = stdTime * 1000;
     getParams();
     updateArrays();
@@ -1067,9 +1067,9 @@ async function connectToGiiker() {
     try {
         const giiker = await connect()
         .then(() => {
-            if (!usedGiiker) {
+            if (!usedVirtual) {
                 alert("Select scramble/solution field to enter moves with Giiker Cube");
-                usedGiiker = true;
+                usedVirtual = true;
             }
             
             $("#btnGiiker").text("Disconnect");
@@ -1178,6 +1178,10 @@ function giikerMove(move) {
 }
 
 function virtual() {
+    if (!usedVirtual) {
+        alert("Select scramble/solution field to enter moves with Virtual Cube");
+        usedVirtual = true;
+    }
     virtualCube = true;
     $("#btnVirtual").text("Stop virtual");
     $("#btnVirtual").blur();
