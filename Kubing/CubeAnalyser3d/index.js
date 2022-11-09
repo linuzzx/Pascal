@@ -1131,7 +1131,7 @@ function stopGiiker() {
     $("#btnPlay").attr("disabled", false);
     $("#btnReset").attr("disabled", false);
 
-    disconnect();
+    const giiker = disconnect();
 }
 
 function giikerMove(move) {
@@ -1151,8 +1151,6 @@ function giikerMove(move) {
             newScramble = (newScramble + " " + move).trim();
         }
         $("#taSetup").val(newScramble).change();
-
-        applyMove(move);
     }
     else if (virtualStep === "solution") {
         let newSolution = $("#taMoves").val();
@@ -1172,8 +1170,6 @@ function giikerMove(move) {
             newSolution = (newSolution + " " + move).trim();
         }
         $("#taMoves").val(newSolution).change();
-
-        applyMove(move);
     }
 }
 
