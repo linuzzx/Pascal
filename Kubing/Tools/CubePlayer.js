@@ -1,4 +1,6 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
+// import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js";
+// import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
 export * as $ from 'https://code.jquery.com/jquery-3.6.0.min.js';
 
 export function initThreeJS() {
@@ -187,17 +189,6 @@ export class CubePlayer extends HTMLElement {
             scene.add(planeCube);
 
             if (logo !== "") {
-                /* let logoTexture = new THREE.TextureLoader().load(logo);
-                let logoMaterial = new THREE.MeshBasicMaterial({map: logoTexture});
-                let logoPlane = new THREE.Mesh(planeGeometry, logoMaterial);
-
-                logoPlane.position.x = 0;
-                logoPlane.position.y = 1.525;
-                logoPlane.position.z = 0;
-                logoPlane.rotateX(-Math.PI / 2);
-                scene.add(logoPlane);
-                planes.push(logoPlane); */
-
                 let loader = new THREE.TextureLoader();
 
                 loader.load(
