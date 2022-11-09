@@ -13,6 +13,7 @@ export class CubePlayer extends HTMLElement {
         let scramble = this.getAttribute("scramble") || "";
         let solution = this.getAttribute("solution") || "";
         let time = parseInt(this.getAttribute("time")) || "";
+        let cubestyle = this.getAttribute("cubestyle") || "";
 
         this.innerHTML = "<button id='btnPlay'>Play</button><div id='cubePlayer'></div>";
 
@@ -29,7 +30,7 @@ export class CubePlayer extends HTMLElement {
         let stdTime = 0.15;
         let playMoveTime;
         let tween;
-        let planeCube;
+        let planeCube, cube;
 
         init();
         adjustSize();
@@ -38,10 +39,10 @@ export class CubePlayer extends HTMLElement {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera( 60, 1, 0.1, 1000 );
         
-            // cube = new THREE.Object3D();
+            cube = new THREE.Object3D();
             planeCube = new THREE.Object3D();
             
-            let planeSize = 0.9;
+            let planeSize = 0.925;
             let geometry = new THREE.BoxGeometry( 1, 1, 1 );
             let planeGeometry = new THREE.PlaneGeometry( planeSize, planeSize );
         
@@ -80,8 +81,16 @@ export class CubePlayer extends HTMLElement {
                                 new THREE.LineBasicMaterial({color: 0x000000, linewidth: 1})
                             );
                             c.add(edges);
-                            //cubies.push(c);
-                            //cube.add(c);
+                            
+                            let cubie = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({color: 0x000000}));
+                            cubie.position.x = x * 1.01;
+                            cubie.position.y = y * 1.01;
+                            cubie.position.z = z * 1.01;
+
+                            if (cubestyle === "solid") {
+                                cube.add(cubie);
+                                planes.push(cubie);
+                            }
                         }
                     }
                 }
@@ -159,6 +168,9 @@ export class CubePlayer extends HTMLElement {
                 }
             }
         
+            if (cubestyle === "solid") {
+                scene.add(cube);
+            }
             scene.add(planeCube);
             
             camera.position.x = 0;
