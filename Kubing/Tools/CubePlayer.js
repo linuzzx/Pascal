@@ -918,11 +918,13 @@ export class CubePlayer extends HTMLElement {
                 renderer.setSize($("#cubePlayer").parent().height(), $("#cubePlayer").parent().height());
             }
             else {
-                $("#cubePlayer").css("width", $("#cubePlayer").width());
-                $("#cubePlayer").css("height", $("#cubePlayer").width());
+                $("#cubePlayer").css("width", $("#cubePlayer").parent().width());
+                $("#cubePlayer").css("height", $("#cubePlayer").parent().width());
                 renderer.setSize($("#cubePlayer").parent().width(), $("#cubePlayer").parent().width());
             }
             renderer.setPixelRatio(window.devicePixelRatio);
+            $("#cubePlayer").append("<h1>Width: "+$("#cubePlayer").width()+"</h1>");
+            $("#cubePlayer").append("<h1>Height: "+$("#cubePlayer").height()+"</h1>");
         }
         /* resetState();
         for (let m of scramble.split(" ")) {
