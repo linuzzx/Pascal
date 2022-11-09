@@ -14,6 +14,7 @@ export class CubePlayer extends HTMLElement {
         let solution = this.getAttribute("solution") || "";
         let time = parseInt(this.getAttribute("time")) || "";
         let cubestyle = this.getAttribute("cubestyle") || "";
+        let logo = this.getAttribute("logo") || "";
 
         this.innerHTML = "<button id='btnPlay'>Play</button><div id='cubePlayer'></div>";
 
@@ -171,7 +172,21 @@ export class CubePlayer extends HTMLElement {
             if (cubestyle === "solid") {
                 scene.add(cube);
             }
+
             scene.add(planeCube);
+
+            if (logo !== "") {
+                let logoTexture = new THREE.TextureLoader().load(logo);
+                let logoMaterial = new THREE.MeshBasicMaterial({map: logoTexture});
+                let logoPlane = new THREE.Mesh(planeGeometry, logoMaterial);
+
+                logoPlane.position.x = 0;
+                logoPlane.position.y = 1.525;
+                logoPlane.position.z = 0;
+                logoPlane.rotateX(-Math.PI / 2);
+                scene.add(logoPlane);
+                planes.push(logoPlane);
+            }
             
             camera.position.x = 0;
             camera.position.y = 5;
@@ -890,6 +905,7 @@ export class CubePlayer extends HTMLElement {
                 $("#cubePlayer").css("height", $("#cubePlayer").width());
                 renderer.setSize($("#cubePlayer").parent().width(), $("#cubePlayer").parent().width());
             }
+            renderer.setPixelRatio(window.devicePixelRatio);
         }
         /* resetState();
         for (let m of scramble.split(" ")) {
