@@ -31,7 +31,7 @@ let u1 = "white", u2 = "white", u3 = "white", u4 = "white", u5 = "white", u6 = "
 let d1 = "yellow", d2 = "yellow", d3 = "yellow", d4 = "yellow", d5 = "yellow", d6 = "yellow", d7 = "yellow", d8 = "yellow", d9 = "yellow", nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8, nd9;
 
 let keyBinds = [];//["J", "F", "H", "G", "I", "K", "D", "E", "S", "L", "W", "O", ",", ".", "N", "B", "Ø", "A", "Å", "Q", "U", "M", "V", "R"];
-let possibleMoves = [];//["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];;
+let possibleMoves = [];//["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];
 
 $(() => {
     $(window).keypress(function(e) {
