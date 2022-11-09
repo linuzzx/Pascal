@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kubing | Einar KL</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+    <script src="./Tools/CubePlayer.js" type="module"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="header">
+        <div><button class="btnTabs" onclick="showHome()">Home</button></div>
+        <div><button class="btnTabs" onclick="showProjects()">Projects</button></div>
+    </div>
+    <div id="underline"></div>
+    <div id="content">
+        <div id="tabHome" class="tabContent">
+            <div class="cubePlayers">
+                <cube-player
+                    scramble="L2 U L2 D R2 D' L2 U2 L' U' B2 L2 D2 L2 B U B' R'"
+                    solution="x' R U2 L2 D2 Rw Lw2 U2' R U R' U' R U R' U' R' F' U' F U R U' R' F' U' F U R"
+                    time="3710"
+                    cubestyle="stickerless" 
+                    logo="./resources/dayan-logo.jpg"
+                    colors="
+                        #ffffff,
+                        #ffaa00,
+                        #00ff00,
+                        #ff0000,
+                        #0000ff,
+                        #ffff00" 
+                    plastic="#f0e8c8"
+                ></cube-player>
+            </div>
+            <div id="socialLinks">
+                <a href="https://www.worldcubeassociation.org/persons/2015LUND03" target="_blank"><img src="./resources/WCA_logo.png" alt="WCA" height="64" width="64"></a>
+            </div>
+        </div>
+        <div id="tabProjects" class="tabContent">
+            <h1><a href="Kubing/AlgInverter">Alg Inverter</a></h1>
+            <h1><a href="Kubing/BLD">BLD</a></h1>
+            <h1><a href="Kubing/BLD/Memo">BLD Memo Trainer</a></h1>
+            <h1><a href="Kubing/BLD/MemoHelper">BLD Memo Helper</a></h1>
+            <h1><a href="Kubing/BLD/LetterPairs">Letter Pairs</a></h1>
+            <h1><a href="Kubing/FrurufFunSite">Fruruf Fun Site</a></h1>
+            <h1><a href="Kubing/CubeAnalyser">Cube Analyser</a></h1>
+            <h1><a href="Kubing/CubeAnalyser3d">Cube Analyser 3d</a></h1>
+            <h1><a href="Kubing/NewTimer">Timer v2</a></h1>
+            <h1><a href="Kubing/Kube">Kube?</a></h1>
+            <h1><a href="Kubing/Kubeside">Kubeside</a></h1>
+            <h1><a href="Kubing/KuberTilSalgs">Kuber til salgs</a></h1>
+            <h1><a href="Kubing/AlgRater">Alg rater</a></h1>
+            <h1><a href="Kubing/Bluetooth3d/">Bluetooth Cube</a></h1>
+            <h1><a href="Kubing/OPA">OLL Parity Avoidance Trainer</a></h1>
+            <h1><a href="Kubing/PR">Personal Records</a></h1>
+            <h1><a href="Kubing/Rotationless">Rotationless</a></h1>
+            <h1><a href="Kubing/1LLL">1LLL</a></h1>
+            <h1><a href="Kubing/1LLL/Trainer">1LLL Trainer</a></h1>
+            <h1><a href="Kubing/VirtualCube">Virtual Cube</a></h1>
+            <h1><a href="Kubing/VirtualCube3d">Virtual Cube 3d</a></h1>
+            <h1><a href="Kubing/NxN_scrambler">NxN scrambler</a></h1>
+            <h1><a href="Kubing/Sq1">Sq-1</a></h1>
+            <h1><a href="Kubing/Solver/3x3">3x3 solver</a></h1>
+            <h1><a href="Kubing/Solver/Skewb">Skewb solver</a></h1>
+            <h1><a href="https://play.google.com/store/apps/details?id=no.einarkl.einarskubeapp" target="_blank">Einars kubeapp</a></h1>
+        </div>
+    </div>
+</body>
+</html>
