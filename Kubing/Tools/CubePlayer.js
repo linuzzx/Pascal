@@ -923,8 +923,6 @@ export class CubePlayer extends HTMLElement {
                 renderer.setSize($("#cubePlayer").parent().width(), $("#cubePlayer").parent().width());
             }
             renderer.setPixelRatio(window.devicePixelRatio);
-            $("#cubePlayer").append("<h1>Width: "+$("#cubePlayer").width()+"</h1>");
-            $("#cubePlayer").append("<h1>Height: "+$("#cubePlayer").height()+"</h1>");
         }
         /* resetState();
         for (let m of scramble.split(" ")) {
