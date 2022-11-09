@@ -29,7 +29,7 @@ export class CubePlayer extends HTMLElement {
         let stdTime = 0.15;
         let playMoveTime;
         let tween;
-        let cube;
+        let planeCube;
 
         init();
         adjustSize();
@@ -38,7 +38,8 @@ export class CubePlayer extends HTMLElement {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera( 60, 1, 0.1, 1000 );
         
-            cube = new THREE.Object3D();
+            // cube = new THREE.Object3D();
+            planeCube = new THREE.Object3D();
             
             let planeSize = 0.9;
             let geometry = new THREE.BoxGeometry( 1, 1, 1 );
@@ -95,7 +96,7 @@ export class CubePlayer extends HTMLElement {
         
                     plane.position.set(x * m1, 1*m2 * m1, z * m1);
                     plane.rotateX(-Math.PI / 2);
-                    cube.add(plane);
+                    planeCube.add(plane);
                     planes.push(plane);
                 }
             }
@@ -107,7 +108,7 @@ export class CubePlayer extends HTMLElement {
         
                     plane.position.set(x * m1, -1*m2 * m1, z * m1);
                     plane.rotateX(Math.PI / 2);
-                    cube.add(plane);
+                    planeCube.add(plane);
                     planes.push(plane);
                 }
             }
@@ -118,7 +119,7 @@ export class CubePlayer extends HTMLElement {
                     let plane = new THREE.Mesh( planeGeometry, planeMaterial );
         
                     plane.position.set(x * m1, y * m1, 1*m2 * m1);
-                    cube.add(plane);
+                    planeCube.add(plane);
                     planes.push(plane);
                 }
             }
@@ -129,7 +130,7 @@ export class CubePlayer extends HTMLElement {
                     let plane = new THREE.Mesh( planeGeometry, planeMaterial );
         
                     plane.position.set(x * m1, y * m1, -1*m2 * m1);
-                    cube.add(plane);
+                    planeCube.add(plane);
                     planes.push(plane);
                 }
             }
@@ -141,7 +142,7 @@ export class CubePlayer extends HTMLElement {
         
                     plane.position.set(-1*m2 * m1, y * m1, z * m1);
                     plane.rotateY(-Math.PI / 2);
-                    cube.add(plane);
+                    planeCube.add(plane);
                     planes.push(plane);
                 }
             }
@@ -153,12 +154,12 @@ export class CubePlayer extends HTMLElement {
         
                     plane.position.set(1*m2 * m1, y * m1, z * m1);
                     plane.rotateY(-Math.PI / 2);
-                    cube.add(plane);
+                    planeCube.add(plane);
                     planes.push(plane);
                 }
             }
         
-            scene.add(cube);
+            scene.add(planeCube);
             
             camera.position.x = 0;
             camera.position.y = 5;
