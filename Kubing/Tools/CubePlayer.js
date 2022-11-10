@@ -38,7 +38,7 @@ export class CubePlayer extends HTMLElement {
         }
 
         let planes = [];
-        let cleanPlanes = [];
+        // let cleanPlanes = [];
         let scene, camera, renderer;
         let anim = false;
         let stdTime = 0.15;
@@ -104,7 +104,7 @@ export class CubePlayer extends HTMLElement {
 
                             if (cubestyle === "solid" || cubestyle === "stickerless") {
                                 cube.add(cubie);
-                                cleanPlanes.push(cubie);
+                                planes.push(cubie);
                             }
                         }
                     }
@@ -121,7 +121,7 @@ export class CubePlayer extends HTMLElement {
                     plane.position.set(x * m1, 1*m2 * m1, z * m1);
                     plane.rotateX(-Math.PI / 2);
                     planeCube.add(plane);
-                    cleanPlanes.push(plane);
+                    planes.push(plane);
                 }
             }
             // Yellow
@@ -133,7 +133,7 @@ export class CubePlayer extends HTMLElement {
                     plane.position.set(x * m1, -1*m2 * m1, z * m1);
                     plane.rotateX(Math.PI / 2);
                     planeCube.add(plane);
-                    cleanPlanes.push(plane);
+                    planes.push(plane);
                 }
             }
             // Green
@@ -144,7 +144,7 @@ export class CubePlayer extends HTMLElement {
                     plane.renderOrder = 1;
                     plane.position.set(x * m1, y * m1, 1*m2 * m1);
                     planeCube.add(plane);
-                    cleanPlanes.push(plane);
+                    planes.push(plane);
                 }
             }
             // Blue
@@ -155,7 +155,7 @@ export class CubePlayer extends HTMLElement {
                     plane.renderOrder = 1;
                     plane.position.set(x * m1, y * m1, -1*m2 * m1);
                     planeCube.add(plane);
-                    cleanPlanes.push(plane);
+                    planes.push(plane);
                 }
             }
             // Orange
@@ -167,7 +167,7 @@ export class CubePlayer extends HTMLElement {
                     plane.position.set(-1*m2 * m1, y * m1, z * m1);
                     plane.rotateY(-Math.PI / 2);
                     planeCube.add(plane);
-                    cleanPlanes.push(plane);
+                    planes.push(plane);
                 }
             }
             // Red
@@ -179,7 +179,7 @@ export class CubePlayer extends HTMLElement {
                     plane.position.set(1*m2 * m1, y * m1, z * m1);
                     plane.rotateY(-Math.PI / 2);
                     planeCube.add(plane);
-                    cleanPlanes.push(plane);
+                    planes.push(plane);
                 }
             }
         
@@ -203,12 +203,10 @@ export class CubePlayer extends HTMLElement {
                         logoPlane.position.z = 0;
                         logoPlane.rotateX(-Math.PI / 2);
                         scene.add(logoPlane);
-                        cleanPlanes.push(logoPlane);
+                        planes.push(logoPlane);
                     }
                 );
             }
-
-            planes = cleanPlanes.slice();
             
             camera.position.x = 0;
             camera.position.y = 5;
@@ -232,32 +230,13 @@ export class CubePlayer extends HTMLElement {
         }
         
         function resetState() {
-            /* let u = planes.filter(cu => {return (cu.getWorldPosition(new THREE.Vector3()).y > 1.5 && cu.geometry === "PlaneGeometry")});
-            let d = planes.filter(cd => {return (cd.getWorldPosition(new THREE.Vector3()).y < -1.5 && cd.geometry === "PlaneGeometry")});
-            let f = planes.filter(cf => {return (cf.getWorldPosition(new THREE.Vector3()).z > 1.5 && cf.geometry === "PlaneGeometry")});
-            let b = planes.filter(cb => {return (cb.getWorldPosition(new THREE.Vector3()).z < -1.5 && cb.geometry === "PlaneGeometry")});
-            let r = planes.filter(cr => {return (cr.getWorldPosition(new THREE.Vector3()).x > 1.5 && cr.geometry === "PlaneGeometry")});
-            let l = planes.filter(cl => {return (cl.getWorldPosition(new THREE.Vector3()).x < -1.5 && cl.geometry === "PlaneGeometry")});
-        
-            for (let p of u.slice(0, 9)) {
-                p.material = white;
+            while(scene.children.length > 0){ 
+                scene.remove(scene.children[0]); 
             }
-            for (let p of d.slice(0, 9)) {
-                p.material = yellow;
-            }
-            for (let p of f.slice(0, 9)) {
-                p.material = green;
-            }
-            for (let p of b.slice(0, 9)) {
-                p.material = blue;
-            }
-            for (let p of r.slice(0, 9)) {
-                p.material = red;
-            }
-            for (let p of l.slice(0, 9)) {
-                p.material = orange;
-            } */
-            planes = cleanPlanes.slice();
+            $("#cubePlayer").html("");
+            planes = [];
+            init();
+            adjustSize();
         }
         
         $("#btnPlay").on("click", () => {
@@ -918,10 +897,6 @@ export class CubePlayer extends HTMLElement {
             }
             renderer.setPixelRatio(window.devicePixelRatio);
         }
-        /* resetState();
-        for (let m of scramble.split(" ")) {
-            mv(m);
-        } */
 
         function isColor(color) {
             // return /^#[0-9A-F]{6}$/i.test(color);
