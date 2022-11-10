@@ -1,6 +1,5 @@
-// import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js";
-import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
+// import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
 export * as $ from 'https://code.jquery.com/jquery-3.6.0.min.js';
 
 export function initThreeJS() {
@@ -15,7 +14,7 @@ export class CubePlayer extends HTMLElement {
         let scramble = this.getAttribute("scramble") || "";
         let solution = this.getAttribute("solution") || "";
         let time = parseInt(this.getAttribute("time")) || "";
-        let cubestyle = this.getAttribute("cubestyle") || "";
+        let cubestyle = this.getAttribute("cubestyle") || "solid";
         let logo = this.getAttribute("logo") || "";
         let colors = this.getAttribute("colors") && this.getAttribute("colors").split(",").length === 6 ? this.getAttribute("colors").split(",").map(c => c.trim()) : 
         [
@@ -28,7 +27,7 @@ export class CubePlayer extends HTMLElement {
         ];
         let plastic = isColor(this.getAttribute("plastic")) ? this.getAttribute("plastic") : "#000000";
 
-        this.innerHTML = "<button id='btnPlay'>Play</button><div id='cubePlayer'></div>";
+        this.innerHTML = "<div id='cubePlayer'></div><div><button id='btnPlay'>Play</button></div>";
 
         if (solution === "") {
             $("#btnPlay").attr("disabled", true);
@@ -47,6 +46,10 @@ export class CubePlayer extends HTMLElement {
         let white, yellow, green, blue, red, orange;
 
         init();
+
+        let cubePlayerHeight = $("#cubePlayer").parent().height();
+        let cubePlayerWidth = $("#cubePlayer").parent().width();
+
         adjustSize();
 
         function init() {
@@ -101,7 +104,7 @@ export class CubePlayer extends HTMLElement {
                             cubie.position.y = y * 1.01;
                             cubie.position.z = z * 1.01;
 
-                            if (cubestyle === "solid" || cubestyle === "stickerless") {
+                            if (cubestyle !== "hollow") {
                                 cube.add(cubie);
                                 planes.push(cubie);
                             }
@@ -182,7 +185,7 @@ export class CubePlayer extends HTMLElement {
                 }
             }
         
-            if (cubestyle === "solid" || cubestyle === "stickerless") {
+            if (cubestyle !== "hollow") {
                 scene.add(cube);
             }
 
@@ -877,24 +880,22 @@ export class CubePlayer extends HTMLElement {
         }
         
         function adjustSize() {
-            $("#cubePlayer").css("position", "relative");
-
-            $("#cubePlayer > canvas").css("margin", "auto");
-
-            $("#btnPlay").css("position", "absolute");
-            $("#btnPlay").css("z-index", "1");
-            
             if ($("body").width() >= $("body").height()) {
-                $("#cubePlayer").css("height", $("#cubePlayer").parent().height());
-                $("#cubePlayer").css("width", $("#cubePlayer").parent().height());
-                renderer.setSize($("#cubePlayer").parent().height(), $("#cubePlayer").parent().height());
+                $("#cubePlayer").css("height", cubePlayerHeight);
+                $("#cubePlayer").css("width", cubePlayerHeight);
+                renderer.setSize(cubePlayerHeight, cubePlayerHeight);
             }
             else {
-                $("#cubePlayer").css("width", $("#cubePlayer").parent().width());
-                $("#cubePlayer").css("height", $("#cubePlayer").parent().width());
-                renderer.setSize($("#cubePlayer").parent().width(), $("#cubePlayer").parent().width());
+                $("#cubePlayer").css("width", cubePlayerWidth);
+                $("#cubePlayer").css("height", cubePlayerWidth);
+                renderer.setSize(cubePlayerWidth, cubePlayerWidth);
             }
             renderer.setPixelRatio(window.devicePixelRatio);
+            
+            $("#btnPlay").parent().css("width", $("#cubePlayer > canvas").width());
+            $("#btnPlay").css("z-index", "1");
+            $("#btnPlay").css("min-width", $("#cubePlayer > canvas").width() * 0.2);
+            $("#btnPlay").parent().css("text-align", "center");
         }
 
         function isColor(color) {
