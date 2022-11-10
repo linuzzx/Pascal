@@ -38,7 +38,6 @@ export class CubePlayer extends HTMLElement {
         }
 
         let planes = [];
-        // let cleanPlanes = [];
         let scene, camera, renderer;
         let anim = false;
         let stdTime = 0.15;
