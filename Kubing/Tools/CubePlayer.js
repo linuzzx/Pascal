@@ -8,10 +8,6 @@ export function initThreeJS() {
     document.head.appendChild(scriptGsap);
 }
 
-export function cubePlayerHelp() {
-    return "https://einarkl.github.io/Kubing/Tools/cubeplayer.md";
-}
-
 export class CubePlayer extends HTMLElement {
     connectedCallback() {
         initThreeJS();
