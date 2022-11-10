@@ -515,8 +515,8 @@ export class CubePlayer extends HTMLElement {
         function doMv(cubies, xyz, angle) {
             let tempCube = new THREE.Object3D();
             
+            scene.attach(tempCube);
             for (let cubie of cubies) {
-                scene.attach(tempCube);
                 tempCube.attach(cubie);
             }
             
