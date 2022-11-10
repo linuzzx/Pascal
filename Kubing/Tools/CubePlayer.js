@@ -902,6 +902,12 @@ export class CubePlayer extends HTMLElement {
             // return /^#[0-9A-F]{6}$/i.test(color);
             return /^#([0-9a-f]{3}){1,2}$/i.test(color);
         }
+        
+        /* setTimeout(() => {
+            for (let m of scramble.split(" ")) {
+                mv(m);
+            }
+        }, 50); */
     }
 }
 
