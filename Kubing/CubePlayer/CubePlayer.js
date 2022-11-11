@@ -911,7 +911,7 @@ export class CubePlayer extends HTMLElement {
     }
 
     attributeChangedCallback() {
-        
+        console.log("Attributes changed");
     }
 }
 
