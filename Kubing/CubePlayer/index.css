@@ -11,9 +11,28 @@ body {
     height: 100%;
     margin: 0;
     padding: 0;
-    display: grid;
-    grid-gap: 1%;
     color: black;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+h1, h2, th, td {
+    color: #aaaaaa;
+    font-family: monospace;
+}
+
+input, select, option {
+    font-family: monospace;
+    width: 90%;
+}
+
+#content {
+    width: 25%;
+    height: 25%;
 }
 
 /*Scrollbar*/

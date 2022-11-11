@@ -6,23 +6,87 @@
         <link rel="stylesheet" href="index.css">
         <script src="../Tools/CubePlayer.js" type="module"></script>
     </head>
-    <body style="width: 100%; height: 100%;">
-        <div style="width: 50%; height: 50%; margin: 0 auto;">
-            <cube-player 
-                scramble="L2 R2 F2 L' R' D2 R L F2 U' D F2 U2 D2 L2 R2 F2 D' R L D'" 
-                solution="D' L' R' U B2 D2 F2 L2 F2 U2 L2 U2 L2" 
-                time="3000" 
-                cubestyle="solid" 
-                logo="./dayan-logo.jpg"
-                colors="
-                    #ffffff,
-                    #ffaa00,
-                    #00ff00,
-                    #ff0000,
-                    #0000ff,
-                    #ffff00" 
-                plastic="#000"
-                >
+    <body>
+        <script>
+            function updateAttr() {
+                let scramble = $("#inpScramble").val();
+                let solution = $("#inpSolution").val();
+                let time = $("#inpTime").val();
+                let cubestyle = $("#selCubestyle").find(":selected").val();
+                let logo = $("#inpLogo").val();
+                let colors = $("#inpColors").val();
+                let plastic = $("#inpPlastic").val();
+                $("#content").html("<cube-player scramble=\""+scramble+"\" solution=\""+solution+"\" time=\""+time+"\" cubestyle=\""+cubestyle+"\" logo=\""+logo+"\" colors=\""+colors+"\" plastic=\""+plastic+"\"></cube-player>");
+            }
+        </script>
+        <div>
+            <h1>Cube Player Attributes</h1>
+            <h2>As of today's date only 1 occurence of &lt;cube-player&gt; is supported.</h2>
+            <table>
+                <col style="width: 10%;" />
+                <col style="width: 50%;" />
+                <col style="width: 40%;" />
+                <tr>
+                    <th>attribute</th>
+                    <th>value</th>
+                    <th>options</th>
+                </tr>
+                <tr>
+                    <td>scramble</td>
+                    <td><input id="inpScramble" type="text" value="L2 R2 F2 L' R' D2 R L F2 U' D F2 U2 D2 L2 R2 F2 D' R L D'" onchange="updateAttr()"></input></td>
+                    <td>scramble</td>
+                </tr>
+                <tr>
+                    <td>solution</td>
+                    <td><input id="inpSolution" type="text" value="D' L' R' U B2 D2 F2 L2 F2 U2 L2 U2 L2" onchange="updateAttr()"></input></td>
+                    <td>solution</td>
+                </tr>
+                <tr>
+                    <td>time</td>
+                    <td><input id="inpTime" type="number" value="3000" onchange="updateAttr()"></input></td>
+                    <td>time in ms</td>
+                </tr>
+                <tr>
+                    <td>cubestyle</td>
+                    <td><select id="selCubestyle" onchange="updateAttr()">
+                        <option value="solid" selected>solid</option>
+                        <option value="stickerless">stickerless</option>
+                        <option value="hollow">hollow</option>
+                    </select></td>
+                    <td>solid | stickerless | hollow</td>
+                </tr>
+                <tr>
+                    <td>logo</td>
+                    <td><input id="inpLogo" type="text" value="./dayan-logo.jpg" onchange="updateAttr()"></input></td>
+                    <td>url to image file</td>
+                </tr>
+                <tr>
+                    <td>colors</td>
+                    <td><input id="inpColors" type="text" value="#ffffff,#ffaa00,#00ff00,#ff0000,#0000ff,#ffff00" onchange="updateAttr()"></input></td>
+                    <td>6 hex colors separated by , in order U L F R B D</td>
+                </tr>
+                <tr>
+                    <td>plastic</td>
+                    <td><input id="inpPlastic" type="text" value="#000000" onchange="updateAttr()"></input></td>
+                    <td>hex color</td>
+                </tr>
+            </table>
+        </div>
+        <div id="content">
+            <cube-player
+            scramble="L2 R2 F2 L' R' D2 R L F2 U' D F2 U2 D2 L2 R2 F2 D' R L D'" 
+            solution="D' L' R' U B2 D2 F2 L2 F2 U2 L2 U2 L2" 
+            time="3000" 
+            cubestyle="solid" 
+            logo="./dayan-logo.jpg"
+            colors="
+                #ffffff,
+                #ffaa00,
+                #00ff00,
+                #ff0000,
+                #0000ff,
+                #ffff00" 
+            plastic="#000000">
             </cube-player>
         </div>
     </body>
