@@ -909,6 +909,10 @@ export class CubePlayer extends HTMLElement {
             }
         }, 50); */
     }
+
+    attributeChangedCallback() {
+        
+    }
 }
 
 customElements.define("cube-player", CubePlayer);
