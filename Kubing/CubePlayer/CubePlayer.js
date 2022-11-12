@@ -8,6 +8,7 @@ export function initThreeJS() {
     document.head.appendChild(scriptGsap);
 }
 
+let cubePlayerHeight, cubePlayerWidth;
 export class CubePlayer extends HTMLElement {
     connectedCallback() {
         initThreeJS();
@@ -27,13 +28,19 @@ export class CubePlayer extends HTMLElement {
         ];
         let plastic = isColor(this.getAttribute("plastic")) ? this.getAttribute("plastic") : "#000000";
 
-        this.innerHTML = "<div id='cubePlayer'></div><div><button id='btnPlay'>Play</button></div>";
+        let cubePlayerDiv = document.createElement("div");
+        let buttonDiv = document.createElement("div");
+        let button = document.createElement("button");
+        button.innerText = "Play";
+        buttonDiv.appendChild(button);
+        this.appendChild(cubePlayerDiv);
+        this.appendChild(buttonDiv);
 
         if (solution === "") {
-            $("#btnPlay").attr("disabled", true);
+            $(button).attr("disabled", true);
         }
         else {
-            $("#btnPlay").attr("disabled", false);
+            $(button).attr("disabled", false);
         }
 
         let planes = [];
@@ -47,14 +54,16 @@ export class CubePlayer extends HTMLElement {
 
         init();
 
-        let cubePlayerHeight = $("#cubePlayer").parent().height();
-        let cubePlayerWidth = $("#cubePlayer").parent().width();
+        if (cubePlayerWidth === undefined) {
+            cubePlayerWidth = $(cubePlayerDiv).parent().width();
+            cubePlayerHeight = $(cubePlayerDiv).parent().height();
+        }
 
         adjustSize();
 
         function init() {
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera( 60, 1, 0.1, 1000 );
+            camera = new THREE.PerspectiveCamera( 40, 1, 0.1, 10 );
         
             cube = new THREE.Object3D();
             planeCube = new THREE.Object3D();
@@ -218,8 +227,8 @@ export class CubePlayer extends HTMLElement {
             
             renderer = new THREE.WebGLRenderer({ alpha: true });
             renderer.setClearColor( 0x000000, 0 );
-            renderer.setSize($("#cubePlayer").parent().width(), $("#cubePlayer").parent().width());
-            $("#cubePlayer").append( renderer.domElement );
+            renderer.setSize($(cubePlayerDiv).parent().width(), $(cubePlayerDiv).parent().width());
+            $(cubePlayerDiv).append( renderer.domElement );
         
             anim = false;
             animate();
@@ -235,14 +244,14 @@ export class CubePlayer extends HTMLElement {
             while(scene.children.length > 0){ 
                 scene.remove(scene.children[0]); 
             }
-            $("#cubePlayer").html("");
+            $(cubePlayerDiv).html("");
             planes = [];
             init();
             adjustSize();
         }
         
-        $("#btnPlay").on("click", () => {
-            $("#btnPlay").prop('disabled', true);
+        $(button).on("click", () => {
+            $(button).prop('disabled', true);
             resetState();
             const setup = scramble;
             const moves = solution;
@@ -260,7 +269,7 @@ export class CubePlayer extends HTMLElement {
                 if (i === mvs.length) {
                     clearInterval(interval);
                     anim = false;
-                    $("#btnPlay").prop('disabled', false);
+                    $(button).prop('disabled', false);
                 }
                 else {
                     if (tween) {
@@ -881,33 +890,28 @@ export class CubePlayer extends HTMLElement {
         
         function adjustSize() {
             if ($("body").width() >= $("body").height()) {
-                $("#cubePlayer").css("height", cubePlayerHeight);
-                $("#cubePlayer").css("width", cubePlayerHeight);
+                $(cubePlayerDiv).css("height", cubePlayerHeight);
+                $(cubePlayerDiv).css("width", cubePlayerHeight);
                 renderer.setSize(cubePlayerHeight, cubePlayerHeight);
             }
             else {
-                $("#cubePlayer").css("width", cubePlayerWidth);
-                $("#cubePlayer").css("height", cubePlayerWidth);
+                $(cubePlayerDiv).css("width", cubePlayerWidth);
+                $(cubePlayerDiv).css("height", cubePlayerWidth);
                 renderer.setSize(cubePlayerWidth, cubePlayerWidth);
             }
             renderer.setPixelRatio(window.devicePixelRatio);
             
-            $("#btnPlay").parent().css("width", $("#cubePlayer > canvas").width());
-            $("#btnPlay").css("z-index", "1");
-            $("#btnPlay").css("min-width", $("#cubePlayer > canvas").width() * 0.2);
-            $("#btnPlay").parent().css("text-align", "center");
+            $(buttonDiv).css("width", $(cubePlayerDiv).width());
+            $(button).css("position", "relative");
+            $(buttonDiv).css("z-index", "0");
+            $(button).css("z-index", "1");
+            $(button).css("min-width", $(cubePlayerDiv).width() * 0.2);
+            $(buttonDiv).css("text-align", "center");
         }
 
         function isColor(color) {
-            // return /^#[0-9A-F]{6}$/i.test(color);
             return /^#([0-9a-f]{3}){1,2}$/i.test(color);
         }
-        
-        /* setTimeout(() => {
-            for (let m of scramble.split(" ")) {
-                mv(m);
-            }
-        }, 50); */
     }
 
     attributeChangedCallback() {

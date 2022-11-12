@@ -2,6 +2,7 @@ html {
     background-image: linear-gradient(to bottom, #181818, #464646);
     background-attachment: fixed;
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
 }
@@ -9,9 +10,9 @@ html {
 body {
     background: transparent;
     height: 100%;
+    width: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
 }
 
 #header {
@@ -39,17 +40,13 @@ body {
 }
 
 #content {
-    height: 90%;
-    padding: 1% 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    width: 100%;
 }
 
 /* Style the tab content */
 .tabContent {
     width: 100%;
+    height: 100%;
     text-align: center;
     display: none;
     -webkit-animation: fadeEffect 1s;
@@ -57,21 +54,24 @@ body {
 }
 
 #tabHome {
-    height: 100%;
+    height: 90%;
+    width: 100%;
     display: block;
 }
 
 #tabProjects {
     height: 100%;
+    width: 100%;
     display: block;
     overflow-y: auto;
 }
 
 .cubePlayers {
+    width: 50%;
+    height: 50%;
+    margin: auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    text-align: left;
-    padding: 5%;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 /* Fade in tabs */
@@ -120,27 +120,17 @@ a:active {
     color: #aaaaaa;
 }
 
-einar {
-    color: #aaaaaa;
-    transition: color 0.1s linear;
-    -webkit-transition: color 0.1s linear;
-}
-
-einar:hover {
-    color: #ffffff;
-    transition: color 0.1s linear;
-    -webkit-transition: color 0.1s linear;
-}
-
 #underline {
     background: #ffffff;
     border-radius: 5px;
 }
 
 #socialLinks {
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
     padding-bottom: 1%;
 }
 
