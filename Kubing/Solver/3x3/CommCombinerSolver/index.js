@@ -4,16 +4,29 @@ let targets;
 let oScrambles;
 let scrambles;
 let solutions;
+let progress;
+
 $(() => {
-    targets = [];
-    scrambles = [];
-    solutions = [];
     adjustSize();
 });
 
 function solveCube(trg, scr) {
-    let nTargets = trg.split("\n").filter(s => s.trim() !== "");
-    let nScrambles = scr.split("\n").filter(s => s.trim() !== "");
+    targets = [];
+    scrambles = [];
+    solutions = [];
+    let nTargets = trg.split("\n").map(s => s.trim());
+    let nScrambles = scr.split("\n").map(s => s.trim());
+    let toRemove = [];
+    for (let i = 0; i < nTargets.length; i++) {
+        if (nTargets[i] === "") {
+            toRemove.push(i);
+        }
+    }
+
+    for (let i of toRemove.reverse()) {
+        nTargets.splice(i, 1);
+        nScrambles.splice(i, 1);
+    }
 
     if (nTargets.length !== nScrambles.length) {
         $("#taTargets").val("");
@@ -22,28 +35,41 @@ function solveCube(trg, scr) {
         alert("Enter the same amount of targets and scrambles!");
     }
     else {
-        for (let j = 0; j < nScrambles.length; j++) {
+        // for (let j = 0; j < nScrambles.length; j++) {
+        for (let j = 0; j < 1; j++) {
             for (let i = 0; i < nScrambles.length; i++) {
-                if (j !== i && !isOtherOrientation(nTargets[j], nTargets[i])) {
+                if (!isOtherOrientation(nTargets[j], nTargets[i])) {
                     targets.push(nTargets[j] + "_" + nTargets[i]);
                     scrambles.push(nScrambles[j] + "*" + inverseAlg(nScrambles[i]));
                 }
             }
         }
+
         oScrambles = scrambles.slice();
-        solutions = [];
 
         for (let i = 0; i < scrambles.length; i++) {
             let s = scrambles[i];
-            if (s.includes("(") || s.includes(")")) {
-                scrambles[i] = removeRedundantMoves(toAlg(s.split("*")[0])) + " " + removeRedundantMoves(toAlg(s.split("*")[1]));
-            }
+            let s1 = s.split("*")[0];
+            let s2 = s.split("*")[1];
             if ((s.includes("[") || s.includes("]")) && (s.includes(":") || s.includes(","))) {
-                scrambles[i] = removeRedundantMoves(commToAlg(s.split("*")[0])) + " " + removeRedundantMoves(commToAlg(s.split("*")[1]));
+                if ((s1.includes("[") || s1.includes("]")) && (s1.includes(":") || s1.includes(","))) {
+                    s1 = removeRedundantMoves(commToAlg(s1));
+                }
+                if ((s2.includes("[") || s2.includes("]")) && (s2.includes(":") || s2.includes(","))) {
+                    s2 = removeRedundantMoves(commToAlg(s2));
+                }
+                scrambles[i] = s1 + " " + s2;
+            }
+            if (s.includes("(") || s.includes(")")) {
+                if (s1.includes("(") || s1.includes(")")) {
+                    s1 = removeRedundantMoves(algxNtoAlg(s1));
+                }
+                if (s2.includes("(") || s2.includes(")")) {
+                    s2 = removeRedundantMoves(algxNtoAlg(s2));
+                }
+                scrambles[i] = s1 + " " + s2;
             }
         }
-
-        $("#taScrambles").val(scrambles.join("\n"));
         $("#taSolutions").val("");
 
         $("#progressBar").css("display", "block");
@@ -63,35 +89,34 @@ function isOtherOrientation(trg1, trg2) {
 
 function getSolution(solution) {
     if (solution[0] === 1) {
-        $("#btnSolve").attr("disabled", false);
-        $("#btnScramble").attr("disabled", false);
-        $("#inpScramble").attr("disabled", false);
-        $("#inpEndState").attr("disabled", false);
         let sol = removeRedundantMoves(cleanMoves(solution[1]));
-
-        solutions.push("{target:\"" + targets[solutions.length] + "\", alg:\"" + oScrambles[solutions.length] + "\", scramble:\"" + sol + "\"},");
+        let s = getTargetComm(targets[solutions.length], oScrambles[solutions.length], sol);
+        solutions.push(s);
         
         calcProgress();
-
-        $("#taSolutions").val(solutions.join("\n"));
-
-        if (solutions.length === scrambles.length) {
+        
+        if (solutions.length !== scrambles.length) {
+            solve(scrambles[solutions.length], getSolution);
+        }
+        else {
+            $("#taSolutions").val(solutions.join("\n"));
+            
             $("#btnSolve").attr("disabled", false);
             $("#taTargets").attr("disabled", false);
             $("#taScrambles").attr("disabled", false);
 
             setTimeout(() => {
                 $("#progressBar").css("display", "none");
-                $("#innerBar").css("width", "0%");
             }, 1000);
-        }
-        else {
-            solve(scrambles[solutions.length], getSolution);
         }
     }
 }
 
-function toAlg(comm) {
+function getTargetComm(t, a, s) {
+    return "{target:\"" + t + "\", alg:\"" + a + "\", scramble:\"" + s + "\"},";
+}
+
+function algxNtoAlg(comm) {
     let leftBrackets = 0;
     let rightBrackets = 0;
     let commArr = [];
@@ -218,7 +243,6 @@ function commToAlg(comm) {
 
 function calcProgress() {
     let progress = (100 * solutions.length / scrambles.length).toFixed(2);
-
     $("#innerBar").css("width", progress + "%");
     $("#progress").text(progress + "%");
 }

@@ -4210,12 +4210,17 @@ function intersectLines(x1, y1, x2, y2, x3, y3, x4, y4) {
 
 function inverseAlg(alg) {
     let invAlg = "";
-
+    
     if (alg.trim() === "") {
         return "";
     }
-    else if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",")) {
-        invAlg = inverseComm(alg);
+    else if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",") || alg.includes("(") || alg.includes(")")) {
+        if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",")) {
+            invAlg = inverseComm(alg);
+        }
+        if (alg.includes("(") || alg.includes(")")) {
+            invAlg = inverseAlgxN(alg);
+        }
     }
     else {
         let arr = [];
@@ -4286,4 +4291,17 @@ function inverseComm(alg) {
     }
 
     return invAlg;
+}
+
+function inverseAlgxN(alg) {
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+
+    if (leftBrackets !== rightBrackets || (alg[0] !== "(" && alg[alg.length - 2] !== ")")) {
+        return "Illegal alg";
+    }
+
+    let n = alg.split(")")[1].trim();
+    
+    return "(" + inverseAlg(alg.split("(")[1].split(")")[0]) + ")" + n;
 }
