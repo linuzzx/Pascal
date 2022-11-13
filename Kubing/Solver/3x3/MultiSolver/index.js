@@ -9,6 +9,7 @@ $(() => {
 
 function solveCube(scr) {
     scrambles = scr.split("\n").filter(s => s.trim() !== "");
+    solutions = [];
 
     for (let i = 0; i < scrambles.length; i++) {
         let s = scrambles[i];
