@@ -4212,7 +4212,7 @@ function inverseAlg(alg) {
     let invAlg = "";
 
     if (alg.trim() === "") {
-        return "Type in an alg";
+        return "";
     }
     else if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",")) {
         invAlg = inverseComm(alg);
@@ -4271,21 +4271,17 @@ function inverseComm(alg) {
     let ABA = alg.match(/(.*)\:(.*)/);
     
     if (ABCBCABCBC) {
-        console.log(ABCBCABCBC);
         tempAlg = alg;
         invAlg = "[" + tempAlg.replace(alg.split(",")[0] + ",", "").trim() + ", " + alg.split(",")[0].trim() + "]";
     }
     else if (ABCBCA) {
-        console.log(ABCBCA);
         tempAlg = alg;
         invAlg = "[" + ABCBCA[1].trim() + ": " + inverseAlg(tempAlg.replace(ABCBCA[1] + ":", "").trim()) + "]";
     }
     else if (ABAB) {
-        console.log(ABAB);
         invAlg = "[" + ABAB[2].trim() + ", " + ABAB[1].trim() + "]";
     }
     else if (ABA) {
-        console.log(ABA);
         invAlg = "[" + ABA[1].trim() + ": " + inverseAlg(ABA[2].trim()) + "]";
     }
 

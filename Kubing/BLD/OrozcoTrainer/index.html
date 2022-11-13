@@ -7,9 +7,39 @@
     <title>Orozco Trainer | Einar KL</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../Tools/tools.js"></script>
+    <script src="algs.js"></script>
     <script src="script.js" defer></script>
 </head>
 <body>
-    
+    <div id="optionsDiv">
+        <table id="tblRadBut">
+            <tr>
+                <th>UFR-UBR</th>
+                <th>UF-UR</th>
+                <th>UF-BU</th>
+            </tr>
+            <tr>
+                <th><input type="radio" name="radComms" id="radUFR_UBR" value="ufr_ubr" checked="checked" onchange="changeCommType()"></th>
+                <th><input type="radio" name="radComms" id="radUF_UR" value="uf_ur" onchange="changeCommType()"></th>
+                <th><input type="radio" name="radComms" id="radUF_BU" value="uf_bu" onchange="changeCommType()"></th>
+            </tr>
+        </table>
+        <div>
+            <select id="selLetterScheme" onchange="changeLetterScheme(this.value)">
+                <option value="Speffz" selected>Speffz</option>
+                <option value="Einar">Einar</option>
+            </select>
+        </div>
+    </div>
+    <div id="content">
+        <h1 id="scramble">Scramble</h1>
+        <h1 id="letterPair">LetterPair</h1>
+        <h1 id="solution">Solution</h1>
+    </div>
+    <div id="btnDiv">
+        <button id="btnNextComm" onclick="nextComm()">Next comm</button>
+        <button id="btnShowComm" onclick="showComm()">Show comm</button>
+    </div>
 </body>
 </html>
