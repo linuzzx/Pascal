@@ -23,7 +23,8 @@
                 let logo = $("#inpLogo").val();
                 let colors = $("#inpColors").val();
                 let plastic = $("#inpPlastic").val();
-                $("#content").html("<cube-player scramble=\""+scramble+"\" solution=\""+solution+"\" time=\""+time+"\" cubestyle=\""+cubestyle+"\" logo=\""+logo+"\" colors=\""+colors+"\" plastic=\""+plastic+"\"></cube-player>");
+                let playbutton = $("#selPlaybutton").find(":selected").val();
+                $("#content").html("<cube-player scramble=\""+scramble+"\" solution=\""+solution+"\" time=\""+time+"\" cubestyle=\""+cubestyle+"\" logo=\""+logo+"\" colors=\""+colors+"\" plastic=\""+plastic+"\" playbutton=\""+playbutton+"\"></cube-player>");
             }
         </script>
         <div>
@@ -80,6 +81,14 @@
                     <td>plastic</td>
                     <td><input id="inpPlastic" type="text" value="#000000" onchange="updateAttr()"></input></td>
                     <td>hex color</td>
+                </tr>
+                <tr>
+                    <td>playbutton</td>
+                    <td><select id="selPlaybutton" onchange="updateAttr()">
+                        <option value="button" selected>button</option>
+                        <option value="none">none</option>
+                    </select></td>
+                    <td>button | none</td>
                 </tr>
             </table>
         </div>
