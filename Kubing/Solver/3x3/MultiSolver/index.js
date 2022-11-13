@@ -21,7 +21,6 @@ function solveCube(scr) {
         }
     }
 
-    // scrambles = scrambles.map(s => {if (s.includes("[") || s.includes("]") || s.includes(":") || s.includes(",") || s.includes("(") || s.includes(")")) {return removeRedundantMoves(commToAlg(s))} else {return s}});
     $("#taScrambles").val(scrambles.join("\n"));
     $("#taSolutions").val("");
 
@@ -114,6 +113,11 @@ function commToAlg(comm) {
     [A: B] = A B A'
     */
 
+    if (
+        comm.split("").filter(c => c === "[").length !== (comm.split("").filter(c => c === ",").length + comm.split("").filter(c => c === ":").length)
+    ) {
+        comm = comm.replaceAll(":", ":[")+"]";
+    }
     comm = cleanMoves(comm.replaceAll("[", " [ ").replaceAll("]", " ] ").replaceAll(",", " , ").replaceAll(":", " : "));
     for (let c of comm.split(" ")) {
         if (c === "[") {
