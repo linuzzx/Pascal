@@ -23,7 +23,7 @@ const w = 3;
 const r = 4;
 const g = 5;
 
-const giikerColors = ['blue', 'yellow', 'orange', 'white', 'red', 'green'];
+const colors = ['blue', 'yellow', 'orange', 'white', 'red', 'green'];
 
 const turns = {
   0: 1,
@@ -233,7 +233,7 @@ class Giiker extends EventEmitter {
       );
       state.corners.push({
         position: cornerLocations[index].map((f) => faces[f]),
-        colors: mappedColors.map((c) => giikerColors[c])
+        colors: mappedColors.map((c) => colors[c])
       });
     });
     this._state.edgePositions.forEach((ep, index) => {
@@ -243,7 +243,7 @@ class Giiker extends EventEmitter {
       );
       state.edges.push({
         position: edgeLocations[index].map((f) => faces[f]),
-        colors: mappedColors.map((c) => giikerColors[c])
+        colors: mappedColors.map((c) => colors[c])
       });
     });
     return state;

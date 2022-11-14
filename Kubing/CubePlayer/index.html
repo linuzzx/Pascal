@@ -24,9 +24,8 @@
                 let colors = $("#inpColors").val();
                 let plastic = $("#inpPlastic").val();
                 let playbutton = $("#selPlaybutton").find(":selected").val();
-                let smartcube = $("#selSmartcube").find(":selected").val();
-                let attributes = [scramble, solution, time, cubestyle, logo, colors, plastic, playbutton, smartcube];
-                $("#content cube-player").attr(attr, attributes[["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube"].indexOf(attr)]);
+                let attributes = [scramble, solution, time, cubestyle, logo, colors, plastic, playbutton];
+                $("#content cube-player").attr(attr, attributes[["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton"].indexOf(attr)]);
             }
         </script>
         <div>
@@ -92,14 +91,6 @@
                     </select></td>
                     <td>button | none</td>
                 </tr>
-                <tr>
-                    <td>smartcube</td>
-                    <td><select id="selSmartcube" onchange="updateAttr('smartcube')">
-                        <option value="none" selected>none</option>
-                        <option value="giiker">giiker</option>
-                    </select></td>
-                    <td>none | giiker</td>
-                </tr>
             </table>
         </div>
         <div id="content">
@@ -116,9 +107,7 @@
                 #ff0000,
                 #0000ff,
                 #ffff00" 
-            plastic="#000000"
-            playbutton="button"
-            smartcube="none">
+            plastic="#000000">
             </cube-player>
         </div>
     </body>
