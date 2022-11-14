@@ -1080,6 +1080,7 @@ async function connectSmartCube(sc) {
                 const giiker = await connect()
                 .then(() => {
                     $(smartcubeButton).css("display", "none");
+                    alert("Giiker cube connected");
                 });
                 setVirtualCube(true);
 
