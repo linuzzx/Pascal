@@ -6,6 +6,12 @@ export function initThreeJS() {
     let scriptGsap = document.createElement('script');
     scriptGsap.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js');
     document.head.appendChild(scriptGsap);
+    /* 
+    var script = document.querySelector('#hljs');
+    script.addEventListener('load', function() {
+        hljs.initHighlightingOnLoad(); 
+    });
+    */
 }
 
 let initialized = false;
