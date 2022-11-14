@@ -12,12 +12,15 @@ let xAxis, yAxis, zAxis;
 let anim;
 let tween;
 
+let scramble = "";
 let time = 0;
 let moveCount = 0;
 let tps = 0;
 let interval;
 let timing = false;
 let ready = false;
+
+let reconMoves = [];
 
 let prevTurn;
 
@@ -248,9 +251,9 @@ function applyScramble() {
     resetState();
     let oAnim = anim;
     anim = false;
-    let scr = getScrambleNxN(3);
-    $("#scramble").text(scr);
-    for (let s of scr.split(" ")) {
+    scramble = getScrambleNxN(3);
+    $("#scramble").text(scramble);
+    for (let s of scramble.split(" ")) {
         applyMove(s);
     }
     anim = oAnim;
@@ -269,6 +272,7 @@ function getTurn(e) {
         const key = keyBinds.indexOf(String.fromCharCode(e.which).toLowerCase());
         const turn = possibleMoves[key];
         if (turn) {
+            reconMoves.push(turn);
             if (turn.includes("x") || turn.includes("y") || turn.includes("z")) {}
             else {
                 if (ready) {
@@ -442,7 +446,35 @@ function stopTimer() {
 
         tps = moveCount / (time / 1000);
         $("#tps").html(tps.toFixed(2) + " tps");
+        recon(time, scramble, reconMoves.join(" "));
     }
+}
+
+function recon(t, scr, rec) {
+    let ft;
+    let ms = Math.floor((t % 1000) / 10);
+    let s = Math.floor((t / 1000) % 60);
+    let m = Math.floor((t / 60000) % 60);
+
+    if (ms < 10) ms = "0" + ms;
+
+    if (m === 0) {
+        ft = s + "." + ms;
+    }
+    else {
+        if (s < 10) s = "0" + s;
+        ft = m + ":" + s + "." + ms;
+    }
+    const url = getURL(ft, scr, rec);
+
+    $("#btnRecon").css("display", "block");
+    $("#btnRecon").attr("href", url);
+}
+
+function getURL(tim, scr, rec) {
+    let url = "https://einarkl.github.io/Kubing/CubeAnalyser3d/?";
+
+    return url + "setup=" + encodeURIComponent(scr) + "&moves=" + encodeURIComponent(rec) + "&time=" + encodeURIComponent(tim);
 }
 
 function rotateAroundPoint(obj, point, axis, theta, pointIsWorld = true){

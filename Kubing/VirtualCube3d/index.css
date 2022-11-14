@@ -24,6 +24,15 @@ body {
     text-align: center;
 }
 
+#btnRecon {
+    position: absolute;
+    left: 50%;
+    bottom: 1%;
+    transform: translateX(-50%);
+    margin: auto;
+    text-align: center;
+}
+
 #buttonDiv {
     display: grid;
     grid-template-columns: 1fr 1fr;
