@@ -3,7 +3,7 @@ let commType;
 let letterScheme;
 let corners = ["UBL", "BUL", "LUB", "UBR", "BUR", "RUB", "UFL", "FUL", "LUF", "DFL", "FDL", "LDF", "DFR", "FDR", "RDF", "DBL", "BDL", "LDB", "DBR", "BDR", "RDB"];
 let edges = ["UB", "UL", "UR", "DF", "DL", "DR", "DB", "FL", "FR", "BR", "BL", "BU", "LU", "RU", "FD", "LD", "DR", "BD", "LF", "RF", "RB", "LB"];
-let curComm = [];
+let curComm = "";
 
 $(() => {
     locked = false;
@@ -57,13 +57,12 @@ function nextComm() {
     }
 
     let l2 = pieces.splice(Math.floor(Math.random() * pieces.length), 1)[0];
-    curComm = [l1, l2];
+    curComm = l1 + "_" + l2;
     let lp = letterScheme[l1.toLowerCase()] + letterScheme[l2.toLowerCase()];
 
-    let ind1 = arr.findIndex(c => c.target === l1);
-    let ind2 = arr.findIndex(c => c.target === l2);
-    let scr = removeRedundantMoves(inverseAlg(arr[ind2].scramble) + " " + arr[ind1].scramble);
-    let sol = arr[ind1].alg + "<br>" + inverseAlg(arr[ind2].alg);
+    let ind = arr.findIndex(c => c.target === curComm);
+    let scr = removeRedundantMoves(arr[ind].scramble);
+    let sol = arr[ind].alg.replace("*", "<br>");
 
     $("#scramble").text(scr);
     $("#letterPair").text(lp);
@@ -101,8 +100,9 @@ function changeLetterScheme(ls) {
         }
     }
     
-    if (curComm.length !== 0) {console.log(curComm);
-        let lp = letterScheme[curComm[0].toLowerCase()] + letterScheme[curComm[1].toLowerCase()];
+    if (curComm !== "") {
+        let c = curComm.toLowerCase().split("_");
+        let lp = letterScheme[c[0]] + letterScheme[c[1]];
         $("#letterPair").text(lp);
     }
 

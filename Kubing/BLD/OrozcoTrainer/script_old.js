@@ -57,12 +57,13 @@ function nextComm() {
     }
 
     let l2 = pieces.splice(Math.floor(Math.random() * pieces.length), 1)[0];
-    curComm = l1 + "_" + l2;
+    curComm = [l1, l2];
     let lp = letterScheme[l1.toLowerCase()] + letterScheme[l2.toLowerCase()];
 
-    let ind1 = arr.findIndex(c => c.target === curComm);
-    let scr = removeRedundantMoves(arr[ind1].scramble);
-    let sol = arr[ind1].alg.replace("*", "<br>");
+    let ind1 = arr.findIndex(c => c.target === l1);
+    let ind2 = arr.findIndex(c => c.target === l2);
+    let scr = removeRedundantMoves(inverseAlg(arr[ind2].scramble) + " " + arr[ind1].scramble);
+    let sol = arr[ind1].alg + "<br>" + inverseAlg(arr[ind2].alg);
 
     $("#scramble").text(scr);
     $("#letterPair").text(lp);
