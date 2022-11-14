@@ -94,14 +94,14 @@ function getSolution(solution) {
         solutions.push(s);
         
         calcProgress();
+
+        $("#taSolutions").val(solutions.join("\n"));
         
         if (solutions.length !== scrambles.length) {
             worker.terminate();
             solve(scrambles[solutions.length], getSolution);
         }
         else {
-            $("#taSolutions").val(solutions.join("\n"));
-            
             $("#btnSolve").attr("disabled", false);
             $("#taTargets").attr("disabled", false);
             $("#taScrambles").attr("disabled", false);
