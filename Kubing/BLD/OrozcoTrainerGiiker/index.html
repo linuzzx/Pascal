@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../Tools/tools.js"></script>
     <script src="algs.js"></script>
+    <script src="../../CubePlayer/CubePlayer.js" type="module"></script>
     <script src="script.js" defer></script>
 </head>
 <body>
@@ -31,13 +32,10 @@
                 <option value="Einar">Einar</option>
             </select>
         </div>
-        <div>
-            <button id="btnGiiker">Giiker</button>
-        </div>
     </div>
     <div id="content">
-        <h1 id="scramble">Scramble</h1>
         <h1 id="letterPair">LetterPair</h1>
+        <div id="cpDiv"><cube-player></cube-player></div>
         <h1 id="solution">Solution</h1>
     </div>
     <div id="btnDiv">

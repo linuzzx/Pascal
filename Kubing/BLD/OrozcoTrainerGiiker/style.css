@@ -15,12 +15,17 @@ body {
     overflow: hidden;
 }
 
+#cpDiv {
+    width: 25%;
+    height: 25%;
+}
+
 #optionsDiv {
     min-width: 30%;
     max-width: 40%;
     min-height: 5%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     text-align: right;
     padding: 1%;
     margin-right: auto;

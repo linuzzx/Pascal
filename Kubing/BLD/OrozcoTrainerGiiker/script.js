@@ -65,7 +65,7 @@ function nextComm() {
     let scr = removeRedundantMoves(inverseAlg(arr[ind2].scramble) + " " + arr[ind1].scramble);
     let sol = arr[ind1].alg + "<br>" + inverseAlg(arr[ind2].alg);
 
-    $("#scramble").text(scr);
+    $("#cpDiv cube-player").attr("scramble", scr);
     $("#letterPair").text(lp);
     $("#solution").html(sol);
 
@@ -125,116 +125,5 @@ function getKey(e) {
     }
     else if (e.which === 13) {// enter
         nextComm();
-    }
-}
-
-async function connectToGiiker() {
-    try {
-        const giiker = await connect()
-        .then(() => {
-            if (!usedVirtual) {
-                alert("Select scramble/solution field to enter moves with Giiker Cube");
-                usedVirtual = true;
-            }
-            
-            // $("#btnGiiker").text("Disconnect");
-            // $("#btnGiiker").blur();
-            // $("#btnGiiker").attr("onclick", "stopGiiker()");
-            $("#btnGiiker").attr("disabled", true);
-        
-            $("#inputTime").attr("readonly", true);
-            $("#taSetup").attr("readonly", true);
-            $("#taMoves").attr("readonly", true);
-            $("#btnVirtual").attr("disabled", true);
-            $("#btnPlay").attr("disabled", true);
-            $("#btnReset").attr("disabled", true);
-
-            virtualStep = "";
-
-            $("#taSetup").on("focus", () => {
-                virtualStep = "scramble";
-                $("#taSetup").css("background-color", "#33C481");
-            });
-            $("#taSetup").focusout(() => {
-                $("#taSetup").css("background-color", "#FFFFFF");
-            });
-            $("#taMoves").on("focus", () => {
-                virtualStep = "solution";
-                $("#taMoves").css("background-color", "#33C481");
-            });
-            $("#taMoves").focusout(() => {
-                $("#taMoves").css("background-color", "#FFFFFF");
-            });
-        });
-
-        giiker.on('connected', () => {
-            alert("Giiker cube connected");
-        });
-
-        giiker.on('move', (move) => {/* console.log(move);
-            doAlg(move.notation); */
-        });
-
-        giiker.on('disconnected', () => {
-            alert("Giiker cube disconnected");
-            $("#btnGiiker").attr("disabled", false);
-        })
-    
-    } catch(e) {
-        $("#btnGiiker").attr("disabled", false);
-    }
-}
-
-function stopGiiker() {
-    $("#btnGiiker").text("Giiker");
-    $("#btnGiiker").blur();
-    $("#btnGiiker").attr("onclick", "connectToGiiker()");
-
-    $("#inputTime").attr("readonly", false);
-    $("#taSetup").attr("readonly", false);
-    $("#taMoves").attr("readonly", false);
-    $("#btnVirtual").attr("disabled", false);
-    $("#btnPlay").attr("disabled", false);
-    $("#btnReset").attr("disabled", false);
-
-    const giiker = disconnect();
-}
-
-function giikerMove(move) {
-    resetState();
-    if (virtualStep === "scramble") {
-        let newScramble = $("#taSetup").val();
-
-        anim = false;
-        for (let m of newScramble.split(" ")) {
-            applyMove(m);
-        }
-
-        if (newScramble !== "" && newScramble.split(" ")[newScramble.split(" ").length - 1] === move) {
-            newScramble = newScramble.split(" ").slice(0, newScramble.split(" ").length - 1).join(" ") + " " + move.split("")[0] + "2";
-        }
-        else {
-            newScramble = (newScramble + " " + move).trim();
-        }
-        $("#taSetup").val(newScramble).change();
-    }
-    else if (virtualStep === "solution") {
-        let newSolution = $("#taMoves").val();
-
-        anim = false;
-        for (let m of $("#taSetup").val().split(" ")) {
-            applyMove(m);
-        }
-        for (let m of newSolution.split(" ")) {
-            applyMove(m);
-        }
-
-        if (newSolution !== "" && newSolution.split(" ")[newSolution.split(" ").length - 1] === move) {
-            newSolution = newSolution.split(" ").slice(0, newSolution.split(" ").length - 1).join(" ") + " " + move.split("")[0] + "2";
-        }
-        else {
-            newSolution = (newSolution + " " + move).trim();
-        }
-        $("#taMoves").val(newSolution).change();
     }
 }
