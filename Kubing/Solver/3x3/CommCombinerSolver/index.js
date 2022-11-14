@@ -5,6 +5,7 @@ let oScrambles;
 let scrambles;
 let solutions;
 let progress;
+let worker;
 
 $(() => {
     adjustSize();
@@ -35,8 +36,7 @@ function solveCube(trg, scr) {
         alert("Enter the same amount of targets and scrambles!");
     }
     else {
-        // for (let j = 0; j < nScrambles.length; j++) {
-        for (let j = 0; j < 1; j++) {
+        for (let j = 0; j < nScrambles.length; j++) {
             for (let i = 0; i < nScrambles.length; i++) {
                 if (!isOtherOrientation(nTargets[j], nTargets[i])) {
                     targets.push(nTargets[j] + "_" + nTargets[i]);
@@ -96,6 +96,7 @@ function getSolution(solution) {
         calcProgress();
         
         if (solutions.length !== scrambles.length) {
+            worker.terminate();
             solve(scrambles[solutions.length], getSolution);
         }
         else {
@@ -259,7 +260,7 @@ function cleanMoves(moves) {
 }
 
 function solve(scramble, callback, endState = "wwwwwwwwwooooooooogggggggggrrrrrrrrrbbbbbbbbbyyyyyyyyy") {
-    let worker = new Worker("./worker.js");
+    worker = new Worker("./worker.js");
     worker.postMessage([scramble, endState]);
     worker.onmessage = e => {
         callback(e.data);
