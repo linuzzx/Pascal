@@ -8,6 +8,7 @@ export function initThreeJS() {
     document.head.appendChild(scriptGsap);
 }
 
+let initialized = false;
 let cubePlayerHeight, cubePlayerWidth;
 export class CubePlayer extends HTMLElement {
     connectedCallback() {
@@ -927,11 +928,19 @@ export class CubePlayer extends HTMLElement {
             for (let m of scramble.split(" ")) {
                 mv(m);
             }
-        }, 50);
+
+            initialized = true;
+        }, 100);
+    }
+    
+    static get observedAttributes() {
+        return ["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton"];
     }
 
-    attributeChangedCallback() {
-        console.log("Attributes changed");
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (initialized) {
+            console.log(name, oldValue, newValue);
+        }
     }
 }
 

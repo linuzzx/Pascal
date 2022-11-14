@@ -15,7 +15,7 @@
                 navigator.clipboard.writeText(copyText.value);
                 copyText.setSelectionRange(0, 0);
             }
-            function updateAttr() {
+            function updateAttr(attr) {
                 let scramble = $("#inpScramble").val();
                 let solution = $("#inpSolution").val();
                 let time = $("#inpTime").val();
@@ -24,7 +24,8 @@
                 let colors = $("#inpColors").val();
                 let plastic = $("#inpPlastic").val();
                 let playbutton = $("#selPlaybutton").find(":selected").val();
-                $("#content").html("<cube-player scramble=\""+scramble+"\" solution=\""+solution+"\" time=\""+time+"\" cubestyle=\""+cubestyle+"\" logo=\""+logo+"\" colors=\""+colors+"\" plastic=\""+plastic+"\" playbutton=\""+playbutton+"\"></cube-player>");
+                let attributes = [scramble, solution, time, cubestyle, logo, colors, plastic, playbutton];
+                $("#content cube-player").attr(attr, attributes[["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton"].indexOf(attr)]);
             }
         </script>
         <div>
@@ -45,22 +46,22 @@
                 </tr>
                 <tr>
                     <td>scramble</td>
-                    <td><input id="inpScramble" type="text" value="L2 R2 F2 L' R' D2 R L F2 U' D F2 U2 D2 L2 R2 F2 D' R L D'" onchange="updateAttr()"></input></td>
+                    <td><input id="inpScramble" type="text" value="L2 R2 F2 L' R' D2 R L F2 U' D F2 U2 D2 L2 R2 F2 D' R L D'" onchange="updateAttr('scramble')"></input></td>
                     <td>scramble</td>
                 </tr>
                 <tr>
                     <td>solution</td>
-                    <td><input id="inpSolution" type="text" value="D' L' R' U B2 D2 F2 L2 F2 U2 L2 U2 L2" onchange="updateAttr()"></input></td>
+                    <td><input id="inpSolution" type="text" value="D' L' R' U B2 D2 F2 L2 F2 U2 L2 U2 L2" onchange="updateAttr('solution')"></input></td>
                     <td>solution</td>
                 </tr>
                 <tr>
                     <td>time</td>
-                    <td><input id="inpTime" type="number" value="3000" onchange="updateAttr()"></input></td>
+                    <td><input id="inpTime" type="number" value="3000" onchange="updateAttr('time')"></input></td>
                     <td>time in ms</td>
                 </tr>
                 <tr>
                     <td>cubestyle</td>
-                    <td><select id="selCubestyle" onchange="updateAttr()">
+                    <td><select id="selCubestyle" onchange="updateAttr('cubestyle')">
                         <option value="solid" selected>solid</option>
                         <option value="stickerless">stickerless</option>
                         <option value="hollow">hollow</option>
@@ -69,22 +70,22 @@
                 </tr>
                 <tr>
                     <td>logo</td>
-                    <td><input id="inpLogo" type="text" value="./dayan-logo.jpg" onchange="updateAttr()"></input></td>
+                    <td><input id="inpLogo" type="text" value="./dayan-logo.jpg" onchange="updateAttr('logo')"></input></td>
                     <td>url to image file</td>
                 </tr>
                 <tr>
                     <td>colors</td>
-                    <td><input id="inpColors" type="text" value="#ffffff,#ffaa00,#00ff00,#ff0000,#0000ff,#ffff00" onchange="updateAttr()"></input></td>
+                    <td><input id="inpColors" type="text" value="#ffffff,#ffaa00,#00ff00,#ff0000,#0000ff,#ffff00" onchange="updateAttr('colors')"></input></td>
                     <td>6 hex colors separated by , in order U L F R B D</td>
                 </tr>
                 <tr>
                     <td>plastic</td>
-                    <td><input id="inpPlastic" type="text" value="#000000" onchange="updateAttr()"></input></td>
+                    <td><input id="inpPlastic" type="text" value="#000000" onchange="updateAttr('plastic')"></input></td>
                     <td>hex color</td>
                 </tr>
                 <tr>
                     <td>playbutton</td>
-                    <td><select id="selPlaybutton" onchange="updateAttr()">
+                    <td><select id="selPlaybutton" onchange="updateAttr('playbutton')">
                         <option value="button" selected>button</option>
                         <option value="none">none</option>
                     </select></td>
