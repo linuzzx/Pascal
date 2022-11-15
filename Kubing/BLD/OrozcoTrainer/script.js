@@ -4,9 +4,15 @@ let letterScheme;
 let corners = ["UBL", "BUL", "LUB", "UBR", "BUR", "RUB", "UFL", "FUL", "LUF", "DFL", "FDL", "LDF", "DFR", "FDR", "RDF", "DBL", "BDL", "LDB", "DBR", "BDR", "RDB"];
 let edges = ["UB", "UL", "UR", "DF", "DL", "DR", "DB", "FL", "FR", "BR", "BL", "BU", "LU", "RU", "FD", "LD", "DR", "BD", "LF", "RF", "RB", "LB"];
 let curComm = "";
+let start;
+let time;
+let timing;
+let timingInterval;
+let times;
 
 $(() => {
     locked = false;
+    timing = false;
 
     init();
     changeCommType();
@@ -29,6 +35,8 @@ function init() {
     let ls = localStorage.getItem("einarklOrozcoLetterScheme") || "Speffz";
     $("input[name='radComms'][value='"+commType+"']").prop("checked",true);
     $("#selLetterScheme").val(ls).change();
+
+    initTimeList();
 }
 
 function nextComm() {
@@ -119,9 +127,51 @@ function changeCommType() {
     nextComm();
 }
 
+function startTimer() {
+    timing = true;
+    start = Date.now();
+    timingInterval = setInterval(() => {
+        time = getHHmmsshh(Date.now() - start);
+        $("#timer").text(time);
+    }, 10);
+}
+
+function stopTimer() {
+    timing = false;
+    clearInterval(timingInterval);
+
+    $("#timeList").prepend("<tr><td>" + ($("#timeList").children().length + 1) + "</td><td>" + time + "</td</tr>");
+
+    times.push(time);
+
+    localStorage.setItem("einarklOrozcoTrainerTimes", times.join(";"));
+}
+
+function initTimeList() {
+    times = localStorage.getItem("einarklOrozcoTrainerTimes") ? localStorage.getItem("einarklOrozcoTrainerTimes").split(";") : [];
+
+    let i = 1;
+    for (t of times) {
+        $("#timeList").prepend("<tr><td>" + i + "</td><td>" + t + "</td</tr>");
+        i++;
+    }
+}
+
+function resetTimeList() {
+    $("btnReset").blur();
+    times = [];
+    $("#timeList").html("");
+    localStorage.removeItem("einarklOrozcoTrainerTimes");
+}
+
 function getKey(e) {
     if (e.which === 32) {// spacebar
-        showComm();
+        if (timing) {
+            stopTimer();
+        }
+        else {
+            startTimer();
+        }
     }
     else if (e.which === 13) {// enter
         nextComm();

@@ -33,9 +33,20 @@
         </div>
     </div>
     <div id="content">
-        <h1 id="scramble">Scramble</h1>
-        <h1 id="letterPair">LetterPair</h1>
-        <h1 id="solution">Solution</h1>
+        <div id="contentLeft">
+            <button id="btnReset" onclick="resetTimeList()">Reset</button>
+            <div style="height: 60%; max-height: 60%; overflow-y: scroll; border: 1px solid black">
+                <table id="timeList"></table>
+            </div>
+        </div>
+        <div id="contentMiddle">
+            <h1 id="scramble">Scramble</h1>
+            <h1 id="letterPair">LetterPair</h1>
+            <h1 id="solution">Solution</h1>
+        </div>
+        <div id="contentRight">
+            <h1 id="timer">0.00</h1>
+        </div>
     </div>
     <div id="btnDiv">
         <button id="btnNextComm" onclick="nextComm()">Next comm</button>
