@@ -1,5 +1,6 @@
 let locked;
 let commType;
+let commSet;
 let letterScheme;
 let corners = ["UBL", "BUL", "LUB", "UBR", "BUR", "RUB", "UFL", "FUL", "LUF", "DFL", "FDL", "LDF", "DFR", "FDR", "RDF", "DBL", "BDL", "LDB", "DBR", "BDR", "RDB"];
 let edges = ["UB", "UL", "UR", "DF", "DL", "DR", "DB", "FL", "FR", "BR", "BL", "BU", "LU", "RU", "FD", "LD", "DR", "BD", "LF", "RF", "RB", "LB"];
@@ -9,8 +10,6 @@ $(() => {
     locked = false;
 
     init();
-    changeCommType();
-    changeLetterScheme($("#selLetterScheme").val());
 
     $(window).keydown(function(e) {
         if (!locked) {
@@ -26,39 +25,45 @@ $(() => {
 
 function init() {
     commType = localStorage.getItem("einarklCommType") || "ufr";
-    let ls = localStorage.getItem("einarklLetterScheme") || "Speffz";
+    letterScheme = localStorage.getItem("einarklLetterScheme") || "Speffz";
+    commSet = localStorage.getItem("einarklCommSet") || "All";
+
+    initCommSetOptions();
+
     $("input[name='radComms'][value='"+commType+"']").prop("checked",true);
-    $("#selLetterScheme").val(ls).change();
+    $("#selCommSet").val(commSet).change();
+    $("#selLetterScheme").val(letterScheme).change();
+
+    // changeCommType();
+    // changeCommSet($("#selcommSet").val());
+    // changeLetterScheme($("#selLetterScheme").val());
+}
+
+function initCommSetOptions() {
+    let arr = [corners, edges][["ufr", "uf"].indexOf(commType)];
+
+    let out = "<option value='All' selected>All</option>";
+    for (let a of arr) {
+        out += "<option value='" + a + "'>" + a + "</option>";
+    }
+
+    $("#selCommSet").html(out);
 }
 
 function nextComm() {
     $("#btnNextComm").blur();
 
-    let pieces = [corners, edges][["ufr", "uf"].indexOf(commType)].slice();
     let arr = [ufr, uf][["ufr", "uf"].indexOf(commType)];
+    let targets = arr.map(a => a.target);
 
-    let l1 = pieces.splice(Math.floor(Math.random() * pieces.length), 1)[0];
-    let toRemove = [];
-    let pArr = l1.split("");
-    for (let p of pieces) {
-        let n = 0;
-        for (let p1 of pArr) {
-            if (p.includes(p1)) {
-                n++;
-            }
-        }
-        if (n === pArr.length) {
-            toRemove.push(pieces.indexOf(p));
-        }
+    if (commSet !== "All") {
+        targets = targets.filter(t => {return t.includes(commSet)});
     }
     
-    for (let r of toRemove.reverse()) {
-        pieces.splice(r, 1);
-    }
-
-    let l2 = pieces.splice(Math.floor(Math.random() * pieces.length), 1)[0];
-    curComm = l1 + "_" + l2;
-    let lp = letterScheme[l1.toLowerCase()] + letterScheme[l2.toLowerCase()];
+    curComm = targets[Math.floor(Math.random() * targets.length)];
+    let t1 = curComm.split("_")[0];
+    let t2 = curComm.split("_")[1];
+    let lp = letterScheme[t1.toLowerCase()] + letterScheme[t2.toLowerCase()];
 
     let ind = arr.findIndex(c => c.target === curComm);
     let scr = removeRedundantMoves(arr[ind].scramble);
@@ -109,12 +114,26 @@ function changeLetterScheme(ls) {
     localStorage.setItem("einarklLetterScheme", ls);
 }
 
-function changeCommType() {
+function changeCommType(ct) {
     $("input[name='radComms']").blur();
 
-    commType = $("input[name='radComms']:checked").val();
+    commType = ct;
+    commSet = "All";
 
     localStorage.setItem("einarklCommType", commType);
+    localStorage.setItem("einarklCommSet", commSet);
+
+    initCommSetOptions();
+
+    nextComm();
+}
+
+function changeCommSet(cs) {
+    $("#selCommSet").blur();
+
+    commSet = cs;
+
+    localStorage.setItem("einarklCommSet", commSet);
 
     nextComm();
 }

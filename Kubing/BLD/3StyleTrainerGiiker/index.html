@@ -18,10 +18,12 @@
             <tr>
                 <th>UFR</th>
                 <th>UF</th>
+                <th><select id="selCommSet" onchange="changeCommSet(this.value)"></select></th>
             </tr>
             <tr>
-                <th><input type="radio" name="radComms" id="radUFR" value="ufr" checked="checked" onchange="changeCommType()"></th>
-                <th><input type="radio" name="radComms" id="radUF" value="uf" onchange="changeCommType()"></th>
+                <th><input type="radio" name="radComms" id="radUFR" value="ufr" checked="checked" onchange="changeCommType(this.value)"></th>
+                <th><input type="radio" name="radComms" id="radUF" value="uf" onchange="changeCommType(this.value)"></th>
+                <th></th>
             </tr>
         </table>
         <div>
