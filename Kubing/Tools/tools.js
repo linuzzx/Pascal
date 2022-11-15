@@ -2889,6 +2889,13 @@ function removeRedundantMoves(mvs) {
 
         let nm;
 
+        if (m1.includes("2'")) {
+            m1 = m1.replace("2'", "2");
+        }
+        if (m2.includes("2'")) {
+            m2 = m2.replace("2'", "2");
+        }
+
         let e1 = m1.length === 1 ? "" : m1[m1.length - 1];
         let e2 = m2.length === 1 ? "" : m2[m2.length - 1];
         let e = e1 + e2;
@@ -4248,46 +4255,64 @@ function inverseComm(alg) {
     let colons = 0;
     let commas = 0;
 
-    for (let a of alg) {
-        if (a === "[") {
-            leftBrackets++;
+    if (alg.includes("] [")) {
+        let c = alg.split("] [");
+        let c1 = c[0] + "]";
+        let c2 = "[" + c[1];
+        invAlg = inverseAlg(c2) + " " + inverseAlg(c1);
+    }
+    else {
+        for (let a of alg) {
+            if (a === "[") {
+                leftBrackets++;
+            }
+            else if (a === "]") {
+                rightBrackets++;
+            }
+            else if (a === ":") {
+                colons++;
+            }
+            else if (a === ",") {
+                commas++;
+            }
         }
-        else if (a === "]") {
+
+        if (leftBrackets === rightBrackets + 1) {
+            alg += "]";
             rightBrackets++;
         }
-        else if (a === ":") {
-            colons++;
-        }
-        else if (a === ",") {
-            commas++;
-        }
-    }
 
-    if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets || (alg[0] !== "[" && alg[alg.length - 1] !== "]")
-        || (colons === commas && colons === leftBrackets)) {
-        return "Illegal alg";
-    }
-    
-    alg = alg.slice(1, alg.length - 1);
-    
-    let ABCBCABCBC = alg.match(/(.*)\,\ \[(.*)\,(.*)\]/);
-    let ABAB = alg.match(/(.*)\,(.*)/);
-    let ABCBCA = alg.match(/(.*)\:\ \[(.*)\,(.*)\]/);
-    let ABA = alg.match(/(.*)\:(.*)/);
-    
-    if (ABCBCABCBC) {
-        tempAlg = alg;
-        invAlg = "[" + tempAlg.replace(alg.split(",")[0] + ",", "").trim() + ", " + alg.split(",")[0].trim() + "]";
-    }
-    else if (ABCBCA) {
-        tempAlg = alg;
-        invAlg = "[" + ABCBCA[1].trim() + ": " + inverseAlg(tempAlg.replace(ABCBCA[1] + ":", "").trim()) + "]";
-    }
-    else if (ABAB) {
-        invAlg = "[" + ABAB[2].trim() + ", " + ABAB[1].trim() + "]";
-    }
-    else if (ABA) {
-        invAlg = "[" + ABA[1].trim() + ": " + inverseAlg(ABA[2].trim()) + "]";
+        if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets || (alg[0] !== "[" && alg[alg.length - 1] !== "]")
+            || (colons === commas && colons === leftBrackets)) {
+                console.log(leftBrackets);
+                console.log(rightBrackets);
+                console.log(commas);
+                console.log(colons);
+                console.log(alg);
+            return "Illegal alg";
+        }
+        
+        alg = alg.slice(1, alg.length - 1);
+        
+        let ABCBCABCBC = alg.match(/(.*)\,\ \[(.*)\,(.*)\]/);
+        let ABAB = alg.match(/(.*)\,(.*)/);
+        let ABCBCA = alg.match(/(.*)\:\ \[(.*)\,(.*)\]/);
+        let ABA = alg.match(/(.*)\:(.*)/);
+        
+        if (ABCBCABCBC) {
+            tempAlg = alg;
+            invAlg = "[" + tempAlg.replace(alg.split(",")[0] + ",", "").trim() + ", " + alg.split(",")[0].trim() + "]";
+        }
+        else if (ABCBCA) {
+            tempAlg = alg;
+            invAlg = "[" + ABCBCA[1].trim() + ": " + inverseAlg(tempAlg.replace(ABCBCA[1] + ":", "").trim()) + "]";
+        }
+        else if (ABAB) {
+            invAlg = "[" + ABAB[2].trim() + ", " + ABAB[1].trim() + "]";
+        }
+        else if (ABA) {
+            invAlg = "[" + ABA[1].trim() + ": " + inverseAlg(ABA[2].trim()) + "]";
+        }
     }
 
     return invAlg;
