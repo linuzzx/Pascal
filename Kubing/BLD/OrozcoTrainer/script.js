@@ -158,7 +158,6 @@ function initTimeList() {
 }
 
 function resetTimeList() {
-    $("btnReset").blur();
     times = [];
     $("#timeList").html("");
     localStorage.removeItem("einarklOrozcoTrainerTimes");

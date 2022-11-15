@@ -79,7 +79,7 @@ h1 {
 }
 
 #timeList {
-    height: 80%;
+    max-height: 80%;
     width: 75%;
 }
 
