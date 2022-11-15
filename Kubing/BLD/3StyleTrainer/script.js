@@ -65,7 +65,7 @@ function nextComm() {
     let scr = removeRedundantMoves(arr[ind].scramble);
     let sol = arr[ind].alg.replace("*", "<br>");
 
-    $("#cpDiv cube-player").attr("scramble", scr);
+    $("#scramble").text(scr);
     $("#letterPair").text(lp);
     $("#solution").html(sol);
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Style Trainer | Einar KL</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="../../Tools/tools.js"></script>
+    <script src="algs.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="optionsDiv">
+        <table id="tblRadBut">
+            <tr>
+                <th>UFR</th>
+                <th>UF</th>
+                <th><select id="selCommSet" onchange="changeCommSet(this.value)"></select></th>
+            </tr>
+            <tr>
+                <th><input type="radio" name="radComms" id="radUFR" value="ufr" checked="checked" onchange="changeCommType(this.value)"></th>
+                <th><input type="radio" name="radComms" id="radUF" value="uf" onchange="changeCommType(this.value)"></th>
+                <th></th>
+            </tr>
+        </table>
+        <div>
+            <select id="selLetterScheme" onchange="changeLetterScheme(this.value)">
+                <option value="Speffz" selected>Speffz</option>
+                <option value="Einar">Einar</option>
+            </select>
+        </div>
+    </div>
+    <div id="content">
+        <h1 id="scramble">Scramble</h1>
+        <h1 id="letterPair">LetterPair</h1>
+        <h1 id="solution">Solution</h1>
+    </div>
+    <div id="btnDiv">
+        <button id="btnNextComm" onclick="nextComm()">Next comm</button>
+        <button id="btnShowComm" onclick="showComm()">Show comm</button>
+    </div>
+</body>
+</html>
