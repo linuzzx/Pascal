@@ -39,7 +39,7 @@ function initCommSetOptions() {
     let arr = [corners, edges][["ufr", "uf"].indexOf(commType)];
 
     let out = "<option value='All' selected>All</option>";
-    for (let a of arr) {
+    for (let a of arr.sort()) {
         out += "<option value='" + a + "'>" + a + "</option>";
     }
 
