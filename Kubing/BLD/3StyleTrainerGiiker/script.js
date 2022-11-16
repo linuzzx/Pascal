@@ -51,7 +51,7 @@ function nextComm() {
     if (start) {
         console.log(getHHmmsshh(Date.now() - start));
     }
-    start = Date.now();
+
     $("#btnNextComm").blur();
 
     let arr = [ufr, uf][["ufr", "uf"].indexOf(commType)];
@@ -75,6 +75,7 @@ function nextComm() {
     $("#solution").html(sol);
 
     $("#solution").css("display", "none");
+    start = Date.now();
 }
 
 function showComm() {
