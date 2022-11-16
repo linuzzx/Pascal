@@ -106,7 +106,7 @@ function changeLetterScheme(ls) {
         }
     }
     
-    if (curComm.length !== 0) {console.log(curComm);
+    if (curComm.length !== 0) {
         let lp = letterScheme[curComm[0].toLowerCase()] + letterScheme[curComm[1].toLowerCase()];
         $("#letterPair").text(lp);
     }
