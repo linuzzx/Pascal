@@ -56,7 +56,7 @@ export class CubePlayer extends HTMLElement {
             plastic = isColor(this.getAttribute("plastic")) ? this.getAttribute("plastic") : "#000000";
             playbutton = this.getAttribute("playbutton") || "";
             smartcube = this.getAttribute("smartcube") === "giiker" ? this.getAttribute("smartcube") : "";
-            solvedFunc = typeof this.getAttribute("solvedfunc") === "function" ? this.getAttribute("solvedfunc") : "";
+            solvedFunc = window[this.getAttribute("solvedfunc")] ? this.getAttribute("solvedfunc") : "";
 
             cubePlayerDiv = document.createElement("div");
             buttonDiv = document.createElement("div");
