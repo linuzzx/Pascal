@@ -4,6 +4,7 @@ let letterScheme;
 let corners = ["UBL", "BUL", "LUB", "UBR", "BUR", "RUB", "UFL", "FUL", "LUF", "DFL", "FDL", "LDF", "DFR", "FDR", "RDF", "DBL", "BDL", "LDB", "DBR", "BDR", "RDB"];
 let edges = ["UB", "UL", "UR", "DF", "DL", "DR", "DB", "FL", "FR", "BR", "BL", "BU", "LU", "RU", "FD", "LD", "DR", "BD", "LF", "RF", "RB", "LB"];
 let curComm = [];
+let start;
 
 $(() => {
     locked = false;
@@ -32,6 +33,9 @@ function init() {
 }
 
 function nextComm() {
+    if (start) {
+        console.log(getHHmmsshh(Date.now() - start));
+    }
     $("#btnNextComm").blur();
 
     let pieces = [corners, edges, edges][["ufr_ubr", "uf_ur", "uf_bu"].indexOf(commType)].slice();
@@ -70,6 +74,7 @@ function nextComm() {
     $("#solution").html(sol);
 
     $("#solution").css("display", "none");
+    start = Date.now();
 }
 
 function showComm() {
