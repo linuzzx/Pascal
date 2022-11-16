@@ -679,7 +679,7 @@ function checkIfSolved() {
         planesD.filter(c => c === planesD[4]).length === 9
     ) {
         // console.log("SOLVED");
-        if (solvedFunc !== "") {
+        if (solvedFunc !== "" && window[solvedFunc]) {
             window[solvedFunc]();
         }
     }
