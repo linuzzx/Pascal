@@ -33,6 +33,8 @@ let tween;
 let planeCube, cube;
 let white, yellow, green, blue, red, orange;
 
+let solvedFunc;
+
 export class CubePlayer extends HTMLElement {
     connectedCallback() {
         initScripts();
@@ -54,6 +56,7 @@ export class CubePlayer extends HTMLElement {
             plastic = isColor(this.getAttribute("plastic")) ? this.getAttribute("plastic") : "#000000";
             playbutton = this.getAttribute("playbutton") || "";
             smartcube = this.getAttribute("smartcube") === "giiker" ? this.getAttribute("smartcube") : "";
+            solvedFunc = typeof this.getAttribute("solvedfunc") === "function" ? this.getAttribute("solvedfunc") : "";
 
             cubePlayerDiv = document.createElement("div");
             buttonDiv = document.createElement("div");
@@ -112,9 +115,9 @@ export class CubePlayer extends HTMLElement {
                 const setup = scramble;
                 const moves = solution;
             
-                for (let m of (setup).split(" ")) {
+                /* for (let m of (setup).split(" ")) {
                     mv(m);
-                }
+                } */
             
                 anim = true;
                 let mvs = (moves).split(" ");
@@ -141,16 +144,17 @@ export class CubePlayer extends HTMLElement {
                 connectSmartCube(smartcube);
             });
 
-            for (let m of scramble.split(" ")) {
+            /* for (let m of scramble.split(" ")) {
                 mv(m);
-            }
+            } */
+            resetState();
 
             initialized = true;
         }, 500);
     }
     
     static get observedAttributes() {
-        return ["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube"];
+        return ["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube", "solvedfunc"];
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -190,6 +194,9 @@ export class CubePlayer extends HTMLElement {
                     break;
                 case "smartcube":
                     smartcube = newValue === "giiker" ? newValue : "";
+                    break;
+                case "solvedfunc":
+                    solvedFunc = newValue || "";
                     break;
             }
 
@@ -254,6 +261,8 @@ function init() {
         blue
     ];
 
+    planes = [];
+
     for (let z = -1; z < 2; z++) {
         for (let y = -1; y < 2; y++) {
             for (let x = -1; x < 2; x++) {
@@ -290,6 +299,7 @@ function init() {
             plane.renderOrder = 1;
             plane.position.set(x * m1, 1*m2 * m1, z * m1);
             plane.rotateX(-Math.PI / 2);
+            plane.name = "stickerU";
             planeCube.add(plane);
             planes.push(plane);
         }
@@ -302,6 +312,7 @@ function init() {
             plane.renderOrder = 1;
             plane.position.set(x * m1, -1*m2 * m1, z * m1);
             plane.rotateX(Math.PI / 2);
+            plane.name = "stickerD";
             planeCube.add(plane);
             planes.push(plane);
         }
@@ -313,6 +324,7 @@ function init() {
             let plane = new THREE.Mesh( planeGeometry, planeMaterial );
             plane.renderOrder = 1;
             plane.position.set(x * m1, y * m1, 1*m2 * m1);
+            plane.name = "stickerF";
             planeCube.add(plane);
             planes.push(plane);
         }
@@ -324,6 +336,7 @@ function init() {
             let plane = new THREE.Mesh( planeGeometry, planeMaterial );
             plane.renderOrder = 1;
             plane.position.set(x * m1, y * m1, -1*m2 * m1);
+            plane.name = "stickerB";
             planeCube.add(plane);
             planes.push(plane);
         }
@@ -336,6 +349,7 @@ function init() {
             plane.renderOrder = 1;
             plane.position.set(-1*m2 * m1, y * m1, z * m1);
             plane.rotateY(-Math.PI / 2);
+            plane.name = "stickerO";
             planeCube.add(plane);
             planes.push(plane);
         }
@@ -348,6 +362,7 @@ function init() {
             plane.renderOrder = 1;
             plane.position.set(1*m2 * m1, y * m1, z * m1);
             plane.rotateY(-Math.PI / 2);
+            plane.name = "stickerR";
             planeCube.add(plane);
             planes.push(plane);
         }
@@ -372,6 +387,7 @@ function init() {
                 logoPlane.position.y = 1.525;
                 logoPlane.position.z = 0;
                 logoPlane.rotateX(-Math.PI / 2);
+                logoPlane.name = "logo";
                 scene.add(logoPlane);
                 planes.push(logoPlane);
             }
@@ -408,7 +424,7 @@ function resetState() {
         scene.remove(scene.children[0]); 
     }
     $(cubePlayerDiv).empty();
-    planes = [];
+    
     init();
     adjustSize();
     
@@ -636,14 +652,24 @@ function mv(turn) {
             doDw2i();
             break;
     }
-    // console.log(planes.filter(c => {return c.getWorldPosition(new THREE.Vector3()).x < -1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b));
-    let planesU = planes.filter(c => {return c.getWorldPosition(new THREE.Vector3()).y > 1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
-    let planesL = planes.filter(c => {return c.getWorldPosition(new THREE.Vector3()).y < -1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
-    let planesF = planes.filter(c => {return c.getWorldPosition(new THREE.Vector3()).z > 1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
-    let planesR = planes.filter(c => {return c.getWorldPosition(new THREE.Vector3()).x > 1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
-    let planesB = planes.filter(c => {return c.getWorldPosition(new THREE.Vector3()).z < -1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
-    let planesD = planes.filter(c => {return c.getWorldPosition(new THREE.Vector3()).x < -1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
+}
 
+function checkIfSolved() {
+/*     
+    let planesU = planes.filter(p => p.name === "sticker").filter(c => {return c.getWorldPosition(new THREE.Vector3()).y > 1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
+    let planesL = planes.filter(p => p.name === "sticker").filter(c => {return c.getWorldPosition(new THREE.Vector3()).y < -1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
+    let planesF = planes.filter(p => p.name === "sticker").filter(c => {return c.getWorldPosition(new THREE.Vector3()).z > 1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
+    let planesR = planes.filter(p => p.name === "sticker").filter(c => {return c.getWorldPosition(new THREE.Vector3()).x > 1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
+    let planesB = planes.filter(p => p.name === "sticker").filter(c => {return c.getWorldPosition(new THREE.Vector3()).z < -1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
+    let planesD = planes.filter(p => p.name === "sticker").filter(c => {return c.getWorldPosition(new THREE.Vector3()).x < -1.1}).map(p => p.material.color.r + "" + p.material.color.g + "" + p.material.color.b);
+ */
+    let planesU = planes.filter(p => p.name.includes("sticker")).filter(c => {return c.getWorldPosition(new THREE.Vector3()).y > 1.1}).map(p => p.name);
+    let planesL = planes.filter(p => p.name.includes("sticker")).filter(c => {return c.getWorldPosition(new THREE.Vector3()).y < -1.1}).map(p => p.name);
+    let planesF = planes.filter(p => p.name.includes("sticker")).filter(c => {return c.getWorldPosition(new THREE.Vector3()).z > 1.1}).map(p => p.name);
+    let planesR = planes.filter(p => p.name.includes("sticker")).filter(c => {return c.getWorldPosition(new THREE.Vector3()).x > 1.1}).map(p => p.name);
+    let planesB = planes.filter(p => p.name.includes("sticker")).filter(c => {return c.getWorldPosition(new THREE.Vector3()).z < -1.1}).map(p => p.name);
+    let planesD = planes.filter(p => p.name.includes("sticker")).filter(c => {return c.getWorldPosition(new THREE.Vector3()).x < -1.1}).map(p => p.name);
+    
     if (
         planesU.filter(c => c === planesU[4]).length === 9 &&
         planesL.filter(c => c === planesL[4]).length === 9 &&
@@ -653,7 +679,9 @@ function mv(turn) {
         planesD.filter(c => c === planesD[4]).length === 9
     ) {
         // console.log("SOLVED");
-        nextComm();
+        if (solvedFunc !== "") {
+            window[solvedFunc]();
+        }
     }
 }
 
@@ -672,6 +700,7 @@ function doMv(cubies, xyz, angle) {
             y: xyz === "y" ? angle : 0,
             z: xyz === "z" ? angle : 0
         });
+        setTimeout(checkIfSolved, playMoveTime);
     }
     else {
         tween = gsap.to(tempCube.rotation, {
@@ -680,6 +709,7 @@ function doMv(cubies, xyz, angle) {
             y: xyz === "y" ? angle : 0,
             z: xyz === "z" ? angle : 0
         });
+        checkIfSolved();
     }
 }
 
