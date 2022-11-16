@@ -76,17 +76,17 @@ function nextComm() {
     $("#letterPair").text(lp);
     $("#solution").html(sol);
 
-    $("#solution").css("display", "none");
+    $("#solution").css("visibility", "hidden");
 }
 
 function showComm() {
     $("#btnShowComm").blur();
 
-    if ($("#solution").css("display") === "none") {
-        $("#solution").css("display", "block");
+    if ($("#solution").css("visibility") === "hidden") {
+        $("#solution").css("visibility", "visible");
     }
     else {
-        $("#solution").css("display", "none");
+        $("#solution").css("visibility", "hidden");
     }
 }
 

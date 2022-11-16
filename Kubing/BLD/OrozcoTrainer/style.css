@@ -51,7 +51,7 @@ body {
 }
 
 #solution {
-    display: none;
+    visibility: hidden;
 }
 
 #tblRadBut {
