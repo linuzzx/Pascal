@@ -1,6 +1,6 @@
 #matchTables {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 3fr 2fr 1fr 1fr 1fr 1fr;
     gap: 1%;
     text-align: center;
 }
@@ -44,9 +44,11 @@ th, td {
 }
 
 #winner {
+    text-align: center;
     background-color: gold;
 }
 
 #runnerup {
+    text-align: center;
     background-color: silver;
 }
