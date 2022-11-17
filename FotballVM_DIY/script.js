@@ -128,10 +128,10 @@ let semiMatches = {};
 let finalMatch = {};
 
 $(() => {
-    predict();
+    initTables();
 });
 
-function match(tca, tcb) {
+function match(tca, tcb, h, b) {
     let indA = teams.findIndex(t => t.country === tca);
     let indB = teams.findIndex(t => t.country === tcb);
 
@@ -140,50 +140,6 @@ function match(tca, tcb) {
 
     let pa = ta.points;
     let pb = tb.points;
-
-    let h;
-    let b;
-
-    function draw(best, worst) {
-        h = 18 - Math.abs(14 - Math.round(best / 100));
-        b = h;
-        if (pa < 1500) {
-            h = 0;
-            b = 0;
-        }
-        else if (best < 1600) {
-            h = 1;
-            b = 1;
-        }
-        else {
-            h = 2;
-            b = 2;
-        }
-    }
-
-    if (pa > pb) {
-        h = Math.floor((pa - pb) / 100);
-        b = 0;
-        if ((pa - pb) < 100) {
-            draw(pa, pb);
-        }
-        else if ((pa - pb) < 150) {
-            b = h - 1;
-        }
-    }
-    else if (pa < pb) {
-        h = 0;
-        b = Math.floor((pb - pa) / 100);
-        if ((pb - pa) < 100) {
-            draw(pb, pa);
-        }
-        else if ((pb - pa) < 150) {
-            h = b - 1;
-        }
-    }
-    else {
-        draw(pa, pb);
-    }
 
     let scoreA, scoreB, diffA, diffB;
 
@@ -210,24 +166,22 @@ function match(tca, tcb) {
     ta.goaldiff += diffA;
     tb.score += scoreB;
     tb.goaldiff += diffB;
-
-    $("#groupplay").append("<tr><td>" + tca + "</td><td>" + tcb + "</td><td class='result'>" + h + "</td><td class='result'>-</td><td class='result'>" + b + "</td></tr>");
 }
 
 function pickBest(ta, tb) {
-    let best = [ta, tb].sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff)[0];
+    let best = [ta, tb].sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points)[0];
     return best;
 }
 
 function makeSixteenMatches() {
-    let groupA = teams.filter(t => t.group === "a").sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff);
-    let groupB = teams.filter(t => t.group === "b").sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff);
-    let groupC = teams.filter(t => t.group === "c").sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff);
-    let groupD = teams.filter(t => t.group === "d").sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff);
-    let groupE = teams.filter(t => t.group === "e").sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff);
-    let groupF = teams.filter(t => t.group === "f").sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff);
-    let groupG = teams.filter(t => t.group === "g").sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff);
-    let groupH = teams.filter(t => t.group === "h").sort((a, b) => b.points - a.points || b.score - a.score || b.goaldiff - a.goaldiff);
+    let groupA = teams.filter(t => t.group === "a").sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points);
+    let groupB = teams.filter(t => t.group === "b").sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points);
+    let groupC = teams.filter(t => t.group === "c").sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points);
+    let groupD = teams.filter(t => t.group === "d").sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points);
+    let groupE = teams.filter(t => t.group === "e").sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points);
+    let groupF = teams.filter(t => t.group === "f").sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points);
+    let groupG = teams.filter(t => t.group === "g").sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points);
+    let groupH = teams.filter(t => t.group === "h").sort((a, b) => b.score - a.score || b.goaldiff - a.goaldiff || b.points - a.points);
     
     sixteenMatches = {
         49 : [groupA[0], groupB[1]],
@@ -241,6 +195,7 @@ function makeSixteenMatches() {
     };
 
     let i = 0;
+    $("#groupranking").html("");
     for (let group of [groupA, groupB, groupC, groupD, groupE, groupF, groupG, groupH]) {
         let groupName = ["Group A", "Group B", "Group C", "Group D", "Group E", "Group F", "Group G", "Group H"][i];
         let table = "<table>";
@@ -277,16 +232,84 @@ function makeFinalMatch() {
     };
 }
 
-function predict() {
-    let i = 0;
-    // group play
-    for (let m of Object.values(groupMatches)) {
-        match(m[0], m[1]);
+function updateGoals() {
+    let inputs = [];
+    teams = [
+        {country : brazil, ranking : 1, points : 1841, group : "g", score : 0, goaldiff : 0},
+        {country : belgium, ranking : 2, points : 1816, group : "f", score : 0, goaldiff : 0},
+        {country : argentina, ranking : 3, points : 1773, group : "c", score : 0, goaldiff : 0},
+        {country : france, ranking : 4, points : 1759, group : "d", score : 0, goaldiff : 0},
+        {country : england, ranking : 5, points : 1728, group : "b", score : 0, goaldiff : 0},
+        {country : spain, ranking : 7, points : 1715, group : "e", score : 0, goaldiff : 0},
+        {country : netherlands, ranking : 8, points : 1694, group : "a", score : 0, goaldiff : 0},
+        {country : portugal, ranking : 9, points : 1676, group : "h", score : 0, goaldiff : 0},
+        {country : denmark, ranking : 10, points : 1666, group : "d", score : 0, goaldiff : 0},
+        {country : germany, ranking : 11, points : 1650, group : "e", score : 0, goaldiff : 0},
+        {country : croatia, ranking : 12, points : 1645, group : "f", score : 0, goaldiff : 0},
+        {country : mexico, ranking : 13, points : 1644, group : "c", score : 0, goaldiff : 0},
+        {country : uruguay, ranking : 14, points : 1638, group : "h", score : 0, goaldiff : 0},
+        {country : switzerland, ranking : 15, points : 1635, group : "g", score : 0, goaldiff : 0},
+        {country : usa, ranking : 16, points : 1627, group : "b", score : 0, goaldiff : 0},
+        {country : senegal, ranking : 18, points : 1584, group : "a", score : 0, goaldiff : 0},
+        {country : wales, ranking : 19, points : 1569, group : "b", score : 0, goaldiff : 0},
+        {country : iran, ranking : 20, points : 1564, group : "b", score : 0, goaldiff : 0},
+        {country : serbia, ranking : 21, points : 1563, group : "g", score : 0, goaldiff : 0},
+        {country : morocco, ranking : 22, points : 1563, group : "f", score : 0, goaldiff : 0},
+        {country : japan, ranking : 24, points : 1559, group : "e", score : 0, goaldiff : 0},
+        {country : poland, ranking : 26, points : 1548, group : "c", score : 0, goaldiff : 0},
+        {country : korea, ranking : 28, points : 1530, group : "h", score : 0, goaldiff : 0},
+        {country : tunisia, ranking : 30, points : 1507, group : "d", score : 0, goaldiff : 0},
+        {country : costarica, ranking : 31, points : 1503, group : "e", score : 0, goaldiff : 0},
+        {country : australia, ranking : 38, points : 1488, group : "d", score : 0, goaldiff : 0},
+        {country : canada, ranking : 41, points : 1475, group : "f", score : 0, goaldiff : 0},
+        {country : cameroon, ranking : 43, points : 1471, group : "g", score : 0, goaldiff : 0},
+        {country : ecuador, ranking : 44, points : 1464, group : "a", score : 0, goaldiff : 0},
+        {country : qatar, ranking : 50, points : 1439, group : "a", score : 0, goaldiff : 0},
+        {country : saudiarabia, ranking : 51, points : 1437, group : "c", score : 0, goaldiff : 0},
+        {country : ghana, ranking : 61, points : 1393, group : "h", score : 0, goaldiff : 0}
+    ];
+
+    for (let i of $("#groupplay input")) {
+        inputs.push($(i).val());
     }
-    $("#groupplay").parent().append("<br><div style='width: 100%; text-align: right;'><button onclick='copy()'>Copy</button></div>");
+    
+    if (inputs.filter(i => i !== "" && i !== "-").length === 96) {
+        $("#btnCopy").prop("disabled", false);
+
+        let goalsA = [];
+        let goalsB = [];
+        for (let k = 0; k < inputs.length; k += 3) {
+            goalsA.push(inputs[k]);
+            goalsB.push(inputs[k + 2]);
+        }
+        
+        // group play
+        let j = 0;
+        for (let m of Object.values(groupMatches)) {
+            match(m[0], m[1], goalsA[j], goalsB[j]);
+            j++;
+        }
+
+        calculateMatches();
+    }
+    else {
+        $("#btnCopy").prop("disabled", true);
+    }
+}
+
+function calculateMatches() {
+    sixteenTeams = [];
+    quarterTeams = [];
+    semiTeams = [];
+    finalTeams = [];
+    sixteenMatches = {};
+    quarterMatches = {};
+    semiMatches = {};
+    finalMatch = {};
     
     makeSixteenMatches();
     // sixteen play
+    $("#quarterfinalists").html("");
     for (let m of Object.values(sixteenMatches)) {
         quarterTeams.push(pickBest(m[0], m[1]));
         $("#quarterfinalists").append("<tr><td>" + pickBest(m[0], m[1]).country + "</td></tr>");
@@ -294,6 +317,7 @@ function predict() {
 
     makeQuarterMatches();
     // quarter play
+    $("#semifinalists").html("");
     for (let m of Object.values(quarterMatches)) {
         semiTeams.push(pickBest(m[0], m[1]));
         $("#semifinalists").append("<tr><td>" + pickBest(m[0], m[1]).country + "</td></tr>");
@@ -320,12 +344,19 @@ function copy() {
         let row = [];
         for (let i = 0; i < $(tr).children().length; i++) {
             if (i > 1) {
-                let t = $(tr).children()[i];
-                row.push($(t).text());
+                let t = $(tr).children()[i].children[0];
+                row.push($(t).val());
             }
         }
         toCopy.push(row.join("	"));
     }
 
     navigator.clipboard.writeText(toCopy.join("\n"));
+}
+
+function initTables() {
+    for (let m of Object.values(groupMatches)) {
+        $("#groupplay").append("<tr><td>" + m[0] + "</td><td>" + m[1] + "</td><td class='result'><input type='number' value='0'placeholder='H' oninput='updateGoals()'></td><td class='result'><input style='outline: none; border: none; text-align: center;' type='text' value='-' readonly></td><td class='result'><input type='number' placeholder='B' value='0' oninput='updateGoals()'></td></tr>");
+    }
+    $("#groupplay").parent().append("<br><div style='width: 100%; text-align: right;'><button id='btnCopy' onclick='copy()' disabled>Copy</button></div>");
 }
