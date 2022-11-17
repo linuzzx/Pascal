@@ -13,7 +13,7 @@ const ufr_ubr = [
     {target:"FDL",alg:"[U, D R' D' R]",scramble:"D' R' U L2 U' R B2 U L2 D' R2 U' R2 D2 F2 D2 R2 D2 F2"},
     {target:"LUF",alg:"[R2: [R U' R', D']]",scramble:"R D L2 D' R F2 U B2 U F2 D2 L2 D2 F2 U2 R2 F2 R2"},
     {target:"BDL",alg:"[D' R D R', U']",scramble:"L' D R2 D' L' R2 U F2 U F2 U' R2 U F2 R2 U2 F2 U2 R2 U2 F2 L2"},
-    {target:"DBR",alg:"[D x: [R' U' R, D2]]",scramble:"F2 D2 R2 D F2 D L2 U' R2 U' B2 D2 R2 B2 L2 U2 R2"},
+    {target:"DBR",alg:"[D x: [D2, R' U' R]]",scramble:"U R2 U B2 U' R2 U' R2 U2 B2 U2 R2"},
     {target:"RDB",alg:"[R D R', U']",scramble:"U' L U' R2 U L U F2 U' L2 U R2 F2 D2 B2 D2 R2 U2 R2 F2 U2"},
     {target:"DFR",alg:"[D' x': [D2, R U R']]",scramble:"U R2 U B2 U' R2 U R2 F2 D2 B2 L2 D2 F2 R2 U2 B2 U2"},
     {target:"FDR",alg:"[U, D' R' D R]",scramble:"B2 R U L2 U' R' U L2 U' B2"},
