@@ -1,0 +1,52 @@
+#matchTables {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+    gap: 1%;
+    text-align: center;
+}
+
+#groupranking {
+    text-align: left;
+}
+
+#groupranking th {
+    width: 20%;
+}
+
+#groupranking td:nth-child(even) {
+    width: 60%;
+}
+
+#groupranking td:nth-child(odd) {
+    width: 20%;
+}
+
+table, tr {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid black;
+}
+
+#groupplay > th, #groupplay > td {
+    width: 40%;
+}
+
+th, td {
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid black;
+}
+
+.result {
+    width: calc(20% / 3) !important;
+    border: none;
+}
+
+#winner {
+    background-color: gold;
+}
+
+#runnerup {
+    background-color: silver;
+}
