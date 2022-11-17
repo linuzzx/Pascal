@@ -162,7 +162,7 @@ function match(tca, tcb) {
     }
 
     if (pa > pb) {
-        h = 1 + Math.floor((pa - pb) / 100);
+        h = Math.floor((pa - pb) / 100);
         b = 0;
         if ((pa - pb) < 100) {
             draw(pa, pb);
@@ -173,7 +173,7 @@ function match(tca, tcb) {
     }
     else if (pa < pb) {
         h = 0;
-        b = 1 + Math.floor((pb - pa) / 100);
+        b = Math.floor((pb - pa) / 100);
         if ((pb - pa) < 100) {
             draw(pb, pa);
         }
@@ -211,7 +211,7 @@ function match(tca, tcb) {
     tb.score += scoreB;
     tb.goaldiff += diffB;
 
-    $("#groupplay").append("<tr><td>" + tca + "</td><td>" + tcb + "</td><td class='result'>" + scoreA + "</td><td class='result'>-</td><td class='result'>" + scoreB + "</td></tr>");
+    $("#groupplay").append("<tr><td>" + tca + "</td><td>" + tcb + "</td><td class='result'>" + h + "</td><td class='result'>-</td><td class='result'>" + b + "</td></tr>");
 }
 
 function pickBest(ta, tb) {
