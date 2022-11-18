@@ -129,6 +129,7 @@ let finalMatch = {};
 
 $(() => {
     initTables();
+    calculateMatches();
 });
 
 function match(tca, tcb, h, b) {
