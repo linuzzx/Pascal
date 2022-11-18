@@ -15,7 +15,7 @@ const ufr_ubr = [
     {target:"BDL",alg:"[D' R D R', U']",scramble:"L' D R2 D' L' R2 U F2 U F2 U' R2 U F2 R2 U2 F2 U2 R2 U2 F2 L2"},
     {target:"DBR",alg:"[D x: [D2, R' U' R]]",scramble:"U R2 U B2 U' R2 U' R2 U2 B2 U2 R2"},
     {target:"RDB",alg:"[R D R', U']",scramble:"U' L U' R2 U L U F2 U' L2 U R2 F2 D2 B2 D2 R2 U2 R2 F2 U2"},
-    {target:"DFR",alg:"[D' x': [D2, R U R']]",scramble:"U R2 U B2 U' R2 U R2 F2 D2 B2 L2 D2 F2 R2 U2 B2 U2"},
+    {target:"DFR",alg:"[D' x': [R U R', D2]]",scramble:"U R2 U B2 U' R2 U R2 F2 D2 B2 L2 D2 F2 R2 U2 B2 U2"},
     {target:"FDR",alg:"[U, D' R' D R]",scramble:"B2 R U L2 U' R' U L2 U' B2"},
     {target:"DFL",alg:"[x': [R U R', D2]]",scramble:"D' B2 U L2 D' R2 U' D2 F2 L2 D2 U2 R2 D2 U2"},
     {target:"LDF",alg:"[U, R' D R]",scramble:"U R U' L2 U R U B2 U' R2 U R2 B2 D2 B2 D2 R2 U2 L2 F2"},
