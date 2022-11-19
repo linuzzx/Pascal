@@ -366,7 +366,7 @@ function getMoves(moves) {
 
     const arr = strSetup.split(" ").filter(checkEmpty);
 
-    return arr.join(" ");
+    return toAlg(arr.join(" "));
 }
 
 function checkEmpty(move) {
@@ -1246,4 +1246,280 @@ function getTurn(e) {console.log("hei");
         }
         virtualStep === "scramble" ? $("#taSetup").val(newSolution).change() : virtualStep === "solution" ? $("#taMoves").val(newSolution).change() : "";
     }
+}
+
+function toAlg(a) {
+    if (a.includes("(") || a.includes(")")) {
+        a = algxNtoAlg(a);
+    }
+    if ((a.includes("[") || a.includes("]")) && (a.includes(":") || a.includes(","))) {
+        if (a.includes("] [")) {
+            let c = a.split("] [");
+            let c1 = c[0] + "]";
+            let c2 = "[" + c[1];
+            a = commToAlg(c1) + " " + commToAlg(c2);
+        }
+        else {
+            a = commToAlg(a);
+        }
+    }
+
+    return a;
+}
+
+function algxNtoAlg(comm) {
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+    let commArr = [];
+
+    comm = cleanMoves(comm.replaceAll("(", " ( ").replaceAll(")", " ) "));
+    for (let c of comm.split(" ")) {
+        if (c === "(") {
+            commArr.push("b" + leftBrackets);
+            leftBrackets++;
+        }
+        else if (c === ")") {
+            commArr.push(c);
+            rightBrackets++;
+        }
+        else if(c !== " ") {
+            commArr.push(c);
+        }
+    }
+
+    if (leftBrackets !== rightBrackets) {
+        return "";
+    }
+    
+    for (let i = leftBrackets - 1; i >= 0; i--) {
+        let s = commArr.indexOf("b"+i);
+        let e = commArr.indexOf(")");
+        let c = commArr.slice(s + 1, e);
+        let n = parseInt(commArr[e + 1]);
+        commArr.splice(s, e + 2, translateComm(c, n));
+    }
+    
+    return commArr.join(" ") || "";
+
+    function translateComm(cm, n) {
+        let str = "";
+        for (let i = 0; i < n; i++) {
+            str += cm.join(" ") + " ";
+        }
+        return str.trim();
+    }
+}
+
+function commToAlg(comm) {
+    let leftSqBrackets = 0;
+    let rightSqBrackets = 0;
+    let colons = 0;
+    let commas = 0;
+    let commArr = [];
+
+    /* 
+    [A, B] = A B A' B'
+    [A: B] = A B A'
+    */
+
+    if (
+        comm.split("").filter(c => c === "[").length !== (comm.split("").filter(c => c === ",").length + comm.split("").filter(c => c === ":").length)
+    ) {
+        comm = comm.replaceAll(":", ":[")+"]";
+    }
+    comm = cleanMoves(comm.replaceAll("[", " [ ").replaceAll("]", " ] ").replaceAll(",", " , ").replaceAll(":", " : "));
+    for (let c of comm.split(" ")) {
+        if (c === "[") {
+            commArr.push("l" + leftSqBrackets);
+            leftSqBrackets++;
+        }
+        else if (c === "]") {
+            commArr.push(c);
+            rightSqBrackets++;
+        }
+        else if (c === ":") {
+            commArr.push(c);
+            colons++;
+        }
+        else if (c === ",") {
+            commArr.push(c);
+            commas++;
+        }
+        else if (c !== " ") {
+            commArr.push(c);
+        }
+    }
+
+    if (leftSqBrackets === rightSqBrackets + 1) {
+        commArr.push("]");
+        rightSqBrackets++;
+    }
+    
+    if (leftSqBrackets !== rightSqBrackets || colons > leftSqBrackets || commas > leftSqBrackets) {
+        return "";
+    }
+
+    let stack = [];
+    for (let i = leftSqBrackets - 1; i >= 0; i--) {
+        let s = commArr.indexOf("l"+i);
+        let e = commArr.indexOf("]");
+        let c = commArr.slice(s, e + 1);
+        commArr.splice(s, c.length, "stack"+stack.length);
+        stack.push(translateComm(c));
+    }
+
+    let newAlg = stack.pop() || "";
+    while (newAlg.includes("stack")) {
+        
+        let nArr = newAlg.split(" ");
+        for (let i = 0; i < nArr.length; i++) {
+            if (nArr[i].includes("stack")) {
+                nArr[i] = stack[parseInt(nArr[i].replace("stack", ""))];
+            }
+        }
+        
+        newAlg = nArr.join(" ");
+    }
+    
+    return newAlg;
+
+    function translateComm(cm) {
+        if (cm.includes(",")) {
+            let c1 = cm.slice(1, cm.indexOf(",")).join(" ");
+            let c2 = cm.slice(cm.indexOf(",") + 1, -1).join(" ");
+            return [c1, c2, inverseAlg(c1), inverseAlg(c2)].join(" ");
+        }
+        else if (cm.includes(":")) {
+            let c1 = cm.slice(1, cm.indexOf(":")).join(" ");
+            let c2 = cm.slice(cm.indexOf(":") + 1, -1).join(" ");
+            return [c1, c2, inverseAlg(c1)].join(" ");
+        }
+    }
+}
+
+function cleanMoves(moves) {
+    moves = moves.trim();
+    moves = moves.replaceAll(" ", ";");
+
+    while (moves.includes(";;")) {
+        moves = moves.replaceAll(";;", ";");
+    }
+
+    return moves.replaceAll(";", " ");
+}
+
+function inverseAlg(alg) {
+    let invAlg = "";
+    
+    if (alg.trim() === "") {
+        return "";
+    }
+    else if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",") || alg.includes("(") || alg.includes(")")) {
+        if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",")) {
+            invAlg = inverseComm(alg);
+        }
+        if (alg.includes("(") || alg.includes(")")) {
+            invAlg = inverseAlgxN(alg);
+        }
+    }
+    else {
+        let arr = [];
+        for (let a of alg.split(" ")) {
+            if (a.includes("'")) {
+                arr.unshift(a.slice(0, -1));
+            }
+            else if (a.includes("2")) {
+                arr.unshift(a);
+            }
+            else {
+                arr.unshift(a + "'");
+            }
+        }
+        invAlg = arr.join(" ");
+    }
+
+    return invAlg;
+}
+
+function inverseComm(alg) {
+    let invAlg = "";
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+    let colons = 0;
+    let commas = 0;
+
+    if (alg.includes("] [")) {
+        let c = alg.split("] [");
+        let c1 = c[0] + "]";
+        let c2 = "[" + c[1];
+        invAlg = inverseAlg(c2) + " " + inverseAlg(c1);
+    }
+    else {
+        for (let a of alg) {
+            if (a === "[") {
+                leftBrackets++;
+            }
+            else if (a === "]") {
+                rightBrackets++;
+            }
+            else if (a === ":") {
+                colons++;
+            }
+            else if (a === ",") {
+                commas++;
+            }
+        }
+
+        if (leftBrackets === rightBrackets + 1) {
+            alg += "]";
+            rightBrackets++;
+        }
+
+        if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets || (alg[0] !== "[" && alg[alg.length - 1] !== "]")
+            || (colons === commas && colons === leftBrackets)) {
+                console.log(leftBrackets);
+                console.log(rightBrackets);
+                console.log(commas);
+                console.log(colons);
+                console.log(alg);
+            return "Illegal alg";
+        }
+        
+        alg = alg.slice(1, alg.length - 1);
+        
+        let ABCBCABCBC = alg.match(/(.*)\,\ \[(.*)\,(.*)\]/);
+        let ABAB = alg.match(/(.*)\,(.*)/);
+        let ABCBCA = alg.match(/(.*)\:\ \[(.*)\,(.*)\]/);
+        let ABA = alg.match(/(.*)\:(.*)/);
+        
+        if (ABCBCABCBC) {
+            tempAlg = alg;
+            invAlg = "[" + tempAlg.replace(alg.split(",")[0] + ",", "").trim() + ", " + alg.split(",")[0].trim() + "]";
+        }
+        else if (ABCBCA) {
+            tempAlg = alg;
+            invAlg = "[" + ABCBCA[1].trim() + ": " + inverseAlg(tempAlg.replace(ABCBCA[1] + ":", "").trim()) + "]";
+        }
+        else if (ABAB) {
+            invAlg = "[" + ABAB[2].trim() + ", " + ABAB[1].trim() + "]";
+        }
+        else if (ABA) {
+            invAlg = "[" + ABA[1].trim() + ": " + inverseAlg(ABA[2].trim()) + "]";
+        }
+    }
+
+    return invAlg;
+}
+
+function inverseAlgxN(alg) {
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+
+    if (leftBrackets !== rightBrackets || (alg[0] !== "(" && alg[alg.length - 2] !== ")")) {
+        return "Illegal alg";
+    }
+
+    let n = alg.split(")")[1].trim();
+    
+    return "(" + inverseAlg(alg.split("(")[1].split(")")[0]) + ")" + n;
 }
