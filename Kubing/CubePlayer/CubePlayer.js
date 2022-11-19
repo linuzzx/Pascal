@@ -36,6 +36,12 @@ let white, yellow, green, blue, red, orange;
 let solvedFunc;
 
 export class CubePlayer extends HTMLElement {
+    constructor() {
+        super();
+        
+        /* this.attachShadow({mode: 'open'});
+        this.shadowRoot.appendChild(template.content.cloneNode(true)); */
+    }
     connectedCallback() {
         initScripts();
         setTimeout(() => {
