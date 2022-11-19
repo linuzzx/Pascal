@@ -4,6 +4,7 @@ let letterScheme;
 let corners = ["UBL", "BUL", "LUB", "UBR", "BUR", "RUB", "UFL", "FUL", "LUF", "DFL", "FDL", "LDF", "DFR", "FDR", "RDF", "DBL", "BDL", "LDB", "DBR", "BDR", "RDB"];
 let edges = ["UB", "UL", "UR", "DF", "DL", "DR", "DB", "FL", "FR", "BR", "BL", "BU", "LU", "RU", "FD", "LD", "DR", "BD", "LF", "RF", "RB", "LB"];
 let curComm = [];
+let curScramble = "";
 let start;
 
 $(() => {
@@ -67,6 +68,7 @@ function nextComm() {
     let ind1 = arr.findIndex(c => c.target === l1);
     let ind2 = arr.findIndex(c => c.target === l2);
     let scr = removeRedundantMoves(toAlg(arr[ind1].alg + " " + inverseAlg(arr[ind2].alg)));
+    curScramble = scr;
     let sol = arr[ind1].alg + "<br>" + inverseAlg(arr[ind2].alg);
 
     $("#cpDiv cube-player").attr("scramble", $("#cpDiv cube-player").attr("scramble") + " " + scr);
@@ -122,6 +124,7 @@ function changeCommType() {
     localStorage.setItem("einarklOrozcoCommType", commType);
 
     nextComm();
+    resetCube();
 }
 
 function getKey(e) {
@@ -291,4 +294,9 @@ function cleanMoves(moves) {
     }
 
     return moves.replaceAll(";", " ");
+}
+
+function resetCube() {
+    $("#btnReset").blur();
+    $("#cpDiv cube-player").attr("scramble", curScramble);
 }
