@@ -78,11 +78,11 @@ function encodeURL(param) {
 function updateArrays() {
     const setup = getMoves("#taSetup");
     const moves = getMoves("#taMoves");
-    const time = $("#inputTime").val();
+    const time = timeToMs($("#inputTime").val() || "");
 
     $("#cubeDisplay cube-player").attr("scramble", setup);
     $("#cubeDisplay cube-player").attr("solution", moves);
-    $("#cubeDisplay cube-player").attr("time", timeToMs(time));
+    $("#cubeDisplay cube-player").attr("time", time);
 }
 
 function getMoves(moves) {
