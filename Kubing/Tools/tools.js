@@ -4529,6 +4529,7 @@ function commToAlg_old(comm) {
 function commToAlg(comm) {
     let nComm = [];
 
+    comm = comm.trim();
     comm = comm.replaceAll("][", "] [");
     if (comm.includes("(")) {
         let c = comm.split("(");
