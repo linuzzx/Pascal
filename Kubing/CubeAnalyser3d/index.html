@@ -17,12 +17,12 @@
         </div>
         <div id="analysisDiv">
             <div style="display: grid; grid-template-columns: 2fr 1fr 1fr;">
-                <input type="number" id="inputTime" placeholder="Time" step="0.01" onchange="updateURL(); updateTPS(); updateArrays()" onkeyup="updateURL(); updateTPS(); updateArrays()">
+                <input type="number" id="inputTime" placeholder="Time" step="0.01" onchange="updateURL(); updateTPS(); updateArrays()" oninput="updateURL(); updateTPS(); updateArrays()">
                 <button id="btnGiiker" onclick="connectToGiiker()">Giiker</button>
                 <button id="btnVirtual" onclick="virtual()">Virtual</button>
             </div>
-            <textarea type="text" id="taSetup" placeholder="Setup" rows="2" onchange="updateURL(); updateArrays()" onkeyup="updateURL(); updateArrays()"></textarea>
-            <textarea type="text" id="taMoves" placeholder="Moves" rows="8" onchange="updateURL(); updateArrays(); updateTPS()" onkeyup="updateURL(); updateArrays(); updateTPS()"></textarea>
+            <textarea type="text" id="taSetup" placeholder="Setup" rows="2" onchange="updateURL(); updateArrays()" oninput="updateURL(); updateArrays()"></textarea>
+            <textarea type="text" id="taMoves" placeholder="Moves" rows="8" onchange="updateURL(); updateArrays(); updateTPS()" oninput="updateURL(); updateArrays(); updateTPS()"></textarea>
             <div id="tpsDiv">
                 <input type="text" id="tps" readonly></input>
                 <button id="btnReset" onclick="resetInputs()">Reset</button>
