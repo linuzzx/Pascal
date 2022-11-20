@@ -21,7 +21,8 @@ $(function() {
     getParams();
     updateArrays();
     updateTPS();
-    
+    //listCubeTypes();
+    init();
     adjustSize();
 
     $(window).keypress(function(e) {
@@ -41,6 +42,159 @@ $(function() {
 $(window).resize(() => {
     // adjustSize();
 });
+
+function init() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera( 60, 1, 0.1, 1000 );
+
+    cube = new THREE.Object3D();
+    planeCube = new THREE.Object3D();
+    
+    let planeSize = 0.9;
+    let geometry = new THREE.BoxGeometry( 1, 1, 1 );
+    let planeGeometry = new THREE.PlaneGeometry( planeSize, planeSize );
+
+    let colWhite = 0xffffff;
+    let colYellow = 0xffff00;
+    let colGreen = 0x00ff00;
+    let colBlue = 0x0000ff;
+    let colRed = 0xff0000;
+    let colOrange = 0xffaa00;
+    
+    let white = new THREE.MeshBasicMaterial( { color: colWhite });
+    let yellow = new THREE.MeshBasicMaterial( { color: colYellow } );
+    let green = new THREE.MeshBasicMaterial( { color: colGreen } );
+    let blue = new THREE.MeshBasicMaterial( { color: colBlue } );
+    let red = new THREE.MeshBasicMaterial( { color: colRed } );
+    let orange = new THREE.MeshBasicMaterial( { color: colOrange } );
+    
+    let materials = [
+        red,
+        orange,
+        white,
+        yellow,
+        green,
+        blue
+    ];
+
+    for (let z = -1; z < 2; z++) {
+        for (let y = -1; y < 2; y++) {
+            for (let x = -1; x < 2; x++) {
+                if (!(x === 0 && y === 0 && z === 0)) {
+                    let c = new THREE.Mesh(geometry, materials);
+                    c.position.set(x * 1.01, y * 1.01, z * 1.01);
+        
+                    let edges = new THREE.LineSegments(
+                        new THREE.EdgesGeometry( c.geometry ),
+                        new THREE.LineBasicMaterial({color: 0x000000, linewidth: 1})
+                    );
+                    c.add(edges);
+                    //cubies.push(c);
+                    //cube.add(c);
+                }
+            }
+        }
+    }
+    let m1 = 1.01;
+    let m2 = 1.5// + planeSize / 2;
+    // White
+    for (let z = -1; z < 2; z++) {
+        for (let x = -1; x < 2; x++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colWhite, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(x * m1, 1*m2 * m1, z * m1);
+            plane.rotateX(-Math.PI / 2);
+            planeCube.add(plane);
+            planes.push(plane);
+        }
+    }
+    // Yellow
+    for (let z = -1; z < 2; z++) {
+        for (let x = -1; x < 2; x++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colYellow, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(x * m1, -1*m2 * m1, z * m1);
+            plane.rotateX(Math.PI / 2);
+            planeCube.add(plane);
+            planes.push(plane);
+        }
+    }
+    // Green
+    for (let y = -1; y < 2; y++) {
+        for (let x = -1; x < 2; x++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colGreen, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(x * m1, y * m1, 1*m2 * m1);
+            planeCube.add(plane);
+            planes.push(plane);
+        }
+    }
+    // Blue
+    for (let y = -1; y < 2; y++) {
+        for (let x = -1; x < 2; x++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colBlue, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(x * m1, y * m1, -1*m2 * m1);
+            planeCube.add(plane);
+            planes.push(plane);
+        }
+    }
+    // Orange
+    for (let y = -1; y < 2; y++) {
+        for (let z = -1; z < 2; z++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colOrange, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(-1*m2 * m1, y * m1, z * m1);
+            plane.rotateY(-Math.PI / 2);
+            planeCube.add(plane);
+            planes.push(plane);
+        }
+    }
+    // Red
+    for (let y = -1; y < 2; y++) {
+        for (let z = -1; z < 2; z++) {
+            let planeMaterial = new THREE.MeshBasicMaterial( {color: colRed, side: THREE.DoubleSide} );
+            let plane = new THREE.Mesh( planeGeometry, planeMaterial );
+
+            plane.position.set(1*m2 * m1, y * m1, z * m1);
+            plane.rotateY(-Math.PI / 2);
+            planeCube.add(plane);
+            planes.push(plane);
+        }
+    }
+
+    scene.add(planeCube);
+    
+    camera.position.x = 0;
+    camera.position.y = 5;
+    camera.position.z = 5;
+    
+    camera.rotateX(-Math.PI / 4);
+    
+    renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setClearColor( 0x000000, 0 );
+    renderer.setSize($("#cubeDisplayDiv").width(), $("#cubeDisplayDiv").width());
+    $("#cubeDisplay").append( renderer.domElement );
+
+    origo = new THREE.Vector3(0, 0, 0);
+    xAxis = new THREE.Vector3(1, 0, 0);
+    yAxis = new THREE.Vector3(0, 1, 0);
+    zAxis = new THREE.Vector3(0, 0, 1);
+
+    anim = false;
+    animate();
+}
+
+function animate() {
+    requestAnimationFrame( animate );
+
+    renderer.render( scene, camera );
+};
 
 function getParams() {
     if (window.location.search !== "") {
@@ -75,14 +229,129 @@ function encodeURL(param) {
     return param.replaceAll("%20", " ").replaceAll("%27", "'").replaceAll("%2F", "/").replaceAll("%0A", "\n").replaceAll("%26", "&").replaceAll("%3D", "=");
 }
 
+function listCubeTypes() {
+    for (let cube of cubeTypes) {
+        if (cube === "3x3") {
+            $('#selectCube').append($("<option></option>")
+                    .attr("value", cube)
+                    .text(cube));
+        }
+        else {
+            $('#selectCube').append($("<option disabled></option>")
+                    .attr("value", cube)
+                    .text(cube));
+        }
+    }
+}
+
+function resetState() {
+    prevTurn = "";
+
+    let u = planes.filter(cu => {return cu.getWorldPosition(new THREE.Vector3()).y > 1.5});
+    let d = planes.filter(cd => {return cd.getWorldPosition(new THREE.Vector3()).y < -1.5});
+    let f = planes.filter(cf => {return cf.getWorldPosition(new THREE.Vector3()).z > 1.5});
+    let b = planes.filter(cb => {return cb.getWorldPosition(new THREE.Vector3()).z < -1.5});
+    let r = planes.filter(cr => {return cr.getWorldPosition(new THREE.Vector3()).x > 1.5});
+    let l = planes.filter(cl => {return cl.getWorldPosition(new THREE.Vector3()).x < -1.5});
+
+    for (let p of u) {
+        p.material.color.r = 1;
+        p.material.color.g = 1;
+        p.material.color.b = 1;
+    }
+    for (let p of d) {
+        p.material.color.r = 1;
+        p.material.color.g = 1;
+        p.material.color.b = 0;
+    }
+    for (let p of f) {
+        p.material.color.r = 0;
+        p.material.color.g = 1;
+        p.material.color.b = 0;
+    }
+    for (let p of b) {
+        p.material.color.r = 0;
+        p.material.color.g = 0;
+        p.material.color.b = 1;
+    }
+    for (let p of r) {
+        p.material.color.r = 1;
+        p.material.color.g = 0;
+        p.material.color.b = 0;
+    }
+    for (let p of l) {
+        p.material.color.r = 1;
+        p.material.color.g = 2/3;
+        p.material.color.b = 0;
+    }
+}
+
 function updateArrays() {
+    resetState();
     const setup = getMoves("#taSetup");
     const moves = getMoves("#taMoves");
-    const time = $("#inputTime").val();
 
-    $("#cubeDisplay cube-player").attr("scramble", setup);
-    $("#cubeDisplay cube-player").attr("solution", moves);
-    $("#cubeDisplay cube-player").attr("time", timeToMs(time));
+    //$("#allMoves").html(setup + " " + moves);
+
+    for (let m of (setup + " " + moves).split(" ")) {
+        applyMove(m);
+    }
+}
+
+function playMoves() {
+    $("#btnPlay").prop('disabled', true);
+    resetState();
+    const setup = getMoves("#taSetup");
+    const moves = getMoves("#taMoves");
+
+    for (let m of (setup).split(" ")) {
+        applyMove(m);
+    }
+
+    anim = true;
+    let mvs = (moves).split(" ");
+    playMoveTime = $("#inputTime").val() === "" ? stdTime * 1000 : timeToMs($("#inputTime").val()) / mvs.length;
+    
+    let i = 0;
+    let interval = setInterval(() => {
+        if (i === mvs.length) {
+            clearInterval(interval);
+            anim = false;
+            $("#btnPlay").prop('disabled', false);
+        }
+        else {
+            if (tween) {
+                tween.progress(1);
+            }
+            applyMove(mvs[i]);
+        }
+        i++;
+    }, playMoveTime);
+}
+
+function timeToMs(val) {
+    let h = 0;
+    let m = 0;
+    let s = 0;
+    let hs = 0;
+
+    if (val.split(":").length - 1 === 2) {
+        h = val.split(":")[0];
+        m = val.split(":")[1];
+        s = val.split(":")[1].split(".")[0];
+        hs = val.split(":")[1].split(".")[1];
+    }
+    else if (val.split(":").length - 1 === 1) {
+        m = val.split(":")[0];
+        s = val.split(":")[0].split(".")[0];
+        hs = val.split(":")[0].split(".")[1];
+    }
+    else {
+        s = val.split(".")[0];
+        hs = val.split(".")[1];
+    }
+
+    return h * 3600000 + m * 60000 + s * 1000 + hs * 10;
 }
 
 function getMoves(moves) {
@@ -90,14 +359,14 @@ function getMoves(moves) {
     let arrSetup = [];
     const lines = $(moves).val().split("\n");
     for (let line of lines) {
-        arrSetup.push(commToAlg(line.split("//")[0]));
+        arrSetup.push(line.split("//")[0]);
     }
 
     strSetup = arrSetup.join(" ");
 
     const arr = strSetup.split(" ").filter(checkEmpty);
 
-    return arr.join(" ");
+    return toAlg(arr.join(" "));
 }
 
 function checkEmpty(move) {
@@ -126,6 +395,16 @@ function updateURL() {
     let rawMoves = $("#taMoves").val();
     let rawTime = $("#inputTime").val();
     let urlExtra = "?";
+
+    // Må definere mellomrom, ', //, og ny linje
+    const space = "%20";
+    const inverse = "%27";
+    const slash = "%2F";
+    const newLine = "%0A";
+    const and = "%26";
+
+    // rawSetup.replaceAll(" ", "%20").replaceAll("'", "%27").replaceAll("/", "%2F").replaceAll("\n", "%0A").replaceAll("&", "%26").replaceAll("=", "%3D");
+    // rawMoves.replaceAll(" ", "%20").replaceAll("'", "%27").replaceAll("/", "%2F").replaceAll("\n", "%0A").replaceAll("&", "%26").replaceAll("=", "%3D");
 
     rawSetup = encodeURIComponent(rawSetup);
     rawMoves = encodeURIComponent(rawMoves);
@@ -763,6 +1042,21 @@ function doBw2i() {
     doMove(c, "z", -Math.PI);
 }
 
+function adjustSize() {
+    if ($("body").width() >= $("body").height()) {
+        $("body").css("grid-template-columns", "1fr 1fr");
+        $("body").css("grid-template-rows", "");
+        $("input, textarea, h1, button").css("font-size", "5vh");
+        renderer.setSize( $("#cubeDisplayDiv").width(), $("#cubeDisplayDiv").width() );
+    }
+    else {
+        $("body").css("grid-template-columns", "");
+        $("body").css("grid-template-rows", "1fr 2fr");
+        $("input, textarea, h1, button").css("font-size", "5vw");
+        renderer.setSize( $("#cubeDisplayDiv").height(), $("#cubeDisplayDiv").height() );
+    }
+}
+
 function resetInputs() {
     $("#inputTime").val("").change();
     $("#taSetup").val("").change();
@@ -954,15 +1248,278 @@ function getTurn(e) {console.log("hei");
     }
 }
 
-function adjustSize() {
-    if ($("body").width() >= $("body").height()) {
-        $("body").css("grid-template-columns", "1fr 1fr");
-        $("body").css("grid-template-rows", "");
-        $("input, textarea, h1, button").css("font-size", "5vh");
+function toAlg(a) {
+    if (a.includes("(") || a.includes(")")) {
+        a = algxNtoAlg(a);
+    }
+    if ((a.includes("[") || a.includes("]")) && (a.includes(":") || a.includes(","))) {
+        if (a.includes("] [")) {
+            let c = a.split("] [");
+            let c1 = c[0] + "]";
+            let c2 = "[" + c[1];
+            a = commToAlg(c1) + " " + commToAlg(c2);
+        }
+        else {
+            a = commToAlg(a);
+        }
+    }
+
+    return a;
+}
+
+function algxNtoAlg(comm) {
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+    let commArr = [];
+
+    comm = cleanMoves(comm.replaceAll("(", " ( ").replaceAll(")", " ) "));
+    for (let c of comm.split(" ")) {
+        if (c === "(") {
+            commArr.push("b" + leftBrackets);
+            leftBrackets++;
+        }
+        else if (c === ")") {
+            commArr.push(c);
+            rightBrackets++;
+        }
+        else if(c !== " ") {
+            commArr.push(c);
+        }
+    }
+
+    if (leftBrackets !== rightBrackets) {
+        return "";
+    }
+    
+    for (let i = leftBrackets - 1; i >= 0; i--) {
+        let s = commArr.indexOf("b"+i);
+        let e = commArr.indexOf(")");
+        let c = commArr.slice(s + 1, e);
+        let n = parseInt(commArr[e + 1]);
+        commArr.splice(s, e + 2, translateComm(c, n));
+    }
+    
+    return commArr.join(" ") || "";
+
+    function translateComm(cm, n) {
+        let str = "";
+        for (let i = 0; i < n; i++) {
+            str += cm.join(" ") + " ";
+        }
+        return str.trim();
+    }
+}
+
+function commToAlg(comm) {
+    let leftSqBrackets = 0;
+    let rightSqBrackets = 0;
+    let colons = 0;
+    let commas = 0;
+    let commArr = [];
+
+    /* 
+    [A, B] = A B A' B'
+    [A: B] = A B A'
+    */
+
+    if (
+        comm.split("").filter(c => c === "[").length !== (comm.split("").filter(c => c === ",").length + comm.split("").filter(c => c === ":").length)
+    ) {
+        comm = comm.replaceAll(":", ":[")+"]";
+    }
+    comm = cleanMoves(comm.replaceAll("[", " [ ").replaceAll("]", " ] ").replaceAll(",", " , ").replaceAll(":", " : "));
+    for (let c of comm.split(" ")) {
+        if (c === "[") {
+            commArr.push("l" + leftSqBrackets);
+            leftSqBrackets++;
+        }
+        else if (c === "]") {
+            commArr.push(c);
+            rightSqBrackets++;
+        }
+        else if (c === ":") {
+            commArr.push(c);
+            colons++;
+        }
+        else if (c === ",") {
+            commArr.push(c);
+            commas++;
+        }
+        else if (c !== " ") {
+            commArr.push(c);
+        }
+    }
+
+    if (leftSqBrackets === rightSqBrackets + 1) {
+        commArr.push("]");
+        rightSqBrackets++;
+    }
+    
+    if (leftSqBrackets !== rightSqBrackets || colons > leftSqBrackets || commas > leftSqBrackets) {
+        return "";
+    }
+
+    let stack = [];
+    for (let i = leftSqBrackets - 1; i >= 0; i--) {
+        let s = commArr.indexOf("l"+i);
+        let e = commArr.indexOf("]");
+        let c = commArr.slice(s, e + 1);
+        commArr.splice(s, c.length, "stack"+stack.length);
+        stack.push(translateComm(c));
+    }
+
+    let newAlg = stack.pop() || "";
+    while (newAlg.includes("stack")) {
+        
+        let nArr = newAlg.split(" ");
+        for (let i = 0; i < nArr.length; i++) {
+            if (nArr[i].includes("stack")) {
+                nArr[i] = stack[parseInt(nArr[i].replace("stack", ""))];
+            }
+        }
+        
+        newAlg = nArr.join(" ");
+    }
+    
+    return newAlg;
+
+    function translateComm(cm) {
+        if (cm.includes(",")) {
+            let c1 = cm.slice(1, cm.indexOf(",")).join(" ");
+            let c2 = cm.slice(cm.indexOf(",") + 1, -1).join(" ");
+            return [c1, c2, inverseAlg(c1), inverseAlg(c2)].join(" ");
+        }
+        else if (cm.includes(":")) {
+            let c1 = cm.slice(1, cm.indexOf(":")).join(" ");
+            let c2 = cm.slice(cm.indexOf(":") + 1, -1).join(" ");
+            return [c1, c2, inverseAlg(c1)].join(" ");
+        }
+    }
+}
+
+function cleanMoves(moves) {
+    moves = moves.trim();
+    moves = moves.replaceAll(" ", ";");
+
+    while (moves.includes(";;")) {
+        moves = moves.replaceAll(";;", ";");
+    }
+
+    return moves.replaceAll(";", " ");
+}
+
+function inverseAlg(alg) {
+    let invAlg = "";
+    
+    if (alg.trim() === "") {
+        return "";
+    }
+    else if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",") || alg.includes("(") || alg.includes(")")) {
+        if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",")) {
+            invAlg = inverseComm(alg);
+        }
+        if (alg.includes("(") || alg.includes(")")) {
+            invAlg = inverseAlgxN(alg);
+        }
     }
     else {
-        $("body").css("grid-template-columns", "");
-        $("body").css("grid-template-rows", "1fr 2fr");
-        $("input, textarea, h1, button").css("font-size", "5vw");
+        let arr = [];
+        for (let a of alg.split(" ")) {
+            if (a.includes("'")) {
+                arr.unshift(a.slice(0, -1));
+            }
+            else if (a.includes("2")) {
+                arr.unshift(a);
+            }
+            else {
+                arr.unshift(a + "'");
+            }
+        }
+        invAlg = arr.join(" ");
     }
+
+    return invAlg;
+}
+
+function inverseComm(alg) {
+    let invAlg = "";
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+    let colons = 0;
+    let commas = 0;
+
+    if (alg.includes("] [")) {
+        let c = alg.split("] [");
+        let c1 = c[0] + "]";
+        let c2 = "[" + c[1];
+        invAlg = inverseAlg(c2) + " " + inverseAlg(c1);
+    }
+    else {
+        for (let a of alg) {
+            if (a === "[") {
+                leftBrackets++;
+            }
+            else if (a === "]") {
+                rightBrackets++;
+            }
+            else if (a === ":") {
+                colons++;
+            }
+            else if (a === ",") {
+                commas++;
+            }
+        }
+
+        if (leftBrackets === rightBrackets + 1) {
+            alg += "]";
+            rightBrackets++;
+        }
+
+        if (leftBrackets !== rightBrackets || commas > leftBrackets || colons > leftBrackets || (alg[0] !== "[" && alg[alg.length - 1] !== "]")
+            || (colons === commas && colons === leftBrackets)) {
+                console.log(leftBrackets);
+                console.log(rightBrackets);
+                console.log(commas);
+                console.log(colons);
+                console.log(alg);
+            return "Illegal alg";
+        }
+        
+        alg = alg.slice(1, alg.length - 1);
+        
+        let ABCBCABCBC = alg.match(/(.*)\,\ \[(.*)\,(.*)\]/);
+        let ABAB = alg.match(/(.*)\,(.*)/);
+        let ABCBCA = alg.match(/(.*)\:\ \[(.*)\,(.*)\]/);
+        let ABA = alg.match(/(.*)\:(.*)/);
+        
+        if (ABCBCABCBC) {
+            tempAlg = alg;
+            invAlg = "[" + tempAlg.replace(alg.split(",")[0] + ",", "").trim() + ", " + alg.split(",")[0].trim() + "]";
+        }
+        else if (ABCBCA) {
+            tempAlg = alg;
+            invAlg = "[" + ABCBCA[1].trim() + ": " + inverseAlg(tempAlg.replace(ABCBCA[1] + ":", "").trim()) + "]";
+        }
+        else if (ABAB) {
+            invAlg = "[" + ABAB[2].trim() + ", " + ABAB[1].trim() + "]";
+        }
+        else if (ABA) {
+            invAlg = "[" + ABA[1].trim() + ": " + inverseAlg(ABA[2].trim()) + "]";
+        }
+    }
+
+    return invAlg;
+}
+
+function inverseAlgxN(alg) {
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+
+    if (leftBrackets !== rightBrackets || (alg[0] !== "(" && alg[alg.length - 2] !== ")")) {
+        return "Illegal alg";
+    }
+
+    let n = alg.split(")")[1].trim();
+    
+    return "(" + inverseAlg(alg.split("(")[1].split(")")[0]) + ")" + n;
 }

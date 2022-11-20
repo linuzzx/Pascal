@@ -3115,6 +3115,32 @@ function getHHmmsshh(ms, penalty = 0, stats = false) {
     return timeStr;
 }
 
+function timeToMs(val) {
+    val = val.replace(",", ".");
+    let h = 0;
+    let m = 0;
+    let s = 0;
+    let hs = 0;
+
+    if (val.split(":").length - 1 === 2) {
+        h = val.split(":")[0];
+        m = val.split(":")[1];
+        s = val.split(":")[1].split(".")[0];
+        hs = val.split(":")[1].split(".")[1];
+    }
+    else if (val.split(":").length - 1 === 1) {
+        m = val.split(":")[0];
+        s = val.split(":")[0].split(".")[0];
+        hs = val.split(":")[0].split(".")[1];
+    }
+    else {
+        s = val.split(".")[0];
+        hs = val.split(".")[1];
+    }
+
+    return h * 3600000 + m * 60000 + s * 1000 + hs * 10;
+}
+
 function resetCubeState() {
     u1 = "ubl", u2 = "ub", u3 = "ubr", u4 = "ul", u5 = "u", u6 = "ur", u7 = "ufl", u8 = "uf", u9 = "ufr",
     l1 = "lub", l2 = "lu", l3 = "luf", l4 = "lb", l5 = "l", l6 = "lf", l7 = "ldb", l8 = "ld", l9 = "ldf",
@@ -4503,6 +4529,7 @@ function commToAlg_old(comm) {
 function commToAlg(comm) {
     let nComm = [];
 
+    comm = comm.replaceAll("][", "] [");
     if (comm.includes("(")) {
         let c = comm.split("(");
         let c1 = c[0];
