@@ -4221,6 +4221,31 @@ function inverseAlg(alg) {
     if (alg.trim() === "") {
         return "";
     }
+    let arr = [];
+
+    alg = commToAlg(alg);
+    for (let a of alg.split(" ")) {
+        if (a.includes("'")) {
+            arr.unshift(a.slice(0, -1));
+        }
+        else if (a.includes("2")) {
+            arr.unshift(a);
+        }
+        else {
+            arr.unshift(a + "'");
+        }
+    }
+    invAlg = arr.join(" ");
+
+    return invAlg;
+}
+
+/* function inverseAlg2(alg) {
+    let invAlg = "";
+    
+    if (alg.trim() === "") {
+        return "";
+    }
     else if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",") || alg.includes("(") || alg.includes(")")) {
         if (alg.includes("[") || alg.includes("]") || alg.includes(":") || alg.includes(",")) {
             invAlg = inverseComm(alg);
@@ -4393,17 +4418,12 @@ function algxNtoAlg(comm) {
     }
 }
 
-function commToAlg(comm) {
+function commToAlg_old(comm) {
     let leftSqBrackets = 0;
     let rightSqBrackets = 0;
     let colons = 0;
     let commas = 0;
     let commArr = [];
-
-    /* 
-    [A, B] = A B A' B'
-    [A: B] = A B A'
-    */
 
     if (
         comm.split("").filter(c => c === "[").length !== (comm.split("").filter(c => c === ",").length + comm.split("").filter(c => c === ":").length)
@@ -4477,5 +4497,90 @@ function commToAlg(comm) {
             let c2 = cm.slice(cm.indexOf(":") + 1, -1).join(" ");
             return [c1, c2, inverseAlg(c1)].join(" ");
         }
+    }
+} */
+
+function commToAlg(comm) {
+    let nComm = [];
+
+    if (comm.includes("(")) {
+        let c = comm.split("(");
+        let c1 = c[0];
+        let c2 = c[1].split(")")[0];
+        let n = comm.match(/([0-9]+)([^0-9]+)/)[1];
+        let c3 = comm.match(/([0-9]+)([^0-9]+)/)[2];
+        comm = [c1, algXN(c2, n), c3].join(" ").trim();
+    }
+
+    comm = comm.replace(/\,/g, " comma ");
+    comm = comm.replace(/\:/g, " colon ");
+    comm = comm.replace(/\]\s/g, "], ");
+    comm = "[" + comm + "]";
+    comm = comm.replace(/[^\[\]\,\s]+/g, "\"$&\"");
+    comm = comm.replace(/" /g, "\", ");
+    
+    let commArr = JSON.parse(comm);
+
+    for (let c of commArr) {
+        nComm.push(expandComm(c));
+    }
+
+    return nComm.join(" ");
+
+    function algXN(alg, n) {
+        let nAlg = [];
+        for (let i = 0; i < n; i++) {
+            nAlg.push(alg.trim());
+        }
+        return cleanMoves("[" + nAlg.join(" ") + "]");
+    }
+
+    function expandComm(c) {
+        let newComm;
+
+        if (c.includes("comma") || c.includes("colon")) {
+            if (c.filter(co => typeof co === "object").length > 0) {
+                let nC = [];
+                for (let c1 of c) {
+                    if (typeof c1 === "object") {
+                        nC.push(expandComm(c1));
+                    }
+                    else {
+                        nC.push(c1);
+                    }
+                }
+                c = nC;
+            }
+            
+            if (c.includes("comma")) {
+                let c1 = c.slice(0, c.indexOf("comma")).join(" ");
+                let c2 = c.slice(c.indexOf("comma") + 1).join(" ");
+                let c3 = inverseAlg(c1);
+                let c4 = inverseAlg(c2);
+                newComm = cleanMoves([c1, c2, c3, c4].join(" "));
+            }
+            else if (c.includes("colon")) {
+                let c1 = c.slice(0, c.indexOf("colon")).join(" ");
+                let c2 = c.slice(c.indexOf("colon") + 1).join(" ");
+                let c3 = inverseAlg(c1);
+                newComm = cleanMoves([c1, c2, c3].join(" "));
+            }
+        }
+        else {
+            newComm = typeof c === "object" ? cleanMoves(c.join(" ")) : c;
+        }
+        
+        return newComm;
+    }
+
+    function cleanMoves(moves) {
+        moves = moves.trim();
+        moves = moves.replaceAll(" ", ";");
+    
+        while (moves.includes(";;")) {
+            moves = moves.replaceAll(";;", ";");
+        }
+    
+        return moves.replaceAll(";", " ");
     }
 }
