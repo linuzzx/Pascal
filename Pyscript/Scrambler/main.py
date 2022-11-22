@@ -5,7 +5,7 @@ def scramble():
     scr = ""
     movesExtra = ["", "'", "2"]
     axises = [["U","D"], ["F","B"], ["R","L"]]
-    num = random.randrange(19, 22)
+    num = random.randrange(19, 23)
 
     curAxis = -1
     moves = []
