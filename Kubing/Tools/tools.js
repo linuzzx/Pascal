@@ -1497,6 +1497,24 @@ let colors222 = [
                     case "U'":
                         _ui();
                         break;
+                    case "x":
+                        _x();
+                        break;
+                    case "x2":
+                        _x2();
+                        break;
+                    case "x'":
+                        _xi();
+                        break;
+                    case "z":
+                        _z();
+                        break;
+                    case "z2":
+                        _z2();
+                        break;
+                    case "z'":
+                        _zi();
+                        break;
                 }
             }
         
@@ -1579,6 +1597,62 @@ let colors222 = [
         function _ui() {
             _u();
             _u();
+        }
+        function _x() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[0] = new Corner(tempCo[3].c2, tempCo[3].c3, tempCo[3].c1);
+            skewbCo[1] = new Corner(tempCo[2].c3, tempCo[2].c1, tempCo[2].c2);
+            skewbCo[2] = new Corner(tempCo[5].c2, tempCo[5].c3, tempCo[5].c1);
+            skewbCo[3] = new Corner(tempCo[4].c3, tempCo[4].c1, tempCo[4].c2);
+            skewbCo[4] = new Corner(tempCo[7].c2, tempCo[7].c3, tempCo[7].c1);
+            skewbCo[5] = new Corner(tempCo[6].c3, tempCo[6].c1, tempCo[6].c2);
+            skewbCo[6] = new Corner(tempCo[1].c2, tempCo[1].c3, tempCo[1].c1);
+            skewbCo[7] = new Corner(tempCo[0].c3, tempCo[0].c1, tempCo[0].c2);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[0] = new Center(tempCe[2].c);
+            skewbCe[2] = new Center(tempCe[5].c);
+            skewbCe[5] = new Center(tempCe[4].c);
+            skewbCe[4] = new Center(tempCe[0].c);
+        }
+        function _x2() {
+            _x();
+            _x();
+        }
+        function _xi() {
+            _x();
+            _x();
+            _x();
+        }
+        function _z() {
+            let tempCo = skewbCo.slice();
+    
+            skewbCo[0] = new Corner(tempCo[7].c3, tempCo[7].c1, tempCo[7].c2);
+            skewbCo[1] = new Corner(tempCo[0].c2, tempCo[0].c3, tempCo[0].c1);
+            skewbCo[2] = new Corner(tempCo[3].c3, tempCo[3].c1, tempCo[3].c2);
+            skewbCo[3] = new Corner(tempCo[4].c2, tempCo[4].c3, tempCo[4].c1);
+            skewbCo[4] = new Corner(tempCo[5].c3, tempCo[5].c1, tempCo[5].c2);
+            skewbCo[5] = new Corner(tempCo[2].c2, tempCo[2].c3, tempCo[2].c1);
+            skewbCo[6] = new Corner(tempCo[1].c3, tempCo[1].c1, tempCo[1].c2);
+            skewbCo[7] = new Corner(tempCo[6].c2, tempCo[6].c3, tempCo[6].c1);
+    
+            let tempCe = skewbCe.slice();
+    
+            skewbCe[0] = new Center(tempCe[1].c);
+            skewbCe[1] = new Center(tempCe[5].c);
+            skewbCe[5] = new Center(tempCe[3].c);
+            skewbCe[3] = new Center(tempCe[0].c);
+        }
+        function _z2() {
+            _z();
+            _z();
+        }
+        function _zi() {
+            _z();
+            _z();
+            _z();
         }
     }
 
