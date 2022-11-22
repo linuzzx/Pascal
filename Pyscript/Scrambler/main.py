@@ -12,7 +12,7 @@ def scramble():
     
     i = 0
     while (i < num):
-        axis = random.randrange(0, 2)
+        axis = random.randrange(0, 3)
 
         if (axis != curAxis):
             curAxis = axis
@@ -23,9 +23,9 @@ def scramble():
         else:
             m = 0
             if (len(moves) != 1):
-                m = random.randrange(len(moves) - 1)
+                m = random.randrange(len(moves))
             move = moves[m]
-            moveE = movesExtra[random.randrange(len(movesExtra) - 1)]
+            moveE = movesExtra[random.randrange(len(movesExtra))]
             
             del moves[m]
 
