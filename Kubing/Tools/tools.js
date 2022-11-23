@@ -3451,6 +3451,41 @@ function cleanAlg(alg) {
 function getState(n, scr) {
     let cube = [];
 
+    let nScr = [];
+    for (let s of scr.split(" ")) {
+        if (s.includes("M2")) {
+            nScr.push("R2 L2 x2");
+        }
+        else if (s.includes("M'")) {
+            nScr.push("R' L x");
+        }
+        else if (s.includes("M")) {
+            nScr.push("R L' x'");
+        }
+        else if (s.includes("S2")) {
+            nScr.push("F2 B2 z2");
+        }
+        else if (s.includes("S'")) {
+            nScr.push("F B' z'");
+        }
+        else if (s.includes("S")) {
+            nScr.push("F' B Z");
+        }
+        else if (s.includes("E2")) {
+            nScr.push("U2 D2 y2");
+        }
+        else if (s.includes("E'")) {
+            nScr.push("U' D y");
+        }
+        else if (s.includes("E")) {
+            nScr.push("U D' y'");
+        }
+        else {
+            nScr.push(s);
+        }
+    }
+    scr = nScr.join(" ");
+
     for (let s = 0; s < 6; s++) {
         let side = [];
         for (let i = 0; i < n; i++) {
@@ -3552,6 +3587,18 @@ function getNumberState(n, scr) {
         else if (s.includes("B")) {
             let r = parseInt(s.split("B")[1]) || 1;
             move(cube, "B", parseInt(s.split("B")[0]), r);
+        }
+        else if (s.includes("x")) {
+            let r = parseInt(s.split("x")[1]) || 1;
+            move(cube, "x", parseInt(s.split("x")[0]), r);
+        }
+        else if (s.includes("y")) {
+            let r = parseInt(s.split("y")[1]) || 1;
+            move(cube, "y", parseInt(s.split("y")[0]), r);
+        }
+        else if (s.includes("z")) {
+            let r = parseInt(s.split("z")[1]) || 1;
+            move(cube, "z", parseInt(s.split("z")[0]), r);
         }
         else {
             let r = parseInt(s.split("")[2]) || 1;
