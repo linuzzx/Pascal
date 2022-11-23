@@ -14,7 +14,7 @@
 </head>
 <body>
     <textarea wrap="off" id="taScrambles" placeholder="Scrambles"></textarea>
-    <select id="selEvent"></select>
+    <select id="selEvent" onchange="changeEvent(this.value)"></select>
     <button id="btnPDF" onclick="makeDrawings()">Make drawings</button>
     <button id="btnDownload" onclick='makePDF()' style="display: none;">Download</button>
     <div id="content">

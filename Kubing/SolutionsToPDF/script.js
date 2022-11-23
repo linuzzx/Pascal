@@ -9,7 +9,7 @@ function genEventOptions() {
 
     let out = "";
     for (let e of events) {
-        out += "<option value=\"" + e + "\" onchange='changeEvent(this.value)'>" + e + "</option>";
+        out += "<option value=\"" + e + "\">" + e + "</option>";
     }
 
     $("#selEvent").html(out);
