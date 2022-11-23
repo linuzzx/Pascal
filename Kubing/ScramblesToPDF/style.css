@@ -18,4 +18,19 @@ body {
 #scrambles {
     width: 100%;
     height: auto;
+    text-align: center;
+}
+
+@media print{
+    .scrSubDiv {
+        width: 21cm;
+        height: 29cm;
+        top: 0;
+        left: 0;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+        page-break-after: always;
+    }
 }

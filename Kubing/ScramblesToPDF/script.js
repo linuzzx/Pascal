@@ -27,7 +27,7 @@ function makeDrawings() {
     
     for (let j = 0; j < scrambles.length / 5; j++) {
         let nScrambles = scrambles.slice(j * 5, j * 5 + 5);
-        $("#scrambles").append("<div class='scrSubDiv' id='scrSubDiv" + j + "' style='width: 21cm; height: 29cm; margin: auto; display: grid; grid-template-rows: 1fr 1fr 1fr 1fr 1fr;'></div>");
+        $("#scrambles").append("<div class='scrSubDiv' id='scrSubDiv" + j + "' style='width: 21cm; height: 29.5cm; margin: 0.1cm; display: grid; grid-template-rows: 1fr 1fr 1fr 1fr 1fr;'></div>");
 
         for (let s of nScrambles) {
             let ns = s.split(" ").slice();
@@ -45,7 +45,7 @@ function makeDrawings() {
                     }
                 }
             }
-            let el = "<div style='width: 90%; height: 100%; margin: 0; padding: 0; display: grid; grid-template-columns: 2fr 3fr; border: 1px solid black;'><div style='width: 80%; height: 80%; margin: auto;'><svg width='100%' id='svgCube" + i + "'></svg></div><h1 style='margin: auto'>" /* + "2gen: " */ + s/*  + "<br>Optimal: " + optimalSolutions[i] */ + "</h1></div>";
+            let el = "<div style='width: 100%; height: 100%; margin: 0; padding: 0; display: grid; grid-template-columns: 2fr 3fr; border: 1px solid black;'><div style='width: 80%; height: 80%; margin: auto;'><svg width='100%' id='svgCube" + i + "'></svg></div><h1 style='margin: auto; text-align: left;'>" /* + "2gen: " */ + s/*  + "<br>Optimal: " + optimalSolutions[i] */ + "</h1></div>";
             if ($("#svgCube" + i).parent().height() >= $("#svgCube" + i).parent().width() * 3 / 4) {
                 $("#svgCube" + i).attr("width", $("#svgCube" + i).parent().width() * 0.8);
                 // $("#svgCube" + i).attr("height", $("#svgCube" + i).attr("width") * 3 / 4);
@@ -107,8 +107,9 @@ function drawScramble(id, scr) {
 function makePDF() {
     // downloadPDF($("#content").html());
 
-    let mywindow = window.open("", 'PRINT', 'height='+$(window).height()+'",width='+$(window).width());
+    let mywindow = window.open("", 'PRINT', 'left=0,top=0,height='+$(window).height()+'",width='+$(window).width());
     mywindow.document.write($("#scrambles").html());
+    mywindow.document.write("<link rel='stylesheet' href='style.css'>");
     mywindow.document.close();
     mywindow.focus();
     mywindow.print();
