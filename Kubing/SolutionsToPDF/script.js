@@ -48,10 +48,8 @@ function makeDrawings() {
             let el = "<div style='width: 100%; height: 100%; margin: 0; padding: 0; display: grid; grid-template-columns: 2fr 3fr; border: 1px solid black;'><div style='width: 80%; height: 80%; margin: auto;'><svg width='100%' id='svgCube" + i + "'></svg></div><h1 style='margin: auto; text-align: left;'>" /* + "2gen: " */ + s/*  + "<br>Optimal: " + optimalSolutions[i] */ + "</h1></div>";
             if ($("#svgCube" + i).parent().height() >= $("#svgCube" + i).parent().width() * 3 / 4) {
                 $("#svgCube" + i).attr("width", $("#svgCube" + i).parent().width() * 0.8);
-                // $("#svgCube" + i).attr("height", $("#svgCube" + i).attr("width") * 3 / 4);
             }
             else {
-                // $("#svgCube" + i).attr("height", $("#svgCube" + i).parent().height());
                 $("#svgCube" + i).attr("width", $("#svgCube" + i).attr("height") * 4 / 3);
             }
             $("#svgCube" + i).css("width", $("#svgCube" + i).attr("width"));
