@@ -4370,7 +4370,9 @@ function inverseAlg(alg) {
     }
     let arr = [];
 
-    alg = commToAlg(alg);
+    if (alg.includes("[") || alg.includes("]") || alg.includes("(") || alg.includes(")")) {
+        alg = commToAlg(alg);
+    }
     for (let a of alg.split(" ")) {
         if (a.includes("'")) {
             arr.unshift(a.slice(0, -1));
