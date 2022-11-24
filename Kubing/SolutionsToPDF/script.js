@@ -56,7 +56,7 @@ function makeDrawings() {
             $("#svgCube" + i).css("height", $("#svgCube" + i).attr("height"));
             $("#svgCube" + i).css("margin", "auto");
             $("#scrSubDiv" + j).append(el);
-            drawScramble("#svgCube" + i, /* "x' " + */ inverseAlg(ns.join(" ")));
+            drawScramble("#svgCube" + i, /* "x' " + */ inverseAlg(ns.join(" ")) /* + " z' x'" */);
             i++;
         }
     }
