@@ -26,8 +26,9 @@
                 let playbutton = $("#selPlaybutton").find(":selected").val();
                 let smartcube = $("#selSmartcube").find(":selected").val();
                 let solvedfunc = $("#selSolvedfunc").find(":selected").val();
-                let attributes = [scramble, solution, time, cubestyle, logo, colors, plastic, playbutton, smartcube, solvedfunc];
-                $("#content cube-player").attr(attr, attributes[["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube", "solvedfunc"].indexOf(attr)]);
+                let useControls = $("#selControls").find(":selected").val();
+                let attributes = [scramble, solution, time, cubestyle, logo, colors, plastic, playbutton, smartcube, solvedfunc, useControls];
+                $("#content cube-player").attr(attr, attributes[["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube", "solvedfunc", "usecontrols"].indexOf(attr)]);
             }
 
             function customSolvedFunction() {
@@ -113,6 +114,14 @@
                     </select></td>
                     <td>function name</td>
                 </tr>
+                <tr>
+                    <td>usecontrols</td>
+                    <td><select id="selControls" onchange="updateAttr('usecontrols')">
+                        <option value="false" selected>false</option>
+                        <option value="true">true</option>
+                    </select></td>
+                    <td>true | false</td>
+                </tr>
             </table>
         </div>
         <div id="content">
@@ -132,7 +141,8 @@
             plastic="#000000"
             playbutton="button"
             smartcube="none"
-            solvedfunc="none">
+            solvedfunc="none"
+            controls="false">
             </cube-player>
         </div>
     </body>

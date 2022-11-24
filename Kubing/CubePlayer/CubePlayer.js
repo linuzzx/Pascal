@@ -1,4 +1,5 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js";
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
 // import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
 export * as $ from 'https://code.jquery.com/jquery-3.6.0.min.js';
 
@@ -22,10 +23,10 @@ export function initScripts() {
 let initialized = false;
 let cubePlayerHeight, cubePlayerWidth;
 
-let scramble, solution, time, cubestyle, logo, colors, plastic, playbutton, smartcube, cubePlayerDiv, buttonDiv, button, smartcubeButton;
+let scramble, solution, time, cubestyle, logo, colors, plastic, playbutton, smartcube, cubePlayerDiv, buttonDiv, button, smartcubeButton, useControls;
 
 let planes = [];
-let scene, camera, renderer;
+let scene, camera, renderer, controls;
 let anim = false;
 let stdTime = 0.15;
 let playMoveTime;
@@ -63,6 +64,7 @@ export class CubePlayer extends HTMLElement {
             playbutton = this.getAttribute("playbutton") || "";
             smartcube = this.getAttribute("smartcube") === "giiker" ? this.getAttribute("smartcube") : "";
             solvedFunc = window[this.getAttribute("solvedfunc")] ? this.getAttribute("solvedfunc") : "";
+            useControls = this.getAttribute("usecontrols") ? this.getAttribute("usecontrols").toLowerCase().trim() === "true" : false;
 
             cubePlayerDiv = document.createElement("div");
             buttonDiv = document.createElement("div");
@@ -160,10 +162,10 @@ export class CubePlayer extends HTMLElement {
     }
     
     static get observedAttributes() {
-        return ["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube", "solvedfunc"];
+        return ["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube", "solvedfunc", "usecontrols"];
     }
 
-    attributeChangedCallback(attr, oldValue, newValue) {
+    attributeChangedCallback(attr, oldValue, newValue) {if (attr === "usecontrols") {console.log(oldValue, newValue);}
         if (initialized) {
             switch (attr) {
                 case "scramble":
@@ -204,6 +206,9 @@ export class CubePlayer extends HTMLElement {
                 case "solvedfunc":
                     solvedFunc = newValue || "";
                     break;
+                case "usecontrols":
+                    useControls =  newValue ? newValue.toLowerCase().trim() === "true" : false;
+                    break;
             }
 
             // console.log(attr, oldValue, newValue);
@@ -227,6 +232,12 @@ export class CubePlayer extends HTMLElement {
             else {
                 $(button).attr("disabled", false);
             }
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.enablePan = false;
+            controls.enableZoom = false;
+            controls.rotateSpeed = 0.5;
+            controls.enableRotate = useControls;
 
             resetState();
         }
@@ -410,6 +421,12 @@ function init() {
     renderer.setClearColor( 0x000000, 0 );
     renderer.setSize($(cubePlayerDiv).parent().width(), $(cubePlayerDiv).parent().width());
     
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enablePan = false;
+    controls.enableZoom = false;
+    controls.rotateSpeed = 0.5;
+    controls.enableRotate = useControls;
+    
     $(cubePlayerDiv).empty();
     $(cubePlayerDiv).append( renderer.domElement );
     
@@ -421,6 +438,7 @@ function init() {
 
 function animate() {
     requestAnimationFrame( animate );
+    controls.update();
 
     renderer.render( scene, camera );
 }
@@ -1103,6 +1121,8 @@ function adjustSize() {
     $(smartcubeButton).css("z-index", "1");
     $(smartcubeButton).css("min-width", $(cubePlayerDiv).width() * 0.2);
     $(smartcubeButton).css("margin", "auto");
+
+    $("cube-player canvas").css("outline", "none");
 }
 
 function isColor(color) {
