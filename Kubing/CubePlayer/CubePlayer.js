@@ -165,7 +165,7 @@ export class CubePlayer extends HTMLElement {
         return ["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube", "solvedfunc", "usecontrols"];
     }
 
-    attributeChangedCallback(attr, oldValue, newValue) {if (attr === "usecontrols") {console.log(oldValue, newValue);}
+    attributeChangedCallback(attr, oldValue, newValue) {
         if (initialized) {
             switch (attr) {
                 case "scramble":
