@@ -113,18 +113,3 @@ function makePDF() {
     mywindow.print();
     // mywindow.close();
 }
-
-async function downloadPDF(el) {
-    let fileName = "skvib.pdf";
-
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(el);
-    link.download = fileName;
-    link.target = "_blank";
-    link.setAttribute("type", "hidden");
-
-    document.body.appendChild(link);
-
-    link.click();
-    link.remove();
-};
