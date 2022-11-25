@@ -1,3 +1,4 @@
+let curEvent = "Skewb";
 const cornerStates = [
     "235450",
     "431540",
@@ -244,7 +245,7 @@ const cornerStates = [
     "333300"
 ];
 
-let skvib = [
+const skvib = [
     {state: "333300", solution: "solved"},
     {state: "235450", solution: "R'"},
     {state: "431540", solution: "R"},
@@ -489,9 +490,8 @@ let skvib = [
     {state: "353502", solution: "r' R r R' r R r' R'"},
     {state: "434310", solution: "r R' r' R r R r' R'"},
 ];
-
 $(() => {
-    
+    genEventOptions();
 });
 
 let cW = "1";
@@ -538,32 +538,47 @@ let skewbCe2 = [ce1, ce2, ce3, ce4, ce5, ce6];
 
 let cube2 = getSkewbState2("");
 
-const distinct = (value, index, self) => {
-    return self.indexOf(value.state) === index;
+function genEventOptions() {
+    const events = ["Skewb"];
+
+    let out = "";
+    for (let e of events) {
+        out += "<option value=\"" + e + "\">" + e + "</option>";
+    }
+
+    $("#selEvent").html(out);
 }
 
-function run() {
+function changeEvent(ev) {
+    curEvent = ev;
+}
+
+function makeDrawings() {
     $("#scrambles").html("");
     let scrambles = $("#taScrambles").val().split("\n").filter(s => s.trim() !== "");
 
     let i = 0;
     let up = "6";
     let down = "1";
-    for (let j = 0; j < skvib.length / 5; j++) {
-        let nScrambles = skvib.slice(j * 5, j * 5 + 5).map(s => s.solution);
-        $("#scrambles").append("<div class='scrSubDiv' id='scrSubDiv" + j + "' style='width: 21cm; height: 29cm !important; margin: 0.1cm; display: grid; grid-template-rows: 1fr 1fr 1fr 1fr 1fr; page-break-after: always !important;'></div>");
+    
+    for (let j = 0; j < scrambles.length / 5; j++) {
+        let nScrambles = scrambles.slice(j * 5, j * 5 + 5);
+        $("#scrambles").append("<div class='scrSubDiv' id='scrSubDiv" + j + "' style='width: 21cm; height: 29.5cm; margin: 0.1cm; display: grid; grid-template-rows: 1fr 1fr 1fr 1fr 1fr;'></div>");
 
-        for (let s of nScrambles) {
+        for (let s of skvib) {
             let ns = [];
-            for (let m of s.split(" ")) {
-                if (m.includes("R")) {
-                    ns.push("z " + m + " z'");
-                }
-                else if (m.includes("r")) {
-                    ns.push(m.toUpperCase());
-                }
-                else {
-                    ns.push(m);
+            if (curEvent === "Skewb") {
+                ns = [];
+                for (let m of s.solution.split(" ")) {
+                    if (m.includes("R")) {
+                        ns.push("z " + m + " z'");
+                    }
+                    else if (m.includes("r")) {
+                        ns.push(m.toUpperCase());
+                    }
+                    else {
+                        ns.push(m);
+                    }
                 }
             }
             let scram = "x' " + inverseAlg(ns.join(" ")) + " z' x'";
@@ -578,16 +593,7 @@ function run() {
                 co.includes(up) ? skewbCornerOrientations.push(co.indexOf(up)) : skewbCornerOrientations.push(co.indexOf(down));
             }
 
-            /* let stt = "";
-            for (let co of skewbCorners.slice(0, 6)) {
-                co.includes(up) ? stt += co.indexOf(up) + 3 : stt += co.indexOf(down);
-            }
-            if (!cornerStates.includes(stt)) {
-                cornerStates.push(stt);
-            } */
-            
-            let centerCase = getCenterCase(skewbCenters);
-            let el = "<div style='width: 100%; height: 100%; margin: 0; padding: 0; display: grid; grid-template-columns: 2fr 3fr; border: 1px solid black;'><div style='width: 80%; height: 80%; margin: auto;'><svg style='margin: auto' width='100%' id='svgCube" + i + "'></svg></div><h1 style='margin: auto; text-align: left;'>" + /* "<br>(ubl ubr ufr ufl dfl dfr)" + */ "<br>State: " + skvib[i].state.replaceAll("3", "0").replaceAll("4", "1").replaceAll("5", "2") + "<br>Solution: " + (skvib[i].solution === "solved" ? skvib[i].solution : "x z " + skvib[i].solution + " x") + "</h1></div>";
+            let el = "<div style='width: 100%; height: 100%; margin: 0; padding: 0; display: grid; grid-template-columns: 2fr 3fr; border: 1px solid black;'><div style='width: 80%; height: 80%; margin: auto;'><svg width='100%' id='svgCube" + i + "'></svg></div><h1 style='margin: auto; text-align: left;'>" + "<br>Solution: " + (skvib[i].solution === "solved" ? skvib[i].solution : "x z " + skvib[i].solution + " x") + "</h1></div>";
             if ($("#svgCube" + i).parent().height() >= $("#svgCube" + i).parent().width() * 3 / 4) {
                 $("#svgCube" + i).attr("width", $("#svgCube" + i).parent().width() * 0.8);
             }
@@ -961,7 +967,7 @@ function getSkewbState2(sol) {
 function makePDF() {
     // downloadPDF($("#content").html());
 
-    let mywindow = window.open("", 'PRINT', 'left=0,top=0,height='+$(window).height()+'",width='+$(window).width());
+    let mywindow = window.open("", 'PRINT', 'left=0,top=0,height='+$(window).height() * 0.75+'",width='+$(window).width() * 0.75);
     mywindow.document.write($("#scrambles").html());
     mywindow.document.write("<link rel='stylesheet' href='style.css'>");
     mywindow.document.close();
@@ -1008,10 +1014,10 @@ function drawScrambleSkewb2(svgID, scr) {
     let co2 = new Corner(cW, cB, cR);
     let co3 = new Corner(cW, cR, cG);
     let co4 = new Corner(cW, cG, cO);
-    let co5 = new Corner(cY, "0", "0");
-    let co6 = new Corner(cY, "0", "0");
-    let co7 = new Corner(cY, "0", "0");
-    let co8 = new Corner(cY, "0", "0");
+    let co5 = new Corner(cY, cO, cG);
+    let co6 = new Corner(cY, cG, cR);
+    let co7 = new Corner(cY, cR, cB);
+    let co8 = new Corner(cY, cB, cO);
 
     let cleanSkewbCo = [co1, co2, co3, co4, co5, co6, co7, co8];
     let skewbCo = [co1, co2, co3, co4, co5, co6, co7, co8];
