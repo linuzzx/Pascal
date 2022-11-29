@@ -181,7 +181,9 @@ export class CubePlayer extends HTMLElement {
                     break;
                 case "cubestyle":
                     cubestyle = newValue || "solid";
-                    shouldInit = true;
+                    if (oldValue !== newValue) {
+                        shouldInit = true;
+                    }
                     break;
                 case "logo":
                     logo = newValue || "";
