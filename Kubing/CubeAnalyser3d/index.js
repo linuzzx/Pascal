@@ -912,13 +912,13 @@ function virtual() {
         }
     });
     $("#taSetup").focusout(() => {
-        if (virtualCube) {
-            $("#taSetup").css("background-color", "#FFFFFF");
-        }
+        $("#taSetup").css("background-color", "#FFFFFF");
     });
     $("#taMoves").on("focus", () => {
-        virtualStep = "solution";
-        $("#taMoves").css("background-color", "#33C481");
+        if (virtualCube) {
+            virtualStep = "solution";
+            $("#taMoves").css("background-color", "#33C481");
+        }
     });
     $("#taMoves").focusout(() => {
         $("#taMoves").css("background-color", "#FFFFFF");
@@ -975,6 +975,12 @@ function getTurn(e) {
             newSolution = (newSolution + " " + move).trim();
         }
         virtualStep === "scramble" ? $("#taSetup").val(newSolution).change() : virtualStep === "solution" ? $("#taMoves").val(newSolution).change() : "";
+        for (let m of $("#taSetup").val().split(" ")) {
+            applyMove(m);
+        }
+        for (let m of $("#taMoves").val().split(" ")) {
+            applyMove(m);
+        }
     }
 }
 
