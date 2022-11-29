@@ -56,6 +56,14 @@ export class CubePlayer extends HTMLElement {
             this.id = this.getAttribute("id") || this.id;
             scramble = this.getAttribute("scramble") || "";
             solution = this.getAttribute("solution") || "";
+
+            if (scramble.includes("[") || scramble.includes("]") || scramble.includes("(") || scramble.includes(")")) {
+                scramble = commToAlg(scramble);
+            }
+            if (solution.includes("[") || solution.includes("]") || solution.includes("(") || solution.includes(")")) {
+                solution = commToAlg(solution);
+            }
+
             time = parseInt(this.getAttribute("time")) || "";
             cubestyle = this.getAttribute("cubestyle") || "solid";
             logo = this.getAttribute("logo") || "";
@@ -257,6 +265,14 @@ export class CubePlayer extends HTMLElement {
             }
 
             resetState();
+
+            if (scramble.includes("[") || scramble.includes("]") || scramble.includes("(") || scramble.includes(")")) {
+                scramble = commToAlg(scramble);
+            }
+            if (solution.includes("[") || solution.includes("]") || solution.includes("(") || solution.includes(")")) {
+                solution = commToAlg(solution);
+            }
+            
             for (let m of scramble.split(" ")) {
                 mv(m);
             }
@@ -1674,3 +1690,90 @@ const connect = async () => {
   await giiker.connect();
   return giiker;
 };
+
+function commToAlg(comm) {
+    let nComm = [];
+
+    comm = comm.trim();
+    comm = comm.replaceAll("][", "] [");
+    if (comm.includes("(")) {
+        let c = comm.split("(");
+        let c1 = c[0];
+        let c2 = c[1].split(")")[0];
+        let n = comm.match(/([0-9]+)([^0-9]+)/)[1];
+        let c3 = comm.match(/([0-9]+)([^0-9]+)/)[2];
+        comm = [c1, algXN(c2, n), c3].join(" ").trim();
+    }
+
+    comm = comm.replace(/\,/g, " comma ");
+    comm = comm.replace(/\:/g, " colon ");
+    comm = comm.replace(/\]\s/g, "], ");
+    comm = "[" + comm + "]";
+    comm = comm.replace(/[^\[\]\,\s]+/g, "\"$&\"");
+    comm = comm.replace(/" /g, "\", ");
+    
+    let commArr = JSON.parse(comm);
+
+    for (let c of commArr) {
+        nComm.push(expandComm(c));
+    }
+
+    return nComm.join(" ");
+
+    function algXN(alg, n) {
+        let nAlg = [];
+        for (let i = 0; i < n; i++) {
+            nAlg.push(alg.trim());
+        }
+        return cleanMoves("[" + nAlg.join(" ") + "]");
+    }
+
+    function expandComm(c) {
+        let newComm;
+
+        if (c.includes("comma") || c.includes("colon")) {
+            if (c.filter(co => typeof co === "object").length > 0) {
+                let nC = [];
+                for (let c1 of c) {
+                    if (typeof c1 === "object") {
+                        nC.push(expandComm(c1));
+                    }
+                    else {
+                        nC.push(c1);
+                    }
+                }
+                c = nC;
+            }
+            
+            if (c.includes("comma")) {
+                let c1 = c.slice(0, c.indexOf("comma")).join(" ");
+                let c2 = c.slice(c.indexOf("comma") + 1).join(" ");
+                let c3 = inverseAlg(c1);
+                let c4 = inverseAlg(c2);
+                newComm = cleanMoves([c1, c2, c3, c4].join(" "));
+            }
+            else if (c.includes("colon")) {
+                let c1 = c.slice(0, c.indexOf("colon")).join(" ");
+                let c2 = c.slice(c.indexOf("colon") + 1).join(" ");
+                let c3 = inverseAlg(c1);
+                newComm = cleanMoves([c1, c2, c3].join(" "));
+            }
+        }
+        else {
+            newComm = typeof c === "object" ? cleanMoves(c.join(" ")) : c;
+        }
+        
+        return newComm;
+    }
+
+    function cleanMoves(moves) {
+        moves = moves.trim();
+        moves = moves.replaceAll(" ", ";");
+    
+        while (moves.includes(";;")) {
+            moves = moves.replaceAll(";;", ";");
+        }
+    
+        return moves.replaceAll(";", " ");
+    }
+}
