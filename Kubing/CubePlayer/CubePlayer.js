@@ -167,6 +167,7 @@ export class CubePlayer extends HTMLElement {
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
+        let shouldInit = false;
         if (initialized) {
             switch (attr) {
                 case "scramble":
@@ -180,9 +181,11 @@ export class CubePlayer extends HTMLElement {
                     break;
                 case "cubestyle":
                     cubestyle = newValue || "solid";
+                    shouldInit = true;
                     break;
                 case "logo":
                     logo = newValue || "";
+                    shouldInit = true;
                     break;
                 case "colors":
                     colors = newValue.split(",").filter(c => isColor(c)).length === 6 ? newValue.split(",") : 
@@ -194,21 +197,26 @@ export class CubePlayer extends HTMLElement {
                         "#0000ff",
                         "#ffff00"
                     ];
+                    shouldInit = true;
                     break;
                 case "plastic":
                     plastic = isColor(newValue) ? newValue : "#000000";
+                    shouldInit = true;
                     break;
                 case "playbutton":
                     playbutton = newValue || "";
+                    shouldInit = true;
                     break;
                 case "smartcube":
                     smartcube = newValue === "giiker" ? newValue : "";
+                    shouldInit = true;
                     break;
                 case "solvedfunc":
                     solvedFunc = newValue || "";
                     break;
                 case "usecontrols":
                     useControls =  newValue ? newValue.toLowerCase().trim() === "true" : false;
+                    shouldInit = true;
                     break;
             }
 
@@ -239,6 +247,10 @@ export class CubePlayer extends HTMLElement {
             controls.enableZoom = false;
             controls.rotateSpeed = 0.5;
             controls.enableRotate = useControls;
+
+            if (shouldInit) {
+                init();
+            }
 
             resetState();
             for (let m of solution.split(" ")) {
@@ -461,7 +473,7 @@ function resetState() {
     } */
 
     if (movesApplied.length !== 0) {
-        for (let m of inverseAlg(movesApplied.join(" ")).split(" ")) {
+        for (let m of inverseAlg(movesApplied.slice().join(" ")).split(" ")) {
             mv(m);
         }
         movesApplied = [];
