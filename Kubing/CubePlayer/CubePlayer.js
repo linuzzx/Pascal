@@ -2,11 +2,17 @@ import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.m
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
 // import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
 export * as $ from 'https://code.jquery.com/jquery-3.6.0.min.js';
-
+let urls = [];
 export function initScripts() {
     let scriptGsap = document.createElement('script');
-    scriptGsap.setAttribute('src','https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js');
-    document.head.appendChild(scriptGsap);
+    let url = "https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js";
+    scriptGsap.setAttribute('src',url);
+    let scripts = document.getElementsByTagName("script");
+
+    if (!urls.includes(url)) {
+        urls.push(url);
+        document.head.appendChild(scriptGsap);
+    }
 
     /* let scriptGiiker = document.createElement('script');
     scriptGiiker.setAttribute('src','https://einarkl.github.io/Kubing/CubePlayer/giiker.js');
@@ -47,6 +53,7 @@ export class CubePlayer extends HTMLElement {
     connectedCallback() {
         initScripts();
         setTimeout(() => {
+            this.id = this.getAttribute("id") || this.id;
             scramble = this.getAttribute("scramble") || "";
             solution = this.getAttribute("solution") || "";
             time = parseInt(this.getAttribute("time")) || "";
@@ -163,13 +170,16 @@ export class CubePlayer extends HTMLElement {
     }
     
     static get observedAttributes() {
-        return ["scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube", "solvedfunc", "usecontrols"];
+        return ["id", "scramble", "solution", "time", "cubestyle", "logo", "colors", "plastic", "playbutton", "smartcube", "solvedfunc", "usecontrols"];
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
         let shouldInit = false;
         if (initialized) {
             switch (attr) {
+                case "id":
+                    this.id = newValue || this.id;
+                    break;
                 case "scramble":
                     scramble = newValue || "";
                     break;
