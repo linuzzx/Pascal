@@ -240,6 +240,9 @@ export class CubePlayer extends HTMLElement {
             controls.enableRotate = useControls;
 
             resetState();
+            for (let m of solution.split(" ")) {
+                mv(m);
+            }
         }
     }
 }
