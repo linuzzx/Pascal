@@ -1,5 +1,3 @@
-let url = "Kubing/CubeAnalyser/?";
-
 const cubeTypes = ["3x3", "2x2", "4x4", "Square-1"]; //["3x3", "2x2", "4x4", "5x5", "6x6", "7x7", "Clock", "Megaminx","Pyraminx", "Skewb", "Square-1"];
 let setupArray = [];
 let movesArray = [];
