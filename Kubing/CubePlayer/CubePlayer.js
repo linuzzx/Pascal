@@ -242,12 +242,6 @@ export class CubePlayer extends HTMLElement {
                 $(button).attr("disabled", false);
             }
 
-            /* controls = new OrbitControls(camera, renderer.domElement);
-            controls.enablePan = false;
-            controls.enableZoom = false;
-            controls.rotateSpeed = 0.5;
-            controls.enableRotate = useControls; */
-
             if (shouldInit && oldValue !== newValue) {
                 init();
             }
