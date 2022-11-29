@@ -128,24 +128,6 @@ function updateURL() {
     if (urlRest !== "") {
         urlExtra = "?" + urlRest;
     }
-    /* if (rawSetup !== "") {
-        urlExtra += "setup="+rawSetup;
-        if (rawMoves !== "") {
-            urlExtra += "&moves="+rawMoves;
-        }
-        if (rawTime !== "") {
-            urlExtra += "&time="+rawTime;
-        }
-    }
-    else if (rawMoves !== "") {
-        urlExtra += "moves="+rawMoves;
-        if (rawTime !== "") {
-            urlExtra += "&time="+rawTime;
-        }
-    }
-    else if (rawTime !== "") {
-        urlExtra += "time="+rawTime;
-    } */
 
     const state = {};
     const title = "";
