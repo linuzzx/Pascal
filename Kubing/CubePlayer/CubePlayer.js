@@ -181,9 +181,7 @@ export class CubePlayer extends HTMLElement {
                     break;
                 case "cubestyle":
                     cubestyle = newValue || "solid";
-                    if (oldValue !== newValue) {
-                        shouldInit = true;
-                    }
+                    shouldInit = true;
                     break;
                 case "logo":
                     logo = newValue || "";
@@ -250,7 +248,7 @@ export class CubePlayer extends HTMLElement {
             controls.rotateSpeed = 0.5;
             controls.enableRotate = useControls;
 
-            if (shouldInit) {
+            if (shouldInit && oldValue !== newValue) {
                 init();
             }
 
