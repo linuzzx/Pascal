@@ -33,15 +33,6 @@ function getParams() {
 
         for (let p of params) {
             switch (p.split("=")[0]) {
-                /* case "setup":
-                    $("#taSetup").val(decode(p.split("=")[1]));
-                    break;
-                case "moves":
-                    $("#taMoves").val(encodeURL(p.split("=")[1]));
-                    break;
-                case "time":
-                    $("#inputTime").val(encodeURL(p.split("=")[1]));
-                    break; */
                 case "setup":
                     $("#taSetup").val(decodeURIComponent(p.split("=")[1]));
                     break;

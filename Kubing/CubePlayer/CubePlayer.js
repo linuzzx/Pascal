@@ -20,6 +20,7 @@ export function initScripts() {
     */
 }
 
+let movesApplied = [];
 let initialized = false;
 let cubePlayerHeight, cubePlayerWidth;
 
@@ -447,7 +448,7 @@ function animate() {
 }
 
 function resetState() {
-    while(scene.children.length > 0){ 
+    /* while(scene.children.length > 0){ 
         scene.remove(scene.children[0]); 
     }
     $(cubePlayerDiv).empty();
@@ -457,10 +458,45 @@ function resetState() {
     
     for (let m of scramble.split(" ")) {
         mv(m);
+    } */
+
+    if (movesApplied.length !== 0) {
+        for (let m of inverseAlg(movesApplied.join(" ")).split(" ")) {
+            mv(m);
+        }
+        movesApplied = [];
     }
+    for (let m of scramble.split(" ")) {
+        mv(m);
+    }
+}
+
+function inverseAlg(alg) {
+    let invAlg = "";
+    
+    if (alg.trim() === "") {
+        return "";
+    }
+    let arr = [];
+    
+    for (let a of alg.split(" ")) {
+        if (a.includes("'")) {
+            arr.unshift(a.slice(0, -1));
+        }
+        else if (a.includes("2")) {
+            arr.unshift(a);
+        }
+        else {
+            arr.unshift(a + "'");
+        }
+    }
+    invAlg = arr.join(" ");
+
+    return invAlg;
 }
             
 function mv(turn) {
+    movesApplied.push(turn);
     switch (turn) {
         case "R":
             doR();
