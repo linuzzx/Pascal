@@ -23,19 +23,6 @@ $(function() {
     updateTPS();
     
     adjustSize();
-
-    $(window).keypress(function(e) {
-        if (virtualCube && !(locked && e.which === prevWhich)) {
-            prevWhich = e.which;
-            locked = true;
-
-            getTurn(e);
-        }
-    });
-
-    $(window).keyup(function(e) {
-        locked = false;
-    });
 });
 
 $(window).resize(() => {
@@ -791,6 +778,7 @@ async function connectToGiiker() {
                 alert("Select scramble/solution field to enter moves with Giiker Cube");
                 usedVirtual = true;
             }
+            virtualCube = true;
             
             $("#btnGiiker").text("Disconnect");
             $("#btnGiiker").blur();
@@ -806,15 +794,19 @@ async function connectToGiiker() {
             virtualStep = "";
 
             $("#taSetup").on("focus", () => {
-                virtualStep = "scramble";
-                $("#taSetup").css("background-color", "#33C481");
+                if (virtualCube) {
+                    virtualStep = "scramble";
+                    $("#taSetup").css("background-color", "#33C481");
+                }
             });
             $("#taSetup").focusout(() => {
                 $("#taSetup").css("background-color", "#FFFFFF");
             });
             $("#taMoves").on("focus", () => {
-                virtualStep = "solution";
-                $("#taMoves").css("background-color", "#33C481");
+                if (virtualCube) {
+                    virtualStep = "solution";
+                    $("#taMoves").css("background-color", "#33C481");
+                }
             });
             $("#taMoves").focusout(() => {
                 $("#taMoves").css("background-color", "#FFFFFF");
@@ -852,6 +844,7 @@ function stopGiiker() {
     $("#btnReset").attr("disabled", false);
 
     const giiker = disconnect();
+    virtualCube = false;
 }
 
 function giikerMove(move) {
@@ -913,11 +906,15 @@ function virtual() {
     virtualStep = "";
 
     $("#taSetup").on("focus", () => {
-        virtualStep = "scramble";
-        $("#taSetup").css("background-color", "#33C481");
+        if (virtualCube) {
+            virtualStep = "scramble";
+            $("#taSetup").css("background-color", "#33C481");
+        }
     });
     $("#taSetup").focusout(() => {
-        $("#taSetup").css("background-color", "#FFFFFF");
+        if (virtualCube) {
+            $("#taSetup").css("background-color", "#FFFFFF");
+        }
     });
     $("#taMoves").on("focus", () => {
         virtualStep = "solution";
@@ -925,6 +922,19 @@ function virtual() {
     });
     $("#taMoves").focusout(() => {
         $("#taMoves").css("background-color", "#FFFFFF");
+    });
+
+    $(window).keypress(function(e) {
+        if (virtualCube && !(locked && e.which === prevWhich)) {
+            prevWhich = e.which;
+            locked = true;
+
+            getTurn(e);
+        }
+    });
+
+    $(window).keyup(function(e) {
+        locked = false;
     });
 }
 
@@ -946,7 +956,7 @@ function stopVirtual() {
     $("#taMoves").css("background-color", "#FFFFFF");
 }
 
-function getTurn(e) {console.log("hei");
+function getTurn(e) {
     let keyBinds = ["j", "f", "h", "g", "i", "k", "d", "e", "s", "l", "w", "o", ",", ".", "n", "b", "ø", "a", "å", "q", "u", "m", "v", "r"];
     let possibleMoves = ["U", "U'", "F", "F'", "R", "R'", "L", "L'", "D", "D'", "B", "B'", "M", "M'", "x", "x'", "y", "y'", "z", "z'", "Rw", "Rw'", "Lw", "Lw'"];
 
