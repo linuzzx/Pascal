@@ -124,9 +124,9 @@ export class CubePlayer extends HTMLElement {
                 const setup = scramble;
                 const moves = solution;
             
-                /* for (let m of (setup).split(" ")) {
+                for (let m of (setup).split(" ")) {
                     mv(m);
-                } */
+                }
             
                 anim = true;
                 let mvs = (moves).split(" ");
@@ -153,10 +153,10 @@ export class CubePlayer extends HTMLElement {
                 connectSmartCube(smartcube);
             });
 
-            /* for (let m of scramble.split(" ")) {
-                mv(m);
-            } */
             resetState();
+            for (let m of scramble.split(" ")) {
+                mv(m);
+            }
 
             initialized = true;
         }, 500);
@@ -253,6 +253,9 @@ export class CubePlayer extends HTMLElement {
             }
 
             resetState();
+            for (let m of scramble.split(" ")) {
+                mv(m);
+            }
             for (let m of solution.split(" ")) {
                 mv(m);
             }
@@ -478,9 +481,9 @@ function resetState() {
         }
         movesApplied = [];
     }
-    for (let m of scramble.split(" ")) {
+    /* for (let m of scramble.split(" ")) {
         mv(m);
-    }
+    } */
 }
 
 function inverseAlg(alg) {
