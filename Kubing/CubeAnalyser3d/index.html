@@ -27,6 +27,13 @@
                 <input type="text" id="tps" readonly></input>
                 <button id="btnReset" onclick="resetInputs()">Reset</button>
             </div>
+            <div id="styleDiv">
+                <select id="selCubestyle" onchange="updateURL(); updateArrays()">
+                    <option value="solid" selected>Solid</option>
+                    <option value="stickerless">Stickerless</option>
+                    <option value="hollow">Hollow</option>
+                </select>
+            </div>
         </div>
     </body>
 </html>

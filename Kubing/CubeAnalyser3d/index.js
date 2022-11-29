@@ -66,6 +66,9 @@ function getParams() {
                 case "time":
                     $("#inputTime").val(decodeURIComponent(p.split("=")[1]));
                     break;
+                case "cubestyle":
+                    $("#selCubestyle").val(decodeURIComponent(p.split("=")[1])).change();
+                    break;
             }
         }
     }
@@ -79,10 +82,12 @@ function updateArrays() {
     const setup = getMoves("#taSetup");
     const moves = getMoves("#taMoves");
     const time = timeToMs($("#inputTime").val()) || "";
+    const cubestyle = $("#selCubestyle").find(":selected").val();
 
     $("#cubeDisplay cube-player").attr("scramble", setup);
     $("#cubeDisplay cube-player").attr("solution", moves);
     $("#cubeDisplay cube-player").attr("time", time);
+    $("#cubeDisplay cube-player").attr("cubestyle", cubestyle);
 }
 
 function getMoves(moves) {
@@ -124,12 +129,19 @@ function updateTPS() {
 function updateURL() {
     let rawSetup = $("#taSetup").val();
     let rawMoves = $("#taMoves").val();
-    let rawTime = $("#inputTime").val();
-    let urlExtra = "?";
+    let rawTime = $("#inputTime").val() ? "time=" + $("#inputTime").val() : "";
+    let cubestyle = $("#selCubestyle").find(":selected").val() ? "cubestyle=" + $("#selCubestyle").find(":selected").val() : "";
+    let urlExtra = "";
 
-    rawSetup = encodeURIComponent(rawSetup);
-    rawMoves = encodeURIComponent(rawMoves);
-    if (rawSetup !== "") {
+    rawSetup = $("#taSetup").val() ? "setup=" + encodeURIComponent(rawSetup) : "";
+    rawMoves = $("#taMoves").val() ? "moves=" + encodeURIComponent(rawMoves) : "";
+
+    let urlRest = [rawSetup, rawMoves, rawTime, cubestyle].filter(u => u !== "").join("&");
+
+    if (urlRest !== "") {
+        urlExtra = "?" + urlRest;
+    }
+    /* if (rawSetup !== "") {
         urlExtra += "setup="+rawSetup;
         if (rawMoves !== "") {
             urlExtra += "&moves="+rawMoves;
@@ -146,12 +158,14 @@ function updateURL() {
     }
     else if (rawTime !== "") {
         urlExtra += "time="+rawTime;
-    }
+    } */
 
     const state = {};
     const title = "";
 
-    history.pushState(state, title, urlExtra);
+    if (urlExtra !== "") {
+        history.pushState(state, title, urlExtra);
+    }
 }
 
 function applyMove(turn) {
@@ -958,11 +972,11 @@ function adjustSize() {
     if ($("body").width() >= $("body").height()) {
         $("body").css("grid-template-columns", "1fr 1fr");
         $("body").css("grid-template-rows", "");
-        $("input, textarea, h1, button").css("font-size", "5vh");
+        $("input, textarea, h1, button, select, option").css("font-size", "5vh");
     }
     else {
         $("body").css("grid-template-columns", "");
         $("body").css("grid-template-rows", "1fr 2fr");
-        $("input, textarea, h1, button").css("font-size", "5vw");
+        $("input, textarea, h1, button, select, option").css("font-size", "5vw");
     }
 }
