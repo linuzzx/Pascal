@@ -60,7 +60,7 @@ export class EinarTimer extends HTMLElement {
                 this.timing = false;
                 this.timerlock = true;
                 this.shadowRoot.querySelector("#timerdisplay").innerText = this.getAttribute("time");
-                window[this.stopfunc](this.getAttribute("ms"), this.getAttribute("time"));
+                window[this.stopfunc] ? window[this.stopfunc](this.getAttribute("ms"), this.getAttribute("time")) : "";
             }
         });
     }
