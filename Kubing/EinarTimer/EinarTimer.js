@@ -35,9 +35,9 @@ export class EinarTimer extends HTMLElement {
         this.startkey = parseInt(this.getAttribute("startkey")) || 32;
         this.stopkey = parseInt(this.getAttribute("stopkey")) || 32;
         this.stopfunc = this.getAttribute("stopfunc") || "";
-        this.decimals = this.getAttribute("decimals") || 2;
+        this.decimals = parseInt(this.getAttribute("decimals")) || 2;
         
-        this.addEventListener("keyup", e => {
+        window.addEventListener("keyup", e => {
             if (e.which === this.startkey && !this.timing && !this.timerlock) {
                 this.timing = true;
                 let start = Date.now();
@@ -55,7 +55,7 @@ export class EinarTimer extends HTMLElement {
             }
         });
 
-        this.addEventListener("keydown", e => {
+        window.addEventListener("keydown", e => {
             if (e.which === this.stopkey && this.timing) {
                 clearInterval(this.interval);
                 this.timing = false;
