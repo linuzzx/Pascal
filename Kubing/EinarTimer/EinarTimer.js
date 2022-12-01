@@ -35,6 +35,7 @@ export class EinarTimer extends HTMLElement {
         this.startkey = parseInt(this.getAttribute("startkey")) || 32;
         this.stopkey = parseInt(this.getAttribute("stopkey")) || 32;
         this.stopfunc = this.getAttribute("stopfunc") || "";
+        this.decimals = this.getAttribute("decimals") || 2;
         
         window.addEventListener("keyup", e => {
             if (e.which === this.startkey && !this.timing && !this.timerlock) {
@@ -42,7 +43,7 @@ export class EinarTimer extends HTMLElement {
                 let start = Date.now();
                 this.interval = setInterval(() => {
                     let ms = Date.now() - start;
-                    let time = msToTime(ms);
+                    let time = msToTime(ms, this.decimals);
                     let message = this.getAttribute("timermessage") || "Timing";
                     this.setAttribute("ms", ms);
                     this.setAttribute("time", time);
@@ -66,7 +67,7 @@ export class EinarTimer extends HTMLElement {
     }
     
     static get observedAttributes() {
-        return ["color", "background", "fontfamily", "fontsize", "timerupdate", "timermessage", "startkey", "stopkey", "stopfunc"];
+        return ["color", "background", "fontfamily", "fontsize", "timerupdate", "timermessage", "decimals", "startkey", "stopkey", "stopfunc"];
     }
 
     attributeChangedCallback(attr, oldValue, newValue) {
@@ -97,6 +98,9 @@ export class EinarTimer extends HTMLElement {
                 case "timermessage":
                     this.timermessage = newValue;
                     break;
+                case "decimals":
+                    this.decimals = parseInt(newValue);
+                    break;
                 case "startkey":
                     this.startkey = parseInt(newValue);
                     break;
@@ -114,6 +118,7 @@ export class EinarTimer extends HTMLElement {
 function msToTime(ms, decimals = 2) {
     let timeStr = "";
 
+    decimals = decimals === 3 ? 3 : decimals === 2 ? 2 : decimals === 1 ? 1 : 0;
     let dec = decimals === 3 ? 1 : decimals === 2 ? 10 : decimals === 1 ? 100 : 1000;
 
     let cs = Math.floor((ms % 1000) / dec);
@@ -121,34 +126,14 @@ function msToTime(ms, decimals = 2) {
     let m = Math.floor((ms / 60000) % 60);
     let h = Math.floor((ms / 3600000) % 24);
 
-    if (h !== 0) {
-        if (m < 10) {
-            m = "0" + m;
-        }
-        if (s < 10) {
-            s = "0" + s;
-        }
-        if (cs < 10) {
-            cs = "0" + cs;
-        }
-        timeStr = h + ":" + m + ":" + s + "." + cs;
+    h = h === 0 ? -1 : h;
+    m = m === 0 ? -1 : m;
+
+    if (decimals === 0) {
+        timeStr = [h, [m, s].join(":")].join(":").replaceAll("-1:", "");
     }
     else {
-        if (m !==0) {
-            if (s < 10) {
-                s = "0" + s;
-            }
-            if (cs < 10) {
-                cs = "0" + cs;
-            }
-            timeStr = m + ":" + s + "." + cs;
-        }
-        else {
-            if (cs < 10) {
-                cs = "0" + cs;
-            }
-            timeStr = s + "." + cs;
-        }
+        timeStr = [h, [m, [s, cs].join(".")].join(":")].join(":").replaceAll("-1:", "");
     }
     
     return timeStr;

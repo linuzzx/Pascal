@@ -16,11 +16,12 @@
             let fontsize = $("#inpFontsize").val();
             let timerupdate = $("#inpTimerupdate").val();
             let timermessage = $("#inpTimermessage").val();
+            let decimals = $("#inpDecimals").val();
             let startkey = $("#inpStartkey").val();
             let stopkey = $("#inpStopkey").val();
             let stopfunc = $("#inpStopfunc").val();
-            let attributes = [color, background, fontfamily, fontsize, timerupdate, timermessage, startkey, stopkey, stopfunc];
-            $("einar-timer").attr(attr, attributes[["color", "background", "fontfamily", "fontsize", "timerupdate", "timermessage", "startkey", "stopkey", "stopfunc"].indexOf(attr)]);
+            let attributes = [color, background, fontfamily, fontsize, timerupdate, timermessage, decimals, startkey, stopkey, stopfunc];
+            $("einar-timer").attr(attr, attributes[["color", "background", "fontfamily", "fontsize", "timerupdate", "timermessage", "decimals", "startkey", "stopkey", "stopfunc"].indexOf(attr)]);
         }
 
         function stopTimer(ms, time) {
@@ -36,6 +37,7 @@
     fontsize="20vh"
     timerupdate="show"
     timermessage="Timing"
+    decimals="2"
     startkey="32"
     stopkey="32"
     stopfunc="stopTimer"
@@ -84,6 +86,11 @@
                 <td>timermessage</td>
                 <td><input id="inpTimermessage" type="text" value="Timing" onchange="updateAttr('timermessage')"></input></td>
                 <td>message to show while timing (if timerupdate == "hide"), "Timing" default</td>
+            </tr>
+            <tr>
+                <td>decimals</td>
+                <td><input id="inpDecimals" type="number" value="2" onchange="updateAttr('decimals')"></input></td>
+                <td>Number of decimals to show while timing. [0, 3], 2 (default)</td>
             </tr>
             <tr>
                 <td>startkey</td>
