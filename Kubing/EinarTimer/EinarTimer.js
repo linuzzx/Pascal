@@ -9,7 +9,7 @@ export class EinarTimer extends HTMLElement {
         this.shadowRoot.appendChild(template.content.cloneNode(true));
 
         this.setAttribute("ms", "0");
-        this.setAttribute("time", "0.00");
+        this.setAttribute("time", msToTime(0, this.decimals));
         this.timing = false;
 
         this.timerlock = false;
@@ -72,11 +72,6 @@ export class EinarTimer extends HTMLElement {
 
     attributeChangedCallback(attr, oldValue, newValue) {
         clearInterval(this.interval);
-        this.setAttribute("ms", "0");
-        this.setAttribute("time", "0.00");
-        this.shadowRoot.querySelector("#timerdisplay").innerText = this.getAttribute("time");
-        this.timing = false;
-        this.timerlock = false;
 
         if (this.initialized) {
             switch (attr) {
@@ -112,6 +107,12 @@ export class EinarTimer extends HTMLElement {
                     break;
             }
         }
+
+        this.setAttribute("ms", "0");
+        this.setAttribute("time", msToTime(0, this.decimals));
+        this.shadowRoot.querySelector("#timerdisplay").innerText = this.getAttribute("time");
+        this.timing = false;
+        this.timerlock = false;
     }
 }
 
@@ -128,6 +129,26 @@ function msToTime(ms, decimals = 2) {
 
     h = h === 0 ? -1 : h;
     m = m === 0 ? -1 : m;
+
+    if (decimals === 3) {
+        if (cs === 0) {
+            cs = "000";
+        }
+        else if (cs < 10) {
+            cs = "00" + cs;
+        }
+        else if (cs < 100) {
+            cs = "0" + cs;
+        }
+    }
+    else if (decimals === 2) {
+        if (cs === 0) {
+            cs = "00";
+        }
+        else if (cs < 10) {
+            cs = "0" + cs;
+        }
+    }
 
     if (decimals === 0) {
         timeStr = [h, [m, s].join(":")].join(":").replaceAll("-1:", "");
