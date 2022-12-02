@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini block</title>
+    <title>Mini block scrambler</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../../Tools/tools.js"></script>
     <link rel="stylesheet" href="index.css">
@@ -12,11 +12,7 @@
 <body>
     <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="drawScrambleSkewb('#svgSkewb', $(this).val())"></h1>
     <div><svg id="svgSkewb"></svg></div>
-    <button id="btnScramble" onclick="$('#solution').html(''); $('#inpScramble').val(getScrambleSkewb()); drawScrambleSkewb('#svgSkewb', $('#inpScramble').val())">Scramble</button>
-    <button id="btnSolve" onclick="checkMiniblock($('#inpScramble').val())">Miniblock</button>
-    <button onclick="test1000()">Test 1000</button>
-    <div id="solution"></div>
-    <div id="searchDepth"></div>
+    <button id="btnScramble" onclick="$('#inpScramble').val(scrambleMiniblock()); drawScrambleSkewb('#svgSkewb', $('#inpScramble').val());">Scramble</button>
 </body>
 <script src="index.js" defer></script>
 </html>
