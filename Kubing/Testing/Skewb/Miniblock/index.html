@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="drawSkewb('#svgSkewb', $(this).val())"></h1>
+    <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="drawScrambleSkewb('#svgSkewb', $(this).val())"></h1>
     <div><svg id="svgSkewb"></svg></div>
     <button id="btnScramble" onclick="$('#solution').html(''); $('#inpScramble').val(getScrambleSkewb()); drawScrambleSkewb('#svgSkewb', $('#inpScramble').val())">Scramble</button>
     <button id="btnSolve" onclick="checkMiniblock($('#inpScramble').val())">Miniblock</button>

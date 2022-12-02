@@ -57,12 +57,12 @@ function checkMiniblock(scr) {
     let miniblock = "No miniblock";
     
     for (let r of rotations) {
-        let state = getState(cleanMoves(inverseAlg(r) + " " + scr + " " + r));
+        let state = getState(cleanMoves(scr + " " + r));
         let ce = state.ce;
         let co = state.co;
 
         if (ce[0].c === co[0].c1 && ce[0].c === co[1].c1 && co[0].c3 === co[1].c2) {
-            miniblock = "Miniblock found!";
+            miniblock = "Miniblock found!\n";
         }
     }
 
@@ -117,7 +117,7 @@ function getState(sol) {
                 _xi();
                 break;
             case "y":
-                _y2();
+                _y();
                 break;
             case "y2":
                 _y2();

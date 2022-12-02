@@ -1507,7 +1507,7 @@ let colors222 = [
                         _xi();
                         break;
                     case "y":
-                        _y2();
+                        _y();
                         break;
                     case "y2":
                         _y2();
