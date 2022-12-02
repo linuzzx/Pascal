@@ -9,6 +9,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./EinarTimer.js" type="module"></script>
     <script>
+        function copyScriptSrc() {
+            let copyText = document.getElementById("inpScriptSrc");
+            copyText.setSelectionRange(0, copyText.value.length);
+
+            navigator.clipboard.writeText(copyText.value);
+            copyText.setSelectionRange(0, 0);
+        }
         function updateAttr(attr) {
             let color = $("#inpColor").val();
             let background = $("#inpBackground").val();

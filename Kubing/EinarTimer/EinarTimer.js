@@ -19,6 +19,8 @@ export class EinarTimer extends HTMLElement {
         this.shadowRoot.querySelector("#timerdisplay").style.top = "50%";
         this.shadowRoot.querySelector("#timerdisplay").style.transform = "translateY(-50%)";
         this.shadowRoot.querySelector("#timerdisplay").style.margin = "0";
+        this.shadowRoot.querySelector("#timerdisplay").style.width = "100%";
+        this.shadowRoot.querySelector("#timerdisplay").style.height = "100%";
 
         this.initialized = false;
     }
@@ -26,10 +28,10 @@ export class EinarTimer extends HTMLElement {
     connectedCallback() {
         this.initialized = true;
 
-        this.getAttribute("color") ? this.shadowRoot.querySelector("#timerdisplay").style.color = this.getAttribute("color") : "";
-        this.getAttribute("background") ? this.shadowRoot.querySelector("#timerdisplay").style.background = this.getAttribute("background") : "";
-        this.getAttribute("fontfamily") ? this.shadowRoot.querySelector("#timerdisplay").style.fontFamily = this.getAttribute("fontfamily") : "";
-        this.getAttribute("fontsize") ? this.shadowRoot.querySelector("#timerdisplay").style.fontSize = this.getAttribute("fontsize") : "";
+        this.getAttribute("color") ? this.shadowRoot.querySelector("#timerdisplay").style.color = this.getAttribute("color") : "black";
+        this.getAttribute("background") ? this.shadowRoot.querySelector("#timerdisplay").style.background = this.getAttribute("background") : "transparent";
+        this.getAttribute("fontfamily") ? this.shadowRoot.querySelector("#timerdisplay").style.fontFamily = this.getAttribute("fontfamily") : "Verdana";
+        this.getAttribute("fontsize") ? this.shadowRoot.querySelector("#timerdisplay").style.fontSize = this.getAttribute("fontsize") : "10vh";
 
         clearInterval(this.interval);
         this.startkey = parseInt(this.getAttribute("startkey")) || 32;
