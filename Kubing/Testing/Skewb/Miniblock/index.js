@@ -412,11 +412,15 @@ function testx(x) {
         miniblock_1: 0,
         miniblock_2: 0,
         miniblock_3: 0,
+        miniblock_4: 0,
+        miniblock_5: 0,
         notMiniblock: 0,
         // mini_scrambles: [],
         // mini_1_scrambles: [],
         // mini_2_scrambles: [],
-        mini_3_scrambles: []
+        // mini_3_scrambles: [],
+        mini_4_scrambles: [],
+        // mini_5_scrambles: []
     };
 
     let scrX = [];
@@ -465,7 +469,7 @@ function testx(x) {
                             for (let m3 of moves) {
                                 if (checkMiniblock(s + " " + m1 + " " + m2 + " " + m3)) {
                                     mini_3 = true;
-                                    results.mini_3_scrambles.push([s, m1 + " " + m2 + " " + m3]);
+                                    // results.mini_3_scrambles.push([s, m1 + " " + m2 + " " + m3]);
                                     break loop;
                                 }
                             }
@@ -475,65 +479,51 @@ function testx(x) {
                         results.miniblock_3++;
                     }
                     else {
-                        results.notMiniblock++;
-                    }
-                }
-            }
-        }
-    }
-    console.log(results);
-}
-
-function testAll() {
-    let results = {
-        miniblock: 0,
-        miniblock_1: 0,
-        miniblock_2: 0,
-        notMiniblock: 0
-    };
-
-    let states = [];
-    let scrX = [];
-
-    for (let i = 0; i < x; i++) {
-        scrX.push(getScrambleSkewb());
-    }
-
-    for (let s of scrX) {
-        let r = checkMiniblock(s);
-
-        if (r) {
-            results.miniblock++;
-            // results.mini_scrambles.push(s);
-        }
-        else {
-            let mini_1 = false;
-            loop : for (let m1 of moves) {
-                if (checkMiniblock(s + " " + m1)) {
-                    mini_1 = true;
-                    // results.mini_1_scrambles.push([s, m1]);
-                    break loop;
-                }
-            }
-            if (mini_1) {
-                results.miniblock_1++;
-            }
-            else {
-                let mini_2 = false;
-                loop : for (let m1 of moves) {
-                    for (let m2 of moves) {
-                        if (checkMiniblock(s + " " + m1 + " " + m2)) {
-                            mini_2 = true;
-                            // results.mini_2_scrambles.push([s, m1 + " " + m2]);
-                            break loop;
+                        let mini_4 = false;
+                        loop : for (let m1 of moves) {
+                            for (let m2 of moves) {
+                                for (let m3 of moves) {
+                                    for (let m4 of moves) {
+                                        if (checkMiniblock(s + " " + m1 + " " + m2 + " " + m3 + " " + m4)) {
+                                            mini_4 = true;
+                                            results.mini_4_scrambles.push([s, m1 + " " + m2 + " " + m3 + " " + m4]);
+                                            break loop;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (mini_4) {
+                            results.miniblock_4++;
+                        }
+                        /* else {
+                            let mini_5 = false;
+                            loop : for (let m1 of moves) {
+                                for (let m2 of moves) {
+                                    for (let m3 of moves) {
+                                        for (let m4 of moves) {
+                                            for (let m4 of moves) {
+                                                if (checkMiniblock(s + " " + m1 + " " + m2 + " " + m3 + " " + m4 + " " + m5)) {
+                                                    mini_5 = true;
+                                                    // results.mini_5_scrambles.push([s, m1 + " " + m2 + " " + m3 + " " + m4 + " " + m5]);
+                                                    break loop;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (mini_5) {
+                                results.miniblock_5++;
+                            }
+                            else {
+                                results.notMiniblock++;
+                            }
+                        } */
+                        else {
+                            results.notMiniblock++;
                         }
                     }
-                }
-                if (mini_2) {
-                    results.miniblock_2++;
-                }
-                else {
-                    results.notMiniblock++;
                 }
             }
         }

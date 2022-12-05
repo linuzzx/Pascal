@@ -135,6 +135,45 @@ function scrambleMiniblock() {
                     }
                 }
                 break;
+            case 4:
+                if (checkMiniblock(scr2)) {
+                    break;
+                }
+                loop : for (let m1 of moves) {
+                    if (m1[0] === scr2.split(" ")[scr2.split(" ").length - 1][0]) {
+                        continue;
+                    }
+                    if (checkMiniblock([scr2, m1].join(" "))) {
+                        break;
+                    }
+                    for (let m2 of moves) {
+                        if (m2[0] === m1[0]) {
+                            continue;
+                        }
+                        if (checkMiniblock([scr2, m1, m2].join(" "))) {
+                            break;
+                        }
+                        for (let m3 of moves) {
+                            if (m3[0] === m2[0]) {
+                                continue;
+                            }
+                            if (checkMiniblock([scr2, m1, m2, m3].join(" "))) {
+                                break;
+                            }
+                            for (let m4 of moves) {
+                                if (m4[0] === m3[0]) {
+                                    continue;
+                                }
+                                if (checkMiniblock([scr2, m1, m2, m3, m4].join(" "))) {
+                                    scr = scr2;
+                                    $("#miniblockSetup").text($("#miniblockSetup").text() + m1 + " " + m2 + " " + m3 + " " + m4);
+                                    break loop;
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
         }
         
         scr2 = getScrambleSkewb();
