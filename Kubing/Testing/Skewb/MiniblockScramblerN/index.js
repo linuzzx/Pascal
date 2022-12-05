@@ -1,5 +1,7 @@
 const solvedStateNumbers = "164145153136263235254246163542";
 let moves = ["U", "U'", "R", "R'", "L", "L'", "B", "B'"];
+let movesA = ["F", "F'", "R", "R'", "L", "L'", "B", "B'", "f", "f'", "r", "r'", "l", "l'", "b", "b'"];
+let movesAC = ["z y' R y z'", "z y' R' y z'", "z R z'", "z R' z'", "z' L z", "z' L' z", "x B x'", "x B' x'", "y' R y", "y' R' y", "R", "R'", "L", "L'", "B", "B'"];
 
 let cW = "1";
 let cY = "2";
@@ -70,13 +72,10 @@ function scrambleMiniblock() {
                 if (checkMiniblock(scr2)) {
                     break outerloop;
                 }
-                for (let m1 of moves) {
-                    if (m1[0] === scr2.split(" ")[scr2.split(" ").length - 1][0]) {
-                        continue;
-                    }
+                for (let m1 of movesAC) {
                     if (checkMiniblock([scr2, m1].join(" "))) {
                         scr = scr2;
-                        $("#miniblockSetup").text($("#miniblockSetup").text() + m1);
+                        $("#miniblockSetup").text($("#miniblockSetup").text() + movesA[movesAC.indexOf(m1)]);
                         break outerloop;
                     }
                 }
@@ -85,20 +84,17 @@ function scrambleMiniblock() {
                 if (checkMiniblock(scr2)) {
                     break outerloop;
                 }
-                for (let m1 of moves) {
-                    if (m1[0] === scr2.split(" ")[scr2.split(" ").length - 1][0]) {
-                        continue;
-                    }
+                for (let m1 of movesAC) {
                     if (checkMiniblock([scr2, m1].join(" "))) {
                         break outerloop;
                     }
-                    for (let m2 of moves) {
+                    for (let m2 of movesAC) {
                         if (m2[0] === m1[0]) {
                             continue;
                         }
                         if (checkMiniblock([scr2, m1, m2].join(" "))) {
                             scr = scr2;
-                            $("#miniblockSetup").text($("#miniblockSetup").text() + m1 + " " + m2);
+                            $("#miniblockSetup").text($("#miniblockSetup").text() + movesA[movesAC.indexOf(m1)] + " " + movesA[movesAC.indexOf(m2)]);
                             break outerloop;
                         }
                     }
@@ -108,27 +104,24 @@ function scrambleMiniblock() {
                 if (checkMiniblock(scr2)) {
                     break outerloop;
                 }
-                for (let m1 of moves) {
-                    if (m1[0] === scr2.split(" ")[scr2.split(" ").length - 1][0]) {
-                        continue;
-                    }
+                for (let m1 of movesAC) {
                     if (checkMiniblock([scr2, m1].join(" "))) {
                         break outerloop;
                     }
-                    for (let m2 of moves) {
+                    for (let m2 of movesAC) {
                         if (m2[0] === m1[0]) {
                             continue;
                         }
                         if (checkMiniblock([scr2, m1, m2].join(" "))) {
                             break outerloop;
                         }
-                        for (let m3 of moves) {
+                        for (let m3 of movesAC) {
                             if (m3[0] === m2[0]) {
                                 continue;
                             }
                             if (checkMiniblock([scr2, m1, m2, m3].join(" "))) {
                                 scr = scr2;
-                                $("#miniblockSetup").text($("#miniblockSetup").text() + m1 + " " + m2 + " " + m3);
+                                $("#miniblockSetup").text($("#miniblockSetup").text() + movesA[movesAC.indexOf(m1)] + " " + movesA[movesAC.indexOf(m2)] + " " + movesA[movesAC.indexOf(m3)]);
                                 break outerloop;
                             }
                         }
@@ -139,34 +132,31 @@ function scrambleMiniblock() {
                 if (checkMiniblock(scr2)) {
                     break outerloop;
                 }
-                for (let m1 of moves) {
-                    if (m1[0] === scr2.split(" ")[scr2.split(" ").length - 1][0]) {
-                        continue;
-                    }
+                for (let m1 of movesAC) {
                     if (checkMiniblock([scr2, m1].join(" "))) {
                         break outerloop;
                     }
-                    for (let m2 of moves) {
+                    for (let m2 of movesAC) {
                         if (m2[0] === m1[0]) {
                             continue;
                         }
                         if (checkMiniblock([scr2, m1, m2].join(" "))) {
                             break outerloop;
                         }
-                        for (let m3 of moves) {
+                        for (let m3 of movesAC) {
                             if (m3[0] === m2[0]) {
                                 continue;
                             }
                             if (checkMiniblock([scr2, m1, m2, m3].join(" "))) {
                                 break outerloop;
                             }
-                            for (let m4 of moves) {
+                            for (let m4 of movesAC) {
                                 if (m4[0] === m3[0]) {
                                     continue;
                                 }
                                 if (checkMiniblock([scr2, m1, m2, m3, m4].join(" "))) {
                                     scr = scr2;
-                                    $("#miniblockSetup").text($("#miniblockSetup").text() + m1 + " " + m2 + " " + m3 + " " + m4);
+                                    $("#miniblockSetup").text($("#miniblockSetup").text() + movesA[movesAC.indexOf(m1)] + " " + movesA[movesAC.indexOf(m2)] + " " + movesA[movesAC.indexOf(m3)] + " " + movesA[movesAC.indexOf(m4)]);
                                     break outerloop;
                                 }
                             }
