@@ -45,46 +45,63 @@ let skewbCo = [co1, co2, co3, co4, co5, co6, co7, co8];
 let cleanSkewbCe = [ce1, ce2, ce3, ce4, ce5, ce6];
 let skewbCe = [ce1, ce2, ce3, ce4, ce5, ce6];
 
-$(() => {
-    drawScrambleSkewb('#svgSkewb', $("#inpScramble").val());
-
-    adjustSize();
-});
-
-function isValidScramble(scr) {
-    return scr.trim() !== "";
+onmessage = e => {
+    genScramble(e.data[0]);
 }
 
-function scrambleMiniblock() {
-    $("#btnScramble").attr("disabled", true);
-    $("#inpScramble").attr("disabled", true);
-    $("#selN").attr("disabled", true);
-
-    $("#miniblockSetup").text("Setup to miniblock: ");
-    let n = parseInt($("#selN").find(":selected").val());
-    let scramble = "";
+function genScramble(n) {
     let setup = "";
-    
-    let worker = new Worker("./worker.js");
-    worker.postMessage([n]);
-    worker.onmessage = e => {
-        scramble = e.data[0];
-        setup = e.data[1];
+    let scr = "";
+    let scr2 = getScrambleSkewb();
 
-        $("#inpScramble").val(scramble);
-        $("#miniblockSetup").text($("#miniblockSetup").text() + setup);
+    while (scr === "") {
+        if (checkMiniblock(scr2)) {
+            if (n === 0) {
+                scr = scr2;
+            }
+        }
+        else {
+            let arr = movesA.slice();
+            outerloop : for (let i = 1; i <= n; i++) {
+                if (i === 1) {
+                    for (let m of movesA) {
+                        let newM = movesAC[movesA.indexOf(m)];
+                        if (checkMiniblock(scr2 + " " + newM)) {
+                            if (i === n) {
+                                scr = scr2;
+                                setup = m;
+                            }
+                            break outerloop;
+                        }
+                    }
+                }
+                else {
+                    let tArr = arr.slice();
+                    for (let m1 of arr) {
+                        for (let m2 of movesA) {
+                            tArr.push(m1 + " " + m2);
+                            let newM = (m1 + " " + m2).split(" ").map(m => movesAC[movesA.indexOf(m)]).join(" ");
+                            if (checkMiniblock(scr2 + " " + newM)) {
+                                if (i === n) {
+                                    scr = scr2;
+                                    setup = m1 + " " + m2;
+                                }
+                                break outerloop;
+                            }
+                        }
+                    }
+                    arr = tArr.slice();
+                }
+            }
+        }
 
-        drawScrambleSkewb('#svgSkewb', $('#inpScramble').val());
-
-        $("#btnScramble").attr("disabled", false);
-        $("#inpScramble").attr("disabled", false);
-        $("#selN").attr("disabled", false);
-
-        return scramble;
+        scr2 = getScrambleSkewb();
     }
+
+    postMessage([scr, setup]);
 }
 
-/* function checkMiniblock(scr) {
+function checkMiniblock(scr) {
     let miniblock = false;
     
     outerloop : for (let r of rotations) {
@@ -339,11 +356,6 @@ function resetCubeState() {
     }
 }
 
-function scrollDown() {
-    const element = document.getElementsByTagName("body")[0].parentElement;
-    element.scrollTop = element.scrollHeight;
-}
-
 const rotations = [
     "",
     "x'",
@@ -369,12 +381,31 @@ const rotations = [
     "y x2",
     "z' x2",
     "z x2"
-]; */
+];
 
-function adjustSize() {
-    $("svg").height(3 * $("#svgSkewb").width() / 4);
-    $("#inpScramble").css("font-size", "3vh");
-    $("#selN").css("font-size", "3vh");
-    $("label").css("font-size", "3vh");
-    $("button").css("font-size", "3vh");
+function getScrambleSkewb() {
+    //8-9 trekk
+    //U R L B
+    let scr = "";
+    let moves = ["U", "R", "L", "B"];
+    let movesExtra = ["", "'"];
+    let numOfMoves = [8, 9];
+    let prevMove = "";
+
+    let num = numOfMoves[Math.floor(Math.random() * numOfMoves.length)];
+
+    for (let i=0; i<num; i++) {
+        let move = moves[Math.floor(Math.random() * moves.length)];
+        let extra = movesExtra[Math.floor(Math.random() * movesExtra.length)];
+        
+        if (prevMove !== move) {
+            prevMove = move;
+            scr += move+extra+" ";
+        }
+        else {
+            i--;
+        }
+    }
+
+    return scr.trim();
 }
