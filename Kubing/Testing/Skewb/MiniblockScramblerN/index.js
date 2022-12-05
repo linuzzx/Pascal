@@ -54,7 +54,7 @@ function isValidScramble(scr) {
 }
 
 function scrambleMiniblock() {
-    $("#miniblockSetup").text("");
+    $("#miniblockSetup").text("Setup to miniblock: ");
     let n = parseInt($("#selN").find(":selected").val());
     let scr = "";
     let scr2 = getScrambleSkewb();
@@ -76,7 +76,7 @@ function scrambleMiniblock() {
                     }
                     if (checkMiniblock([scr2, m1].join(" "))) {
                         scr = scr2;
-                        $("#miniblockSetup").text(m1);
+                        $("#miniblockSetup").text($("#miniblockSetup").text() + m1);
                         break loop;
                     }
                 }
@@ -98,7 +98,7 @@ function scrambleMiniblock() {
                         }
                         if (checkMiniblock([scr2, m1, m2].join(" "))) {
                             scr = scr2;
-                            $("#miniblockSetup").text(m1 + " " + m2);
+                            $("#miniblockSetup").text($("#miniblockSetup").text() + m1 + " " + m2);
                             break loop;
                         }
                     }
@@ -128,7 +128,7 @@ function scrambleMiniblock() {
                             }
                             if (checkMiniblock([scr2, m1, m2, m3].join(" "))) {
                                 scr = scr2;
-                                $("#miniblockSetup").text(m1 + " " + m2 + " " + m3);
+                                $("#miniblockSetup").text($("#miniblockSetup").text() + m1 + " " + m2 + " " + m3);
                                 break loop;
                             }
                         }

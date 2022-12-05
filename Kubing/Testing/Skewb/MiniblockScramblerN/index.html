@@ -20,7 +20,7 @@
     <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="drawScrambleSkewb('#svgSkewb', $(this).val())"></h1>
     <div><svg id="svgSkewb"></svg></div>
     <button id="btnScramble" onclick="$('#inpScramble').val(scrambleMiniblock()); drawScrambleSkewb('#svgSkewb', $('#inpScramble').val());">Scramble</button>
-    <h1 id="miniblockSetup"></h1>
+    <h1 id="miniblockSetup">Setup to miniblock: </h1>
 </body>
 <script src="index.js" defer></script>
 </html>
