@@ -53,7 +53,7 @@ function isValidScramble(scr) {
     return scr.trim() !== "";
 }
 
-function checkMiniblock(scr) {
+function checkMiniblock2(scr) {
     let miniblock = "No miniblock";
     
     for (let r of rotations) {
@@ -69,7 +69,7 @@ function checkMiniblock(scr) {
     $("#solution").html("<h1>" + miniblock + "</h1>");
 }
 
-function checkMiniblock2(scr) {
+function checkMiniblock(scr) {
     let miniblock = false;
     
     outerloop : for (let r of rotations) {
@@ -371,7 +371,7 @@ function test1000() {
     };
 
     for (let s of scr1000) {
-        let r = checkMiniblock2(s);
+        let r = checkMiniblock(s);
 
         if (r) {
             results.miniblock++;
@@ -396,7 +396,7 @@ function testX(x) {
     }
 
     for (let s of scrX) {
-        let r = checkMiniblock2(s);
+        let r = checkMiniblock(s);
 
         if (r) {
             minis++;
@@ -404,6 +404,141 @@ function testX(x) {
     }
 
     console.log(minis);
+}
+
+function testx(x) {
+    let results = {
+        miniblock: 0,
+        miniblock_1: 0,
+        miniblock_2: 0,
+        miniblock_3: 0,
+        notMiniblock: 0,
+        // mini_scrambles: [],
+        // mini_1_scrambles: [],
+        // mini_2_scrambles: [],
+        mini_3_scrambles: []
+    };
+
+    let scrX = [];
+
+    for (let i = 0; i < x; i++) {
+        scrX.push(getScrambleSkewb());
+    }
+
+    for (let s of scrX) {
+        let r = checkMiniblock(s);
+
+        if (r) {
+            results.miniblock++;
+            // results.mini_scrambles.push(s);
+        }
+        else {
+            let mini_1 = false;
+            loop : for (let m1 of moves) {
+                if (checkMiniblock(s + " " + m1)) {
+                    mini_1 = true;
+                    // results.mini_1_scrambles.push([s, m1]);
+                    break loop;
+                }
+            }
+            if (mini_1) {
+                results.miniblock_1++;
+            }
+            else {
+                let mini_2 = false;
+                loop : for (let m1 of moves) {
+                    for (let m2 of moves) {
+                        if (checkMiniblock(s + " " + m1 + " " + m2)) {
+                            mini_2 = true;
+                            // results.mini_2_scrambles.push([s, m1 + " " + m2]);
+                            break loop;
+                        }
+                    }
+                }
+                if (mini_2) {
+                    results.miniblock_2++;
+                }
+                else {
+                    let mini_3 = false;
+                    loop : for (let m1 of moves) {
+                        for (let m2 of moves) {
+                            for (let m3 of moves) {
+                                if (checkMiniblock(s + " " + m1 + " " + m2 + " " + m3)) {
+                                    mini_3 = true;
+                                    results.mini_3_scrambles.push([s, m1 + " " + m2 + " " + m3]);
+                                    break loop;
+                                }
+                            }
+                        }
+                    }
+                    if (mini_3) {
+                        results.miniblock_3++;
+                    }
+                    else {
+                        results.notMiniblock++;
+                    }
+                }
+            }
+        }
+    }
+    console.log(results);
+}
+
+function testAll() {
+    let results = {
+        miniblock: 0,
+        miniblock_1: 0,
+        miniblock_2: 0,
+        notMiniblock: 0
+    };
+
+    let states = [];
+    let scrX = [];
+
+    for (let i = 0; i < x; i++) {
+        scrX.push(getScrambleSkewb());
+    }
+
+    for (let s of scrX) {
+        let r = checkMiniblock(s);
+
+        if (r) {
+            results.miniblock++;
+            // results.mini_scrambles.push(s);
+        }
+        else {
+            let mini_1 = false;
+            loop : for (let m1 of moves) {
+                if (checkMiniblock(s + " " + m1)) {
+                    mini_1 = true;
+                    // results.mini_1_scrambles.push([s, m1]);
+                    break loop;
+                }
+            }
+            if (mini_1) {
+                results.miniblock_1++;
+            }
+            else {
+                let mini_2 = false;
+                loop : for (let m1 of moves) {
+                    for (let m2 of moves) {
+                        if (checkMiniblock(s + " " + m1 + " " + m2)) {
+                            mini_2 = true;
+                            // results.mini_2_scrambles.push([s, m1 + " " + m2]);
+                            break loop;
+                        }
+                    }
+                }
+                if (mini_2) {
+                    results.miniblock_2++;
+                }
+                else {
+                    results.notMiniblock++;
+                }
+            }
+        }
+    }
+    console.log(results);
 }
 
 const scr1000 = [
