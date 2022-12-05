@@ -413,14 +413,11 @@ function testx(x) {
         miniblock_2: 0,
         miniblock_3: 0,
         miniblock_4: 0,
-        miniblock_5: 0,
-        notMiniblock: 0,
         // mini_scrambles: [],
         // mini_1_scrambles: [],
         // mini_2_scrambles: [],
         // mini_3_scrambles: [],
-        mini_4_scrambles: [],
-        // mini_5_scrambles: []
+        mini_4_scrambles: []
     };
 
     let scrX = [];
@@ -495,33 +492,6 @@ function testx(x) {
                         }
                         if (mini_4) {
                             results.miniblock_4++;
-                        }
-                        /* else {
-                            let mini_5 = false;
-                            loop : for (let m1 of moves) {
-                                for (let m2 of moves) {
-                                    for (let m3 of moves) {
-                                        for (let m4 of moves) {
-                                            for (let m4 of moves) {
-                                                if (checkMiniblock(s + " " + m1 + " " + m2 + " " + m3 + " " + m4 + " " + m5)) {
-                                                    mini_5 = true;
-                                                    // results.mini_5_scrambles.push([s, m1 + " " + m2 + " " + m3 + " " + m4 + " " + m5]);
-                                                    break loop;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            if (mini_5) {
-                                results.miniblock_5++;
-                            }
-                            else {
-                                results.notMiniblock++;
-                            }
-                        } */
-                        else {
-                            results.notMiniblock++;
                         }
                     }
                 }
