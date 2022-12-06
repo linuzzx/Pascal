@@ -13,7 +13,7 @@
     <h1 id="inpH1"><input type="text" placeholder="Scramble" id="inpScramble" oninput="drawScrambleSkewb('#svgSkewb', $(this).val())"></h1>
     <div><svg id="svgSkewb"></svg></div>
     <button id="btnScramble" onclick="$('#solution').html(''); $('#inpScramble').val(getScrambleSkewb()); drawScrambleSkewb('#svgSkewb', $('#inpScramble').val())">Scramble</button>
-    <button id="btnSolve" onclick="$('#solution').text(checkMiniblock($('#inpScramble').val()))">Miniblock</button>
+    <button id="btnSolve" onclick="checkMiniblock2($('#inpScramble').val())">Miniblock</button>
     <button onclick="test1000()">Test 1000</button>
     <div id="solution"></div>
     <div id="searchDepth"></div>
