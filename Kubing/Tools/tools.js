@@ -1309,12 +1309,18 @@ let colors222 = [
     }
 
     // Skewb
-    function drawScrambleSkewb(svgID, scr) {
+    function drawScrambleSkewb(svgID, scr, advanced = false) {
         $(svgID).empty();
         let n = 3;
     
         let moves = ["U", "U'", "R", "R'", "L", "L'", "B", "B'"];
+        let movesA = ["F", "F'", "R", "R'", "L", "L'", "B", "B'", "f", "f'", "r", "r'", "l", "l'", "b", "b'"];
+        let movesAC = ["z y' R y z'", "z y' R' y z'", "z R z'", "z R' z'", "z' L z", "z' L' z", "x B x'", "x B' x'", "y' R y", "y' R' y", "R", "R'", "L", "L'", "B", "B'"];
     
+        if (advanced) {
+            scr = scr.split(" ").map(s => movesAC[movesA.indexOf(s)]).join(" ");
+        }
+
         let cW = "1";
         let cY = "2";
         let cG = "3";
