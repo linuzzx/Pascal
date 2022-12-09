@@ -186,7 +186,7 @@ export class CubePlayer extends HTMLElement {
         if (initialized) {
             switch (attr) {
                 case "id":
-                    this.id = newValue || this.id;
+                    this.id = newValue || "";
                     break;
                 case "scramble":
                     scramble = newValue || "";
