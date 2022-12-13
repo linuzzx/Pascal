@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL shortener | EinarKL</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="config.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="content" style="display: none;">
+        <input type="text" id="inpURL">
+        <button onclick="shortenURL($('#inpURL').val())">Shorten URL</button>
+    </div>
+</body>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+</html>
