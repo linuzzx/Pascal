@@ -11,8 +11,14 @@
 </head>
 <body>
     <div id="content" style="display: none;">
-        <input type="text" id="inpURL">
-        <button onclick="shortenURL($('#inpURL').val())">Shorten URL</button>
+        <div>
+            <input type="text" id="inpLongURL" placeholder="Long URL">
+            <button onclick="shortenURL($('#inpLongURL').val())">Shorten URL</button>
+        </div><br>
+        <div>
+            <input type="text" id="inpShortURL" placeholder="Short URL" readonly>
+            <button onclick="copyURL($('#inpShortURL').val())">Copy URL</button>
+        </div>
     </div>
 </body>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
