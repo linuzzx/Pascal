@@ -1,15 +1,14 @@
 $(() => {
-    console.log(window.search);
     if (window.location.search !== "") {
         const shortURL = (window.location.search).split("?")[1];
-console.log(shortURL);
-        firebase.database().ref("URLs/").once("value", (snapshot) => {console.log(snapshot);
-            let urls = snapshot.val();
-            console.log(urls);
-            let ind = Object.values(urls).findIndex(u => u.shortURL === shortURL);
-
-            if (ind && Object.values(urls)[ind]) {
-                location.replace(Object.values(urls)[ind].longURL);
+        
+        firebase.database().ref("URLs/").once("value", (snapshot) => {
+            let urls = snapshot.val() ? snapshot.val() : [];
+            
+            let ind = Object.keys(urls).indexOf(shortURL);
+            
+            if (ind !== -1) {
+                location.replace(Object.values(snapshot.val())[ind]);
             }
             else {
                 $("#noContent").css("display", "block");
@@ -23,6 +22,11 @@ console.log(shortURL);
 
 function shortenURL(url) {
     let shortenedURL = "";
+    let shorts = [];
+
+    firebase.database().ref("URLs/").once("value", (snapshot) => {
+        shorts = snapshot.val() ? Object.keys(snapshot.val()) : [];
+    });
 /* 
 48-57	0-9
 65-90	A-Z
@@ -32,9 +36,18 @@ function shortenURL(url) {
 
         for (let i = 0; i < 5; i++) {
             let r1 = Math.floor(Math.random() * 3);
-            let r2;
+            let r2 = [[48, 57], [65, 90], [97, 122]][r1];
+
+            short += String.fromCharCode(Math.floor(Math.random() * (r2[1] - r2[0] + 1) + r2[0]));
+        }
+        
+        if (shorts.indexOf(short) === -1) {
+            shortenedURL = short;
+            firebase.database().ref("URLs/").update({[short] : url});
         }
     }
+
+    $("#inpShortURL").val("https://einarkl.github.io/URL?" + shortenedURL);
 }
 
 function copyURL(url) {
