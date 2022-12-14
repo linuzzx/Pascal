@@ -1,22 +1,23 @@
 $(() => {
     if (window.location.search !== "") {
         let shortURL = (window.location.search).split("?")[1];
-        if (shortURL.includes("&")) {
-            shortURL = shortURL.split("&")[0];
+        if (shortURL.includes("&") || shortURL.includes("=")) {
+            location.replace("https://einarkl.github.io/URL");
         }
-        
-        firebase.database().ref("URLs/").once("value", (snapshot) => {
-            let urls = snapshot.val() ? snapshot.val() : [];
-            
-            let ind = Object.keys(urls).indexOf(shortURL);
-            
-            if (ind !== -1) {
-                location.replace(Object.values(snapshot.val())[ind]);
-            }
-            else {
-                $("#noContent").css("display", "block");
-            }
-        });
+        else {
+            firebase.database().ref("URLs/").once("value", (snapshot) => {
+                let urls = snapshot.val() ? snapshot.val() : [];
+                
+                let ind = Object.keys(urls).indexOf(shortURL);
+                
+                if (ind !== -1) {
+                    location.replace(Object.values(snapshot.val())[ind]);
+                }
+                else {
+                    $("#noContent").css("display", "block");
+                }
+            });
+        }
     }
     else {
         $("#content").css("display", "block");
