@@ -1,7 +1,10 @@
 $(() => {
     if (window.location.search !== "") {
         let shortURL = (window.location.search).split("?")[1];
-        if (shortURL.includes("&") || shortURL.includes("=")) {
+        if (shortURL.includes("&")) {
+            location.replace(shortURL.split("&")[0]);
+        }
+        if (shortURL.includes("=")) {
             location.replace("https://einarkl.github.io/URL");
         }
         else {
