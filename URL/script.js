@@ -1,6 +1,9 @@
 $(() => {
     if (window.location.search !== "") {
-        const shortURL = (window.location.search).split("?")[1];
+        let shortURL = (window.location.search).split("?")[1];
+        if (shortURL.includes("&")) {
+            shortURL = shortURL.split("&")[0];
+        }
         
         firebase.database().ref("URLs/").once("value", (snapshot) => {
             let urls = snapshot.val() ? snapshot.val() : [];
