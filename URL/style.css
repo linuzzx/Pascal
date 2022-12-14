@@ -1,0 +1,43 @@
+html {
+    background-image: linear-gradient(to bottom, #181818, #464646);
+    background-attachment: fixed;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: transparent;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+span {
+    color: #aaaaaa;
+    font-size: xx-large;
+}
+
+#content {
+    padding: 5%;
+    width: 100%;
+    height: 100%;
+}
+
+textarea {
+    resize: none;
+}
+
+#inpShortURL {
+    width: 80vw;
+}
+
+#inpLongURL {
+    width: 80vw;
+    height: 30vh;
+}
+
+button, input, textarea {
+    font-size: x-large;
+}

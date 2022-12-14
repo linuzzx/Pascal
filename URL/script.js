@@ -21,35 +21,52 @@ $(() => {
 });
 
 function shortenURL(url) {
-    let shortenedURL = "";
-    let shorts = [];
+    url = url.trim();
+    if (url !== "") {
+        let shortenedURL = "";
+        let shorts = [];
 
-    firebase.database().ref("URLs/").once("value", (snapshot) => {
-        shorts = snapshot.val() ? Object.keys(snapshot.val()) : [];
-    });
-/* 
-48-57	0-9
-65-90	A-Z
-97-122	a-z */
-    while (shortenedURL === "") {
-        let short = "";
+        firebase.database().ref("URLs/").once("value", (snapshot) => {
+            shorts = snapshot.val() ? Object.keys(snapshot.val()) : [];
+        });
+    /* 
+    48-57	0-9
+    65-90	A-Z
+    97-122	a-z */
+        while (shortenedURL === "") {
+            let short = "";
 
-        for (let i = 0; i < 5; i++) {
-            let r1 = Math.floor(Math.random() * 3);
-            let r2 = [[48, 57], [65, 90], [97, 122]][r1];
+            for (let i = 0; i < 5; i++) {
+                let r1 = Math.floor(Math.random() * 3);
+                let r2 = [[48, 57], [65, 90], [97, 122]][r1];
 
-            short += String.fromCharCode(Math.floor(Math.random() * (r2[1] - r2[0] + 1) + r2[0]));
+                short += String.fromCharCode(Math.floor(Math.random() * (r2[1] - r2[0] + 1) + r2[0]));
+            }
+            
+            if (shorts.indexOf(short) === -1) {
+                shortenedURL = short;
+                firebase.database().ref("URLs/").update({[short] : url});
+            }
         }
-        
-        if (shorts.indexOf(short) === -1) {
-            shortenedURL = short;
-            firebase.database().ref("URLs/").update({[short] : url});
-        }
+
+        $("#inpShortURL").val("https://einarkl.github.io/URL?" + shortenedURL);
+        toggleCopyBtn();
     }
-
-    $("#inpShortURL").val("https://einarkl.github.io/URL?" + shortenedURL);
+    else {
+        $("#inpShortURL").val("");
+        toggleCopyBtn();
+    }
 }
 
 function copyURL(url) {
     navigator.clipboard.writeText(url);
+}
+
+function toggleCopyBtn() {
+    if ($("#inpShortURL").val() !== "") {
+        $("#btnCopy").prop("disabled", false);
+    }
+    else {
+        $("#btnCopy").prop("disabled", true);
+    }
 }
