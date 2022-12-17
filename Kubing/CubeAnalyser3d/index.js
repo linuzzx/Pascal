@@ -335,7 +335,7 @@ function adjustSize() {
     }
     else {
         $("body").css("grid-template-columns", "");
-        $("body").css("grid-template-rows", "1fr 2fr");
+        $("body").css("grid-template-rows", "2fr 3fr");
         $("input, textarea, h1, button, select, option").css("font-size", "5vw");
     }
 }
