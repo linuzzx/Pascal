@@ -4,8 +4,15 @@ export function initScripts() {
     let script = document.createElement('script');
     let url = "https://einarkl.github.io/Kubing/Tools/tools.js";
     script.setAttribute('src', url);
-
-    document.head.appendChild(script);
+    
+    let scripts = [];
+    for (let s of document.head.getElementsByTagName("script")) {
+        scripts.push(s.src);
+    }
+    
+    if (!scripts.includes(url)) {
+        document.head.appendChild(script);
+    }
 }
 
 export class EinarDrawScramble extends HTMLElement {
