@@ -23,8 +23,8 @@ export class EinarDrawScramble extends HTMLElement {
 
             let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
             svg.setAttribute("id", id);
-            svg.setAttribute("width", "80%");
-            svg.setAttribute("height", "80%");
+            svg.setAttribute("width", "100%");
+            svg.setAttribute("height", "100%");
             this.appendChild(svg);
             this.setAttribute("width", "100%");
             this.setAttribute("height", "100%");
