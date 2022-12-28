@@ -2,16 +2,18 @@ let initializedScripts = false;
 
 export function initScripts() {
     let script = document.createElement('script');
-    let url = "https://einarkl.github.io/Kubing/Tools/tools.js";
-    script.setAttribute('src', url);
+    let urls = ["https://code.jquery.com/jquery-3.6.0.min.js", "https://einarkl.github.io/Kubing/Tools/tools.js"];
+    for (let url of urls) {
+        script.setAttribute('src', url);
     
-    let scripts = [];
-    for (let s of document.head.getElementsByTagName("script")) {
-        scripts.push(s.src);
-    }
-    
-    if (!scripts.includes(url)) {
-        document.head.appendChild(script);
+        let scripts = [];
+        for (let s of document.head.getElementsByTagName("script")) {
+            scripts.push(s.src);
+        }
+        
+        if (!scripts.includes(url)) {
+            document.head.appendChild(script);
+        }
     }
 }
 
