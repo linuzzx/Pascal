@@ -39,7 +39,7 @@ function checkTile(tile) {
 
 function nextTile() {
     let rl = ["a", "b", "c", "d", "e", "f", "g", "h"][Math.floor(Math.random() * 8)];
-    let rn = Math.floor(Math.random() * 7) + 1;
+    let rn = Math.floor(Math.random() * 8) + 1;
 
     currentTile = rl + rn;
     $("#tile").text(currentTile);
