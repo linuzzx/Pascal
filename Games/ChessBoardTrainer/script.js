@@ -7,7 +7,8 @@ $(() => {
 function init() {
     adjustSize();
     createSquares();
-    $("#result").text("");
+    $("#result").text("...");
+    $("#result").css("visibility", "hidden");
     nextTile();
 }
 
@@ -28,6 +29,7 @@ function createSquares() {
 }
 
 function checkTile(tile) {
+    $("#result").css("visibility", "visible");
     if (currentTile === tile) {
         $("#result").text("Correct!");
         nextTile();
