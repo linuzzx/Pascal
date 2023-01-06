@@ -1,4 +1,5 @@
 let currentTile = "";
+let prevTile = "";
 
 $(() => {
     init();
@@ -44,6 +45,17 @@ function nextTile() {
     let rn = Math.floor(Math.random() * 8) + 1;
 
     currentTile = rl + rn;
+    
+    if (prevTile !== "") {
+        while (currentTile === prevTile) {
+            rl = ["a", "b", "c", "d", "e", "f", "g", "h"][Math.floor(Math.random() * 8)];
+            let rn = Math.floor(Math.random() * 8) + 1;
+
+            currentTile = rl + rn;
+        }
+    }
+
+    prevTile = currentTile;
     $("#tile").text(currentTile);
 }
 
