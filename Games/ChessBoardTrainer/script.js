@@ -1,5 +1,6 @@
 let currentTile = "";
 let prevTile = "";
+let tiles = [];
 
 $(() => {
     init();
@@ -8,8 +9,6 @@ $(() => {
 function init() {
     adjustSize();
     createSquares();
-    $("#result").text("...");
-    $("#result").css("visibility", "hidden");
     nextTile();
 }
 
@@ -19,24 +18,29 @@ function createSquares() {
         let row = "<tr>";
         for (let x = 0; x < 8; x++) {
             let col = (y + x) % 2 === 0 ? "#F0D9B5" : "#B58863";
+            let dataCol = (y + x) % 2 === 0 ? "Light" : "Dark";
             let id = ["a", "b", "c", "d", "e", "f", "g", "h"][x] + [8, 7, 6, 5, 4, 3, 2, 1][y];
             let style = "background-color: " + col + "; width: " + size + "px; height: " + size + "px;";
-            let tile = "<td><div id='" + id + "' class='tiles' style='" + style + "' onclick='checkTile(\"" + id + "\")'></div></td>";
+            let tile = "<td><div id='" + id + "' class='tiles' data-color='" + dataCol + "' style='" + style + "' onclick='checkTile(\"" + id + "\")'></div></td>";
             row += tile;
         }
         row += "</tr>";
         $("#board").append(row);
     }
+    for (let t of $(".tiles")) {
+        tiles.push(t);
+    }
 }
 
 function checkTile(tile) {
-    $("#result").css("visibility", "visible");
     if (currentTile === tile) {
-        $("#result").text("Correct!");
+        for (let t of $(tiles)) {
+            $(t).removeClass("wrongTiles" + $(t).attr("data-color"));
+        }
         nextTile();
     }
-    else {
-        $("#result").text("Incorrect...");
+    else {console.log(tile);
+        $("#" + tile).addClass("wrongTiles" + $("#" + tile).attr("data-color"));console.log("wrongTiles" + $("#" + tile).attr("data-color"));
     }
 }
 

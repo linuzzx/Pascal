@@ -21,7 +21,7 @@ body {
     height: 95%;
     margin: auto;
     display: grid;
-    grid-template-rows: 1fr 1fr 8fr;
+    grid-template-rows: 1fr 8fr;
     text-align: center;
     color: #aaaaaa;
 }
@@ -37,4 +37,20 @@ body {
 
 .tiles:hover {
     background: #DAC332 !important;
+}
+
+.wrongTilesDark {
+    background-color: #E06954 !important;
+}
+
+.wrongTilesLight {
+    background-color: #EC7964 !important;
+}
+
+.wrongTilesDark:hover {
+    background-color: #EC7964 !important;
+}
+
+.wrongTilesLight:hover {
+    background-color: #E06954 !important;
 }
