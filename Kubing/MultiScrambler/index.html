@@ -41,9 +41,9 @@
                 </td>
                 <td>
                     <select id="selPrefix">
-                        <option value="none" selected>none</option>
-                        <option value=".">1.</option>
+                        <option value="." selected>1.</option>
                         <option value=")">1)</option>
+                        <option value="none">none</option>
                     </select>
                 </td>
                 <td>
@@ -54,7 +54,10 @@
                 </td>
             </tr>
         </table>
-        <h1 id="scrambles"></h1>
+        <br>
+        <br>
+        <button onclick="copyScrambles()">Copy</button>
+        <textarea id="scrambles" wrap="off" readonly></textarea>
     </div>
 </body>
 </html>

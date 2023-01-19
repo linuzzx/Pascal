@@ -9,14 +9,22 @@ function scrambleN() {
             if (prefix !== "") {
                 pre = (i + 1) + prefix;
             }
-            scr += pre + getScramble() + "<br>";
+            scr += pre + getScramble() + "\n";
         }
 
         if (j !== (repeat - 1)) {
-            scr += "<br><br><br>";
+            scr += "\n\n\n";
         }
     }
     $("#scrambles").html(scr);
+}
+
+function copyScrambles() {
+    let copyText = document.getElementById("scrambles");
+    copyText.setSelectionRange(0, copyText.value.length);
+
+    navigator.clipboard.writeText(copyText.value);
+    copyText.setSelectionRange(0, 0);
 }
 
 function getScramble() {
