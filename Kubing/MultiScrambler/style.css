@@ -1,0 +1,30 @@
+html {
+    background-image: linear-gradient(to bottom, #181818, #464646);
+    background-attachment: fixed;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+}
+
+body {
+    background: transparent;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#content {
+    padding: 2%;
+}
+
+h1 {
+    color: #aaa;
+    font-family: monospace;
+}
+
+table {
+    color: #aaa;
+    border-collapse: collapse;
+    text-align: left;
+}
