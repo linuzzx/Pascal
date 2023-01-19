@@ -1,13 +1,20 @@
 function scrambleN() {
     let n = parseInt($("#inpN").val()) || 5;
+    let repeat = parseInt($("#inpRepeat").val()) || 1;
     let prefix = $("#selPrefix").find(":selected").val() !== "none" ? $("#selPrefix").find(":selected").val() + " " : "";
     let scr = "";
-    for (let i = 0; i < n; i++) {
-        let pre = "";
-        if (prefix !== "") {
-            pre = (i + 1) + prefix;
+    for (let j = 0; j < repeat; j++) {
+        for (let i = 0; i < n; i++) {
+            let pre = "";
+            if (prefix !== "") {
+                pre = (i + 1) + prefix;
+            }
+            scr += pre + getScramble() + "<br>";
         }
-        scr += pre + getScramble() + "<br>";
+
+        if (j !== (repeat - 1)) {
+            scr += "<br><br><br>";
+        }
     }
     $("#scrambles").html(scr);
 }
