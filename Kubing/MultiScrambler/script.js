@@ -1,9 +1,9 @@
 function scrambleN() {
     let n = parseInt($("#inpN").val()) || 5;
-    let repeat = parseInt($("#inpRepeat").val()) || 1;
+    let sets = parseInt($("#inpSets").val()) || 1;
     let prefix = $("#selPrefix").find(":selected").val() !== "none" ? $("#selPrefix").find(":selected").val() + " " : "";
     let scr = "";
-    for (let j = 0; j < repeat; j++) {
+    for (let j = 0; j < sets; j++) {
         for (let i = 0; i < n; i++) {
             let pre = "";
             if (prefix !== "") {
@@ -12,7 +12,7 @@ function scrambleN() {
             scr += pre + getScramble() + "\n";
         }
 
-        if (j !== (repeat - 1)) {
+        if (j !== (sets - 1)) {
             scr += "\n\n\n";
         }
     }
