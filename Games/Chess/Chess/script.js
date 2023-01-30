@@ -141,7 +141,7 @@ function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") {
         }
     }
 
-    $("img").on("mousedown", e => {
+    $("img").on("mousedown touchstart", e => {
         onMouseDown(e);
     });
 }
@@ -155,7 +155,7 @@ function onMouseDown(e) {
         curPos = e.target.dataset.position;
         getLegalMoves();
 
-        $(curPiece).on("mousemove", e => {
+        $(curPiece).on("mousemove touchmove", e => {
             $("img").css("z-index", "0");
             $(curPiece).css("z-index", "1");
 
@@ -171,7 +171,7 @@ function onMouseDown(e) {
             }
         });
 
-        $(document).on("mouseup", e => {
+        $(document).on("mouseup touchend", e => {
             if (!locked && curCol === curPiece.dataset.color) {
                 locked = true;
                 mouseDown = 0;
@@ -182,7 +182,7 @@ function onMouseDown(e) {
 
                 $("img").css("z-index", "1");
                 $("img").unbind();
-                $("img").on("mousedown", e => {
+                $("img").on("mousedown touchstart", e => {
                     onMouseDown(e);
                 });
             }

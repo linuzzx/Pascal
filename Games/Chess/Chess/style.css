@@ -39,13 +39,13 @@ body {
     position: absolute;
 }
 
-.tiles[data-color = "Light"]:hover {
+/* .tiles[data-color = "Light"]:hover {
     background: #F7EC5B !important;
 }
 
 .tiles[data-color = "Dark"]:hover {
     background: #DAC332 !important;
-}
+} */
 
 .wrongTilesDark {
     background-color: #E06954 !important;
