@@ -21,7 +21,7 @@ body {
     height: 95%;
     margin: auto;
     display: grid;
-    grid-template-rows: 1fr 8fr;
+    grid-template-rows: 1fr;
     text-align: center;
     color: #aaaaaa;
 }
@@ -35,7 +35,15 @@ body {
     padding: 0;
 }
 
-.tiles:hover {
+#ghostImg {
+    position: absolute;
+}
+
+.tiles[data-color = "Light"]:hover {
+    background: #F7EC5B !important;
+}
+
+.tiles[data-color = "Dark"]:hover {
     background: #DAC332 !important;
 }
 
