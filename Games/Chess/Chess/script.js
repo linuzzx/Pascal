@@ -141,8 +141,11 @@ function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") {
         }
     }
 
-    $("img").on("mousedown touchstart", e => {
+    $("img").on("mousedown", e => {
         onMouseDown(e);
+    });
+    $("img").on("touchstart", e => {
+        $("html").css("background", "green");
     });
 }
 
@@ -155,7 +158,7 @@ function onMouseDown(e) {
         curPos = e.target.dataset.position;
         getLegalMoves();
 
-        $(curPiece).on("mousemove touchmove", e => {
+        $(curPiece).on("mousemove", e => {
             $("img").css("z-index", "0");
             $(curPiece).css("z-index", "1");
 
@@ -171,7 +174,7 @@ function onMouseDown(e) {
             }
         });
 
-        $(document).on("mouseup touchend", e => {
+        $(document).on("mouseup", e => {
             if (!locked && curCol === curPiece.dataset.color) {
                 locked = true;
                 mouseDown = 0;
@@ -182,10 +185,18 @@ function onMouseDown(e) {
 
                 $("img").css("z-index", "1");
                 $("img").unbind();
-                $("img").on("mousedown touchstart", e => {
+                $("img").on("mousedown", e => {
                     onMouseDown(e);
                 });
             }
+        });
+
+        $(curPiece).on("touchmove", e => {
+            $("html").css("background", "yellow");
+        });
+
+        $(document).on("touchend", e => {
+            $("html").css("background", "red");
         });
     }
     else if (e.which === 2) {
