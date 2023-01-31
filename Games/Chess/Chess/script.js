@@ -331,13 +331,14 @@ function drawMoves() {
     $("#dots").html("");
 
     for (let m of moves) {
-        let col = $("#" + m)[0].dataset.color === "Light" ? circLight : circDark;
+        let col = "#000";
         console.log(m);
         let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         $(circ).attr("cx", s * (parseInt(columns.indexOf(m.split("")[0])) + 0.5));
         $(circ).attr("cy", s * (parseInt(rows.indexOf(parseInt(m.split("")[1]))) + 0.5));console.log(rows.indexOf(m.split("")[1]));
         $(circ).attr("r", s / 6);
         $(circ).attr("style", "fill:" + col + ";");
+        $(circ).css("opacity", "0.1");
         
         $("#dots").append(circ);
     }
