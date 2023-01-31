@@ -35,8 +35,10 @@ body {
     padding: 0;
 }
 
-#ghostImg {
+#dots {
+    pointer-events: none;
     position: absolute;
+    z-index: 1;
 }
 
 /* .tiles[data-color = "Light"]:hover {
