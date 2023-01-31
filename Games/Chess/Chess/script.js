@@ -331,7 +331,7 @@ function drawMoves() {
     $("#dots").html("");
 
     for (let m of moves) {
-        let col ="red"// $("#" + m)[0].dataset.color === "Light" ? circLight : circDark;
+        let col = $("#" + m)[0].dataset.color === "Light" ? circLight : circDark;
         console.log(m);
         let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         $(circ).attr("cx", s * (parseInt(columns.indexOf(m.split("")[0])) + 0.5));
