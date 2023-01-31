@@ -58,6 +58,7 @@ function clearBoard() {
     }
 }
 
+// function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
 function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") {
     clearBoard();
     let style = "position: relative; width: 100%; height: 100%;";
