@@ -696,7 +696,70 @@ function getLegalMoves() {
             }
             break;
         case "N":
-
+            if (columns.indexOf(pos[0]) + 1 < 8 && parseInt(pos[1]) + 2 <= 8) {
+                if (!getPieceAt(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 2))) {
+                    legalMoves.push(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 2));
+                }
+                else if (getPieceAt(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 2)).dataset.color !== curPiece.dataset.color) {
+                    legalMoves.push("x" + columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 2));
+                }
+            }
+            if (columns.indexOf(pos[0]) + 2 < 8 && parseInt(pos[1]) + 1 <= 8) {
+                if (!getPieceAt(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) + 1))) {
+                    legalMoves.push(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) + 1));
+                }
+                else if (getPieceAt(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) + 1)).dataset.color !== curPiece.dataset.color) {
+                    legalMoves.push("x" + columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) + 1));
+                }
+            }
+            if (columns.indexOf(pos[0]) + 1 < 8 && parseInt(pos[1]) - 2 > 0) {
+                if (!getPieceAt(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 2))) {
+                    legalMoves.push(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 2));
+                }
+                else if (getPieceAt(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 2)).dataset.color !== curPiece.dataset.color) {
+                    legalMoves.push("x" + columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 2));
+                }
+            }
+            if (columns.indexOf(pos[0]) + 2 < 8 && parseInt(pos[1]) - 1 > 0) {
+                if (!getPieceAt(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) - 1))) {
+                    legalMoves.push(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) - 1));
+                }
+                else if (getPieceAt(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) - 1)).dataset.color !== curPiece.dataset.color) {
+                    legalMoves.push("x" + columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) - 1));
+                }
+            }
+            if (columns.indexOf(pos[0]) - 1 >= 0 && parseInt(pos[1]) + 2 <= 8) {
+                if (!getPieceAt(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 2))) {
+                    legalMoves.push(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 2));
+                }
+                else if (getPieceAt(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 2)).dataset.color !== curPiece.dataset.color) {
+                    legalMoves.push("x" + columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 2));
+                }
+            }
+            if (columns.indexOf(pos[0]) - 2 >= 0 && parseInt(pos[1]) + 1 <= 8) {
+                if (!getPieceAt(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) + 1))) {
+                    legalMoves.push(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) + 1));
+                }
+                else if (getPieceAt(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) + 1)).dataset.color !== curPiece.dataset.color) {
+                    legalMoves.push("x" + columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) + 1));
+                }
+            }
+            if (columns.indexOf(pos[0]) - 1 >= 0 && parseInt(pos[1]) - 2 > 0) {
+                if (!getPieceAt(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 2))) {
+                    legalMoves.push(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 2));
+                }
+                else if (getPieceAt(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 2)).dataset.color !== curPiece.dataset.color) {
+                    legalMoves.push("x" + columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 2));
+                }
+            }
+            if (columns.indexOf(pos[0]) - 2 >= 0 && parseInt(pos[1]) - 1 > 0) {
+                if (!getPieceAt(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) - 1))) {
+                    legalMoves.push(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) - 1));
+                }
+                else if (getPieceAt(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) - 1)).dataset.color !== curPiece.dataset.color) {
+                    legalMoves.push("x" + columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) - 1));
+                }
+            }
             break;
         case "R":
             for (let i = 1; i < 8; i++) {
