@@ -311,6 +311,20 @@ function movePiece(piece, oldPos, newPos) {
         $("#" + oldPos).html("");
         piece.dataset.position = newPos;
 
+        if (pieceType === "K") {
+            let cast = curCol === "Light" ? ["K", "Q"] : ["k", "q"];
+            for (let c of cast) {
+                castling[c] = false;
+            }
+        }
+
+        if (pieceType === "R") {
+            let r = piece.id.split("_")[1].split("")[0];
+            let p = r === "a" ? "Q" : "K";
+            let c = curCol === "Light" ? p.toUpperCase() : p.toLowerCase();
+            castling[c] = false;
+        }
+
         curPiece = null;
         curCol = curCol === "Light" ? "Dark" : "Light";
     }
@@ -837,7 +851,6 @@ function drawMoves() {
 
     let i = 0;
     for (let m of legalMoves) {
-        console.log(m);
         let col = "#000";
         let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         $(circ).attr("cx", s * (parseInt(columns.indexOf(m.replace("x", "").split("")[0])) + 0.5));
