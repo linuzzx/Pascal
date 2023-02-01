@@ -17,6 +17,9 @@ let castling = {
     "k" : true,
     "q" : true
 };
+let enPassant = "-";
+let halfMoves = 0;
+let fullMoves = 0;
 
 const circLight ="#D8C3A3";
 const circDark ="#A37A59";
