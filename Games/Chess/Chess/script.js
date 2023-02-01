@@ -218,9 +218,14 @@ function onMouseDown(e) {
                         locked = true;
                         mouseDown = 0;
                         let targets = document.elementsFromPoint(e.clientX, e.clientY);
-                        let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
+                        if (targets[targets.map(t => t.className).indexOf("tiles")]) {
+                            let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
                         
-                        movePiece(curPiece, curPos, newPos);
+                            movePiece(curPiece, curPos, newPos);
+                        }
+                        else {
+                            movePiece(curPiece, curPos, curPos);
+                        }
         
                         $("img").css("z-index", "1");
                         $(".tiles").unbind();
@@ -274,11 +279,23 @@ function movePiece(piece, oldPos, newPos) {
         curPiece = null;
         curCol = curCol === "Light" ? "Dark" : "Light";
     }
+    else if (oldPos === newPos && piece) {
+        piece.dataset.position = newPos;
+    }
 }
 
 function getLegalMoves() {
+    // Also check checks, mates and discovered checks
     legalMoves = [];
     let pos = curPiece.dataset.position.split("");
+    let u = true;
+    let d = true;
+    let r = true;
+    let l = true;
+    let ur = true;
+    let ul = true;
+    let dr = true;
+    let dl = true;
     switch (curPiece.dataset.piece) {
         case "P":
             if (curPiece.dataset.color === "Light") {
@@ -334,16 +351,73 @@ function getLegalMoves() {
 
             break;
         case "B":
-
+            for (let i = 1; i < 8; i++) {
+                if (ur && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) + i <= 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i))) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).toString();
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i));
+                        ur = false;
+                    }
+                    else {
+                        ur = false;
+                    }
+                }
+                else {
+                    ur = false;
+                }
+                if (ul && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) + i <= 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i))) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).toString();
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i));
+                        ul = false;
+                    }
+                    else {
+                        ul = false;
+                    }
+                }
+                else {
+                    ul = false;
+                }
+                if (dr && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) - i > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i))) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).toString();
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i));
+                        dr = false;
+                    }
+                    else {
+                        dr = false;
+                    }
+                }
+                else {
+                    dr = false;
+                }
+                if (dl && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) - i > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i))) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).toString();
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i));
+                        dl = false;
+                    }
+                    else {
+                        dl = false;
+                    }
+                }
+                else {
+                    dl = false;
+                }
+            }
             break;
         case "N":
 
             break;
         case "R":
-            let u = true;
-            let d = true;
-            let r = true;
-            let l = true;
             for (let i = 1; i < 8; i++) {
                 if (u && parseInt(pos[1]) + i <= 8) {
                     if (!getPieceAt(pos[0] + (parseInt(pos[1]) + i))) {
@@ -375,7 +449,7 @@ function getLegalMoves() {
                 else {
                     d = false;
                 }
-                if (r && columns.indexOf(pos[0]) + i > 0 && columns.indexOf(pos[0]) + i < 8) {
+                if (r && columns.indexOf(pos[0]) + i < 8) {
                     if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1])) {
                         legalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
                     }
@@ -390,7 +464,7 @@ function getLegalMoves() {
                 else {
                     r = false;
                 }
-                if (l && columns.indexOf(pos[0]) - i > 0 && columns.indexOf(pos[0]) - i < 8) {
+                if (l && columns.indexOf(pos[0]) - i > 0) {
                     if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1])) {
                         legalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
                     }
