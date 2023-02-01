@@ -292,14 +292,14 @@ function getLegalMoves() {
                     let po = columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 1);
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Dark") {
-                        legalMoves.push(po);
+                        legalMoves.push("x" + po);
                     }
                 }
                 if (columns[columns.indexOf(pos[0]) + 1]) {
                     let po = columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 1);
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Dark") {
-                        legalMoves.push(po);
+                        legalMoves.push("x" + po);
                     }
                 }
             }
@@ -314,14 +314,14 @@ function getLegalMoves() {
                     let po = columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 1);
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Light") {
-                        legalMoves.push(po);
+                        legalMoves.push("x" + po);
                     }
                 }
                 if (columns[columns.indexOf(pos[0]) + 1]) {
                     let po = columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 1);
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Light") {
-                        legalMoves.push(po);
+                        legalMoves.push("x" + po);
                     }
                 }
             }
@@ -350,7 +350,7 @@ function getLegalMoves() {
                         legalMoves.push(pos[0] + (parseInt(pos[1]) + i));
                     }
                     else if (getPieceAt(pos[0] + (parseInt(pos[1]) + i)).dataset.color !== curPiece.dataset.color) {
-                        legalMoves.push(pos[0] + (parseInt(pos[1]) + i));
+                        legalMoves.push("x" + pos[0] + (parseInt(pos[1]) + i));
                         u = false;
                     }
                     else {
@@ -365,7 +365,7 @@ function getLegalMoves() {
                         legalMoves.push(pos[0] + (parseInt(pos[1]) - i));
                     }
                     else if (getPieceAt(pos[0] + (parseInt(pos[1]) - i)).dataset.color !== curPiece.dataset.color) {
-                        legalMoves.push(pos[0] + (parseInt(pos[1]) - i));
+                        legalMoves.push("x" + pos[0] + (parseInt(pos[1]) - i));
                         d = false;
                     }
                     else {
@@ -380,7 +380,7 @@ function getLegalMoves() {
                         legalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
                     }
                     else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1]).dataset.color !== curPiece.dataset.color) {
-                        legalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + pos[1]);
                         r = false;
                     }
                     else {
@@ -395,7 +395,7 @@ function getLegalMoves() {
                         legalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
                     }
                     else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1]).dataset.color !== curPiece.dataset.color) {
-                        legalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + pos[1]);
                         l = false;
                     }
                     else {
@@ -417,17 +417,31 @@ function drawMoves() {
     let s = b / 8;
     $("#dots").html("");
 
+    let i = 0;
     for (let m of legalMoves) {
-        let col = "#000";
         console.log(m);
+        let col = "#000";
         let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        $(circ).attr("cx", s * (parseInt(columns.indexOf(m.split("")[0])) + 0.5));
-        $(circ).attr("cy", s * (parseInt(rows.indexOf(parseInt(m.split("")[1]))) + 0.5));
-        $(circ).attr("r", s / 6);
-        $(circ).attr("style", "fill:" + col + ";");
-        $(circ).css("opacity", "0.1");
+        $(circ).attr("cx", s * (parseInt(columns.indexOf(m.replace("x", "").split("")[0])) + 0.5));
+        $(circ).attr("cy", s * (parseInt(rows.indexOf(parseInt(m.replace("x", "").split("")[1]))) + 0.5));
+
+        if (m.includes("x")) {
+            $(circ).attr("r", s * 0.45);
+            $(circ).attr("fill", "transparent");
+            $(circ).attr("stroke", col);
+            $(circ).attr("stroke-width", s / 10);
+            $(circ).css("opacity", "0.1");
+        }
+        else {
+            $(circ).attr("r", s / 6);
+            $(circ).attr("fill:", col);
+            $(circ).css("opacity", "0.1");
+        }
         
         $("#dots").append(circ);
+
+        legalMoves[i] = m.replace("x", "");
+        i++;
     }
 }
 
