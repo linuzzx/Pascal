@@ -517,7 +517,7 @@ function getLegalMoves() {
                 else {
                     r = false;
                 }
-                if (l && columns.indexOf(pos[0]) - i > 0) {
+                if (l && columns.indexOf(pos[0]) - i >= 0) {
                     if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1])) {
                         legalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
                     }
@@ -710,7 +710,7 @@ function getLegalMoves() {
                 else {
                     r = false;
                 }
-                if (l && columns.indexOf(pos[0]) - i > 0) {
+                if (l && columns.indexOf(pos[0]) - i >= 0) {
                     if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1])) {
                         legalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
                     }
