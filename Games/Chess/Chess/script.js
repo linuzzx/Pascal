@@ -348,7 +348,130 @@ function getLegalMoves() {
 
             break;
         case "Q":
-
+            for (let i = 1; i < 8; i++) {
+                if (u && parseInt(pos[1]) + i <= 8) {
+                    if (!getPieceAt(pos[0] + (parseInt(pos[1]) + i))) {
+                        legalMoves.push(pos[0] + (parseInt(pos[1]) + i));
+                    }
+                    else if (getPieceAt(pos[0] + (parseInt(pos[1]) + i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + pos[0] + (parseInt(pos[1]) + i));
+                        u = false;
+                    }
+                    else {
+                        u = false;
+                    }
+                }
+                else {
+                    u = false;
+                }
+                if (d && parseInt(pos[1]) - i >= 1) {
+                    if (!getPieceAt(pos[0] + (parseInt(pos[1]) - i))) {
+                        legalMoves.push(pos[0] + (parseInt(pos[1]) - i));
+                    }
+                    else if (getPieceAt(pos[0] + (parseInt(pos[1]) - i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + pos[0] + (parseInt(pos[1]) - i));
+                        d = false;
+                    }
+                    else {
+                        d = false;
+                    }
+                }
+                else {
+                    d = false;
+                }
+                if (r && columns.indexOf(pos[0]) + i < 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1])) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1]).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                        r = false;
+                    }
+                    else {
+                        r = false;
+                    }
+                }
+                else {
+                    r = false;
+                }
+                if (l && columns.indexOf(pos[0]) - i > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1])) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1]).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                        l = false;
+                    }
+                    else {
+                        l = false;
+                    }
+                }
+                else {
+                    l = false;
+                }
+            }
+            for (let i = 1; i < 8; i++) {
+                if (ur && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) + i <= 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i))) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).toString();
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i));
+                        ur = false;
+                    }
+                    else {
+                        ur = false;
+                    }
+                }
+                else {
+                    ur = false;
+                }
+                if (ul && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) + i <= 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i))) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).toString();
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i));
+                        ul = false;
+                    }
+                    else {
+                        ul = false;
+                    }
+                }
+                else {
+                    ul = false;
+                }
+                if (dr && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) - i > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i))) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).toString();
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i));
+                        dr = false;
+                    }
+                    else {
+                        dr = false;
+                    }
+                }
+                else {
+                    dr = false;
+                }
+                if (dl && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) - i > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i))) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).toString();
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i));
+                        dl = false;
+                    }
+                    else {
+                        dl = false;
+                    }
+                }
+                else {
+                    dl = false;
+                }
+            }
             break;
         case "B":
             for (let i = 1; i < 8; i++) {
