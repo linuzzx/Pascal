@@ -10,6 +10,13 @@ let curPiece = null;
 let locked = false;
 let columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
 let rows = [8, 7, 6, 5, 4, 3, 2, 1];
+let flipped = false;
+let castling = {
+    "K" : true,
+    "Q" : true,
+    "k" : true,
+    "q" : true
+};
 
 const circLight ="#D8C3A3";
 const circDark ="#A37A59";
@@ -26,6 +33,9 @@ function init() {
 
     curCol = "Light";
 
+    $("#board").on('contextmenu', e => {
+        e.preventDefault();
+    });
     $(document).on("mouseup", () => {
         mouseDown = 0;
     });
@@ -59,13 +69,15 @@ function clearBoard() {
     }
 }
 
-function createLetters(turned = false) {
+function createLetters(flipped = false) {
+    $("#lettersNumbers").html("");
     let tileSize = $("#board").width() / 8;
-    for (let r of rows) {
-        let col = rows.indexOf(r) % 2 === 0 ? "#B58863" : "#F0D9B5";
+    let ro = flipped ? rows.reverse() : rows;
+    for (let r of ro) {
+        let col = ro.indexOf(r) % 2 === 0 ? "#B58863" : "#F0D9B5";
         let l = document.createElementNS("http://www.w3.org/2000/svg", "text");
         $(l).attr("x", tileSize * 0.05);
-        $(l).attr("y", tileSize * (parseInt(rows.indexOf(r)) + 0.25));
+        $(l).attr("y", tileSize * (parseInt(ro.indexOf(r)) + 0.25));
         $(l).attr("font-size", tileSize * 0.25);
         $(l).attr("font-family", "arial");
         $(l).attr("fill", col);
@@ -73,13 +85,14 @@ function createLetters(turned = false) {
 
         $("#lettersNumbers").append(l);
     }
-    for (let c of columns) {
-        let col = columns.indexOf(c) % 2 === 0 ? "#F0D9B5" : "#B58863";
+    let co = flipped ? columns.reverse() : columns;
+    for (let c of co) {
+        let col = co.indexOf(c) % 2 === 0 ? "#F0D9B5" : "#B58863";
         let l = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        $(l).attr("x", tileSize * (parseInt(columns.indexOf(c)) + 0.8));
+        $(l).attr("x", tileSize * (parseInt(co.indexOf(c)) + 0.8));
         $(l).attr("y", 8 * (tileSize - 0.6));
         $(l).attr("font-size", tileSize * 0.25);
-        $(l).attr("font-family", "monospace");
+        $(l).attr("font-family", "arial");
         $(l).attr("fill", col);
         $(l).text(c);
 
@@ -87,12 +100,31 @@ function createLetters(turned = false) {
     }
 }
 
+function flipTable() {
+    createLetters(!flipped);
+    let fen = flipped ? "RNBKQBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbkqbnr" : "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+    placePieces(fen);
+    flipped = !flipped;
+}
+
 // function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
-function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") {
+function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
     clearBoard();
     let style = "position: relative; width: 100%; height: 100%;";
     for (let y = 0; y < 8; y++) {
-        let pieces = fen.split("/")[y];
+        let pieces = fen.split(" ")[0].split("/")[y];
+        curCol = fen.split(" ")[1] ? (fen.split(" ")[1] === "w" ? "Light" : "Dark") : "Light";
+        if (fen.split(" ")[2]) {
+            for (let c of Object.keys(castling)) {
+                castling[c] = false;
+            }
+            for (let c of fen.split(" ")[2].split("")) {
+                castling[c] = true;
+            }
+        }
+        enPassant = fen.split(" ")[3] ? fen.split(" ")[3] : "-";
+        halfMoves = fen.split(" ")[4] ? parseInt(fen.split(" ")[4]) : 0;
+        fullMoves = fen.split(" ")[5] ? parseInt(fen.split(" ")[5]) : 0;
         let x = 0;
         dataCol = "";
         for (let p of pieces.split("")) {
