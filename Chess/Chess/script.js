@@ -300,12 +300,7 @@ function movePiece(piece, oldPos, newPos) {
         let multipPos = true ? "" : "x"; // If multiple possible pieces
         let mate = false;
         let check = true ? (mate ? "#" : "+") : "";
-
-        if (curCol === "Light") {
-            moves[(Object.keys(moves).length + 1) + "."] = [];
-        }
-        
-        moves[(Object.keys(moves).length) + "."].push(pieceType + multipPos + capture + newPos);
+        let castle = null;
 
         $("#" + newPos).html(piece);
         $("#" + oldPos).html("");
@@ -318,12 +313,14 @@ function movePiece(piece, oldPos, newPos) {
                     $("#f1").html(r);
                     $("#h1").html("");
                     r.dataset.position = "f1";
+                    castle = "o-o";
                 }
                 if (newPos === "c1" && castling["Q"]) {
                     let r = getPieceAt("a1");
                     $("#d1").html(r);
                     $("#a1").html("");
                     r.dataset.position = "d1";
+                    castle = "o-o-o";
                 }
             }
             else {
@@ -332,12 +329,14 @@ function movePiece(piece, oldPos, newPos) {
                     $("#f8").html(r);
                     $("#h8").html("");
                     r.dataset.position = "f8";
+                    castle = "o-o";
                 }
                 if (newPos === "c8" && castling["q"]) {
                     let r = getPieceAt("a8");
                     $("#d8").html(r);
                     $("#a8").html("");
                     r.dataset.position = "d8";
+                    castle = "o-o-o";
                 }
             }
 
@@ -353,6 +352,12 @@ function movePiece(piece, oldPos, newPos) {
             let c = curCol === "Light" ? p.toUpperCase() : p.toLowerCase();
             castling[c] = false;
         }
+
+        if (curCol === "Light") {
+            moves[(Object.keys(moves).length + 1) + "."] = [];
+        }
+        
+        moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos);
 
         curPiece = null;
         curCol = curCol === "Light" ? "Dark" : "Light";
