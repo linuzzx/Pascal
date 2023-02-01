@@ -139,7 +139,7 @@ function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") {
                 let id = columns[x] + rows[y];
 
                 if (x < 8) {
-                    $("#" + id).append("<img id='" + piece + "_" + id + "' src='../Pieces/" + svg + ".svg' data-piece='" + piece + "' data-color='" + dataCol + "' data-position='" + id + "' style='" + style + "' draggable='false'></img>");
+                    $("#" + id).append("<img id='" + piece + "_" + id + "' class='pieces' src='../Pieces/" + svg + ".svg' data-piece='" + piece + "' data-color='" + dataCol + "' data-position='" + id + "' style='" + style + "' draggable='false'></img>");
                 }
                 x++;
             }
@@ -160,45 +160,50 @@ function onMouseDown(e) {
             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
             movePiece(curPiece, curPiece.dataset.position, newPos);
         }
-        mouseDown = 1;
-        curPiece = e.target;
+        else {
+            mouseDown = 1;
+            curPiece = e.target;
 
-        if (curCol === curPiece.dataset.color) {
-            curPos = e.target.dataset.position;
-            getLegalMoves();
-    
-            $(curPiece).on("mousemove", e => {
-                $("img").css("z-index", "0");
-                $(curPiece).css("z-index", "2");
-    
-                let size = $("#board").width() / 8;
-                if (mouseDown === 1) {
-                    $(curPiece).css("position", "absolute");
-                    $(curPiece).css("width", size);
-                    $(curPiece).css("height", size);
-                    $(curPiece).css({
-                        left: e.pageX - (size / 2),
-                        top: e.pageY - (size / 2)
-                    });
-                }
-            });
-    
-            $(document).on("mouseup", e => {
-                if (!locked) {
-                    locked = true;
-                    mouseDown = 0;
-                    let targets = document.elementsFromPoint(e.clientX, e.clientY);
-                    let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
-                    
-                    movePiece(curPiece, curPos, newPos);
-    
+            if (curCol === curPiece.dataset.color && curPiece.className === "pieces") {
+                curPos = e.target.dataset.position;
+                getLegalMoves();
+        
+                $(curPiece).on("mousemove", e => {
                     $("img").css("z-index", "0");
-                    $(".tiles").unbind();
-                    $(".tiles").on("mousedown", e => {
-                        onMouseDown(e);
-                    });
-                }
-            });
+                    $(curPiece).css("z-index", "2");
+        
+                    let size = $("#board").width() / 8;
+                    if (mouseDown === 1) {
+                        $(curPiece).css("position", "absolute");
+                        $(curPiece).css("width", size);
+                        $(curPiece).css("height", size);
+                        $(curPiece).css({
+                            left: e.pageX - (size / 2),
+                            top: e.pageY - (size / 2)
+                        });
+                    }
+                });
+        
+                $(document).on("mouseup", e => {
+                    if (!locked) {
+                        locked = true;
+                        mouseDown = 0;
+                        let targets = document.elementsFromPoint(e.clientX, e.clientY);
+                        let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
+                        
+                        movePiece(curPiece, curPos, newPos);
+        
+                        $("img").css("z-index", "0");
+                        $(".tiles").unbind();
+                        $(".tiles").on("mousedown", e => {
+                            onMouseDown(e);
+                        });
+                    }
+                });
+            }
+            else {
+                curPiece = null;
+            }
         }
     }
     else if (e.which === 2) {
@@ -213,7 +218,7 @@ function onMouseDown(e) {
 
 function movePiece(piece, oldPos, newPos) {
     let style = "position: relative; width: 100%; height: 100%;";
-    piece.style = style;
+    $(piece).attr("style", style);
 
     if (oldPos !== newPos && moves.includes(newPos)) {
         moves = [];
@@ -336,7 +341,7 @@ function drawMoves() {
         console.log(m);
         let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         $(circ).attr("cx", s * (parseInt(columns.indexOf(m.split("")[0])) + 0.5));
-        $(circ).attr("cy", s * (parseInt(rows.indexOf(parseInt(m.split("")[1]))) + 0.5));console.log(rows.indexOf(m.split("")[1]));
+        $(circ).attr("cy", s * (parseInt(rows.indexOf(parseInt(m.split("")[1]))) + 0.5));
         $(circ).attr("r", s / 6);
         $(circ).attr("style", "fill:" + col + ";");
         $(circ).css("opacity", "0.1");
