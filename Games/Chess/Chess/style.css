@@ -35,10 +35,20 @@ body {
     padding: 0;
 }
 
+img {
+    z-index: 1;
+}
+
 #dots {
     pointer-events: none;
     position: absolute;
     z-index: 1;
+}
+
+#lettersNumbers {
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
 }
 
 /* .tiles[data-color = "Light"]:hover {

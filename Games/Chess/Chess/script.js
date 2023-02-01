@@ -1,13 +1,13 @@
 let currentMove = "";
 let prevMove = "";
 let tiles = [];
-let moves = [];
+let moves = {};
+let legalMoves = [];
 let mouseDown = 0;
 let curCol = "Light";
 let curPos = null;
 let curPiece = null;
 let locked = false;
-let legalMoves = [];
 let columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
 let rows = [8, 7, 6, 5, 4, 3, 2, 1];
 
@@ -21,6 +21,7 @@ $(() => {
 function init() {
     adjustSize();
     createSquares();
+    createLetters();
     placePieces();
 
     curCol = "Light";
@@ -55,6 +56,34 @@ function createSquares() {
 function clearBoard() {
     for (t of tiles) {
         $("#" + t.id).html("");
+    }
+}
+
+function createLetters(turned = false) {
+    let tileSize = $("#board").width() / 8;
+    for (let r of rows) {
+        let col = rows.indexOf(r) % 2 === 0 ? "#B58863" : "#F0D9B5";
+        let l = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        $(l).attr("x", tileSize * 0.05);
+        $(l).attr("y", tileSize * (parseInt(rows.indexOf(r)) + 0.25));
+        $(l).attr("font-size", tileSize * 0.25);
+        $(l).attr("font-family", "arial");
+        $(l).attr("fill", col);
+        $(l).text(r);
+
+        $("#lettersNumbers").append(l);
+    }
+    for (let c of columns) {
+        let col = columns.indexOf(c) % 2 === 0 ? "#F0D9B5" : "#B58863";
+        let l = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        $(l).attr("x", tileSize * (parseInt(columns.indexOf(c)) + 0.8));
+        $(l).attr("y", 8 * (tileSize - 0.6));
+        $(l).attr("font-size", tileSize * 0.25);
+        $(l).attr("font-family", "monospace");
+        $(l).attr("fill", col);
+        $(l).text(c);
+
+        $("#lettersNumbers").append(l);
     }
 }
 
@@ -155,7 +184,7 @@ function onMouseDown(e) {
     locked = false;
     if (e.which === 1) {
         // Left
-        if (curPiece !== null && moves.includes(document.elementsFromPoint(e.clientX, e.clientY)[document.elementsFromPoint(e.clientX, e.clientY).map(t => t.className).indexOf("tiles")].id)) {
+        if (curPiece !== null && legalMoves.includes(document.elementsFromPoint(e.clientX, e.clientY)[document.elementsFromPoint(e.clientX, e.clientY).map(t => t.className).indexOf("tiles")].id)) {
             let targets = document.elementsFromPoint(e.clientX, e.clientY);
             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
             movePiece(curPiece, curPiece.dataset.position, newPos);
@@ -169,7 +198,7 @@ function onMouseDown(e) {
                 getLegalMoves();
         
                 $(curPiece).on("mousemove", e => {
-                    $("img").css("z-index", "0");
+                    $("img").css("z-index", "1");
                     $(curPiece).css("z-index", "2");
         
                     let size = $("#board").width() / 8;
@@ -193,7 +222,7 @@ function onMouseDown(e) {
                         
                         movePiece(curPiece, curPos, newPos);
         
-                        $("img").css("z-index", "0");
+                        $("img").css("z-index", "1");
                         $(".tiles").unbind();
                         $(".tiles").on("mousedown", e => {
                             onMouseDown(e);
@@ -203,6 +232,8 @@ function onMouseDown(e) {
             }
             else {
                 curPiece = null;
+                legalMoves = [];
+                drawMoves();
             }
         }
     }
@@ -220,63 +251,77 @@ function movePiece(piece, oldPos, newPos) {
     let style = "position: relative; width: 100%; height: 100%;";
     $(piece).attr("style", style);
 
-    if (oldPos !== newPos && moves.includes(newPos)) {
-        moves = [];
+    if (oldPos !== newPos && legalMoves.includes(newPos) && curPiece !== null) {
+        legalMoves = [];
         drawMoves();
-        curPiece = null;
-        curCol = curCol === "Light" ? "Dark" : "Light";
+
+        let capture = $("#" + newPos).children().length === 1 ? "x" : "";
+        let pieceType = piece.dataset.piece === "P" ? (capture ? piece.dataset.position.split("")[0] : "") : piece.dataset.piece;
+        let multipPos = true ? "" : "x"; // If multiple possible pieces
+        let mate = false;
+        let check = true ? (mate ? "#" : "+") : "";
+
+        if (curCol === "Light") {
+            moves[(Object.keys(moves).length + 1) + "."] = [];
+        }
+        
+        moves[(Object.keys(moves).length) + "."].push(pieceType + multipPos + capture + newPos);
+
         $("#" + newPos).html(piece);
         $("#" + oldPos).html("");
         piece.dataset.position = newPos;
+
+        curPiece = null;
+        curCol = curCol === "Light" ? "Dark" : "Light";
     }
 }
 
 function getLegalMoves() {
-    moves = [];
+    legalMoves = [];
     let pos = curPiece.dataset.position.split("");
     switch (curPiece.dataset.piece) {
         case "P":
             if (curPiece.dataset.color === "Light") {
                 if (!getPieceAt(pos[0] + (parseInt(pos[1]) + 1))) {
-                    moves.push(pos[0] + (parseInt(pos[1]) + 1));
+                    legalMoves.push(pos[0] + (parseInt(pos[1]) + 1));
                     if (pos[1] === "2" && !getPieceAt(pos[0] + (parseInt(pos[1]) + 2))) {
-                        moves.push(pos[0] + (parseInt(pos[1]) + 2));
+                        legalMoves.push(pos[0] + (parseInt(pos[1]) + 2));
                     }
                 }
                 if (columns[columns.indexOf(pos[0]) - 1]) {
                     let po = columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 1);
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Dark") {
-                        moves.push(po);
+                        legalMoves.push(po);
                     }
                 }
                 if (columns[columns.indexOf(pos[0]) + 1]) {
                     let po = columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 1);
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Dark") {
-                        moves.push(po);
+                        legalMoves.push(po);
                     }
                 }
             }
             else if (curPiece.dataset.color === "Dark") {
                 if (!getPieceAt(pos[0] + (parseInt(pos[1]) - 1))) {
-                    moves.push(pos[0] + (parseInt(pos[1]) - 1));
+                    legalMoves.push(pos[0] + (parseInt(pos[1]) - 1));
                     if (pos[1] === "7" && !getPieceAt(pos[0] + (parseInt(pos[1]) - 2))) {
-                        moves.push(pos[0] + (parseInt(pos[1]) - 2));
+                        legalMoves.push(pos[0] + (parseInt(pos[1]) - 2));
                     }
                 }
                 if (columns[columns.indexOf(pos[0]) - 1]) {
                     let po = columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 1);
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Light") {
-                        moves.push(po);
+                        legalMoves.push(po);
                     }
                 }
                 if (columns[columns.indexOf(pos[0]) + 1]) {
                     let po = columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 1);
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Light") {
-                        moves.push(po);
+                        legalMoves.push(po);
                     }
                 }
             }
@@ -300,26 +345,62 @@ function getLegalMoves() {
             let r = true;
             let l = true;
             for (let i = 1; i < 8; i++) {
-                if (u && parseInt(pos[1]) !== 8 && (!getPieceAt(pos[0] + (parseInt(pos[1]) + i)) || getPieceAt(pos[0] + (parseInt(pos[1]) + i)).dataset.color !== curPiece.dataset.color)) {
-                    moves.push(pos[0] + (parseInt(pos[1]) + i));
+                if (u && parseInt(pos[1]) + i <= 8) {
+                    if (!getPieceAt(pos[0] + (parseInt(pos[1]) + i))) {
+                        legalMoves.push(pos[0] + (parseInt(pos[1]) + i));
+                    }
+                    else if (getPieceAt(pos[0] + (parseInt(pos[1]) + i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push(pos[0] + (parseInt(pos[1]) + i));
+                        u = false;
+                    }
+                    else {
+                        u = false;
+                    }
                 }
                 else {
                     u = false;
                 }
-                if (d && parseInt(pos[1]) !== 1 && (!getPieceAt(pos[0] + (parseInt(pos[1]) - i)) || getPieceAt(pos[0] + (parseInt(pos[1]) - i)).dataset.color !== curPiece.dataset.color)) {
-                    moves.push(pos[0] + (parseInt(pos[1]) - i));
+                if (d && parseInt(pos[1]) - i >= 1) {
+                    if (!getPieceAt(pos[0] + (parseInt(pos[1]) - i))) {
+                        legalMoves.push(pos[0] + (parseInt(pos[1]) - i));
+                    }
+                    else if (getPieceAt(pos[0] + (parseInt(pos[1]) - i)).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push(pos[0] + (parseInt(pos[1]) - i));
+                        d = false;
+                    }
+                    else {
+                        d = false;
+                    }
                 }
                 else {
                     d = false;
                 }
-                if (r && pos[0] !== "h" && (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1]) || getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1]).dataset.color !== curPiece.dataset.color)) {
-                    moves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                if (r && columns.indexOf(pos[0]) + i > 0 && columns.indexOf(pos[0]) + i < 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1])) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1]).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                        r = false;
+                    }
+                    else {
+                        r = false;
+                    }
                 }
                 else {
                     r = false;
                 }
-                if (l && pos[0] !== "a" && (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1]) || getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1]).dataset.color !== curPiece.dataset.color)) {
-                    moves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                if (l && columns.indexOf(pos[0]) - i > 0 && columns.indexOf(pos[0]) - i < 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1])) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1]).dataset.color !== curPiece.dataset.color) {
+                        legalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                        l = false;
+                    }
+                    else {
+                        l = false;
+                    }
                 }
                 else {
                     l = false;
@@ -336,7 +417,7 @@ function drawMoves() {
     let s = b / 8;
     $("#dots").html("");
 
-    for (let m of moves) {
+    for (let m of legalMoves) {
         let col = "#000";
         console.log(m);
         let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -374,4 +455,9 @@ function adjustSize() {
     $("#dots").attr("height", size);
     $("#dots").css("top", $("#board").position().top);
     $("#dots").css("left", $("#board").position().left);
+    
+    $("#lettersNumbers").attr("width", size);
+    $("#lettersNumbers").attr("height", size);
+    $("#lettersNumbers").css("top", $("#board").position().top);
+    $("#lettersNumbers").css("left", $("#board").position().left);
 }
