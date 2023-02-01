@@ -312,6 +312,35 @@ function movePiece(piece, oldPos, newPos) {
         piece.dataset.position = newPos;
 
         if (pieceType === "K") {
+            if (curCol === "Light") {
+                if (newPos === "g1" && castling["K"]) {
+                    let r = getPieceAt("h1");
+                    $("#f1").html(r);
+                    $("#h1").html("");
+                    r.dataset.position = "f1";
+                }
+                if (newPos === "c1" && castling["Q"]) {
+                    let r = getPieceAt("a1");
+                    $("#d1").html(r);
+                    $("#a1").html("");
+                    r.dataset.position = "d1";
+                }
+            }
+            else {
+                if (newPos === "g8" && castling["k"]) {
+                    let r = getPieceAt("h8");
+                    $("#f8").html(r);
+                    $("#h8").html("");
+                    r.dataset.position = "f8";
+                }
+                if (newPos === "c8" && castling["q"]) {
+                    let r = getPieceAt("a8");
+                    $("#d8").html(r);
+                    $("#a8").html("");
+                    r.dataset.position = "d8";
+                }
+            }
+
             let cast = curCol === "Light" ? ["K", "Q"] : ["k", "q"];
             for (let c of cast) {
                 castling[c] = false;
@@ -516,6 +545,22 @@ function getLegalMoves() {
                 }
                 else {
                     dl = false;
+                }
+            }
+            if (curPiece.dataset.color === "Light") {
+                if (castling["K"] && !getPieceAt("f1") && !getPieceAt("g1")) {
+                    legalMoves.push("g1");
+                }
+                if (castling["Q"] && !getPieceAt("b1") && !getPieceAt("c1") && !getPieceAt("d1")) {
+                    legalMoves.push("c1");
+                }
+            }
+            else {
+                if (castling["k"] && !getPieceAt("f8") && !getPieceAt("g8")) {
+                    legalMoves.push("g8");
+                }
+                if (castling["q"] && !getPieceAt("b8") && !getPieceAt("c8") && !getPieceAt("d8")) {
+                    legalMoves.push("c8");
                 }
             }
             break;
