@@ -223,7 +223,7 @@ function onMouseDown(e) {
             let targets = document.elementsFromPoint(e.clientX, e.clientY);
             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
             
-            if (curPiece.dataset.piece === "P" && newPos.split("")[1] === "1" || newPos.split("")[1] === "8") {
+            if (curPiece.dataset.piece === "P" && newPos.split("")[1] === "1" || newPos.split("")[1] === "8" && legalMoves.includes(newPos)) {
                 promote(curPiece, curPiece.dataset.position, newPos);
             }
             else {
@@ -262,7 +262,7 @@ function onMouseDown(e) {
                         if (targets[targets.map(t => t.className).indexOf("tiles")]) {
                             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
                         
-                            if (curPiece.dataset.piece === "P" && newPos.split("")[1] === "1" || newPos.split("")[1] === "8") {
+                            if (curPiece.dataset.piece === "P" && newPos.split("")[1] === "1" || newPos.split("")[1] === "8" && legalMoves.includes(newPos)) {
                                 promote(curPiece, curPos, newPos);
                             }
                             else {
@@ -396,8 +396,8 @@ function movePiece(piece, oldPos, newPos) {
 }
 
 function promote(piece, oldPos, newPos) {
-let tileSize = $("#board").width() / 8;
-    let promPieces = piece.dataset.color === "Light" ? ["Qw", "Nw", "Rw", "Bw", "X"] : ["X", "Bw", "Rw", "Nw", "Qw"];
+    let tileSize = $("#board").width() / 8;
+    let promPieces = piece.dataset.color === "Light" ? ["Qw", "Nw", "Rw", "Bw", "X"] : ["X", "Bb", "Rb", "Nb", "Qb"];
     let style = "position: relative; width: 100%; height: 100%;";
     
     let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
@@ -424,27 +424,46 @@ let tileSize = $("#board").width() / 8;
             img.setAttributeNS(null, "x", tileSize * columns.indexOf(newPos.split("")[0]));
             img.setAttributeNS(null, "y", y);
             img.setAttributeNS(null, "style", "position: absolute; z-index: 3;");
-            $(img).on("mouseup", e => {
+            img.setAttributeNS(null, "id", "prom" + p);
+            $("#promotionLayer").append(img);
+            $("#prom" + p).css("pointer-events", "auto");
+            $("#prom" + p).on("mouseup", e => {
                 e.preventDefault();
-                img.setAttribute("style", "position: absolute; z-index: 3; background-color: red");
+                e.stopPropagation();
                 choosePromotion(piece, oldPos, newPos, p);
             });
-            $("#promotionLayer").append(img);
             y += tileSize;
         }
         else {
             y += tileSize * 0.5;
         }
     }
-    /* moves[(Object.keys(moves).length) + "."].push(piece.dataset.position + "=");
-
-    curPiece = null;
-    curCol = curCol === "Light" ? "Dark" : "Light"; */
 }
 
 function choosePromotion(piece, oldPos, newPos, prom) {
-    console.log("promoted " + oldPos + " to: " + newPos + " as a " + prom);
-    console.log("promoted to: " + prom);
+    $("#promotionLayer").html("");
+
+    let t = curCol === "Light" ? prom.split("")[0] : prom.split("")[0].toLowerCase();
+    let capture = $("#" + newPos).children().length === 1 ? "x" : "";
+
+    $("#" + newPos).html(piece);
+    $("#" + oldPos).html("");
+    piece.dataset.position = newPos;
+    piece.dataset.piece = prom.split("")[0];
+    $(piece).attr("src", "../Pieces/" + prom + ".svg");
+    let style = "position: relative; width: 100%; height: 100%;";
+    $(piece).attr("style", style);
+
+    if (curCol === "Light") {
+        moves[(Object.keys(moves).length + 1) + "."] = [];
+    }
+    
+    moves[(Object.keys(moves).length) + "."].push(oldPos.split("")[0] + capture + newPos + "=" + t);
+
+    curPiece = null;
+    curCol = curCol === "Light" ? "Dark" : "Light";
+    legalMoves = [];
+    drawMoves();
 }
 
 function getLegalMoves() {
