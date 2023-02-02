@@ -443,7 +443,7 @@ function promote(piece, oldPos, newPos) {
 function choosePromotion(piece, oldPos, newPos, prom) {
     $("#promotionLayer").html("");
 
-    let capture = $("#" + newPos).children().length === 1 ? "x" : "";
+    let capture = $("#" + newPos).children().length === 1 ? oldPos.split("")[0] + "x" : "";
 
     $("#" + newPos).html(piece);
     $("#" + oldPos).html("");
@@ -457,7 +457,7 @@ function choosePromotion(piece, oldPos, newPos, prom) {
         moves[(Object.keys(moves).length + 1) + "."] = [];
     }
     
-    moves[(Object.keys(moves).length) + "."].push(oldPos.split("")[0] + capture + newPos + "=" + prom.split("")[0]);
+    moves[(Object.keys(moves).length) + "."].push(capture + newPos + "=" + prom.split("")[0]);
 
     curPiece = null;
     curCol = curCol === "Light" ? "Dark" : "Light";
