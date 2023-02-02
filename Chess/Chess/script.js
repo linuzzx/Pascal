@@ -1003,7 +1003,55 @@ function getLegalMoves() {
             break;
     }
 
+    for (let m of legalMoves) {
+        // Check for checks
+        let checks = findChecks(curCol);
+        if (checks.length > 0) {
+            alert("CHECK!");
+        }
+    }
+
     drawMoves();
+}
+
+function findChecks(col) {
+    let checks = [];
+    let pBoard = [];
+    let i = 0;
+    for (let y = 0; y < 8; y++) {
+        pBoard.push([]);
+        for (let x = 0; x < 8; x++) {
+            let t = tiles[i];
+            let p = $(t).children().length > 0 ? ($(t).children()[0].dataset.color === "Light" ? $(t).children()[0].dataset.piece : $(t).children()[0].dataset.piece.toLowerCase()) : "";
+
+            pBoard[y].push(p);
+            i++;
+        }
+    }
+
+    let kW = posKing(pBoard, "K");
+    let kB = posKing(pBoard, "k");
+console.log(kW);
+console.log(kB);
+    if (col === "Light") {
+        if (pBoard[kW.y - 1][kW.x - 1]) {
+
+        }
+    }
+
+    return checks;
+}
+
+function posKing(arr, el) {
+    let pos = -1;
+    for (let y = 0; y < arr.length; y++) {
+        for (let x = 0; x < arr[y].length; x++) {
+            if (arr[y][x] === el) {
+                i = columns[x] + rows[y];
+            }
+        }
+    }
+    return i;
 }
 
 function drawMoves() {
