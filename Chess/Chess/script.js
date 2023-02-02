@@ -222,7 +222,13 @@ function onMouseDown(e) {
         if (curPiece !== null && legalMoves.includes(document.elementsFromPoint(e.clientX, e.clientY)[document.elementsFromPoint(e.clientX, e.clientY).map(t => t.className).indexOf("tiles")].id)) {
             let targets = document.elementsFromPoint(e.clientX, e.clientY);
             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
-            movePiece(curPiece, curPiece.dataset.position, newPos);
+            
+            if (curPiece.dataset.piece === "P" && newPos.split("")[1] === "1" || newPos.split("")[1] === "8") {
+                promote(curPiece, curPiece.dataset.position, newPos);
+            }
+            else {
+                movePiece(curPiece, curPiece.dataset.position, newPos);
+            }
         }
         else {
             mouseDown = 1;
@@ -256,7 +262,12 @@ function onMouseDown(e) {
                         if (targets[targets.map(t => t.className).indexOf("tiles")]) {
                             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
                         
-                            movePiece(curPiece, curPos, newPos);
+                            if (curPiece.dataset.piece === "P" && newPos.split("")[1] === "1" || newPos.split("")[1] === "8") {
+                                promote(curPiece, curPos, newPos);
+                            }
+                            else {
+                                movePiece(curPiece, curPos, newPos);
+                            }
                         }
                         else {
                             movePiece(curPiece, curPos, curPos);
@@ -301,7 +312,8 @@ function movePiece(piece, oldPos, newPos) {
         let mate = false;
         let check = true ? (mate ? "#" : "+") : "";
         let castle = null;
-
+        enPassant = "-";
+        
         $("#" + newPos).html(piece);
         $("#" + oldPos).html("");
         piece.dataset.position = newPos;
@@ -351,22 +363,22 @@ function movePiece(piece, oldPos, newPos) {
             let c = curCol === "Light" ? p.toUpperCase() : p.toLowerCase();
             castling[c] = false;
         }
-        else if (piece.dataset.piece === "P" && !capture && oldPos.split("")[0] !== newPos.split("")[0]) {
-            // en passant
-            if (curCol === "Light") {
-                $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) - 1)).html("");
+
+        if (piece.dataset.piece === "P") {
+            if (Math.abs(parseInt(oldPos.split("")[1]) - parseInt(newPos.split("")[1])) === 2) {
+                let i = curCol === "Light" ? -1 : 1;
+                enPassant = newPos.split("")[0] + (parseInt(newPos.split("")[1]) + i);
             }
-            else {
-                $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) + 1)).html("");
+
+            if (!capture && oldPos.split("")[0] !== newPos.split("")[0]) {
+                // en passant
+                if (curCol === "Light") {
+                    $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) - 1)).html("");
+                }
+                else {
+                    $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) + 1)).html("");
+                }
             }
-        }
-        
-        if (piece.dataset.piece === "P" && Math.abs(parseInt(oldPos.split("")[1]) - parseInt(newPos.split("")[1])) === 2) {
-            let i = curCol === "Light" ? -1 : 1;
-            enPassant = newPos.split("")[0] + (parseInt(newPos.split("")[1]) + i);
-        }
-        else {
-            enPassant = "-";
         }
 
         if (curCol === "Light") {
@@ -381,6 +393,58 @@ function movePiece(piece, oldPos, newPos) {
     else if (oldPos === newPos && piece) {
         piece.dataset.position = newPos;
     }
+}
+
+function promote(piece, oldPos, newPos) {
+let tileSize = $("#board").width() / 8;
+    let promPieces = piece.dataset.color === "Light" ? ["Qw", "Nw", "Rw", "Bw", "X"] : ["X", "Bw", "Rw", "Nw", "Qw"];
+    let style = "position: relative; width: 100%; height: 100%;";
+    
+    let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+    $(rect).attr("x", tileSize * columns.indexOf(newPos.split("")[0]));
+    $(rect).attr("y", piece.dataset.color === "Light" ? 0 : tileSize * 3.5);
+    $(rect).attr("width", tileSize);
+    $(rect).attr("height", tileSize * 4.5);
+    $(rect).attr("rx", tileSize * 0.05);
+    $(rect).attr("ry", tileSize * 0.05);
+    $(rect).attr("fill", "#f1f1f1");
+    $(rect).attr("stroke", "rgba(0, 0, 0, 0.2)");
+    $(rect).attr("id", "promotion");
+
+    $("#promotionLayer").append(rect);
+
+
+    let y = piece.dataset.color === "Light" ? 0 : tileSize * 3.5;
+    for (let p of promPieces) {
+        if (p !== "X") {
+            let img = document.createElementNS('http://www.w3.org/2000/svg','image');
+            img.setAttributeNS(null, "width", tileSize);
+            img.setAttributeNS(null, "height", tileSize);
+            img.setAttributeNS("http://www.w3.org/1999/xlink", "href", "../Pieces/" + p + ".svg");
+            img.setAttributeNS(null, "x", tileSize * columns.indexOf(newPos.split("")[0]));
+            img.setAttributeNS(null, "y", y);
+            img.setAttributeNS(null, "style", "position: absolute; z-index: 3;");
+            $(img).on("mouseup", e => {
+                e.preventDefault();
+                img.setAttribute("style", "position: absolute; z-index: 3; background-color: red");
+                choosePromotion(piece, oldPos, newPos, p);
+            });
+            $("#promotionLayer").append(img);
+            y += tileSize;
+        }
+        else {
+            y += tileSize * 0.5;
+        }
+    }
+    /* moves[(Object.keys(moves).length) + "."].push(piece.dataset.position + "=");
+
+    curPiece = null;
+    curCol = curCol === "Light" ? "Dark" : "Light"; */
+}
+
+function choosePromotion(piece, oldPos, newPos, prom) {
+    console.log("promoted " + oldPos + " to: " + newPos + " as a " + prom);
+    console.log("promoted to: " + prom);
 }
 
 function getLegalMoves() {
@@ -976,7 +1040,12 @@ function adjustSize() {
     $("#board").width(size);
     $("#board").height(size);
     
-    $("#dots").attr("width", size);
+    $("#promotionLayer, #dots, #lettersNumbers").attr("width", size);
+    $("#promotionLayer, #dots, #lettersNumbers").attr("height", size);
+    $("#promotionLayer, #dots, #lettersNumbers").css("top", $("#board").position().top);
+    $("#promotionLayer, #dots, #lettersNumbers").css("left", $("#board").position().left);
+
+    /* $("#dots").attr("width", size);
     $("#dots").attr("height", size);
     $("#dots").css("top", $("#board").position().top);
     $("#dots").css("left", $("#board").position().left);
@@ -984,5 +1053,5 @@ function adjustSize() {
     $("#lettersNumbers").attr("width", size);
     $("#lettersNumbers").attr("height", size);
     $("#lettersNumbers").css("top", $("#board").position().top);
-    $("#lettersNumbers").css("left", $("#board").position().left);
+    $("#lettersNumbers").css("left", $("#board").position().left); */
 }

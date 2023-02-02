@@ -39,6 +39,12 @@ img {
     z-index: 1;
 }
 
+#promotionLayer {
+    pointer-events: none;
+    position: absolute;
+    z-index: 3;
+}
+
 #dots {
     pointer-events: none;
     position: absolute;
