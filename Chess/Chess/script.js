@@ -345,12 +345,28 @@ function movePiece(piece, oldPos, newPos) {
                 castling[c] = false;
             }
         }
-
-        if (pieceType === "R") {
+        else if (pieceType === "R") {
             let r = piece.id.split("_")[1].split("")[0];
             let p = r === "a" ? "Q" : "K";
             let c = curCol === "Light" ? p.toUpperCase() : p.toLowerCase();
             castling[c] = false;
+        }
+        else if (piece.dataset.piece === "P" && !capture && oldPos.split("")[0] !== newPos.split("")[0]) {
+            // en passant
+            if (curCol === "Light") {
+                $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) - 1)).html("");
+            }
+            else {
+                $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) + 1)).html("");
+            }
+        }
+        
+        if (piece.dataset.piece === "P" && Math.abs(parseInt(oldPos.split("")[1]) - parseInt(newPos.split("")[1])) === 2) {
+            let i = curCol === "Light" ? -1 : 1;
+            enPassant = newPos.split("")[0] + (parseInt(newPos.split("")[1]) + i);
+        }
+        else {
+            enPassant = "-";
         }
 
         if (curCol === "Light") {
@@ -402,6 +418,13 @@ function getLegalMoves() {
                         legalMoves.push("x" + po);
                     }
                 }
+                if (enPassant !== "-") {
+                    let po1 = columns[columns.indexOf(enPassant.split("")[0]) - 1] + (parseInt(enPassant.split("")[1]) - 1);
+                    let po2 = columns[columns.indexOf(enPassant.split("")[0]) + 1] + (parseInt(enPassant.split("")[1]) - 1);
+                    if (pos.join("") === po1 || pos.join("") === po2) {
+                        legalMoves.push("x" + enPassant);
+                    }
+                }
             }
             else if (curPiece.dataset.color === "Dark") {
                 if (!getPieceAt(pos[0] + (parseInt(pos[1]) - 1))) {
@@ -422,6 +445,13 @@ function getLegalMoves() {
                     let p = getPieceAt(po);
                     if (p && p.dataset.color === "Light") {
                         legalMoves.push("x" + po);
+                    }
+                }
+                if (enPassant !== "-") {
+                    let po1 = columns[columns.indexOf(enPassant.split("")[0]) - 1] + (parseInt(enPassant.split("")[1]) + 1);
+                    let po2 = columns[columns.indexOf(enPassant.split("")[0]) + 1] + (parseInt(enPassant.split("")[1]) + 1);
+                    if (pos.join("") === po1 || pos.join("") === po2) {
+                        legalMoves.push("x" + enPassant);
                     }
                 }
             }
