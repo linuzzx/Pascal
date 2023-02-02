@@ -223,7 +223,7 @@ function onMouseDown(e) {
             let targets = document.elementsFromPoint(e.clientX, e.clientY);
             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
             
-            if (curPiece.dataset.piece === "P" && newPos.split("")[1] === "1" || newPos.split("")[1] === "8" && legalMoves.includes(newPos)) {
+            if (curPiece.dataset.piece === "P" && (newPos.split("")[1] === "1" || newPos.split("")[1] === "8") && legalMoves.includes(newPos)) {
                 promote(curPiece, curPiece.dataset.position, newPos);
             }
             else {
@@ -261,8 +261,8 @@ function onMouseDown(e) {
                         let targets = document.elementsFromPoint(e.clientX, e.clientY);
                         if (targets[targets.map(t => t.className).indexOf("tiles")]) {
                             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
-                        
-                            if (curPiece.dataset.piece === "P" && newPos.split("")[1] === "1" || newPos.split("")[1] === "8" && legalMoves.includes(newPos)) {
+                        console.log(curPiece.dataset.piece);
+                            if (curPiece.dataset.piece === "P" && (newPos.split("")[1] === "1" || newPos.split("")[1] === "8") && legalMoves.includes(newPos)) {
                                 promote(curPiece, curPos, newPos);
                             }
                             else {
