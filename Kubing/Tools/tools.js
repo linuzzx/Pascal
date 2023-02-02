@@ -4778,3 +4778,18 @@ function commToAlg(comm) {
         return moves.replaceAll(";", " ");
     }
 }
+
+function indexOf2d(arr, el) {
+    let i = -1;
+    for (let y = 0; y < arr.length; y++) {
+        for (let x = 0; x < arr[y].length; x++) {
+            if (arr[y][x] === el) {
+                i = {
+                    x: x,
+                    y: y
+                };
+            }
+        }
+    }
+    return i;
+}
