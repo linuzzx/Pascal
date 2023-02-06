@@ -39,6 +39,10 @@ img {
     z-index: 1;
 }
 
+.pieces:hover {
+    cursor: grab;
+}
+
 #promotionLayer {
     pointer-events: none;
     position: absolute;
@@ -63,12 +67,36 @@ img {
 }
 
 /* .tiles[data-color = "Light"]:hover {
+    border: 2px solid #FAF2E5 !important;
+}
+
+.tiles[data-color = "Dark"]:hover {
+    border: 2px solid #E5D5C9 !important;
+} */
+
+/* .tiles[data-color = "Light"]:hover {
     background: #F7EC5B !important;
 }
 
 .tiles[data-color = "Dark"]:hover {
     background: #DAC332 !important;
 } */
+
+.dragging {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 3px solid rgba(255, 255, 255, .75);
+}
+
+
+.selectedPieceTile[data-color = "Light"], .movedPieceTile[data-color = "Light"] {
+    background: #F7EC5B !important;
+}
+
+.selectedPieceTile[data-color = "Dark"], .movedPieceTile[data-color = "Dark"] {
+    background: #DAC332 !important;
+}
 
 .wrongTilesDark {
     background-color: #E06954 !important;

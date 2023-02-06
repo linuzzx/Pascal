@@ -3,11 +3,13 @@ let prevMove = "";
 let tiles = [];
 let moves = {};
 let legalMoves = [];
+let checks = [];
 let mouseDown = 0;
 let curCol = "Light";
 let curPos = null;
 let curPiece = null;
 let locked = false;
+let dragging = false;
 let columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
 let rows = [8, 7, 6, 5, 4, 3, 2, 1];
 let flipped = false;
@@ -213,10 +215,26 @@ function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -
     $(".tiles").on("mousedown", e => {
         onMouseDown(e);
     });
+    $(document).on("mousemove", e => {
+        if (dragging) {
+            $(".dragging").removeClass("dragging");
+            let targets = document.elementsFromPoint(e.clientX, e.clientY);
+            $(targets[targets.map(t => t.className).indexOf("tiles")]).addClass("dragging");
+            $(".dragging").css("cursor", "grabbing");
+        }
+    });
+    $(document).on("mouseup", e => {
+        dragging = false;
+        $(".dragging").removeClass("dragging");
+        $(".tiles").css("cursor", "");
+    });
 }
 
 function onMouseDown(e) {
     locked = false;
+
+    $(".selectedPieceTile").removeClass("selectedPieceTile");
+
     if (e.which === 1) {
         // Left
         if (curPiece !== null && legalMoves.includes(document.elementsFromPoint(e.clientX, e.clientY)[document.elementsFromPoint(e.clientX, e.clientY).map(t => t.className).indexOf("tiles")].id)) {
@@ -234,7 +252,13 @@ function onMouseDown(e) {
             mouseDown = 1;
             curPiece = e.target;
 
-            if (curCol === curPiece.dataset.color && curPiece.className === "pieces") {
+            if (curPiece && curCol === curPiece.dataset.color && curPiece.className === "pieces") {
+                dragging = true;
+
+                let targ = document.elementsFromPoint(e.clientX, e.clientY);
+                let curTile = targ[targ.map(t => t.className).indexOf("tiles")];
+                $(curTile).addClass("selectedPieceTile");
+
                 curPos = e.target.dataset.position;
                 getLegalMoves();
         
@@ -255,13 +279,12 @@ function onMouseDown(e) {
                 });
         
                 $(document).on("mouseup", e => {
-                    if (!locked) {
+                    if (!locked && curPiece) {
                         locked = true;
                         mouseDown = 0;
                         let targets = document.elementsFromPoint(e.clientX, e.clientY);
                         if (targets[targets.map(t => t.className).indexOf("tiles")]) {
                             let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
-                        console.log(curPiece.dataset.piece);
                             if (curPiece.dataset.piece === "P" && (newPos.split("")[1] === "1" || newPos.split("")[1] === "8") && legalMoves.includes(newPos)) {
                                 promote(curPiece, curPos, newPos);
                             }
@@ -291,10 +314,18 @@ function onMouseDown(e) {
     else if (e.which === 2) {
         // Middle
         mouseDown = 2;
+
+        curPiece = null;
+        legalMoves = [];
+        drawMoves();
     }
     else if (e.which === 3) {
         // Right
         mouseDown = 3;
+
+        curPiece = null;
+        legalMoves = [];
+        drawMoves();
     }
 }
 
@@ -303,14 +334,30 @@ function movePiece(piece, oldPos, newPos) {
     $(piece).attr("style", style);
 
     if (oldPos !== newPos && legalMoves.includes(newPos) && curPiece !== null) {
+        $(".movedPieceTile").removeClass("movedPieceTile");
+        $("#" + oldPos).addClass("movedPieceTile");
+        $("#" + newPos).addClass("movedPieceTile");
+
         legalMoves = [];
         drawMoves();
+        // Check for checks
+        let mate = false;
+        let check = "";
+        if (checks.length > 0 && checks.map(c => c.pos).includes(newPos)) {
+            let p = curCol === "Light" ? piece.dataset.piece : piece.dataset.piece.toLowerCase();
+            loop : for (let i = 0; i < checks.length; i++) {
+                if (checks[i].pos === newPos && checks[i].piece === p) {
+                    check = mate ? "#" : "+";
+                    console.log(checks);
+                    console.log("CHECK!");
+                    break loop;
+                }
+            }
+        }
 
         let capture = $("#" + newPos).children().length === 1 ? "x" : "";
         let pieceType = piece.dataset.piece === "P" ? (capture ? piece.dataset.position.split("")[0] : "") : piece.dataset.piece;
         let multipPos = true ? "" : "x"; // If multiple possible pieces
-        let mate = false;
-        let check = true ? (mate ? "#" : "+") : "";
         let castle = null;
         enPassant = "-";
         
@@ -385,7 +432,7 @@ function movePiece(piece, oldPos, newPos) {
             moves[(Object.keys(moves).length + 1) + "."] = [];
         }
         
-        moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos);
+        moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos + check);
 
         curPiece = null;
         curCol = curCol === "Light" ? "Dark" : "Light";
@@ -1003,19 +1050,14 @@ function getLegalMoves() {
             break;
     }
 
-    for (let m of legalMoves) {
-        // Check for checks
-        let checks = findChecks(curCol);
-        if (checks.length > 0) {
-            alert("CHECK!");
-        }
-    }
+    // Check for checks before moving
+    findChecks();
 
     drawMoves();
 }
 
-function findChecks(col) {
-    let checks = [];
+function findChecks() {
+    checks = [];
     let pBoard = [];
     let i = 0;
     for (let y = 0; y < 8; y++) {
@@ -1031,15 +1073,50 @@ function findChecks(col) {
 
     let kW = posKing(pBoard, "K");
     let kB = posKing(pBoard, "k");
-console.log(kW);
-console.log(kB);
-    if (col === "Light") {
-        if (pBoard[kW.y - 1][kW.x - 1]) {
+    
+    // Dark checks
+    if (curCol === "Dark") {
+        let positions = [];
 
+        // Pawn checks
+        for (let y of [-1]) {
+            for (let x of [-1, 1]) {
+                if (columns[parseInt(kW.x) + x] && rows[parseInt(kW.y) + y]) {
+                    positions.push({
+                        x: parseInt(kW.x) + x,
+                        y: parseInt(kW.y) + y,
+                        pos: columns[parseInt(kW.x) + x] + rows[parseInt(kW.y) + y],
+                        p: "p"
+                    });
+                }
+            }
+        }
+        
+        // Knight checks
+        for (let y of [-2, -1, 1, 2]) {
+            for (let x of [-2, -1, 1, 2]) {
+                if (Math.abs(y / x) !== 1 && columns[parseInt(kW.x) + x] && rows[parseInt(kW.y) + y]) {
+                    positions.push({
+                        x: parseInt(kW.x) + x,
+                        y: parseInt(kW.y) + y,
+                        pos: columns[parseInt(kW.x) + x] + rows[parseInt(kW.y) + y],
+                        p: "n"
+                    });
+                }
+            }
+        }
+        console.log(positions);
+        for (let p of positions) {
+            if (legalMoves.includes(p.pos)) {
+                checks.push({
+                    pos: p.pos,
+                    piece: p.p
+                });
+            }
         }
     }
 
-    return checks;
+    // Light checks
 }
 
 function posKing(arr, el) {
@@ -1047,11 +1124,15 @@ function posKing(arr, el) {
     for (let y = 0; y < arr.length; y++) {
         for (let x = 0; x < arr[y].length; x++) {
             if (arr[y][x] === el) {
-                i = columns[x] + rows[y];
+                pos = {
+                    tile: columns[x] + rows[y],
+                    x: x,
+                    y: y
+                };
             }
         }
     }
-    return i;
+    return pos;
 }
 
 function drawMoves() {
