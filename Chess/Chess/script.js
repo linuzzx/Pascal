@@ -13,6 +13,7 @@ let dragging = false;
 let columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
 let rows = [8, 7, 6, 5, 4, 3, 2, 1];
 let flipped = false;
+let check = false;
 let castling = {
     "K" : true,
     "Q" : true,
@@ -360,12 +361,14 @@ function movePiece(piece, oldPos, newPos) {
         drawMoves();
         
         let mate = false;
-        let check = "";
+        let chck = "";
+        check = false;
         if (checks.length > 0 && checks.map(c => c.pos).includes(newPos)) {
             let p = curCol === "Light" ? piece.dataset.piece : piece.dataset.piece.toLowerCase();
             loop : for (let i = 0; i < checks.length; i++) {
                 if (checks[i].pos === newPos && checks[i].piece === p) {
-                    check = mate ? "#" : "+";
+                    check = true;
+                    chck = mate ? "#" : "+";
                     console.log(checks);
                     console.log("CHECK!");
                     break loop;
@@ -450,7 +453,7 @@ function movePiece(piece, oldPos, newPos) {
             moves[(Object.keys(moves).length + 1) + "."] = [];
         }
         
-        moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos + check);
+        moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos + chck);
 
         curPiece = null;
         curCol = curCol === "Light" ? "Dark" : "Light";
@@ -1091,19 +1094,110 @@ function findChecks() {
 
     let kW = posKing(pBoard, "K");
     let kB = posKing(pBoard, "k");
+    console.log(kB);
+    let positions = [];
+
+    let k = curCol === "Light" ? kB : kW;
+
+    // Pawn checks
+    let pawnY = curCol === "Light" ? 1 : -1;
+    for (let x of [-1, 1]) {
+        if (columns[parseInt(k.x) + x] && rows[parseInt(k.y) + pawnY]) {
+            positions.push({
+                x: parseInt(k.x) + x,
+                y: parseInt(k.y) + pawnY,
+                pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + pawnY],
+                p: curCol === "Light" ? "P" : "p"
+            });
+        }
+    }
     
-    // Dark checks
-    if (curCol === "Dark") {
-        let positions = [];
+    // Knight checks
+    for (let y of [-2, -1, 1, 2]) {
+        for (let x of [-2, -1, 1, 2]) {
+            if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "N" : "n"
+                });
+            }
+        }
+    }
+    
+    // Rook checks
+    for (let y of [-2, -1, 1, 2]) {
+        for (let x of [-2, -1, 1, 2]) {
+            if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "R" : "r"
+                });
+            }
+        }
+    }
+    
+    /* if (curCol === "Light") {
+        // Light checks
+        let k = kB;
+
+        // Pawn checks
+        for (let y of [1]) {
+            for (let x of [-1, 1]) {
+                if (columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                    positions.push({
+                        x: parseInt(k.x) + x,
+                        y: parseInt(k.y) + y,
+                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                        p: "P"
+                    });
+                }
+            }
+        }
+        
+        // Knight checks
+        for (let y of [-2, -1, 1, 2]) {
+            for (let x of [-2, -1, 1, 2]) {
+                if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                    positions.push({
+                        x: parseInt(k.x) + x,
+                        y: parseInt(k.y) + y,
+                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                        p: "N"
+                    });
+                }
+            }
+        }
+        
+        // Rook checks
+        for (let y of [-2, -1, 1, 2]) {
+            for (let x of [-2, -1, 1, 2]) {
+                if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                    positions.push({
+                        x: parseInt(k.x) + x,
+                        y: parseInt(k.y) + y,
+                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                        p: "R"
+                    });
+                }
+            }
+        }
+    }
+    else {
+        // Dark checks
+        let k = kW;
 
         // Pawn checks
         for (let y of [-1]) {
             for (let x of [-1, 1]) {
-                if (columns[parseInt(kW.x) + x] && rows[parseInt(kW.y) + y]) {
+                if (columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
                     positions.push({
-                        x: parseInt(kW.x) + x,
-                        y: parseInt(kW.y) + y,
-                        pos: columns[parseInt(kW.x) + x] + rows[parseInt(kW.y) + y],
+                        x: parseInt(k.x) + x,
+                        y: parseInt(k.y) + y,
+                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
                         p: "p"
                     });
                 }
@@ -1113,28 +1207,26 @@ function findChecks() {
         // Knight checks
         for (let y of [-2, -1, 1, 2]) {
             for (let x of [-2, -1, 1, 2]) {
-                if (Math.abs(y / x) !== 1 && columns[parseInt(kW.x) + x] && rows[parseInt(kW.y) + y]) {
+                if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
                     positions.push({
-                        x: parseInt(kW.x) + x,
-                        y: parseInt(kW.y) + y,
-                        pos: columns[parseInt(kW.x) + x] + rows[parseInt(kW.y) + y],
+                        x: parseInt(k.x) + x,
+                        y: parseInt(k.y) + y,
+                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
                         p: "n"
                     });
                 }
             }
         }
-        console.log(positions);
-        for (let p of positions) {
-            if (legalMoves.includes(p.pos)) {
-                checks.push({
-                    pos: p.pos,
-                    piece: p.p
-                });
-            }
+    } */
+    console.log(positions);
+    for (let p of positions) {
+        if (legalMoves.includes(p.pos)) {
+            checks.push({
+                pos: p.pos,
+                piece: p.p
+            });
         }
     }
-
-    // Light checks
 }
 
 function posKing(arr, el) {
