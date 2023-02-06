@@ -83,12 +83,11 @@ img {
 } */
 
 .dragging {
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    border: 3px solid rgba(255, 255, 255, .75);
+    box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    -webkit-box-sizing: border-box !important;
+    border: 3px solid rgba(255, 255, 255, .75) !important;
 }
-
 
 .selectedPieceTile[data-color = "Light"], .movedPieceTile[data-color = "Light"] {
     background: #F7EC5B !important;

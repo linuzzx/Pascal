@@ -219,7 +219,14 @@ function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -
         if (dragging) {
             $(".dragging").removeClass("dragging");
             let targets = document.elementsFromPoint(e.clientX, e.clientY);
-            $(targets[targets.map(t => t.className).indexOf("tiles")]).addClass("dragging");
+            let tarI = -1;
+            for (let i = 0; i < targets.length; i++) {
+                if (targets[i].className.includes("tiles")) {
+                    tarI = i;
+                }
+            }
+            let tarTile = targets[tarI];
+            $(tarTile).addClass("dragging");
             $(".dragging").css("cursor", "grabbing");
         }
     });
@@ -237,9 +244,16 @@ function onMouseDown(e) {
 
     if (e.which === 1) {
         // Left
-        if (curPiece !== null && legalMoves.includes(document.elementsFromPoint(e.clientX, e.clientY)[document.elementsFromPoint(e.clientX, e.clientY).map(t => t.className).indexOf("tiles")].id)) {
-            let targets = document.elementsFromPoint(e.clientX, e.clientY);
-            let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
+        let targetsDown = document.elementsFromPoint(e.clientX, e.clientY);
+        let tarDownI = -1;
+        for (let i = 0; i < targetsDown.length; i++) {
+            if (targetsDown[i].className.includes("tiles")) {
+                tarDownI = i;
+            }
+        }
+        let tarDownTile = targetsDown[tarDownI].id;
+        if (curPiece !== null && legalMoves.includes(tarDownTile)) {
+            let newPos = tarDownTile;
             
             if (curPiece.dataset.piece === "P" && (newPos.split("")[1] === "1" || newPos.split("")[1] === "8") && legalMoves.includes(newPos)) {
                 promote(curPiece, curPiece.dataset.position, newPos);
@@ -254,10 +268,7 @@ function onMouseDown(e) {
 
             if (curPiece && curCol === curPiece.dataset.color && curPiece.className === "pieces") {
                 dragging = true;
-
-                let targ = document.elementsFromPoint(e.clientX, e.clientY);
-                let curTile = targ[targ.map(t => t.className).indexOf("tiles")];
-                $(curTile).addClass("selectedPieceTile");
+                $("#" + tarDownTile).addClass("selectedPieceTile");
 
                 curPos = e.target.dataset.position;
                 getLegalMoves();
@@ -282,9 +293,16 @@ function onMouseDown(e) {
                     if (!locked && curPiece) {
                         locked = true;
                         mouseDown = 0;
-                        let targets = document.elementsFromPoint(e.clientX, e.clientY);
-                        if (targets[targets.map(t => t.className).indexOf("tiles")]) {
-                            let newPos = targets[targets.map(t => t.className).indexOf("tiles")].id;
+                        let targetsUp = document.elementsFromPoint(e.clientX, e.clientY);
+                        let tarUpI = -1;
+                        for (let i = 0; i < targetsUp.length; i++) {
+                            if (targetsUp[i].className.includes("tiles")) {
+                                tarUpI = i;
+                            }
+                        }
+                        let tarUpTile = targetsUp[tarUpI].id;
+                        if (curPiece !== null && legalMoves.includes(tarUpTile)) {
+                            let newPos = tarUpTile;
                             if (curPiece.dataset.piece === "P" && (newPos.split("")[1] === "1" || newPos.split("")[1] === "8") && legalMoves.includes(newPos)) {
                                 promote(curPiece, curPos, newPos);
                             }
@@ -340,7 +358,7 @@ function movePiece(piece, oldPos, newPos) {
 
         legalMoves = [];
         drawMoves();
-        // Check for checks
+        
         let mate = false;
         let check = "";
         if (checks.length > 0 && checks.map(c => c.pos).includes(newPos)) {
