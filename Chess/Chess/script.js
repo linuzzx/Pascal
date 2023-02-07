@@ -31,6 +31,10 @@ $(() => {
     init();
 });
 
+$(window).resize(() => {
+    adjustSize();
+});
+
 function init() {
     adjustSize();
     createSquares();
