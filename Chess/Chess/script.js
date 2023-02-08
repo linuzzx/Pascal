@@ -367,10 +367,10 @@ function movePiece(piece, oldPos, newPos) {
         let mate = false;
         let chck = "";
         check = false;
-        if (checks.length > 0 && checks.map(c => c.pos).includes(newPos)) {
+        if (checks.length > 0 && checks.map(c => c.pos.substr(c.pos.length - 2)).includes(newPos)) {
             let p = curCol === "Light" ? piece.dataset.piece : piece.dataset.piece.toLowerCase();
             loop : for (let i = 0; i < checks.length; i++) {
-                if (checks[i].pos === newPos && checks[i].piece === p) {
+                if (checks[i].pos.substr(checks[i].pos.length - 2) === newPos && checks[i].piece === p) {
                     check = true;
                     chck = mate ? "#" : "+";
                     console.log(checks);
@@ -1222,6 +1222,7 @@ function findChecks() {
             }
         }
     } */
+    console.log(legalMoves);
     console.log(positions);
     for (let p of positions) {
         if (legalMoves.includes(p.pos)) {
