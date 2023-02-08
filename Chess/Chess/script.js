@@ -1098,7 +1098,7 @@ function findChecks() {
 
     let kW = posKing(pBoard, "K");
     let kB = posKing(pBoard, "k");
-    console.log(kB);
+    
     let positions = [];
 
     let k = curCol === "Light" ? kB : kW;
@@ -1144,86 +1144,6 @@ function findChecks() {
         }
     }
     
-    /* if (curCol === "Light") {
-        // Light checks
-        let k = kB;
-
-        // Pawn checks
-        for (let y of [1]) {
-            for (let x of [-1, 1]) {
-                if (columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
-                    positions.push({
-                        x: parseInt(k.x) + x,
-                        y: parseInt(k.y) + y,
-                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
-                        p: "P"
-                    });
-                }
-            }
-        }
-        
-        // Knight checks
-        for (let y of [-2, -1, 1, 2]) {
-            for (let x of [-2, -1, 1, 2]) {
-                if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
-                    positions.push({
-                        x: parseInt(k.x) + x,
-                        y: parseInt(k.y) + y,
-                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
-                        p: "N"
-                    });
-                }
-            }
-        }
-        
-        // Rook checks
-        for (let y of [-2, -1, 1, 2]) {
-            for (let x of [-2, -1, 1, 2]) {
-                if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
-                    positions.push({
-                        x: parseInt(k.x) + x,
-                        y: parseInt(k.y) + y,
-                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
-                        p: "R"
-                    });
-                }
-            }
-        }
-    }
-    else {
-        // Dark checks
-        let k = kW;
-
-        // Pawn checks
-        for (let y of [-1]) {
-            for (let x of [-1, 1]) {
-                if (columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
-                    positions.push({
-                        x: parseInt(k.x) + x,
-                        y: parseInt(k.y) + y,
-                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
-                        p: "p"
-                    });
-                }
-            }
-        }
-        
-        // Knight checks
-        for (let y of [-2, -1, 1, 2]) {
-            for (let x of [-2, -1, 1, 2]) {
-                if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
-                    positions.push({
-                        x: parseInt(k.x) + x,
-                        y: parseInt(k.y) + y,
-                        pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
-                        p: "n"
-                    });
-                }
-            }
-        }
-    } */
-    console.log(legalMoves);
-    console.log(positions);
     for (let p of positions) {
         if (legalMoves.includes(p.pos)) {
             checks.push({
