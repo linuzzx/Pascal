@@ -451,20 +451,21 @@ function drawArrow() {
                 let arrowPnt = [destX, destY];
                 // let arrowStrt = [movePoint(srcX, srcY, angle, rad).x, movePoint(srcX, srcY, angle, rad).y];
                 // let arrowWingRight = rotatePoint(destX + 0.8 * s / 2, destY, destX, destY, angle + 145, false);
-                let a1 = (angle * 180 / Math.PI) + 145;
-                let a2 = (angle * 180 / Math.PI) - 145;
-                let arrowWingRight = rotatePoint(movePoint(destX, destY, angle, 0.4 * s).x, movePoint(destX, destY, angle, 0.4 * s).y, destX, destY, a1, false);
-                let arrowWingLeft = rotatePoint(movePoint(destX, destY, angle, 0.4 * s).x, movePoint(destX, destY, angle, 0.4 * s).y, destX, destY, a2, false);
-                let arrowStrt = [rotatePoint(srcX + rad, srcY, srcX, srcY, angle).x, rotatePoint(srcX + rad, srcY, srcX, srcY, angle).y];
+                let a1 = angle + (145 * Math.PI / 180) + Math.PI / 2;
+                let a2 = angle - (145 * Math.PI / 180) + Math.PI / 2;
+                let mvPoint = movePoint(destX, destY, angle + Math.PI / 2, 0.4 * s);
+                let arrowWingRight = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, a1);
+                let arrowWingLeft = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, a2);
+                let arrowStrt = rotatePoint(srcX + rad, srcY, srcX, srcY, angle);
 
 console.log(angle * 180 / Math.PI, 35);
                 points = [
-                    arrowPnt[0] + "," + [arrowPnt[1]],
+                    arrowPnt[0] + "," + arrowPnt[1],
                     arrowWingRight.x + "," + arrowWingRight.y,
                     
-                    arrowStrt[0] + "," + [arrowStrt[1]],
+                    arrowStrt.x + "," + arrowStrt.y,
                     arrowWingLeft.x + "," + arrowWingLeft.y,
-                    arrowPnt[0] + "," + [arrowPnt[1]]
+                    arrowPnt[0] + "," + arrowPnt[1]
                 ];
                 ///////////////////
                 let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -475,8 +476,8 @@ console.log(angle * 180 / Math.PI, 35);
 
                 $("#arrowLayer").append(circ);
                 let circ2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                $(circ2).attr("cx", movePoint(destX, destY, angle, 0.4 * s).x);
-                $(circ2).attr("cy", movePoint(destX, destY, angle, 0.4 * s).y);
+                $(circ2).attr("cx", movePoint(destX, destY, angle + Math.PI / 2, 0.4 * s).x);
+                $(circ2).attr("cy", movePoint(destX, destY, angle + Math.PI / 2, 0.4 * s).y);
                 $(circ2).attr("r", 3);
                 $(circ2).attr("fill", "blue");
 
