@@ -1131,19 +1131,27 @@ function findChecks() {
     }
     
     // Rook checks
-    for (let y of [-2, -1, 1, 2]) {
-        for (let x of [-2, -1, 1, 2]) {
-            if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
-                positions.push({
-                    x: parseInt(k.x) + x,
-                    y: parseInt(k.y) + y,
-                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
-                    p: curCol === "Light" ? "R" : "r"
-                });
-            }
+    for (let y = -7; y < 8; y++) {
+        if (columns[parseInt(k.x)] && rows[parseInt(k.y) + y]) {
+            positions.push({
+                x: parseInt(k.x),
+                y: parseInt(k.y) + y,
+                pos: columns[parseInt(k.x)] + rows[parseInt(k.y) + y],
+                p: curCol === "Light" ? "R" : "r"
+            });
         }
     }
-    
+    for (let x = -7; x < 8; x++) {
+        if (columns[parseInt(k.x) + x] && rows[parseInt(k.y)]) {
+            positions.push({
+                x: parseInt(k.x) + x,
+                y: parseInt(k.y),
+                pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y)],
+                p: curCol === "Light" ? "R" : "r"
+            });
+        }
+    }
+    console.log(positions);
     for (let p of positions) {
         if (legalMoves.includes(p.pos)) {
             checks.push({
