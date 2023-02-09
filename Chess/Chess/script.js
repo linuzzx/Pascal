@@ -1130,6 +1130,7 @@ function findChecks() {
         }
     }
     
+    // Queen checks
     // Rook checks
     for (let y = -7; y < 8; y++) {
         if (columns[parseInt(k.x)] && rows[parseInt(k.y) + y]) {
@@ -1138,6 +1139,12 @@ function findChecks() {
                 y: parseInt(k.y) + y,
                 pos: columns[parseInt(k.x)] + rows[parseInt(k.y) + y],
                 p: curCol === "Light" ? "R" : "r"
+            });
+            positions.push({
+                x: parseInt(k.x),
+                y: parseInt(k.y) + y,
+                pos: columns[parseInt(k.x)] + rows[parseInt(k.y) + y],
+                p: curCol === "Light" ? "Q" : "q"
             });
         }
     }
@@ -1149,6 +1156,32 @@ function findChecks() {
                 pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y)],
                 p: curCol === "Light" ? "R" : "r"
             });
+            positions.push({
+                x: parseInt(k.x) + x,
+                y: parseInt(k.y),
+                pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y)],
+                p: curCol === "Light" ? "Q" : "q"
+            });
+        }
+    }
+    
+    // Bishop checks
+    for (let y = -7; y < 8; y++) {
+        for (let x = -7; x < 8; x++) {
+            if (Math.abs(y / x) === 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "B" : "b"
+                });
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "Q" : "q"
+                });
+            }
         }
     }
     console.log(positions);
