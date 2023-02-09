@@ -1184,6 +1184,20 @@ function findChecks() {
             }
         }
     }
+    
+    // "King checks"
+    for (let y = -1; y < 2; y++) {
+        for (let x = -1; x < 2; x++) {
+            if (columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "K" : "k"
+                });
+            }
+        }
+    }
     console.log(positions);
     for (let p of positions) {
         if (legalMoves.map(m => m.substr(m.length - 2)).includes(p.pos)) {
