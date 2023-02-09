@@ -24,10 +24,26 @@ let enPassant = "-";
 let halfMoves = 0;
 let fullMoves = 0;
 
+let buttons = ["Control", "Shift", "Alt"];
+let curBtn = null;
+
+let arrowDown = null;
+let arrowUp = null;
+
 const circLight ="#D8C3A3";
 const circDark ="#A37A59";
 
 $(() => {
+    $(window).on("keydown", e => {
+        if (buttons.includes(e.key)) {
+            curBtn = e.key;
+        }
+    });
+    $(window).on("keyup", e => {
+        if (buttons.includes(e.key)) {
+            curBtn = null;
+        }
+    });
     init();
 });
 
@@ -249,6 +265,9 @@ function onMouseDown(e) {
 
     if (e.which === 1) {
         // Left
+
+        $("#squareLayer, #arrowLayer").html("");
+
         let targetsDown = document.elementsFromPoint(e.clientX, e.clientY);
         let tarDownI = -1;
         for (let i = 0; i < targetsDown.length; i++) {
@@ -344,13 +363,186 @@ function onMouseDown(e) {
     }
     else if (e.which === 3) {
         // Right
+
         mouseDown = 3;
+
+        let targetsDown = document.elementsFromPoint(e.clientX, e.clientY);
+        let tarDownI = -1;
+        for (let i = 0; i < targetsDown.length; i++) {
+            if (targetsDown[i].className.includes("tiles")) {
+                tarDownI = i;
+            }
+        }
+        arrowDown = targetsDown[tarDownI].id;
+
+        $(document).on("mouseup", e => {
+            if (!locked && e.which === 3) {
+                locked = true;
+                mouseDown = 0;
+                let targetsUp = document.elementsFromPoint(e.clientX, e.clientY);
+                let tarUpI = -1;
+                for (let i = 0; i < targetsUp.length; i++) {
+                    if (targetsUp[i].className.includes("tiles")) {
+                        tarUpI = i;
+                    }
+                }
+                arrowUp = targetsUp[tarUpI].id;
+
+                drawArrow();
+
+                $(".tiles").unbind();
+                $(".tiles").on("mousedown", e => {
+                    onMouseDown(e);
+                });
+            }
+        });
 
         curPiece = null;
         legalMoves = [];
         drawMoves();
     }
 }
+
+function drawArrow() {
+    let s = $("#board").width() / 8;
+    if (arrowDown === arrowUp) {
+        drawSquare();
+    }
+    else {
+        let arrowStyles = [
+            "fill: rgba(248, 85, 63, 0.8); opacity: 0.8;",//red "ctrl"
+            "fill: rgba(159, 207, 63, 0.8); opacity: 0.8;",//green "shift"
+            "fill: rgba(72, 193, 249, 0.8); opacity: 0.8;",//blue "alt"
+            "fill: rgba(255, 170, 0, 0.8); opacity: 0.8;",//yellow ""
+        ];
+
+        let tileFrom = arrowDown;
+        let tileTo = arrowUp;
+
+        let id = "arr" + tileFrom + "_" + tileTo;
+        
+        if ($("#" + id).length !== 0) {
+            $("#" + id).remove();
+        }
+        else {
+            let rad = s * 3.5 / 10;
+            let widthFromCenter = s / 10;
+
+            let destX = s * (parseInt(columns.indexOf(tileTo.split("")[0])) + 0.5);
+            let destY = s * (parseInt(rows.indexOf(parseInt(tileTo.split("")[1]))) + 0.5);
+            let srcX = s * (parseInt(columns.indexOf(tileFrom.split("")[0])) + 0.5);
+            let srcY = s * (parseInt(rows.indexOf(parseInt(tileFrom.split("")[1]))) + 0.5);
+
+            let dx = destX - srcX;
+            let dy = destY - srcY;
+            let angle = Math.atan2(dy, dx);
+            
+            let points = [];
+
+            let cFrom = parseInt(columns.indexOf(tileFrom.split("")[0]));
+            let cTo = parseInt(columns.indexOf(tileTo.split("")[0]));
+            let rFrom = parseInt(rows.indexOf(parseInt(tileFrom.split("")[1])));
+            let rTo = parseInt(rows.indexOf(parseInt(tileTo.split("")[1])));
+
+            if ((Math.abs(cTo - cFrom) === 1 || Math.abs(cTo - cFrom) === 2) && (Math.abs(rTo - rFrom) === 1 || Math.abs(rTo - rFrom) === 2) && Math.abs(cTo - cFrom) !== Math.abs(rTo - rFrom)) {
+                console.log("Knight!");
+            }
+            else {
+                let arrowPnt = [destX, destY];
+                // let arrowStrt = [movePoint(srcX, srcY, angle, rad).x, movePoint(srcX, srcY, angle, rad).y];
+                // let arrowWingRight = rotatePoint(destX + 0.8 * s / 2, destY, destX, destY, angle + 145, false);
+                let a1 = (angle * 180 / Math.PI) + 145;
+                let a2 = (angle * 180 / Math.PI) - 145;
+                let arrowWingRight = rotatePoint(movePoint(destX, destY, angle, 0.4 * s).x, movePoint(destX, destY, angle, 0.4 * s).y, destX, destY, a1, false);
+                let arrowWingLeft = rotatePoint(movePoint(destX, destY, angle, 0.4 * s).x, movePoint(destX, destY, angle, 0.4 * s).y, destX, destY, a2, false);
+                let arrowStrt = [rotatePoint(srcX + rad, srcY, srcX, srcY, angle).x, rotatePoint(srcX + rad, srcY, srcX, srcY, angle).y];
+
+console.log(angle * 180 / Math.PI, 35);
+                points = [
+                    arrowPnt[0] + "," + [arrowPnt[1]],
+                    arrowWingRight.x + "," + arrowWingRight.y,
+                    
+                    arrowStrt[0] + "," + [arrowStrt[1]],
+                    arrowWingLeft.x + "," + arrowWingLeft.y,
+                    arrowPnt[0] + "," + [arrowPnt[1]]
+                ];
+                ///////////////////
+                let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                $(circ).attr("cx", arrowWingRight.x);
+                $(circ).attr("cy", arrowWingRight.y);
+                $(circ).attr("r", 5);
+                $(circ).attr("fill", "red");
+
+                $("#arrowLayer").append(circ);
+                let circ2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                $(circ2).attr("cx", movePoint(destX, destY, angle, 0.4 * s).x);
+                $(circ2).attr("cy", movePoint(destX, destY, angle, 0.4 * s).y);
+                $(circ2).attr("r", 3);
+                $(circ2).attr("fill", "blue");
+
+                $("#arrowLayer").append(circ2);
+                ///////////////////
+            }
+
+            let poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+            $(poly).attr("id", id);
+            $(poly).attr("points", points.join(" "));
+            $(poly).attr("style", curBtn === null ? arrowStyles[arrowStyles.length - 1] : arrowStyles[buttons.indexOf(curBtn)]);
+
+            $("#arrowLayer").append(poly);
+        }
+    }
+}
+
+function drawSquare() {
+    let s = $("#board").width() / 8;
+    let squareStyles = [
+        "fill: rgb(255, 170, 0); opacity: 0.8;",//yellow "ctrl"
+        "fill: rgb(172, 206, 89); opacity: 0.8;",//green "shift"
+        "fill: rgb(82, 176, 220); opacity: 0.8;",//blue "alt"
+        "fill: rgb(235, 97, 80); opacity: 0.8;",//red ""
+    ];
+
+    let tile = arrowUp;
+    let id = "sq" + arrowUp;
+
+    $("#" + id).remove();
+
+    let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+    $(rect).attr("x", s * (parseInt(columns.indexOf(tile.split("")[0]))));
+    $(rect).attr("y", s * (parseInt(rows.indexOf(parseInt(tile.split("")[1])))));
+    $(rect).attr("width", s);
+    $(rect).attr("height", s);
+    $(rect).attr("id", id);
+    $(rect).attr("style", curBtn === null ? squareStyles[squareStyles.length - 1] : squareStyles[buttons.indexOf(curBtn)]);
+
+    $("#squareLayer").append(rect);
+}
+
+function rotatePoint(pointToRotateX, pointToRotateY, centerOfRotationX, centerOfRotationY, angle, radians = true) {
+    let x1;
+    let y1;
+    if (radians) {
+        x1 = (pointToRotateX - centerOfRotationX) * Math.cos(angle) - (pointToRotateY - centerOfRotationY) * Math.sin(angle) + centerOfRotationX;
+        y1 = (pointToRotateX - centerOfRotationX) * Math.sin(angle) + (pointToRotateY - centerOfRotationY) * Math.cos(angle) + centerOfRotationY;
+    }
+    else {
+        angle = (angle * Math.PI/180);
+        x1 = (pointToRotateX - centerOfRotationX) * Math.cos(angle) - (pointToRotateY - centerOfRotationY) * Math.sin(angle) + centerOfRotationX;
+        y1 = (pointToRotateX - centerOfRotationX) * Math.sin(angle) + (pointToRotateY - centerOfRotationY) * Math.cos(angle) + centerOfRotationY;
+    }
+    return {x: x1, y: y1};
+}
+
+function movePoint(px, py, angle, dist) {
+    let x = px;
+    let y = py;
+  
+    x += dist * Math.sin(angle);
+    y -= dist * Math.cos(angle);
+  
+    return {x: x, y: y};
+  }
 
 function movePiece(piece, oldPos, newPos) {
     let style = "position: relative; width: 100%; height: 100%;";
@@ -1246,7 +1438,7 @@ function drawMoves() {
         }
         else {
             $(circ).attr("r", s / 6);
-            $(circ).attr("fill:", col);
+            $(circ).attr("fill", col);
             $(circ).css("opacity", "0.1");
         }
         
@@ -1277,10 +1469,10 @@ function adjustSize() {
     $("#board").width(size);
     $("#board").height(size);
     
-    $("#promotionLayer, #dots, #lettersNumbers").attr("width", size);
-    $("#promotionLayer, #dots, #lettersNumbers").attr("height", size);
-    $("#promotionLayer, #dots, #lettersNumbers").css("top", $("#board").position().top);
-    $("#promotionLayer, #dots, #lettersNumbers").css("left", $("#board").position().left);
+    $("#promotionLayer, #dots, #arrowLayer, #squareLayer, #lettersNumbers").attr("width", size);
+    $("#promotionLayer, #dots, #arrowLayer, #squareLayer, #lettersNumbers").attr("height", size);
+    $("#promotionLayer, #dots, #arrowLayer, #squareLayer, #lettersNumbers").css("top", $("#board").position().top);
+    $("#promotionLayer, #dots, #arrowLayer, #squareLayer, #lettersNumbers").css("left", $("#board").position().left);
 
     /* $("#dots").attr("width", size);
     $("#dots").attr("height", size);
