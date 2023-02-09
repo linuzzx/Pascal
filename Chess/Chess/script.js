@@ -1153,7 +1153,7 @@ function findChecks() {
     }
     console.log(positions);
     for (let p of positions) {
-        if (legalMoves.includes(p.pos)) {
+        if (legalMoves.map(m => m.substr(m.length - 2)).includes(p.pos)) {
             checks.push({
                 pos: p.pos,
                 piece: p.p
