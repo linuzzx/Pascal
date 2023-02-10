@@ -451,37 +451,66 @@ function drawArrow() {
                 let arrowPnt = [destX, destY];
                 // let arrowStrt = [movePoint(srcX, srcY, angle, rad).x, movePoint(srcX, srcY, angle, rad).y];
                 // let arrowWingRight = rotatePoint(destX + 0.8 * s / 2, destY, destX, destY, angle + 145, false);
-                let a1 = angle + (145 * Math.PI / 180) + Math.PI / 2;
-                let a2 = angle - (145 * Math.PI / 180) + Math.PI / 2;
+                let a = 145 * Math.PI / 180;
                 let mvPoint = movePoint(destX, destY, angle + Math.PI / 2, 0.4 * s);
-                let arrowWingRight = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, a1);
-                let arrowWingLeft = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, a2);
+                let arrowWingRight = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, a);
+                let arrowWingLeft = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, -a);
+                let arrowWingCornerRight = moveTowardsPoint(arrowWingRight.x, arrowWingRight.y, arrowWingLeft.x, arrowWingLeft.y,
+                    (getDistance(arrowWingRight.x, arrowWingRight.y, arrowWingLeft.x, arrowWingLeft.y) / 2) - widthFromCenter);
+                let arrowWingCornerLeft = moveTowardsPoint(arrowWingLeft.x, arrowWingLeft.y, arrowWingRight.x, arrowWingRight.y,
+                    (getDistance(arrowWingRight.x, arrowWingRight.y, arrowWingLeft.x, arrowWingLeft.y) / 2) - widthFromCenter);
                 let arrowStrt = rotatePoint(srcX + rad, srcY, srcX, srcY, angle);
+                let arrowStrtRight = movePoint(arrowWingCornerRight.x, arrowWingCornerRight.y, angle - Math.PI / 2,
+                    getDistance((arrowWingRight.x + arrowWingLeft.x) / 2, (arrowWingRight.y + arrowWingLeft.y) / 2, arrowStrt.x, arrowStrt.y));
+                let arrowStrtLeft = movePoint(arrowWingCornerLeft.x, arrowWingCornerLeft.y, angle - Math.PI / 2,
+                    getDistance((arrowWingRight.x + arrowWingLeft.x) / 2, (arrowWingRight.y + arrowWingLeft.y) / 2, arrowStrt.x, arrowStrt.y));
 
-console.log(angle * 180 / Math.PI, 35);
                 points = [
                     arrowPnt[0] + "," + arrowPnt[1],
                     arrowWingRight.x + "," + arrowWingRight.y,
-                    
+                    arrowWingCornerRight.x + "," + arrowWingCornerRight.y,
+                    arrowStrtRight.x + "," + arrowStrtRight.y,
                     arrowStrt.x + "," + arrowStrt.y,
+                    arrowStrtLeft.x + "," + arrowStrtLeft.y,
+                    arrowWingCornerLeft.x + "," + arrowWingCornerLeft.y,
                     arrowWingLeft.x + "," + arrowWingLeft.y,
                     arrowPnt[0] + "," + arrowPnt[1]
                 ];
                 ///////////////////
-                let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                $(circ).attr("cx", arrowWingRight.x);
-                $(circ).attr("cy", arrowWingRight.y);
-                $(circ).attr("r", 5);
-                $(circ).attr("fill", "red");
+                /* let circWR = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                $(circWR).attr("cx", arrowWingRight.x);
+                $(circWR).attr("cy", arrowWingRight.y);
+                $(circWR).attr("r", 3);
+                $(circWR).attr("fill", "red");
+                $("#arrowLayer").append(circWR);
 
-                $("#arrowLayer").append(circ);
-                let circ2 = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                $(circ2).attr("cx", movePoint(destX, destY, angle + Math.PI / 2, 0.4 * s).x);
-                $(circ2).attr("cy", movePoint(destX, destY, angle + Math.PI / 2, 0.4 * s).y);
-                $(circ2).attr("r", 3);
-                $(circ2).attr("fill", "blue");
+                let circWL = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                $(circWL).attr("cx", arrowWingLeft.x);
+                $(circWL).attr("cy", arrowWingLeft.y);
+                $(circWL).attr("r", 3);
+                $(circWL).attr("fill", "blue");
+                $("#arrowLayer").append(circWL);
 
-                $("#arrowLayer").append(circ2);
+                let circWCR = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                $(circWCR).attr("cx", arrowStrtRight.x);
+                $(circWCR).attr("cy", arrowStrtRight.y);
+                $(circWCR).attr("r", 3);
+                $(circWCR).attr("fill", "green");
+                $("#arrowLayer").append(circWCR);
+
+                let circWCL = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                $(circWCL).attr("cx", arrowStrt.x);
+                $(circWCL).attr("cy", arrowStrt.y);
+                $(circWCL).attr("r", 3);
+                $(circWCL).attr("fill", "purple");
+                $("#arrowLayer").append(circWCL);
+
+                let circF = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                $(circF).attr("cx", mvPoint.x);
+                $(circF).attr("cy", mvPoint.y);
+                $(circF).attr("r", 3);
+                $(circF).attr("fill", "yellow");
+                $("#arrowLayer").append(circF); */
                 ///////////////////
             }
 
@@ -543,7 +572,29 @@ function movePoint(px, py, angle, dist) {
     y -= dist * Math.cos(angle);
   
     return {x: x, y: y};
-  }
+}
+
+function moveTowardsPoint(p0x, p0y, px, py, dist) {
+    let dx = px - p0x;
+    let dy = py - p0y;
+    let angle = Math.atan2(dy, dx) + Math.PI / 2;
+    
+    let x = p0x;
+    let y = p0y;
+  
+    x += dist * Math.sin(angle);
+    y -= dist * Math.cos(angle);
+  
+    return {x: x, y: y};
+}
+
+function getDistance(p0x, p0y, px, py) {
+    let a = px - p0x;
+    let b = py - p0y;
+
+    let c = Math.sqrt(a*a + b*b);
+    return c;
+}
 
 function movePiece(piece, oldPos, newPos) {
     let style = "position: relative; width: 100%; height: 100%;";
