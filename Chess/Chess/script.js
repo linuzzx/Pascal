@@ -77,7 +77,23 @@ function createSquares() {
             let col = (y + x) % 2 === 0 ? "#F0D9B5" : "#B58863";
             let dataCol = (y + x) % 2 === 0 ? "Light" : "Dark";
             let id = columns[x] + rows[y];
-            let style = "background-color: " + col + "; width: " + size + "px; height: " + size + "px; text-align: center;";
+            let brdRad = 0;
+
+            if (y === 0 && x === 0) {
+                brdRad = "5% 0 0 0";
+            }
+            else if (y === 0 && x === 7) {
+                brdRad = "0 5% 0 0";
+            }
+            else if (y === 7 && x === 0) {
+                brdRad = "0 0 0 5%";
+            }
+            else if (y === 7 && x === 7) {
+                brdRad = "0 0 5% 0";
+            }
+
+            let style = "background-color: " + col + "; width: " + size + "px; height: " + size + "px; text-align: center; border-radius: " + brdRad;
+
             let tile = "<td><div id='" + id + "' class='tiles' data-color='" + dataCol + "' style='" + style + "' onclick='clickTile(\"" + id + "\")'></div></td>";
             row += tile;
         }
@@ -1482,6 +1498,155 @@ function findChecks() {
             });
         }
     }
+    checks = checks.sort((a, b) => {
+        if (a.piece < b.piece){
+            return -1;
+        }
+        else if (a.piece > b.piece){
+            return 1;
+        }
+        return 0;
+    });
+}
+
+function findChecks2(fen) {
+    checks2 = {
+        w: [],
+        b: []
+    };
+    let pBoard = [];
+    let i = 0;
+    for (let y = 0; y < 8; y++) {
+        pBoard.push([]);
+        for (let x = 0; x < 8; x++) {
+            let t = tiles[i];
+            let p = $(t).children().length > 0 ? ($(t).children()[0].dataset.color === "Light" ? $(t).children()[0].dataset.piece : $(t).children()[0].dataset.piece.toLowerCase()) : "";
+
+            pBoard[y].push(p);
+            i++;
+        }
+    }
+
+    let kW = posKing(pBoard, "K");
+    let kB = posKing(pBoard, "k");
+    
+    let positions = [];
+
+    let k = curCol === "Light" ? kB : kW;
+
+    // Pawn checks
+    let pawnY = curCol === "Light" ? 1 : -1;
+    for (let x of [-1, 1]) {
+        if (columns[parseInt(k.x) + x] && rows[parseInt(k.y) + pawnY]) {
+            positions.push({
+                x: parseInt(k.x) + x,
+                y: parseInt(k.y) + pawnY,
+                pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + pawnY],
+                p: curCol === "Light" ? "P" : "p"
+            });
+        }
+    }
+    
+    // Knight checks
+    for (let y of [-2, -1, 1, 2]) {
+        for (let x of [-2, -1, 1, 2]) {
+            if (Math.abs(y / x) !== 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "N" : "n"
+                });
+            }
+        }
+    }
+    
+    // Queen checks
+    // Rook checks
+    for (let y = -7; y < 8; y++) {
+        if (columns[parseInt(k.x)] && rows[parseInt(k.y) + y]) {
+            positions.push({
+                x: parseInt(k.x),
+                y: parseInt(k.y) + y,
+                pos: columns[parseInt(k.x)] + rows[parseInt(k.y) + y],
+                p: curCol === "Light" ? "R" : "r"
+            });
+            positions.push({
+                x: parseInt(k.x),
+                y: parseInt(k.y) + y,
+                pos: columns[parseInt(k.x)] + rows[parseInt(k.y) + y],
+                p: curCol === "Light" ? "Q" : "q"
+            });
+        }
+    }
+    for (let x = -7; x < 8; x++) {
+        if (columns[parseInt(k.x) + x] && rows[parseInt(k.y)]) {
+            positions.push({
+                x: parseInt(k.x) + x,
+                y: parseInt(k.y),
+                pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y)],
+                p: curCol === "Light" ? "R" : "r"
+            });
+            positions.push({
+                x: parseInt(k.x) + x,
+                y: parseInt(k.y),
+                pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y)],
+                p: curCol === "Light" ? "Q" : "q"
+            });
+        }
+    }
+    
+    // Bishop checks
+    for (let y = -7; y < 8; y++) {
+        for (let x = -7; x < 8; x++) {
+            if (Math.abs(y / x) === 1 && columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "B" : "b"
+                });
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "Q" : "q"
+                });
+            }
+        }
+    }
+    
+    // "King checks"
+    for (let y = -1; y < 2; y++) {
+        for (let x = -1; x < 2; x++) {
+            if (columns[parseInt(k.x) + x] && rows[parseInt(k.y) + y]) {
+                positions.push({
+                    x: parseInt(k.x) + x,
+                    y: parseInt(k.y) + y,
+                    pos: columns[parseInt(k.x) + x] + rows[parseInt(k.y) + y],
+                    p: curCol === "Light" ? "K" : "k"
+                });
+            }
+        }
+    }
+    
+    for (let p of positions) {
+        if (legalMoves.map(m => m.substr(m.length - 2)).includes(p.pos)) {
+            checks.push({
+                pos: p.pos,
+                piece: p.p
+            });
+        }
+    }
+    checks = checks.sort((a, b) => {
+        if (a.piece < b.piece){
+            return -1;
+        }
+        else if (a.piece > b.piece){
+            return 1;
+        }
+        return 0;
+    });
 }
 
 function posKing(arr, el) {
@@ -1544,10 +1709,10 @@ function clickTile(tile) {
 function adjustSize() {
     let size;
     if ($("body").width() >= $("body").height()) {
-        size = $("#content").height() * 8 / 10;
+        size = $("#content").height() * 0.95;
     }
     else {
-        size = $("#content").width() * 8 / 10;
+        size = $("#content").width() * 0.95;
     }
     $("#board").width(size);
     $("#board").height(size);
@@ -1556,14 +1721,4 @@ function adjustSize() {
     $("#promotionLayer, #dots, #arrowLayer, #squareLayer, #lettersNumbers").attr("height", size);
     $("#promotionLayer, #dots, #arrowLayer, #squareLayer, #lettersNumbers").css("top", $("#board").position().top);
     $("#promotionLayer, #dots, #arrowLayer, #squareLayer, #lettersNumbers").css("left", $("#board").position().left);
-
-    /* $("#dots").attr("width", size);
-    $("#dots").attr("height", size);
-    $("#dots").css("top", $("#board").position().top);
-    $("#dots").css("left", $("#board").position().left);
-    
-    $("#lettersNumbers").attr("width", size);
-    $("#lettersNumbers").attr("height", size);
-    $("#lettersNumbers").css("top", $("#board").position().top);
-    $("#lettersNumbers").css("left", $("#board").position().left); */
 }
