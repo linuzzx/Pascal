@@ -386,9 +386,11 @@ function onMouseDown(e) {
                         tarUpI = i;
                     }
                 }
-                arrowUp = targetsUp[tarUpI].id;
+                if (targetsUp[tarUpI]) {
+                    arrowUp = targetsUp[tarUpI].id;
 
-                drawArrow();
+                    drawArrow();
+                }
 
                 $(".tiles").unbind();
                 $(".tiles").on("mousedown", e => {
@@ -432,10 +434,6 @@ function drawArrow() {
             let destY = s * (parseInt(rows.indexOf(parseInt(tileTo.split("")[1]))) + 0.5);
             let srcX = s * (parseInt(columns.indexOf(tileFrom.split("")[0])) + 0.5);
             let srcY = s * (parseInt(rows.indexOf(parseInt(tileFrom.split("")[1]))) + 0.5);
-
-            let dx = destX - srcX;
-            let dy = destY - srcY;
-            let angle = Math.atan2(dy, dx);
             
             let points = [];
 
@@ -446,12 +444,72 @@ function drawArrow() {
 
             if ((Math.abs(cTo - cFrom) === 1 || Math.abs(cTo - cFrom) === 2) && (Math.abs(rTo - rFrom) === 1 || Math.abs(rTo - rFrom) === 2) && Math.abs(cTo - cFrom) !== Math.abs(rTo - rFrom)) {
                 console.log("Knight!");
+                let tempX, tempY;
+
+                if (Math.abs(cTo - cFrom) === 2) {
+                    tempX = s * (parseInt(columns.indexOf(tileTo.split("")[0])) + 0.5);
+                    tempY = s * (parseInt(rows.indexOf(parseInt(tileFrom.split("")[1]))) + 0.5);
+                }
+                else {
+                    tempX = s * (parseInt(columns.indexOf(tileFrom.split("")[0])) + 0.5);
+                    tempY = s * (parseInt(rows.indexOf(parseInt(tileTo.split("")[1]))) + 0.5);
+                }
+
+                let dtx = tempX - srcX;
+                let dty = tempY - srcY;
+                let angleT = Math.atan2(dty, dtx);
+
+                let dx = destX - tempX;
+                let dy = destY - tempY;
+                let angle = Math.atan2(dy, dx);
+
+                let a = 145 * Math.PI / 180;
+                let arrowPnt = {x: destX, y: destY};
+                let mvPoint = movePoint(destX, destY, angle + Math.PI / 2, 0.4 * s);
+                let arrowWingRight = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, a);
+                let arrowWingLeft = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, -a);
+                let arrowWingCornerRight = moveTowardsPoint(arrowWingRight.x, arrowWingRight.y, arrowWingLeft.x, arrowWingLeft.y,
+                    (getDistance(arrowWingRight.x, arrowWingRight.y, arrowWingLeft.x, arrowWingLeft.y) / 2) - widthFromCenter);
+                let arrowWingCornerLeft = moveTowardsPoint(arrowWingLeft.x, arrowWingLeft.y, arrowWingRight.x, arrowWingRight.y,
+                    (getDistance(arrowWingRight.x, arrowWingRight.y, arrowWingLeft.x, arrowWingLeft.y) / 2) - widthFromCenter);
+                let tmp, tmp2, tempRight, tempLeft;
+                if (cTo - cFrom === -1 && rTo - rFrom === -2 || cTo - cFrom === -2 && rTo - rFrom === 1 || cTo - cFrom === 1 && rTo - rFrom === 2 || cTo - cFrom === 2 && rTo - rFrom === -1) {
+                    tmp = movePoint(tempX, tempY, - angleT, widthFromCenter);
+                    tmp2 = movePoint(tempX, tempY, angleT, widthFromCenter);
+                    tempLeft = movePoint(tmp2.x, tmp2.y, getAngle(arrowWingRight.x, arrowWingRight.y, arrowWingLeft.x, arrowWingLeft.y) + Math.PI / 2, widthFromCenter);
+                }
+                else {
+                    tmp = movePoint(tempX, tempY, angleT, widthFromCenter);
+                    tmp2 = movePoint(tempX, tempY, -angleT, widthFromCenter);
+                    tempLeft = movePoint(tmp.x, tmp.y, getAngle(arrowWingRight.x, arrowWingRight.y, arrowWingLeft.x, arrowWingLeft.y) + Math.PI / 2, widthFromCenter);
+                }
+                tempRight = rotatePoint(tempLeft.x, tempLeft.y, tempX, tempY, Math.PI);
+                let arrowStrt = rotatePoint(srcX + rad, srcY, srcX, srcY, angleT);
+                let mvPointStrt = movePoint(arrowStrt.x, arrowStrt.y, angleT, widthFromCenter);
+                let arrowStrtRight = rotatePoint(mvPointStrt.x, mvPointStrt.y, arrowStrt.x, arrowStrt.y, Math.PI);
+                let arrowStrtLeft = rotatePoint(arrowStrtRight.x, arrowStrtRight.y, arrowStrt.x, arrowStrt.y, Math.PI);
+
+                points = [
+                    arrowPnt.x + "," + arrowPnt.y,
+                    arrowWingRight.x + "," + arrowWingRight.y,
+                    arrowWingCornerRight.x + "," + arrowWingCornerRight.y,
+                    tempRight.x + "," + tempRight.y,
+                    arrowStrtRight.x + "," + arrowStrtRight.y,
+                    arrowStrt.x + "," + arrowStrt.y,
+                    arrowStrtLeft.x + "," + arrowStrtLeft.y,
+                    tempLeft.x + "," + tempLeft.y,
+                    arrowWingCornerLeft.x + "," + arrowWingCornerLeft.y,
+                    arrowWingLeft.x + "," + arrowWingLeft.y,
+                    arrowPnt.x + "," + arrowPnt.y
+                ];
             }
             else {
-                let arrowPnt = [destX, destY];
-                // let arrowStrt = [movePoint(srcX, srcY, angle, rad).x, movePoint(srcX, srcY, angle, rad).y];
-                // let arrowWingRight = rotatePoint(destX + 0.8 * s / 2, destY, destX, destY, angle + 145, false);
+                let dx = destX - srcX;
+                let dy = destY - srcY;
+                let angle = Math.atan2(dy, dx);
+
                 let a = 145 * Math.PI / 180;
+                let arrowPnt = {x: destX, y: destY};
                 let mvPoint = movePoint(destX, destY, angle + Math.PI / 2, 0.4 * s);
                 let arrowWingRight = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, a);
                 let arrowWingLeft = rotatePoint(mvPoint.x, mvPoint.y, destX, destY, -a);
@@ -466,7 +524,7 @@ function drawArrow() {
                     getDistance((arrowWingRight.x + arrowWingLeft.x) / 2, (arrowWingRight.y + arrowWingLeft.y) / 2, arrowStrt.x, arrowStrt.y));
 
                 points = [
-                    arrowPnt[0] + "," + arrowPnt[1],
+                    arrowPnt.x + "," + arrowPnt.y,
                     arrowWingRight.x + "," + arrowWingRight.y,
                     arrowWingCornerRight.x + "," + arrowWingCornerRight.y,
                     arrowStrtRight.x + "," + arrowStrtRight.y,
@@ -474,44 +532,8 @@ function drawArrow() {
                     arrowStrtLeft.x + "," + arrowStrtLeft.y,
                     arrowWingCornerLeft.x + "," + arrowWingCornerLeft.y,
                     arrowWingLeft.x + "," + arrowWingLeft.y,
-                    arrowPnt[0] + "," + arrowPnt[1]
+                    arrowPnt.x + "," + arrowPnt.y
                 ];
-                ///////////////////
-                /* let circWR = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                $(circWR).attr("cx", arrowWingRight.x);
-                $(circWR).attr("cy", arrowWingRight.y);
-                $(circWR).attr("r", 3);
-                $(circWR).attr("fill", "red");
-                $("#arrowLayer").append(circWR);
-
-                let circWL = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                $(circWL).attr("cx", arrowWingLeft.x);
-                $(circWL).attr("cy", arrowWingLeft.y);
-                $(circWL).attr("r", 3);
-                $(circWL).attr("fill", "blue");
-                $("#arrowLayer").append(circWL);
-
-                let circWCR = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                $(circWCR).attr("cx", arrowStrtRight.x);
-                $(circWCR).attr("cy", arrowStrtRight.y);
-                $(circWCR).attr("r", 3);
-                $(circWCR).attr("fill", "green");
-                $("#arrowLayer").append(circWCR);
-
-                let circWCL = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                $(circWCL).attr("cx", arrowStrt.x);
-                $(circWCL).attr("cy", arrowStrt.y);
-                $(circWCL).attr("r", 3);
-                $(circWCL).attr("fill", "purple");
-                $("#arrowLayer").append(circWCL);
-
-                let circF = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-                $(circF).attr("cx", mvPoint.x);
-                $(circF).attr("cy", mvPoint.y);
-                $(circF).attr("r", 3);
-                $(circF).attr("fill", "yellow");
-                $("#arrowLayer").append(circF); */
-                ///////////////////
             }
 
             let poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
@@ -536,17 +558,20 @@ function drawSquare() {
     let tile = arrowUp;
     let id = "sq" + arrowUp;
 
-    $("#" + id).remove();
+    if ($("#" + id).length !== 0) {
+        $("#" + id).remove();
+    }
+    else {
+        let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        $(rect).attr("x", s * (parseInt(columns.indexOf(tile.split("")[0]))));
+        $(rect).attr("y", s * (parseInt(rows.indexOf(parseInt(tile.split("")[1])))));
+        $(rect).attr("width", s);
+        $(rect).attr("height", s);
+        $(rect).attr("id", id);
+        $(rect).attr("style", curBtn === null ? squareStyles[squareStyles.length - 1] : squareStyles[buttons.indexOf(curBtn)]);
 
-    let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-    $(rect).attr("x", s * (parseInt(columns.indexOf(tile.split("")[0]))));
-    $(rect).attr("y", s * (parseInt(rows.indexOf(parseInt(tile.split("")[1])))));
-    $(rect).attr("width", s);
-    $(rect).attr("height", s);
-    $(rect).attr("id", id);
-    $(rect).attr("style", curBtn === null ? squareStyles[squareStyles.length - 1] : squareStyles[buttons.indexOf(curBtn)]);
-
-    $("#squareLayer").append(rect);
+        $("#squareLayer").append(rect);
+    }
 }
 
 function rotatePoint(pointToRotateX, pointToRotateY, centerOfRotationX, centerOfRotationY, angle, radians = true) {
@@ -594,6 +619,14 @@ function getDistance(p0x, p0y, px, py) {
 
     let c = Math.sqrt(a*a + b*b);
     return c;
+}
+
+function getAngle(p0x, p0y, px, py) {
+    let dx = px - p0x;
+    let dy = py - p0y;
+    let angle = Math.atan2(dy, dx);
+
+    return angle;
 }
 
 function movePiece(piece, oldPos, newPos) {
