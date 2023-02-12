@@ -443,7 +443,6 @@ function drawArrow() {
             let rTo = parseInt(rows.indexOf(parseInt(tileTo.split("")[1])));
 
             if ((Math.abs(cTo - cFrom) === 1 || Math.abs(cTo - cFrom) === 2) && (Math.abs(rTo - rFrom) === 1 || Math.abs(rTo - rFrom) === 2) && Math.abs(cTo - cFrom) !== Math.abs(rTo - rFrom)) {
-                console.log("Knight!");
                 let tempX, tempY;
 
                 if (Math.abs(cTo - cFrom) === 2) {
@@ -650,7 +649,6 @@ function movePiece(piece, oldPos, newPos) {
                 if (checks[i].pos.substr(checks[i].pos.length - 2) === newPos && checks[i].piece === p) {
                     check = true;
                     chck = mate ? "#" : "+";
-                    console.log(checks);
                     console.log("CHECK!");
                     break loop;
                 }
@@ -1475,7 +1473,7 @@ function findChecks() {
             }
         }
     }
-    console.log(positions);
+    
     for (let p of positions) {
         if (legalMoves.map(m => m.substr(m.length - 2)).includes(p.pos)) {
             checks.push({
