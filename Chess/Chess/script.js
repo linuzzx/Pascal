@@ -13,6 +13,7 @@ let curCol = "Light";
 let curPos = null;
 let curPiece = null;
 let locked = false;
+let promReady = false;
 let dragging = false;
 let columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
 let rows = [8, 7, 6, 5, 4, 3, 2, 1];
@@ -691,7 +692,7 @@ function getAngle(p0x, p0y, px, py) {
 }
 
 function movePiece(piece, oldPos, newPos, drag = true) {
-    let style = "position: relative; width: 100%; height: 100%;";
+    let style = "position: relative; width: 100%; height: 100%; z-index: 2;";
     $(piece).attr("style", style);
     let clickEnPassant = null;
 
@@ -849,6 +850,12 @@ function movePiece(piece, oldPos, newPos, drag = true) {
             }, moveTime);
 
             setTimeout(() => {
+                if (clickEnPassant) {
+                    $(clickEnPassant).html("");
+                }
+            }, moveTime);
+
+            setTimeout(() => {
                 if (castlingRook) {
                     $("#" + castlingRookNP).html(castlingRook);
                     $("#" + castlingRookOP).html("");
@@ -856,10 +863,6 @@ function movePiece(piece, oldPos, newPos, drag = true) {
                         top: 0,
                         left: 0,
                     });
-                }
-                
-                if (clickEnPassant) {
-                    $(clickEnPassant).html("");
                 }
 
                 $("#" + newPos).html(piece);
@@ -933,20 +936,60 @@ function promote(piece, oldPos, newPos) {
             img.setAttributeNS(null, "id", "prom" + p);
             $("#promotionLayer").append(img);
             $("#prom" + p).css("pointer-events", "auto");
+            $("#prom" + p).on("mousedown", e => {
+                e.preventDefault();
+                e.stopPropagation();
+                promReady = true;
+            });
             $("#prom" + p).on("mouseup", e => {
                 e.preventDefault();
                 e.stopPropagation();
-                choosePromotion(piece, oldPos, newPos, p);
+                if (promReady) {
+                    choosePromotion(piece, oldPos, newPos, p);
+                }
             });
             y += tileSize;
         }
         else {
+            let cross = document.createElementNS('http://www.w3.org/2000/svg', "circle");
+            $(cross).attr("cx", tileSize * columns.indexOf(newPos.split("")[0]) + 0.5 * tileSize);
+            $(cross).attr("cy", y + tileSize * 0.25);
+            $(cross).attr("r", tileSize * 0.25);
+            $(cross).attr("fill", "#aaa");
+            $(cross).attr("stroke", "rgba(0, 0, 0, 0.2)");
+            $(cross).attr("style", "position: absolute; z-index: 3;");
+            $(cross).attr("id", "promCross");
+
+            $("#promotionLayer").append(cross);
+            $("#promCross").css("pointer-events", "auto");
+            $("#promCross").on("mousedown", e => {
+                e.preventDefault();
+                e.stopPropagation();
+                promReady = true;
+            });
+            $("#promCross").on("mouseup", e => {console.log("HEI");
+                e.preventDefault();
+                e.stopPropagation();
+                if (promReady) {
+                    cancelPromotion(piece, oldPos, newPos);
+                }
+            });
             y += tileSize * 0.5;
         }
     }
 }
 
+function cancelPromotion(piece, oldPos, newPos) {
+    promReady = false;
+    $("#promotionLayer").html("");
+    curPiece = null;
+    legalMoves = [];
+    drawMoves();
+    console.log("Cancelled promotion");
+}
+
 function choosePromotion(piece, oldPos, newPos, prom) {
+    promReady = false;
     $("#promotionLayer").html("");
 
     let capture = $("#" + newPos).children().length === 1 ? oldPos.split("")[0] + "x" : "";
