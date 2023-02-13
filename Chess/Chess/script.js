@@ -4,6 +4,10 @@ let tiles = [];
 let moves = {};
 let legalMoves = [];
 let checks = [];
+let checks2 = {
+    w: [],
+    b: []
+};
 let mouseDown = 0;
 let curCol = "Light";
 let curPos = null;
@@ -149,7 +153,49 @@ function flipTable() {
     flipped = !flipped;
 }
 
-// function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
+function loadFEN(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
+    
+}
+
+function exportFEN() {
+    let raw = tiles.map(t => $(t).children().length === 0 ? 1 : ($(t).children()[0].dataset.color === "Light" ? $(t).children()[0].dataset.piece : $(t).children()[0].dataset.piece.toLowerCase()));
+    let rows = [];
+    let nRows = [];
+    for (let i = 0; i < 8; i++) {
+        rows.push(raw.slice(i * 8, i * 8 + 8));
+    }
+    for (let r of rows) {
+        let nr = [];
+        let sum = 0;
+        for (let i = 0; i < r.length; i++) {
+            if (r[i] !== 1) {
+                nr.push(sum);
+                sum = 0;
+                nr.push(r[i]);
+            }
+            else {
+                sum++;
+            }
+
+            if (i === r.length - 1) {
+                nr.push(sum);
+                sum = 0;
+            }
+        }
+        nRows.push(nr.filter(c => c !== 0).join(""));
+    }
+
+    let fenPieces = nRows.join("/");
+    let fenTurn = curCol === "Light" ? "w" : "b";
+    let fenCastling = Object.keys(castling).filter(k => Object.values(castling)[Object.keys(castling).indexOf(k)] === true);
+    fenCastling = fenCastling.length === 0 ? "-" : fenCastling.join("");
+    let fenEnPassant = enPassant;
+    let fenHalfMoves = halfMoves;
+    let fenFullMoves = fullMoves;
+
+    return [fenPieces, fenTurn, fenCastling, fenEnPassant, fenHalfMoves, fenFullMoves].join(" ");
+}
+
 function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
     clearBoard();
     let style = "position: relative; width: 100%; height: 100%;";
@@ -647,6 +693,7 @@ function getAngle(p0x, p0y, px, py) {
 function movePiece(piece, oldPos, newPos, drag = true) {
     let style = "position: relative; width: 100%; height: 100%;";
     $(piece).attr("style", style);
+    let clickEnPassant = null;
 
     if (oldPos !== newPos && legalMoves.includes(newPos) && curPiece !== null) {
         $(".movedPieceTile").removeClass("movedPieceTile");
@@ -757,16 +804,26 @@ function movePiece(piece, oldPos, newPos, drag = true) {
             if (!capture && oldPos.split("")[0] !== newPos.split("")[0]) {
                 // en passant
                 if (curCol === "Light") {
-                    $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) - 1)).html("");
+                    if (drag) {
+                        $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) - 1)).html("");
+                    }
+                    else {
+                        clickEnPassant = "#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) - 1);
+                    }
                 }
                 else {
-                    $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) + 1)).html("");
+                    if (drag) {
+                        $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) + 1)).html("");
+                    }
+                    else {
+                        clickEnPassant = "#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) + 1);
+                    }
                 }
             }
         }
 
         if (!drag) {
-            let moveTime = 500 //100;
+            let moveTime = 200;
             let s = $("#board").width() / 8;
             let nX = columns.indexOf(newPos.split("")[0]) - columns.indexOf(oldPos.split("")[0]);
             let nY = rows.indexOf(parseInt(newPos.split("")[1])) - rows.indexOf(parseInt(oldPos.split("")[1]));
@@ -800,6 +857,10 @@ function movePiece(piece, oldPos, newPos, drag = true) {
                         left: 0,
                     });
                 }
+                
+                if (clickEnPassant) {
+                    $(clickEnPassant).html("");
+                }
 
                 $("#" + newPos).html(piece);
                 $("#" + oldPos).html("");
@@ -807,7 +868,7 @@ function movePiece(piece, oldPos, newPos, drag = true) {
                     top: 0,
                     left: 0,
                 });
-            }, moveTime * 1.5);
+            }, moveTime + 50);
 
         }
         else {
@@ -820,8 +881,8 @@ function movePiece(piece, oldPos, newPos, drag = true) {
         }
         
         moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos + chck);
-
-        if (capture === "x" || pieceType === "P") {
+        
+        if (piece.dataset.piece === "P" || capture === "x") {
             halfMoves = 0;
         }
         else {
