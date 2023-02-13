@@ -985,12 +985,18 @@ function cancelPromotion(piece, oldPos, newPos) {
     curPiece = null;
     legalMoves = [];
     drawMoves();
+    $("#" + oldPos).html(piece);
+    let style = "position: relative; width: 100%; height: 100%;";
+    $(piece).attr("style", style);
     console.log("Cancelled promotion");
 }
 
 function choosePromotion(piece, oldPos, newPos, prom) {
     promReady = false;
     $("#promotionLayer").html("");
+    $(".movedPieceTile").removeClass("movedPieceTile");
+    $("#" + oldPos).addClass("movedPieceTile");
+    $("#" + newPos).addClass("movedPieceTile");
 
     let capture = $("#" + newPos).children().length === 1 ? oldPos.split("")[0] + "x" : "";
 
