@@ -299,7 +299,7 @@ function onMouseDown(e) {
                 promote(curPiece, curPiece.dataset.position, newPos);
             }
             else {
-                movePiece(curPiece, curPiece.dataset.position, newPos);
+                movePiece(curPiece, curPiece.dataset.position, newPos, false);
             }
         }
         else {
@@ -644,7 +644,7 @@ function getAngle(p0x, p0y, px, py) {
     return angle;
 }
 
-function movePiece(piece, oldPos, newPos) {
+function movePiece(piece, oldPos, newPos, drag = true) {
     let style = "position: relative; width: 100%; height: 100%;";
     $(piece).attr("style", style);
 
@@ -677,41 +677,62 @@ function movePiece(piece, oldPos, newPos) {
         let castle = null;
         enPassant = "-";
         
-        $("#" + newPos).html(piece);
-        $("#" + oldPos).html("");
         piece.dataset.position = newPos;
 
+        let castlingRook = null;
+        let castlingRookOP = null;
+        let castlingRookNP = null;
         if (pieceType === "K") {
             if (curCol === "Light") {
                 if (newPos === "g1" && castling["K"]) {
                     let r = getPieceAt("h1");
-                    $("#f1").html(r);
-                    $("#h1").html("");
+                    if (drag) {
+                        $("#f1").html(r);
+                        $("#h1").html("");
+                    }
                     r.dataset.position = "f1";
                     castle = "o-o";
+                    castlingRook = r;
+                    castlingRookOP = "h1";
+                    castlingRookNP = "f1";
                 }
                 if (newPos === "c1" && castling["Q"]) {
                     let r = getPieceAt("a1");
-                    $("#d1").html(r);
-                    $("#a1").html("");
+                    if (drag) {
+                        $("#d1").html(r);
+                        $("#a1").html("");
+                    }
                     r.dataset.position = "d1";
                     castle = "o-o-o";
+                    castlingRook = r;
+                    castlingRookOP = "a1";
+                    castlingRookNP = "d1";
                 }
             }
             else {
                 if (newPos === "g8" && castling["k"]) {
                     let r = getPieceAt("h8");
-                    $("#f8").html(r);
-                    $("#h8").html("");
+                    if (drag) {
+                        $("#f8").html(r);
+                        $("#h8").html("");
+                    }
                     r.dataset.position = "f8";
                     castle = "o-o";
+                    castlingRook = r;
+                    castlingRookOP = "h8";
+                    castlingRookNP = "f8";
                 }
                 if (newPos === "c8" && castling["q"]) {
                     let r = getPieceAt("a8");
-                    $("#d8").html(r);
-                    $("#a8").html("");
+                    if (drag) {
+                        $("#d8").html(r);
+                        $("#a8").html("");
+                    }
                     r.dataset.position = "d8";
                     castle = "o-o-o";
+                    castlingRook = r;
+                    castlingRookOP = "a8";
+                    castlingRookNP = "d8";
                 }
             }
 
@@ -742,6 +763,56 @@ function movePiece(piece, oldPos, newPos) {
                     $("#" + newPos.split("")[0] + (parseInt(newPos.split("")[1]) + 1)).html("");
                 }
             }
+        }
+
+        if (!drag) {
+            let moveTime = 500 //100;
+            let s = $("#board").width() / 8;
+            let nX = columns.indexOf(newPos.split("")[0]) - columns.indexOf(oldPos.split("")[0]);
+            let nY = rows.indexOf(parseInt(newPos.split("")[1])) - rows.indexOf(parseInt(oldPos.split("")[1]));
+            let eqX = nX >= 0 ? "+=" : "-=";
+            let eqY = nY >= 0 ? "+=" : "-=";
+            
+            if (castlingRook) {
+                $(castlingRook).attr("style", style);
+                let nrX = columns.indexOf(castlingRookNP.split("")[0]) - columns.indexOf(castlingRookOP.split("")[0]);
+                let nrY = rows.indexOf(parseInt(castlingRookNP.split("")[1])) - rows.indexOf(parseInt(castlingRookOP.split("")[1]));
+                let eqrX = nrX >= 0 ? "+=" : "-=";
+                let eqrY = nrY >= 0 ? "+=" : "-=";
+
+                $(castlingRook).animate({ 
+                    top: eqrY + (s * Math.abs(nrY)),
+                    left: eqrX + (s * Math.abs(nrX)),
+                }, moveTime);
+            }
+            
+            $(piece).animate({ 
+                top: eqY + (s * Math.abs(nY)),
+                left: eqX + (s * Math.abs(nX)),
+            }, moveTime);
+
+            setTimeout(() => {
+                if (castlingRook) {
+                    $("#" + castlingRookNP).html(castlingRook);
+                    $("#" + castlingRookOP).html("");
+                    $(castlingRook).css({ 
+                        top: 0,
+                        left: 0,
+                    });
+                }
+
+                $("#" + newPos).html(piece);
+                $("#" + oldPos).html("");
+                $(piece).css({ 
+                    top: 0,
+                    left: 0,
+                });
+            }, moveTime * 1.5);
+
+        }
+        else {
+            $("#" + newPos).html(piece);
+            $("#" + oldPos).html("");
         }
 
         if (curCol === "Light") {
