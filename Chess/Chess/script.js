@@ -785,7 +785,7 @@ function movePiece(piece, oldPos, newPos, drag = true) {
                     left: eqrX + (s * Math.abs(nrX)),
                 }, moveTime);
             }
-            
+
             $(piece).animate({ 
                 top: eqY + (s * Math.abs(nY)),
                 left: eqX + (s * Math.abs(nX)),
@@ -820,6 +820,17 @@ function movePiece(piece, oldPos, newPos, drag = true) {
         }
         
         moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos + chck);
+
+        if (capture === "x" || pieceType === "P") {
+            halfMoves = 0;
+        }
+        else {
+            halfMoves++;
+        }
+
+        if (curCol === "Dark") {
+            fullMoves++;
+        }
 
         curPiece = null;
         curCol = curCol === "Light" ? "Dark" : "Light";
