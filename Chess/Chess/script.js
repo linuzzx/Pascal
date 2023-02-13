@@ -921,11 +921,21 @@ function promote(piece, oldPos, newPos) {
     $(rect).attr("id", "promotion");
 
     $("#promotionLayer").append(rect);
-
+    $("#promotionLayer").css("pointer-events", "auto");
 
     let y = piece.dataset.color === "Light" ? 0 : tileSize * 3.5;
     for (let p of promPieces) {
         if (p !== "X") {
+            let imgBG = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+            $(imgBG).attr("x", tileSize * columns.indexOf(newPos.split("")[0]));
+            $(imgBG).attr("y", y);
+            $(imgBG).attr("width", tileSize);
+            $(imgBG).attr("height", tileSize);
+            $(imgBG).attr("fill", "#fff");
+            $(imgBG).attr("style", "position: absolute; z-index: 3;");
+            $(imgBG).attr("id", "promCross");
+
+            $("#promotionLayer").append(imgBG);
             let img = document.createElementNS('http://www.w3.org/2000/svg','image');
             img.setAttributeNS(null, "width", tileSize);
             img.setAttributeNS(null, "height", tileSize);
@@ -936,6 +946,7 @@ function promote(piece, oldPos, newPos) {
             img.setAttributeNS(null, "id", "prom" + p);
             $("#promotionLayer").append(img);
             $("#prom" + p).css("pointer-events", "auto");
+            $("#prom" + p).unbind();
             $("#prom" + p).on("mousedown", e => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -951,23 +962,25 @@ function promote(piece, oldPos, newPos) {
             y += tileSize;
         }
         else {
-            let cross = document.createElementNS('http://www.w3.org/2000/svg', "circle");
-            $(cross).attr("cx", tileSize * columns.indexOf(newPos.split("")[0]) + 0.5 * tileSize);
-            $(cross).attr("cy", y + tileSize * 0.25);
-            $(cross).attr("r", tileSize * 0.25);
-            $(cross).attr("fill", "#aaa");
-            $(cross).attr("stroke", "rgba(0, 0, 0, 0.2)");
-            $(cross).attr("style", "position: absolute; z-index: 3;");
-            $(cross).attr("id", "promCross");
+            let crossBG = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+            $(crossBG).attr("x", tileSize * columns.indexOf(newPos.split("")[0]));
+            $(crossBG).attr("y", y);
+            $(crossBG).attr("width", tileSize);
+            $(crossBG).attr("height", tileSize * 0.5);
+            $(crossBG).attr("fill", "#f1f1f1");
+            $(crossBG).attr("style", "position: absolute; z-index: 3;");
+            $(crossBG).attr("id", "promCross");
 
-            $("#promotionLayer").append(cross);
+            $("#promotionLayer").append(crossBG);
             $("#promCross").css("pointer-events", "auto");
-            $("#promCross").on("mousedown", e => {
+            $("#promCross").css("width", tileSize);
+            $("#promCross").css("height", tileSize * 0.5);
+            $("#promotionLayer").on("mousedown", e => {
                 e.preventDefault();
                 e.stopPropagation();
                 promReady = true;
             });
-            $("#promCross").on("mouseup", e => {console.log("HEI");
+            $("#promotionLayer").on("mouseup", e => {
                 e.preventDefault();
                 e.stopPropagation();
                 if (promReady) {
@@ -982,18 +995,21 @@ function promote(piece, oldPos, newPos) {
 function cancelPromotion(piece, oldPos, newPos) {
     promReady = false;
     $("#promotionLayer").html("");
+    $("#promotionLayer").unbind();
+    $("#promotionLayer").css("pointer-events", "none");
     curPiece = null;
     legalMoves = [];
     drawMoves();
     $("#" + oldPos).html(piece);
     let style = "position: relative; width: 100%; height: 100%;";
     $(piece).attr("style", style);
-    console.log("Cancelled promotion");
 }
 
 function choosePromotion(piece, oldPos, newPos, prom) {
     promReady = false;
     $("#promotionLayer").html("");
+    $("#promotionLayer").unbind();
+    $("#promotionLayer").css("pointer-events", "none");
     $(".movedPieceTile").removeClass("movedPieceTile");
     $("#" + oldPos).addClass("movedPieceTile");
     $("#" + newPos).addClass("movedPieceTile");
