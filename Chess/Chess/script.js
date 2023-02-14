@@ -88,9 +88,11 @@ function init() {
 
 function loadSFX() {
     for (let s of Object.keys(sfx)) {
-        sfx[s] = new Audio("../sfx/" + s + ".mp3");
+        let audio = new Audio();
+        audio.src = "../sfx/" + s + ".mp3";
+        audio.preload = "auto";
+        sfx[s] = audio;
     }
-    sfx.start.play();
 }
 
 function createSquares() {
@@ -1081,8 +1083,13 @@ function choosePromotion(piece, oldPos, newPos, prom) {
     if (curCol === "Light") {
         moves[(Object.keys(moves).length + 1) + "."] = [];
     }
-    
-    moves[(Object.keys(moves).length) + "."].push(capture + newPos + "=" + prom.split("")[0]);
+    let mate = false;
+    let check = false;
+
+    moves[(Object.keys(moves).length) + "."].push(capture + newPos + "=" + prom.split("")[0] + (mate ? "#" : check ? "+" : ""));
+
+    let sound = mate ? sfx.checkmate : check ? sfx.check : capture.includes("x") ? sfx.capture : sfx.move;
+    sound.play();
 
     curPiece = null;
     curCol = curCol === "Light" ? "Dark" : "Light";
