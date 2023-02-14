@@ -3,6 +3,7 @@ let prevMove = "";
 let tiles = [];
 let moves = {};
 let legalMoves = [];
+let allLegalMoves = [];
 let checks = [];
 let checks2 = {
     w: [],
@@ -754,6 +755,7 @@ function movePiece(piece, oldPos, newPos, drag = true) {
                 if (checks[i].pos.substr(checks[i].pos.length - 2) === newPos && checks[i].piece === p) {
                     check = true;
                     chck = mate ? "#" : "+";
+                    console.log("Check!");
                     break loop;
                 }
             }
@@ -950,12 +952,31 @@ function movePiece(piece, oldPos, newPos, drag = true) {
             fenPositions[fenPos] = 1;
         }
 
+        /* if (legalMoves.length === 0) {
+            gameDraw("Stalemate");
+        } */
         if (halfMoves === 100) {
             gameDraw("50-Move Rule");
         }
         if (fenPositions[fenPos] === 3) {
             gameDraw("Threefold Repetition");
         }
+        let boardPiecesRaw = tiles.filter(t => $(t).children().length > 0).map(t => ($(t).children()[0].dataset.color === "Light" ? $(t).children()[0].dataset.piece : $(t).children()[0].dataset.piece.toLowerCase()) + ($(t).children()[0].dataset.piece.toLowerCase() === "b" ? (getTileColor(t.id) === "Light" ? "w" : "b") : "")).sort((a, b) => a.localeCompare(b));
+        let boardPieces = boardPiecesRaw.map(p => p.split("")[0]);
+
+        if (
+            boardPieces.length === 2 ||
+            (boardPieces.length === 3 && (boardPieces.join("") === ["b", "k", "K"].join("") || boardPieces.join("") === ["B", "k", "K"].join("") || boardPieces.join("") === ["k", "K", "n"].join("") || boardPieces.join("") === ["k", "K", "N"].join(""))) ||
+            boardPieces.length === 4 && (boardPiecesRaw.join("") === ["bb", "Bb", "k", "K"].join("") || boardPiecesRaw.join("") === ["bw", "Bw", "k", "K"].join(""))
+        ) {
+            gameDraw("Dead Position");
+        }
+        /* 
+        King vs. king
+        King and bishop vs. king
+        King and knight vs. king
+        King and bishop vs. king and bishop of the same color as the opponent's bishop
+        */
     }
     else if (oldPos === newPos && piece) {
         piece.dataset.position = newPos;
@@ -964,6 +985,12 @@ function movePiece(piece, oldPos, newPos, drag = true) {
         }
     }
     jadoubeLock = true;
+}
+
+function getTileColor(tile) {
+    let t = tile.includes("#") ? tile : "#" + tile;
+    
+    return $(t)[0].dataset.color;
 }
 
 function promote(piece, oldPos, newPos) {
@@ -1104,6 +1131,17 @@ function choosePromotion(piece, oldPos, newPos, prom) {
     }
     let mate = false;
     let check = false;
+    if (checks.length > 0 && checks.map(c => c.pos.substr(c.pos.length - 2)).includes(newPos)) {
+        let p = curCol === "Light" ? piece.dataset.piece : piece.dataset.piece.toLowerCase();
+        loop : for (let i = 0; i < checks.length; i++) {
+            if (checks[i].pos.substr(checks[i].pos.length - 2) === newPos && checks[i].piece === p) {
+                check = true;
+                chck = mate ? "#" : "+";
+                console.log("Check!");
+                break loop;
+            }
+        }
+    }
 
     moves[(Object.keys(moves).length) + "."].push(capture + newPos + "=" + prom.split("")[0] + (mate ? "#" : check ? "+" : ""));
 
@@ -1660,6 +1698,553 @@ function getLegalMoves() {
     drawMoves();
 }
 
+function getAllLegalMoves() {
+    // Also check checks, mates and discovered checks
+    allLegalMoves = [];
+    let boardPieces = tiles.filter(t => $(t).children().length > 0).map(t => ($(t).children()[0]));
+console.log(boardPieces);
+    for (let currentPiece of boardPieces) {
+        let pos = currentPiece.dataset.position.split("");
+        let u = true;
+        let d = true;
+        let r = true;
+        let l = true;
+        let ur = true;
+        let ul = true;
+        let dr = true;
+        let dl = true;
+        switch (currentPiece.dataset.piece) {
+            case "P":
+                if (currentPiece.dataset.color === "Light") {
+                    if (!getPieceAt(pos[0] + (parseInt(pos[1]) + 1))) {
+                        allLegalMoves.push(pos[0] + (parseInt(pos[1]) + 1));
+                        if (pos[1] === "2" && !getPieceAt(pos[0] + (parseInt(pos[1]) + 2))) {
+                            allLegalMoves.push(pos[0] + (parseInt(pos[1]) + 2));
+                        }
+                    }
+                    if (columns[columns.indexOf(pos[0]) - 1]) {
+                        let po = columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 1);
+                        let p = getPieceAt(po);
+                        if (p && p.dataset.color === "Dark") {
+                            allLegalMoves.push("x" + po);
+                        }
+                    }
+                    if (columns[columns.indexOf(pos[0]) + 1]) {
+                        let po = columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 1);
+                        let p = getPieceAt(po);
+                        if (p && p.dataset.color === "Dark") {
+                            allLegalMoves.push("x" + po);
+                        }
+                    }
+                    if (enPassant !== "-") {
+                        let po1 = columns[columns.indexOf(enPassant.split("")[0]) - 1] + (parseInt(enPassant.split("")[1]) - 1);
+                        let po2 = columns[columns.indexOf(enPassant.split("")[0]) + 1] + (parseInt(enPassant.split("")[1]) - 1);
+                        if (pos.join("") === po1 || pos.join("") === po2) {
+                            allLegalMoves.push("x" + enPassant);
+                        }
+                    }
+                }
+                else if (currentPiece.dataset.color === "Dark") {
+                    if (!getPieceAt(pos[0] + (parseInt(pos[1]) - 1))) {
+                        allLegalMoves.push(pos[0] + (parseInt(pos[1]) - 1));
+                        if (pos[1] === "7" && !getPieceAt(pos[0] + (parseInt(pos[1]) - 2))) {
+                            allLegalMoves.push(pos[0] + (parseInt(pos[1]) - 2));
+                        }
+                    }
+                    if (columns[columns.indexOf(pos[0]) - 1]) {
+                        let po = columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 1);
+                        let p = getPieceAt(po);
+                        if (p && p.dataset.color === "Light") {
+                            allLegalMoves.push("x" + po);
+                        }
+                    }
+                    if (columns[columns.indexOf(pos[0]) + 1]) {
+                        let po = columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 1);
+                        let p = getPieceAt(po);
+                        if (p && p.dataset.color === "Light") {
+                            allLegalMoves.push("x" + po);
+                        }
+                    }
+                    if (enPassant !== "-") {
+                        let po1 = columns[columns.indexOf(enPassant.split("")[0]) - 1] + (parseInt(enPassant.split("")[1]) + 1);
+                        let po2 = columns[columns.indexOf(enPassant.split("")[0]) + 1] + (parseInt(enPassant.split("")[1]) + 1);
+                        if (pos.join("") === po1 || pos.join("") === po2) {
+                            allLegalMoves.push("x" + enPassant);
+                        }
+                    }
+                }
+
+                break;
+            case "K":console.log(checks);
+                for (let i = 1; i < 2; i++) {
+                    if (u && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(pos[0] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(pos[0] + (parseInt(pos[1]) + i));
+                        }
+                        else if (getPieceAt(pos[0] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + pos[0] + (parseInt(pos[1]) + i));
+                            u = false;
+                        }
+                        else {
+                            u = false;
+                        }
+                    }
+                    else {
+                        u = false;
+                    }
+                    if (d && parseInt(pos[1]) - i >= 1) {
+                        if (!getPieceAt(pos[0] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(pos[0] + (parseInt(pos[1]) - i));
+                        }
+                        else if (getPieceAt(pos[0] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + pos[0] + (parseInt(pos[1]) - i));
+                            d = false;
+                        }
+                        else {
+                            d = false;
+                        }
+                    }
+                    else {
+                        d = false;
+                    }
+                    if (r && columns.indexOf(pos[0]) + i < 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1])) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1]).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                            r = false;
+                        }
+                        else {
+                            r = false;
+                        }
+                    }
+                    else {
+                        r = false;
+                    }
+                    if (l && columns.indexOf(pos[0]) - i > 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1])) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1]).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                            l = false;
+                        }
+                        else {
+                            l = false;
+                        }
+                    }
+                    else {
+                        l = false;
+                    }
+                }
+                for (let i = 1; i < 2; i++) {
+                    if (ur && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i));
+                            ur = false;
+                        }
+                        else {
+                            ur = false;
+                        }
+                    }
+                    else {
+                        ur = false;
+                    }
+                    if (ul && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i));
+                            ul = false;
+                        }
+                        else {
+                            ul = false;
+                        }
+                    }
+                    else {
+                        ul = false;
+                    }
+                    if (dr && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) - i > 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i));
+                            dr = false;
+                        }
+                        else {
+                            dr = false;
+                        }
+                    }
+                    else {
+                        dr = false;
+                    }
+                    if (dl && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) - i > 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i));
+                            dl = false;
+                        }
+                        else {
+                            dl = false;
+                        }
+                    }
+                    else {
+                        dl = false;
+                    }
+                }
+                if (currentPiece.dataset.color === "Light") {
+                    if (castling["K"] && !getPieceAt("f1") && !getPieceAt("g1")) {
+                        allLegalMoves.push("g1");
+                    }
+                    if (castling["Q"] && !getPieceAt("b1") && !getPieceAt("c1") && !getPieceAt("d1")) {
+                        allLegalMoves.push("c1");
+                    }
+                }
+                else {
+                    if (castling["k"] && !getPieceAt("f8") && !getPieceAt("g8")) {
+                        allLegalMoves.push("g8");
+                    }
+                    if (castling["q"] && !getPieceAt("b8") && !getPieceAt("c8") && !getPieceAt("d8")) {
+                        allLegalMoves.push("c8");
+                    }
+                }
+                break;
+            case "Q":
+                for (let i = 1; i < 8; i++) {
+                    if (u && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(pos[0] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(pos[0] + (parseInt(pos[1]) + i));
+                        }
+                        else if (getPieceAt(pos[0] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + pos[0] + (parseInt(pos[1]) + i));
+                            u = false;
+                        }
+                        else {
+                            u = false;
+                        }
+                    }
+                    else {
+                        u = false;
+                    }
+                    if (d && parseInt(pos[1]) - i >= 1) {
+                        if (!getPieceAt(pos[0] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(pos[0] + (parseInt(pos[1]) - i));
+                        }
+                        else if (getPieceAt(pos[0] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + pos[0] + (parseInt(pos[1]) - i));
+                            d = false;
+                        }
+                        else {
+                            d = false;
+                        }
+                    }
+                    else {
+                        d = false;
+                    }
+                    if (r && columns.indexOf(pos[0]) + i < 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1])) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1]).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                            r = false;
+                        }
+                        else {
+                            r = false;
+                        }
+                    }
+                    else {
+                        r = false;
+                    }
+                    if (l && columns.indexOf(pos[0]) - i >= 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1])) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1]).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                            l = false;
+                        }
+                        else {
+                            l = false;
+                        }
+                    }
+                    else {
+                        l = false;
+                    }
+                }
+                for (let i = 1; i < 8; i++) {
+                    if (ur && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i));
+                            ur = false;
+                        }
+                        else {
+                            ur = false;
+                        }
+                    }
+                    else {
+                        ur = false;
+                    }
+                    if (ul && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i));
+                            ul = false;
+                        }
+                        else {
+                            ul = false;
+                        }
+                    }
+                    else {
+                        ul = false;
+                    }
+                    if (dr && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) - i > 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i));
+                            dr = false;
+                        }
+                        else {
+                            dr = false;
+                        }
+                    }
+                    else {
+                        dr = false;
+                    }
+                    if (dl && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) - i > 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i));
+                            dl = false;
+                        }
+                        else {
+                            dl = false;
+                        }
+                    }
+                    else {
+                        dl = false;
+                    }
+                }
+                break;
+            case "B":
+                for (let i = 1; i < 8; i++) {
+                    if (ur && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) + i));
+                            ur = false;
+                        }
+                        else {
+                            ur = false;
+                        }
+                    }
+                    else {
+                        ur = false;
+                    }
+                    if (ul && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) + i));
+                            ul = false;
+                        }
+                        else {
+                            ul = false;
+                        }
+                    }
+                    else {
+                        ul = false;
+                    }
+                    if (dr && columns.indexOf(pos[0]) + i < 8 && parseInt(pos[1]) - i > 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + (parseInt(pos[1]) - i));
+                            dr = false;
+                        }
+                        else {
+                            dr = false;
+                        }
+                    }
+                    else {
+                        dr = false;
+                    }
+                    if (dl && columns.indexOf(pos[0]) - i >= 0 && parseInt(pos[1]) - i > 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).toString();
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + (parseInt(pos[1]) - i));
+                            dl = false;
+                        }
+                        else {
+                            dl = false;
+                        }
+                    }
+                    else {
+                        dl = false;
+                    }
+                }
+                break;
+            case "N":
+                if (columns.indexOf(pos[0]) + 1 < 8 && parseInt(pos[1]) + 2 <= 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 2))) {
+                        allLegalMoves.push(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 2));
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 2)).dataset.color !== currentPiece.dataset.color) {
+                        allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) + 2));
+                    }
+                }
+                if (columns.indexOf(pos[0]) + 2 < 8 && parseInt(pos[1]) + 1 <= 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) + 1))) {
+                        allLegalMoves.push(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) + 1));
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) + 1)).dataset.color !== currentPiece.dataset.color) {
+                        allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) + 1));
+                    }
+                }
+                if (columns.indexOf(pos[0]) + 1 < 8 && parseInt(pos[1]) - 2 > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 2))) {
+                        allLegalMoves.push(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 2));
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 2)).dataset.color !== currentPiece.dataset.color) {
+                        allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + 1] + (parseInt(pos[1]) - 2));
+                    }
+                }
+                if (columns.indexOf(pos[0]) + 2 < 8 && parseInt(pos[1]) - 1 > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) - 1))) {
+                        allLegalMoves.push(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) - 1));
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) - 1)).dataset.color !== currentPiece.dataset.color) {
+                        allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + 2] + (parseInt(pos[1]) - 1));
+                    }
+                }
+                if (columns.indexOf(pos[0]) - 1 >= 0 && parseInt(pos[1]) + 2 <= 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 2))) {
+                        allLegalMoves.push(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 2));
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 2)).dataset.color !== currentPiece.dataset.color) {
+                        allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) + 2));
+                    }
+                }
+                if (columns.indexOf(pos[0]) - 2 >= 0 && parseInt(pos[1]) + 1 <= 8) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) + 1))) {
+                        allLegalMoves.push(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) + 1));
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) + 1)).dataset.color !== currentPiece.dataset.color) {
+                        allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) + 1));
+                    }
+                }
+                if (columns.indexOf(pos[0]) - 1 >= 0 && parseInt(pos[1]) - 2 > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 2))) {
+                        allLegalMoves.push(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 2));
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 2)).dataset.color !== currentPiece.dataset.color) {
+                        allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - 1] + (parseInt(pos[1]) - 2));
+                    }
+                }
+                if (columns.indexOf(pos[0]) - 2 >= 0 && parseInt(pos[1]) - 1 > 0) {
+                    if (!getPieceAt(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) - 1))) {
+                        allLegalMoves.push(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) - 1));
+                    }
+                    else if (getPieceAt(columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) - 1)).dataset.color !== currentPiece.dataset.color) {
+                        allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - 2] + (parseInt(pos[1]) - 1));
+                    }
+                }
+                break;
+            case "R":
+                for (let i = 1; i < 8; i++) {
+                    if (u && parseInt(pos[1]) + i <= 8) {
+                        if (!getPieceAt(pos[0] + (parseInt(pos[1]) + i))) {
+                            allLegalMoves.push(pos[0] + (parseInt(pos[1]) + i));
+                        }
+                        else if (getPieceAt(pos[0] + (parseInt(pos[1]) + i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + pos[0] + (parseInt(pos[1]) + i));
+                            u = false;
+                        }
+                        else {
+                            u = false;
+                        }
+                    }
+                    else {
+                        u = false;
+                    }
+                    if (d && parseInt(pos[1]) - i >= 1) {
+                        if (!getPieceAt(pos[0] + (parseInt(pos[1]) - i))) {
+                            allLegalMoves.push(pos[0] + (parseInt(pos[1]) - i));
+                        }
+                        else if (getPieceAt(pos[0] + (parseInt(pos[1]) - i)).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + pos[0] + (parseInt(pos[1]) - i));
+                            d = false;
+                        }
+                        else {
+                            d = false;
+                        }
+                    }
+                    else {
+                        d = false;
+                    }
+                    if (r && columns.indexOf(pos[0]) + i < 8) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1])) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) + i] + pos[1]).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) + i] + pos[1]);
+                            r = false;
+                        }
+                        else {
+                            r = false;
+                        }
+                    }
+                    else {
+                        r = false;
+                    }
+                    if (l && columns.indexOf(pos[0]) - i >= 0) {
+                        if (!getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1])) {
+                            allLegalMoves.push(columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                        }
+                        else if (getPieceAt(columns[columns.indexOf(pos[0]) - i] + pos[1]).dataset.color !== currentPiece.dataset.color) {
+                            allLegalMoves.push("x" + columns[columns.indexOf(pos[0]) - i] + pos[1]);
+                            l = false;
+                        }
+                        else {
+                            l = false;
+                        }
+                    }
+                    else {
+                        l = false;
+                    }
+                }
+                break;
+        }
+
+        // Check for checks before moving
+        findChecks();
+    }
+    console.log(allLegalMoves);
+}
+
 function findChecks() {
     checks = [];
     let pBoard = [];
@@ -1797,7 +2382,7 @@ function findChecks() {
     });
 }
 
-function findChecks2(fen) {
+function findChecks2(pos) {
     checks2 = {
         w: [],
         b: []
