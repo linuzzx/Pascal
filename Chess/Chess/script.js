@@ -962,19 +962,32 @@ function promote(piece, oldPos, newPos) {
             y += tileSize;
         }
         else {
-            let crossBG = document.createElementNS('http://www.w3.org/2000/svg', "rect");
-            $(crossBG).attr("x", tileSize * columns.indexOf(newPos.split("")[0]));
-            $(crossBG).attr("y", y);
-            $(crossBG).attr("width", tileSize);
-            $(crossBG).attr("height", tileSize * 0.5);
-            $(crossBG).attr("fill", "#f1f1f1");
-            $(crossBG).attr("style", "position: absolute; z-index: 3;");
-            $(crossBG).attr("id", "promCross");
+            let crossW = tileSize * 0.2;
+            let crossH = crossW * 0.2;
+            let cross1 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+            $(cross1).attr("x", tileSize * columns.indexOf(newPos.split("")[0]) + tileSize * 0.5 - crossW * 0.5);
+            $(cross1).attr("y", y + tileSize * 0.25 - crossH * 0.5);
+            $(cross1).attr("rx", crossH / 4);
+            $(cross1).attr("ry", crossH / 4);
+            $(cross1).attr("width", crossW);
+            $(cross1).attr("height", crossH);
+            $(cross1).attr("fill", "#8B8987");
+            $(cross1).attr("style", "position: absolute; z-index: 3; transform-box: fill-box; transform-origin: center; transform: rotate(45deg);");
 
-            $("#promotionLayer").append(crossBG);
-            $("#promCross").css("pointer-events", "auto");
-            $("#promCross").css("width", tileSize);
-            $("#promCross").css("height", tileSize * 0.5);
+            $("#promotionLayer").append(cross1);
+
+            let cross2 = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+            $(cross2).attr("x", tileSize * columns.indexOf(newPos.split("")[0]) + tileSize * 0.5 - crossW * 0.5);
+            $(cross2).attr("y", y + tileSize * 0.25 - crossH * 0.5);
+            $(cross2).attr("width", crossW);
+            $(cross2).attr("height", crossH);
+            $(cross2).attr("rx", crossH / 4);
+            $(cross2).attr("ry", crossH / 4);
+            $(cross2).attr("fill", "#8B8987");
+            $(cross2).attr("style", "position: absolute; z-index: 3; transform-box: fill-box; transform-origin: center; transform: rotate(-45deg);");
+
+            $("#promotionLayer").append(cross2);
+
             $("#promotionLayer").on("mousedown", e => {
                 e.preventDefault();
                 e.stopPropagation();
