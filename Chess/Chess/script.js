@@ -14,6 +14,7 @@ let curPos = null;
 let curPiece = null;
 let locked = false;
 let promReady = false;
+let jadoubeLock = true;
 let dragging = false;
 let columns = ["a", "b", "c", "d", "e", "f", "g", "h"];
 let rows = [8, 7, 6, 5, 4, 3, 2, 1];
@@ -34,6 +35,18 @@ let curBtn = null;
 
 let arrowDown = null;
 let arrowUp = null;
+
+let sfx = {
+    start: null,
+    move: null,
+    capture: null,
+    castling: null,
+    check: null,
+    gameOver: null,
+    stalemate: null,
+    checkmate: null,
+    jadoube: null
+};
 
 const circLight ="#D8C3A3";
 const circDark ="#A37A59";
@@ -57,6 +70,7 @@ $(window).resize(() => {
 });
 
 function init() {
+    loadSFX();
     adjustSize();
     createSquares();
     createLetters();
@@ -70,6 +84,13 @@ function init() {
     $(document).on("mouseup", () => {
         mouseDown = 0;
     });
+}
+
+function loadSFX() {
+    for (let s of Object.keys(sfx)) {
+        sfx[s] = new Audio("../sfx/" + s + ".mp3");
+    }
+    sfx.start.play();
 }
 
 function createSquares() {
@@ -310,6 +331,7 @@ function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -
                 }
             }
             let tarTile = targets[tarI];
+            preTileHover = tarTile;
             $(tarTile).addClass("dragging");
             $(".dragging").css("cursor", "grabbing");
         }
@@ -323,6 +345,7 @@ function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -
 
 function onMouseDown(e) {
     locked = false;
+    jadoubeLock = true;
 
     $(".selectedPieceTile").removeClass("selectedPieceTile");
 
@@ -361,6 +384,18 @@ function onMouseDown(e) {
                 getLegalMoves();
         
                 $(curPiece).on("mousemove", e => {
+                    let targets = document.elementsFromPoint(e.clientX, e.clientY);
+                    let tarI = -1;
+                    for (let i = 0; i < targets.length; i++) {
+                        if (targets[i].className.includes("tiles")) {
+                            tarI = i;
+                        }
+                    }
+                    let tarTile = targets[tarI].id;
+                    
+                    if (curPiece && tarTile !== curPiece.dataset.position) {
+                        jadoubeLock = false;
+                    }
                     $("img").css("z-index", "1");
                     $(curPiece).css("z-index", "2");
         
@@ -713,7 +748,6 @@ function movePiece(piece, oldPos, newPos, drag = true) {
                 if (checks[i].pos.substr(checks[i].pos.length - 2) === newPos && checks[i].piece === p) {
                     check = true;
                     chck = mate ? "#" : "+";
-                    console.log("CHECK!");
                     break loop;
                 }
             }
@@ -885,6 +919,9 @@ function movePiece(piece, oldPos, newPos, drag = true) {
         
         moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos + chck);
         
+        let sound = mate ? sfx.checkmate : check ? sfx.check : capture ? sfx.capture: castle !== null ? sfx.castling : sfx.move;
+        sound.play();
+
         if (piece.dataset.piece === "P" || capture === "x") {
             halfMoves = 0;
         }
@@ -901,7 +938,11 @@ function movePiece(piece, oldPos, newPos, drag = true) {
     }
     else if (oldPos === newPos && piece) {
         piece.dataset.position = newPos;
+        if (!jadoubeLock) {
+            sfx.jadoube.play();
+        }
     }
+    jadoubeLock = true;
 }
 
 function promote(piece, oldPos, newPos) {
