@@ -36,6 +36,10 @@ let curBtn = null;
 let arrowDown = null;
 let arrowUp = null;
 
+let fenPositions = {
+    "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -" : 1
+};
+
 let sfx = {
     start: null,
     move: null,
@@ -937,6 +941,21 @@ function movePiece(piece, oldPos, newPos, drag = true) {
 
         curPiece = null;
         curCol = curCol === "Light" ? "Dark" : "Light";
+
+        let fenPos = exportFEN().split(" ").slice(0, 4).join(" ");
+        if (fenPositions[fenPos]) {
+            fenPositions[fenPos]++;
+        }
+        else {
+            fenPositions[fenPos] = 1;
+        }
+
+        if (halfMoves === 100) {
+            gameDraw("50-Move Rule");
+        }
+        if (fenPositions[fenPos] === 3) {
+            gameDraw("Threefold Repetition");
+        }
     }
     else if (oldPos === newPos && piece) {
         piece.dataset.position = newPos;
@@ -1171,7 +1190,7 @@ function getLegalMoves() {
             }
 
             break;
-        case "K":
+        case "K":console.log(checks);
             for (let i = 1; i < 2; i++) {
                 if (u && parseInt(pos[1]) + i <= 8) {
                     if (!getPieceAt(pos[0] + (parseInt(pos[1]) + i))) {
@@ -1964,6 +1983,11 @@ function drawMoves() {
         legalMoves[i] = m.replace("x", "");
         i++;
     }
+}
+
+function gameDraw(reason) {
+    sfx.gameOver.play();
+    alert("Draw: " + reason);
 }
 
 function getPieceAt(tile) {
