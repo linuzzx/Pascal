@@ -37,6 +37,8 @@ let curBtn = null;
 let arrowDown = null;
 let arrowUp = null;
 
+let lastTouch = null;
+
 let fenPositions = {
     "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -" : 1
 };
@@ -348,6 +350,33 @@ function placePieces(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -
         $(".dragging").removeClass("dragging");
         $(".tiles").css("cursor", "");
     });
+    /////////////////////////////////////////7
+    $(".tiles").on("touchstart", e => {
+        onTouchStart(e);
+    });
+    $(document).on("toucmove", e => {
+        if (dragging) {
+            $(".dragging").removeClass("dragging");
+            let touch = e.targetTouches[0];
+            let targets = document.elementsFromPoint(touch.pageX, touch.pageY);
+            lastTouch = {x: touch.pageX, y: touch.pageY};
+            let tarI = -1;
+            for (let i = 0; i < targets.length; i++) {
+                if (targets[i].className.includes("tiles")) {
+                    tarI = i;
+                }
+            }
+            let tarTile = targets[tarI];
+            preTileHover = tarTile;
+            $(tarTile).addClass("dragging");
+            $(".dragging").css("cursor", "grabbing");
+        }
+    });
+    $(document).on("touchend", e => {
+        dragging = false;
+        $(".dragging").removeClass("dragging");
+        $(".tiles").css("cursor", "");
+    });
 }
 
 function onMouseDown(e) {
@@ -448,6 +477,9 @@ function onMouseDown(e) {
                         $(".tiles").on("mousedown", e => {
                             onMouseDown(e);
                         });
+                        $(".tiles").on("touchstart", e => {
+                            onTouchStart(e);
+                        });
                     }
                 });
             }
@@ -507,6 +539,121 @@ function onMouseDown(e) {
         curPiece = null;
         legalMoves = [];
         drawMoves();
+    }
+}
+
+function onTouchStart(e) {
+    locked = false;
+    jadoubeLock = true;
+
+    $(".selectedPieceTile").removeClass("selectedPieceTile");
+
+    // Left
+
+    $("#squareLayer, #arrowLayer").html("");
+
+    let touchDown = e.targetTouches[0];
+    let targetsDown = document.elementsFromPoint(touchDown.pageX, touchDown.pageY);
+    lastTouch = {x: touchDown.pageX, y: touchDown.pageY};
+    let tarDownI = -1;
+    for (let i = 0; i < targetsDown.length; i++) {
+        if (targetsDown[i].className.includes("tiles")) {
+            tarDownI = i;
+        }
+    }
+    let tarDownTile = targetsDown[tarDownI].id;
+    if (curPiece !== null && legalMoves.includes(tarDownTile)) {
+        let newPos = tarDownTile;
+        
+        if (curPiece.dataset.piece === "P" && (newPos.split("")[1] === "1" || newPos.split("")[1] === "8") && legalMoves.includes(newPos)) {
+            promote(curPiece, curPiece.dataset.position, newPos);
+        }
+        else {
+            movePiece(curPiece, curPiece.dataset.position, newPos, false);
+        }
+    }
+    else {
+        mouseDown = 1;
+        curPiece = e.target;
+
+        if (curPiece && curCol === curPiece.dataset.color && curPiece.className === "pieces") {
+            dragging = true;
+            $("#" + tarDownTile).addClass("selectedPieceTile");
+
+            curPos = e.target.dataset.position;
+            getLegalMoves();
+    
+            $(curPiece).on("touchmove", e => {
+                let touch = e.targetTouches[0];
+                let targets = document.elementsFromPoint(touch.pageX, touch.pageY);
+                lastTouch = {x: touch.pageX, y: touch.pageY};
+                let tarI = -1;
+                for (let i = 0; i < targets.length; i++) {
+                    if (targets[i].className.includes("tiles")) {
+                        tarI = i;
+                    }
+                }
+                let tarTile = targets[tarI].id;
+                
+                if (curPiece && tarTile !== curPiece.dataset.position) {
+                    jadoubeLock = false;
+                }
+                $("img").css("z-index", "1");
+                $(curPiece).css("z-index", "2");
+    
+                let size = $("#board").width() / 8;
+                if (mouseDown === 1) {
+                    $(curPiece).css("position", "absolute");
+                    $(curPiece).css("width", size);
+                    $(curPiece).css("height", size);
+                    $(curPiece).css({
+                        left: touch.pageX - (size / 2),
+                        top: touch.pageY - (size / 2)
+                    });
+                }
+            });
+    
+            $(document).on("touchend", e => {
+                if (!locked && curPiece) {
+                    locked = true;
+                    mouseDown = 0;
+                    let targetsUp = document.elementsFromPoint(lastTouch.x, lastTouch.y);
+                    let tarUpI = -1;
+                    for (let i = 0; i < targetsUp.length; i++) {
+                        if (targetsUp[i].className.includes("tiles")) {
+                            tarUpI = i;
+                        }
+                    }
+                    let tarUpTile = targetsUp[tarUpI].id;
+                    if (curPiece !== null && legalMoves.includes(tarUpTile)) {
+                        let newPos = tarUpTile;
+                        if (curPiece.dataset.piece === "P" && (newPos.split("")[1] === "1" || newPos.split("")[1] === "8") && legalMoves.includes(newPos)) {
+                            promote(curPiece, curPos, newPos);
+                        }
+                        else {
+                            movePiece(curPiece, curPos, newPos);
+                        }
+                    }
+                    else {
+                        movePiece(curPiece, curPos, curPos);
+                    }
+    
+                    $("img").css("z-index", "1");
+                    $(".tiles").unbind();
+                    $(".tiles").on("mousedown", e => {
+                        onMouseDown(e);
+                    });
+                    $(".tiles").on("touchstart", e => {
+                        onTouchStart(e);
+                    });
+                }
+            });
+        }
+        else {
+            curPiece = null;
+            legalMoves = [];
+            drawMoves();
+        }
     }
 }
 
