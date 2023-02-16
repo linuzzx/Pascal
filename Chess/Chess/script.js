@@ -916,6 +916,23 @@ function movePiece(piece, oldPos, newPos, drag = true) {
         
         piece.dataset.position = newPos;
 
+        // If rook captured
+        if ($("#" + newPos).children()[0] && $("#" + newPos).children()[0].dataset.piece === "R") {
+            let rPos = $("#" + newPos).children()[0].dataset.position;
+            if (rPos === "a1") {
+                castling["Q"] = false;
+            }
+            else if (rPos === "h1") {
+                castling["K"] = false;
+            }
+            else if (rPos === "a8") {
+                castling["q"] = false;
+            }
+            else if (rPos === "h8") {
+                castling["k"] = false;
+            }
+        }
+
         let castlingRook = null;
         let castlingRookOP = null;
         let castlingRookNP = null;
@@ -1264,6 +1281,23 @@ function choosePromotion(piece, oldPos, newPos, prom) {
     $("#" + newPos).addClass("movedPieceTile");
 
     let capture = $("#" + newPos).children().length === 1 ? oldPos.split("")[0] + "x" : "";
+
+    // If rook captured
+    if ($("#" + newPos).children()[0] && $("#" + newPos).children()[0].dataset.piece === "R") {
+        let rPos = $("#" + newPos).children()[0].dataset.position;
+        if (rPos === "a1") {
+            castling["Q"] = false;
+        }
+        else if (rPos === "h1") {
+            castling["K"] = false;
+        }
+        else if (rPos === "a8") {
+            castling["q"] = false;
+        }
+        else if (rPos === "h8") {
+            castling["k"] = false;
+        }
+    }
 
     $("#" + newPos).html(piece);
     $("#" + oldPos).html("");
