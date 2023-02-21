@@ -1,0 +1,126 @@
+html {
+    background-image: linear-gradient(to bottom, #181818, #464646);
+    background-attachment: fixed;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: transparent;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#content {
+    width: 95%;
+    height: 95%;
+    margin: auto;
+    display: grid;
+    grid-template-rows: 1fr;
+    text-align: center;
+    color: #aaaaaa;
+}
+
+#board {
+    margin: auto;
+    border-collapse: collapse;
+}
+
+#board tr, td {
+    padding: 0;
+}
+
+img {
+    z-index: 1;
+}
+
+.pieces:hover {
+    cursor: grab;
+}
+
+#promotionLayer {
+    pointer-events: none;
+    position: absolute;
+    z-index: 3;
+}
+
+#dots {
+    pointer-events: none;
+    position: absolute;
+    z-index: 1;
+}
+
+#arrowLayer {
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+}
+
+#squareLayer {
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+}
+
+#lettersNumbers {
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+}
+
+#btnFlip {
+    margin: auto;
+    width: 10%;
+}
+
+/* .tiles[data-color = "Light"]:hover {
+    border: 2px solid #FAF2E5 !important;
+}
+
+.tiles[data-color = "Dark"]:hover {
+    border: 2px solid #E5D5C9 !important;
+} */
+
+/* .tiles[data-color = "Light"]:hover {
+    background: #F7EC5B !important;
+}
+
+.tiles[data-color = "Dark"]:hover {
+    background: #DAC332 !important;
+} */
+
+.dragging {
+    box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    -webkit-box-sizing: border-box !important;
+    border: 3px solid rgba(255, 255, 255, .75) !important;
+}
+
+.selectedPieceTile[data-color = "Light"], .movedPieceTile[data-color = "Light"] {
+    background: #F7EC5B !important;
+}
+
+.selectedPieceTile[data-color = "Dark"], .movedPieceTile[data-color = "Dark"] {
+    background: #DAC332 !important;
+}
+
+.wrongTilesDark {
+    background-color: #E06954 !important;
+}
+
+.wrongTilesLight {
+    background-color: #EC7964 !important;
+}
+
+.wrongTilesDark:hover {
+    background-color: #EC7964 !important;
+}
+
+.wrongTilesLight:hover {
+    background-color: #E06954 !important;
+}
