@@ -78,6 +78,10 @@ img {
     width: 10%;
 }
 
+.flipped {
+    transform: rotate(180deg) !important;
+}
+
 /* .tiles[data-color = "Light"]:hover {
     border: 2px solid #FAF2E5 !important;
 }

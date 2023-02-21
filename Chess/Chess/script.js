@@ -178,10 +178,36 @@ function createLetters(flipped = false) {
 }
 
 function flipTable() {
-    createLetters(!flipped);
+    /* createLetters(!flipped);
     let fen = flipped ? "RNBKQBNR/PPPPPPPP/8/8/8/8/pppppppp/rnbkqbnr w KQkq - 0 1" : "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
-    placePieces(fen);
+    placePieces(fen); */
     flipped = !flipped;
+
+    if (flipped) {
+        $("#board").addClass("flipped");
+        $("#dots").addClass("flipped");
+        $("#arrowLayer").addClass("flipped");
+        $("#squareLayer").addClass("flipped");
+        $("#promotionLayer").addClass("flipped");
+
+        for (let p of $(".pieces")) {
+            $(p).addClass("flipped");
+        }
+    }
+    else {
+        $("#board").removeClass("flipped");
+        $("#dots").removeClass("flipped");
+        $("#arrowLayer").removeClass("flipped");
+        $("#squareLayer").removeClass("flipped");
+        $("#promotionLayer").removeClass("flipped");
+
+        for (let p of $(".pieces")) {
+            $(p).removeClass("flipped");
+        }
+    }
+    
+    createLetters(flipped);
+    drawMoves();
 }
 
 function loadFEN(fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
@@ -659,6 +685,10 @@ function onTouchStart(e) {
 
 function drawArrow() {
     let s = $("#board").width() / 8;
+
+    let cs = flipped ? columns.reverse() : columns;
+    let rs = flipped ? rows.reverse() : rows;
+
     if (arrowDown === arrowUp) {
         drawSquare();
     }
@@ -682,28 +712,28 @@ function drawArrow() {
             let rad = s * 3.5 / 10;
             let widthFromCenter = s / 10;
 
-            let destX = s * (parseInt(columns.indexOf(tileTo.split("")[0])) + 0.5);
-            let destY = s * (parseInt(rows.indexOf(parseInt(tileTo.split("")[1]))) + 0.5);
-            let srcX = s * (parseInt(columns.indexOf(tileFrom.split("")[0])) + 0.5);
-            let srcY = s * (parseInt(rows.indexOf(parseInt(tileFrom.split("")[1]))) + 0.5);
+            let destX = s * (parseInt(cs.indexOf(tileTo.split("")[0])) + 0.5);
+            let destY = s * (parseInt(rs.indexOf(parseInt(tileTo.split("")[1]))) + 0.5);
+            let srcX = s * (parseInt(cs.indexOf(tileFrom.split("")[0])) + 0.5);
+            let srcY = s * (parseInt(rs.indexOf(parseInt(tileFrom.split("")[1]))) + 0.5);
             
             let points = [];
 
-            let cFrom = parseInt(columns.indexOf(tileFrom.split("")[0]));
-            let cTo = parseInt(columns.indexOf(tileTo.split("")[0]));
-            let rFrom = parseInt(rows.indexOf(parseInt(tileFrom.split("")[1])));
-            let rTo = parseInt(rows.indexOf(parseInt(tileTo.split("")[1])));
+            let cFrom = parseInt(cs.indexOf(tileFrom.split("")[0]));
+            let cTo = parseInt(cs.indexOf(tileTo.split("")[0]));
+            let rFrom = parseInt(rs.indexOf(parseInt(tileFrom.split("")[1])));
+            let rTo = parseInt(rs.indexOf(parseInt(tileTo.split("")[1])));
 
             if ((Math.abs(cTo - cFrom) === 1 || Math.abs(cTo - cFrom) === 2) && (Math.abs(rTo - rFrom) === 1 || Math.abs(rTo - rFrom) === 2) && Math.abs(cTo - cFrom) !== Math.abs(rTo - rFrom)) {
                 let tempX, tempY;
 
                 if (Math.abs(cTo - cFrom) === 2) {
-                    tempX = s * (parseInt(columns.indexOf(tileTo.split("")[0])) + 0.5);
-                    tempY = s * (parseInt(rows.indexOf(parseInt(tileFrom.split("")[1]))) + 0.5);
+                    tempX = s * (parseInt(cs.indexOf(tileTo.split("")[0])) + 0.5);
+                    tempY = s * (parseInt(rs.indexOf(parseInt(tileFrom.split("")[1]))) + 0.5);
                 }
                 else {
-                    tempX = s * (parseInt(columns.indexOf(tileFrom.split("")[0])) + 0.5);
-                    tempY = s * (parseInt(rows.indexOf(parseInt(tileTo.split("")[1]))) + 0.5);
+                    tempX = s * (parseInt(cs.indexOf(tileFrom.split("")[0])) + 0.5);
+                    tempY = s * (parseInt(rs.indexOf(parseInt(tileTo.split("")[1]))) + 0.5);
                 }
 
                 let dtx = tempX - srcX;
@@ -2724,12 +2754,15 @@ function drawMoves() {
     let s = b / 8;
     $("#dots").html("");
 
+    let cs = flipped ? columns.reverse() : columns;
+    let rs = flipped ? rows.reverse() : rows;
+
     let i = 0;
     for (let m of legalMoves) {
         let col = "#000";
         let circ = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        $(circ).attr("cx", s * (parseInt(columns.indexOf(m.replace("x", "").split("")[0])) + 0.5));
-        $(circ).attr("cy", s * (parseInt(rows.indexOf(parseInt(m.replace("x", "").split("")[1]))) + 0.5));
+        $(circ).attr("cx", s * (parseInt(cs.indexOf(m.replace("x", "").split("")[0])) + 0.5));
+        $(circ).attr("cy", s * (parseInt(rs.indexOf(parseInt(m.replace("x", "").split("")[1]))) + 0.5));
 
         if (m.includes("x")) {
             $(circ).attr("r", s * 0.45);
