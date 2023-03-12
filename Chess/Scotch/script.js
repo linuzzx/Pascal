@@ -1,7 +1,11 @@
 let currentMove = "";
 let prevMove = "";
 let tiles = [];
-let moves = {};
+let moves = {
+    "1.": ["e4", "e5"],
+    "2.": ["Nf3", "Nc6"],
+    "3.": ["d4"],
+};
 let legalMoves = [];
 let allLegalMoves = [];
 let checks = [];
@@ -82,8 +86,6 @@ function init() {
     createSquares();
     createLetters();
     placePieces();
-
-    curCol = "Light";
 
     $("#board").on('contextmenu', e => {
         e.preventDefault();
@@ -1091,6 +1093,9 @@ function movePiece(piece, oldPos, newPos, drag = true) {
 
         if (curCol === "Light") {
             moves[(Object.keys(moves).length + 1) + "."] = [];
+        }
+        else if (Object.keys(moves).length === 0) {
+            moves[(Object.keys(moves).length + 1) + "."] = ["..."];
         }
         
         moves[(Object.keys(moves).length) + "."].push(castle ? castle : pieceType + multipPos + capture + newPos + chck);
