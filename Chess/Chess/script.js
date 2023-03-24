@@ -694,19 +694,23 @@ function drawArrow() {
     }
     else {
         let arrowStyles = [
-            "fill: rgba(248, 85, 63, 0.8); opacity: 0.8;",//red "ctrl"
-            "fill: rgba(159, 207, 63, 0.8); opacity: 0.8;",//green "shift"
-            "fill: rgba(72, 193, 249, 0.8); opacity: 0.8;",//blue "alt"
-            "fill: rgba(255, 170, 0, 0.8); opacity: 0.8;",//yellow ""
+            "rgba(248, 85, 63, 0.8)",//red "ctrl"
+            "rgba(159, 207, 63, 0.8)",//green "shift"
+            "rgba(72, 193, 249, 0.8)",//blue "alt"
+            "rgba(255, 170, 0, 0.8)",//yellow ""
         ];
 
         let tileFrom = arrowDown;
         let tileTo = arrowUp;
 
         let id = "arr" + tileFrom + "_" + tileTo;
+        let arrowCol = (curBtn === null ? arrowStyles[arrowStyles.length - 1] : arrowStyles[buttons.indexOf(curBtn)]);
         
-        if ($("#" + id).length !== 0) {
+        if ($("#" + id).length !== 0 && $("#" + id).css("fill") === arrowCol) {
             $("#" + id).remove();
+        }
+        else if ($("#" + id).length !== 0) {
+            $("#" + id).css("fill", arrowCol);
         }
         else {
             let rad = s * 3.5 / 10;
@@ -820,7 +824,7 @@ function drawArrow() {
             let poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             $(poly).attr("id", id);
             $(poly).attr("points", points.join(" "));
-            $(poly).attr("style", curBtn === null ? arrowStyles[arrowStyles.length - 1] : arrowStyles[buttons.indexOf(curBtn)]);
+            $(poly).attr("style", "fill: " + (curBtn === null ? arrowStyles[arrowStyles.length - 1] : arrowStyles[buttons.indexOf(curBtn)]) + "; opacity: 0.8;");
 
             $("#arrowLayer").append(poly);
         }
