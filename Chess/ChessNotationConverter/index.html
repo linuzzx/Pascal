@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chess Notation Converter | Einar KL</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="index.css">
+    <link rel="shortcut icon" href="https://einarkl.no/favicon.png" type="image/x-icon">
+</head>
+<body>
+    <div id="content">
+        <h1>Convert from Norwegian to English Chess Notation</h1>
+        <textarea id="taNor" oninput="convert(this.value)" placeholder="Norwegian Notation"></textarea>
+        <textarea id="taEng" readonly placeholder="English Notation"></textarea>
+        <button onclick="copy()">Copy</button>
+    </div>
+</body>
+</html>
