@@ -21,12 +21,11 @@ function initEvents() {
 }
 
 function deleteStep(n) {
-    for (let i = n; i < Object.keys(steps).length - 1; i++) {
-        steps[n] = steps[n + 1];
-        console.log(n);
+    for (let i = n; i < Object.keys(steps).length; i++) {
+        steps[i] = steps[i + 1];
     }
 
-    delete steps[Object.keys(steps).length];
+    delete steps[Object.keys(steps).reverse()[0]];
 
     updateSteps();
 }
@@ -82,7 +81,6 @@ function updateSolution() {
         }
     }
 
-    let solution = normal.join(" ") + inverseAlg(inverse.join(" "));
-
-    $("#solution").val("<h2>" + solution + " " + solution.split(" ").length + "(HTM)</h2>");
+    let sol = removeRedundantMoves(normal.join(" ").trim() + " " + inverseAlg(inverse.join(" ").trim())).trim();
+    $("#solution").html("<h1>" + sol + "&nbsp;&nbsp;&nbsp;" + (sol === "" ? 0 : sol.split(" ").length) + " (HTM)</h1>");
 }
