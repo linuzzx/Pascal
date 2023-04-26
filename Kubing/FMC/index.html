@@ -5,6 +5,7 @@
     <title>FMC | Einar KL</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../Tools/tools.js"></script>
+    <script src='https://einarkl.github.io/Kubing/EinarDrawScramble/EinarDrawScramble.js' type='module'></script>
     <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="https://einarkl.no/favicon.png" type="image/x-icon">
@@ -28,7 +29,12 @@
                 <button class="btnAddStep">Add</button>
             </div>
         </div>
-        <div id="solution"></div>
+        <div id="solution">
+            <h1>0 (HTM)</h1>
+        </div>
+        <div id="drawScrambleDiv">
+            <einar-drawscramble scramble=""></einar-drawscramble>
+        </div>
     </div>
 </body>
 </html>

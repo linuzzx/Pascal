@@ -7,6 +7,7 @@ $(() => {
 function initEvents() {
     $("#inpScramble").on("input", () => {
         $("#inpInverseScramble").val(inverseAlg($("#inpScramble").val().trim()));
+        updateSolution();
     });
 
     // $(".niss").on("click", e => {
@@ -82,5 +83,6 @@ function updateSolution() {
     }
 
     let sol = removeRedundantMoves(normal.join(" ").trim() + " " + inverseAlg(inverse.join(" ").trim())).trim();
-    $("#solution").html("<h1>" + sol + "&nbsp;&nbsp;&nbsp;" + (sol === "" ? 0 : sol.split(" ").length) + " (HTM)</h1>");
+    $("#solution").html("<h1>" + [sol, (sol === "" ? 0 : sol.split(" ").length)].join("&nbsp;&nbsp;&nbsp;") + " (HTM)</h1>");
+    $("einar-drawscramble").attr("scramble", $("#inpScramble").val().trim() + " " + sol);
 }
