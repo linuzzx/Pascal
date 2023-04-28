@@ -2,10 +2,11 @@ let steps = {};
 
 $(() => {
     initEvents();
+    getParams();
 });
 
 function initEvents() {
-    $("#inpScramble").on("input", () => {
+    $("#inpScramble").on("input change", () => {
         $("#inpInverseScramble").val(inverseAlg($("#inpScramble").val().trim()));
         updateSolution();
     });
@@ -19,6 +20,24 @@ function initEvents() {
         e.stopPropagation();
         console.log(e);
     });
+}
+
+function getParams() {
+    if (window.location.search !== "") {
+        const params = (window.location.search).split("?")[1].split("&");
+
+        for (let p of params) {
+            switch (p.split("=")[0]) {
+                case "scramble":
+                    $("#inpScramble").val(decodeURIComponent(p.split("=")[1])).change();
+                    break;
+                case "steps":
+                    steps = JSON.parse(decodeURIComponent(p.split("=")[1]));
+                    break;
+            }
+        }
+    }
+    updateSteps();
 }
 
 function deleteStep(n) {
@@ -51,6 +70,7 @@ function editSteps() {
     }
 
     updateSolution();
+    updateURL();
 }
 
 function updateSteps() {
@@ -67,6 +87,7 @@ function updateSteps() {
     }
     
     updateSolution();
+    updateURL();
 }
 
 function updateSolution() {
@@ -85,4 +106,20 @@ function updateSolution() {
     let sol = removeRedundantMoves(normal.join(" ").trim() + " " + inverseAlg(inverse.join(" ").trim())).trim();
     $("#solution").html("<h1>" + [sol, (sol === "" ? 0 : sol.split(" ").length)].join("&nbsp;&nbsp;&nbsp;") + " (HTM)</h1>");
     $("einar-drawscramble").attr("scramble", $("#inpScramble").val().trim() + " " + sol);
+}
+
+function updateURL() {
+    let rawScramble = $("#inpScramble").val();
+    let scramble = rawScramble !== "" ? "scramble=" + encodeURIComponent(rawScramble) : "";
+    let jsonSteps = steps !== {} ? "steps=" + encodeURIComponent(JSON.stringify(steps)) : "";
+
+    let urlRest = [scramble, jsonSteps].filter(u => u !== "").join("&");
+    let urlExtra = urlRest !== "" ? "?" + urlRest : "";
+
+    const state = {};
+    const title = "";
+
+    if (urlExtra !== "") {
+        history.pushState(state, title, urlExtra);
+    }
 }
