@@ -5,7 +5,7 @@ $(() => {
             shortURL = shortURL.split("&")[0];
         }
         if (shortURL.includes("=")) {
-            location.replace("https://einarkl.github.io/URL");
+            location.replace("https://einarkl.no/URL");
         }
         else {
             firebase.database().ref("URLs/").once("value", (snapshot) => {
@@ -56,7 +56,7 @@ function shortenURL(url) {
             }
         }
 
-        $("#inpShortURL").val("https://einarkl.github.io/URL?" + shortenedURL);
+        $("#inpShortURL").val("https://einarkl.no/URL?" + shortenedURL);
         toggleCopyBtn();
     }
     else {
