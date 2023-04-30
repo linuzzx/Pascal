@@ -105,9 +105,7 @@ function updateSolution() {
 
     let sol = removeRedundantMoves(normal.join(" ").trim() + " " + inverseAlg(inverse.join(" ").trim())).trim();
     $("#solution").html("<h1>" + [sol, (sol === "" ? 0 : sol.split(" ").length)].join("&nbsp;&nbsp;&nbsp;") + " (HTM)</h1>");
-    $("cube-player").attr("scramble", $("#inpScramble").val().trim());
-    $("cube-player").attr("solution", sol);
-    $("cube-player").attr("time", sol.split(" ").length * 500);
+    $("einar-drawscramble").attr("scramble", $("#inpScramble").val().trim() + " " + sol);
 }
 
 function updateURL() {
