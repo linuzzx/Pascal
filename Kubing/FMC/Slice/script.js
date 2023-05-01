@@ -14,7 +14,7 @@ function nextScramble() {
 function getScrambleSlice() {
     let rotations = ["", "x'", "x", "x2", "y'", "y", "y2", "z'", "z", "z2", "y' x'", "y x'", "y2 x'", "z' x'", "z x'", "z2 x'", "y' x", "y x", "z' x", "z x", "y' x2", "y x2", "z' x2", "z x2"];
     let rot = rotations[Math.floor(Math.random() * rotations.length)];
-    let scr = rot + " R2 E R2 E'" + " ";
+    let scr = rot + " R2 E R2 E' ";
     let movesDR = ["U", "U'", "U2", "D", "D'", "D2", "R2", "L2", "F2", "B2"];
     let movesHTR = ["U2", "D2", "R2", "L2", "F2", "B2"];
     let dr = [];
@@ -26,11 +26,11 @@ function getScrambleSlice() {
     getMoves(htr, movesHTR, rHTR);
     getMoves(dr, movesDR, rDR);
     
-    scr += rot + " " + htr.join(" ") + " " + dr.join(" ");
+    scr += htr.join(" ") + " " + dr.join(" ");
 
-    scr = getMovesWithoutRotations(removeRedundantMoves(scr.trim()))
+    scr = removeRedundantMoves(getMovesWithoutRotations(scr.trim()))
 
-    $("#solution").text(getMovesWithoutRotations(removeRedundantMoves(inverseAlg(rot + " " + htr.join(" ") + " " + dr.join(" ")))));
+    $("#solution").text(inverseAlg(removeRedundantMoves(getMovesWithoutRotations(rot + " " + htr.join(" ") + " " + dr.join(" ")))));
 
     return scr;
 }
