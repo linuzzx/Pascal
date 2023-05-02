@@ -9,6 +9,7 @@ function initEvents() {
     $("#inpScramble").on("input change", () => {
         $("#inpInverseScramble").val(inverseAlg($("#inpScramble").val().trim()));
         updateSolution();
+        updateURL();
     });
 
     // $(".niss").on("click", e => {
