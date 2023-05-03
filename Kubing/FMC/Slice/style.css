@@ -1,0 +1,39 @@
+html {
+    background-image: linear-gradient(to bottom, #181818, #464646);
+    background-attachment: fixed;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: monospace;
+    color: #aaaaaa;
+}
+
+body {
+    background: transparent;
+    width: 95%;
+    height: 95%;
+    margin: auto;
+}
+
+#content {
+    width: 95%;
+    height: 95%;
+    margin: auto;
+    text-align: center;
+}
+
+#scramble {
+    text-align: center;
+}
+
+#drawScrambleDiv {
+    width: 25%;
+    margin: auto;
+}
+
+button {
+    width: 5%;
+    height: 5%;
+    margin: auto;
+}

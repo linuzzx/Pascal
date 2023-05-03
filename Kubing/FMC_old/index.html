@@ -5,7 +5,7 @@
     <title>FMC | Einar KL</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../Tools/tools.js"></script>
-    <script src='../CubePlayer/CubePlayer.js' type='module'></script>
+    <script src='https://einarkl.github.io/Kubing/EinarDrawScramble/EinarDrawScramble.js' type='module'></script>
     <script src="script.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="https://einarkl.no/favicon.png" type="image/x-icon">
@@ -33,25 +33,7 @@
             <h1>0 (HTM)</h1>
         </div>
         <div id="drawScrambleDiv">
-            <cube-player
-            scramble="" 
-            solution="" 
-            time="" 
-            cubestyle="stickerless" 
-            logo="../CubePlayer/dayan-logo.jpg"
-            colors="
-                #ffffff,
-                #ffaa00,
-                #00ff00,
-                #ff0000,
-                #0000ff,
-                #ffff00" 
-            plastic="#eae8e1"
-            playbutton="button"
-            smartcube="none"
-            solvedfunc="none"
-            usecontrols="true">
-            </cube-player>
+            <einar-drawscramble scramble=""></einar-drawscramble>
         </div>
     </div>
 </body>
