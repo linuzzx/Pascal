@@ -48,7 +48,8 @@ function findTriggers(n) {
     let nTriggers = Object.fromEntries(
         Object.entries(triggers).map(([k, v]) => [k, v[0]])
     );
-    console.log(triggers);
+    console.log(nTriggers);
+    // console.log(triggers);
 }
 
 function getSubsetScramble(moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"], len = null) {
