@@ -1,5 +1,7 @@
 const solvedStateNumbers = "164145153136263235254246163542";
 let moves = ["U", "U'", "R", "R'", "L", "L'", "B", "B'"];
+let movesA = ["F", "F'", "R", "R'", "L", "L'", "B", "B'", "f", "f'", "r", "r'", "l", "l'", "b", "b'"];
+let movesAC = ["z y' R y z'", "z y' R' y z'", "z R z'", "z R' z'", "z' L z", "z' L' z", "x B x'", "x B' x'", "y' R y", "y' R' y", "R", "R'", "L", "L'", "B", "B'"];
 
 let cW = "1";
 let cY = "2";
@@ -54,20 +56,35 @@ function isValidScramble(scr) {
 }
 
 function scrambleMiniblock() {
-    let scr = "";
-    let scr2 = getScrambleSkewb();
+    $("#btnScramble").attr("disabled", true);
+    $("#inpScramble").attr("disabled", true);
+    $("#selN").attr("disabled", true);
 
-    while (scr === "") {
-        if (checkMiniblock(scr2)) {
-            scr = scr2;
-        }
-        scr2 = getScrambleSkewb();
+    $("#miniblockSetup").text("Setup to miniblock: ");
+    let n = parseInt($("#selN").find(":selected").val());
+    let scramble = "";
+    let setup = "";
+    
+    let worker = new Worker("./worker.js");
+    worker.postMessage([n]);
+    worker.onmessage = e => {
+        scramble = e.data[0];
+        setup = e.data[1];
+
+        $("#inpScramble").val(scramble);
+        $("#miniblockSetup").text($("#miniblockSetup").text() + setup);
+
+        drawScrambleSkewb('#svgSkewb', $('#inpScramble').val());
+
+        $("#btnScramble").attr("disabled", false);
+        $("#inpScramble").attr("disabled", false);
+        $("#selN").attr("disabled", false);
+
+        return scramble;
     }
-
-    return scr;
 }
 
-function checkMiniblock(scr) {
+/* function checkMiniblock(scr) {
     let miniblock = false;
     
     outerloop : for (let r of rotations) {
@@ -327,12 +344,6 @@ function scrollDown() {
     element.scrollTop = element.scrollHeight;
 }
 
-function adjustSize() {
-    $("svg").height(3 * $("#svgSkewb").width() / 4);
-    $("#inpScramble").css("font-size", "3vh");
-    $("button").css("font-size", "3vh");
-}
-
 const rotations = [
     "",
     "x'",
@@ -358,4 +369,12 @@ const rotations = [
     "y x2",
     "z' x2",
     "z x2"
-];
+]; */
+
+function adjustSize() {
+    $("svg").height(3 * $("#svgSkewb").width() / 4);
+    $("#inpScramble").css("font-size", "3vh");
+    $("#selN").css("font-size", "3vh");
+    $("label").css("font-size", "3vh");
+    $("button").css("font-size", "3vh");
+}
