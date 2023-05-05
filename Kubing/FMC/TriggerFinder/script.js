@@ -28,10 +28,12 @@ function findTriggers(n) {
         badCorners = [stateArr[18], stateArr[20], stateArr[24], stateArr[26], stateArr[36], stateArr[38], stateArr[42], stateArr[44]].map(s => s === stateArr[22] || s === stateArr[40]).filter(s => s === false).length/*  +
                     [stateArr[9], stateArr[11], stateArr[15], stateArr[17], stateArr[27], stateArr[29], stateArr[33], stateArr[35]].map(s => s === stateArr[13] || s === stateArr[31]).filter(s => s === false).length; */
         
-        if (!triggers[badEdges + "e" + badCorners + "c"]) {
-            triggers[badEdges + "e" + badCorners + "c"] = [];
+        if (stateArr.slice(18, 27).filter(s => s === stateArr[22] || s === stateArr[40]).length === 9) {
+            if (!triggers[badEdges + "e" + badCorners + "c"]) {
+                triggers[badEdges + "e" + badCorners + "c"] = [];
+            }
+            triggers[badEdges + "e" + badCorners + "c"].push(inverseAlg(s));
         }
-        triggers[badEdges + "e" + badCorners + "c"].push(inverseAlg(s));
 
         /* if (!triggers[badEdges + "e"]) {
             triggers[badEdges + "e"] = [];
@@ -47,6 +49,7 @@ function findTriggers(n) {
         Object.entries(triggers).map(([k, v]) => [k, v[0]])
     );
     console.log(nTriggers);
+    // console.log(triggers);
 }
 
 function getSubsetScramble(moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"], len = null) {
