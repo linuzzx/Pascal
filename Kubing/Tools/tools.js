@@ -615,7 +615,7 @@ let colors222 = [
 {
     let stroke = "#1E1E1E";
 
-    function drawScrambleNxN(svgID, n, scr) {
+    function drawScrambleNxN(svgID, n, scr, col = ["white", "#FFAA00", "#00FF00", "red", "blue", "yellow"]) {
         $(svgID).empty();
     
         let cube = getState(n, scr);
@@ -679,7 +679,13 @@ let colors222 = [
                 let k = 0;
                 let xCount = 0;
                 for (let x = x1; x < x2; x += size) {
-                    fill = cube[i][j][k];
+                    if (col.join("") === "white#FFAA00#00FF00redblueyellow") {
+                        fill = cube[i][j][k];
+                    }
+                    else {
+                        const oldCols = ["white", "#FFAA00", "#00FF00", "red", "blue", "yellow"];
+                        fill = col[oldCols.indexOf(cube[i][j][k])];
+                    }
                     
                     let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
                     $(rect).attr("x", x);
