@@ -94,5 +94,5 @@ function getNewState(state) {
     let r = state.slice(48, 52);
     let b = state.slice(64, 68);
 
-    return u + l + f + r + b;
+    return (u + l + f + r + b).replaceAll("2", "0").replaceAll("3", "0").replaceAll("4", "0").replaceAll("5", "0").replaceAll("6", "0");
 }
