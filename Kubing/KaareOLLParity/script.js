@@ -34,7 +34,7 @@ function genOPs(n) {
     
     while (depth <= n) {
         if (depth === 1) {
-            for (let m of arr) {
+            for (let m of arr.filter(a => {return !a.includes("U")})) {
                 let state = getNumberState(4, m + " " + op + " " + inverseAlg(m));
                 if (goodState(state)) {
                     let nState = getNewState(state);
