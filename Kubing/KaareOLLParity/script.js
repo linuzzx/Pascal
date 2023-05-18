@@ -54,7 +54,15 @@ function genOPs(n) {
             for (let m1 of arr) {
                 let prevMove = m1.split(" ")[m1.split(" ").length - 1][0];
                 let prevPrevMove = m1.split(" ")[m1.split(" ").length - 2] ? m1.split(" ")[m1.split(" ").length - 2][0] : "";
-                for (let m2 of moves4x4.filter(m => {return m[0] !== prevMove && prevMove + prevPrevMove !== "UD" && prevMove + prevPrevMove !== "DU"})) {
+                for (let m2 of moves4x4.filter(m => {
+                    if (m[0] === prevMove) {
+                        return false;
+                    }
+                    if (prevMove === "D" && m[0] === "U") {
+                        return false;
+                    }
+                    return true;
+                })) {
                     tArr.push(m1 + " " + m2);
                     let alg = m1 + " " + m2 + " " + op + " " + inverseAlg(m1 + " " + m2);
                     let state = getNumberState(4, inverseAlg(alg));
