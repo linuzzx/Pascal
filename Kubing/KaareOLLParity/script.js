@@ -11,14 +11,17 @@ function gen(n) {
     let ops = genOPs(n);
 
     for (let i = 0; i < Object.keys(ops).length; i++) {
-        out += "<div style=\"display: grid; grid-template-columns: 1fr 1fr;\"><svg id=\"svgScramble" + i + "\"></svg><h1 id=\"scramble" + i + "\"></h1></div><br><br>";
+        out += "<div style=\"display: grid; grid-template-columns: 1fr 1fr;\"><svg id=\"svgScramble" + i + "\"></svg><div id=\"scramble" + i + "\" style=\"height: 25vh; overflow-y: scroll;\"></div></div><br><br>";
     }
 
     $("#scrambleDiv").html(out);
 
     for (let i = 0; i < Object.keys(ops).length; i++) {
         let alg = inverseAlg(Object.values(ops)[i][0]);
-        $("#scramble" + i).text(alg.replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]"));
+        for (let j = 1; j <= Object.values(ops)[i].length; j++) {
+            $("#scramble" + i).append("<h2>" + j + ". " + inverseAlg(Object.values(ops)[i][j - 1]).replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]") + "</h2>");
+        }
+        // $("#scramble" + i).text(alg.replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]"));
         drawScrambleNxN("#svgScramble" + i, 4, alg, ["white", "gray", "gray", "gray", "gray", "gray"]);
     }
     
@@ -85,8 +88,48 @@ function genOPs(n) {
         }
         depth++;
     }
-    console.log(ops);
+
+    for (let k of Object.keys(ops)) {
+        ops[k] = [...new Set(ops[k])];
+    }
+    ops = sortOps(ops);
+
     return ops;
+}
+
+function sortOps(ops) {
+    let nOps = {};
+
+    for (let k of Object.keys(ops)) {
+        let arr = ops[k].sort((a, b) => {
+            return getAlgScore(a) - getAlgScore(b);
+        });
+        nOps[k] = arr;
+    }
+
+    return nOps;
+}
+
+function getAlgScore(alg) {
+    let sum = 0;
+
+    for (let m of alg.split(" ")) {
+        let p = 0;
+
+        if (m.includes("R") || m.includes("U")) {
+            p += 1;
+        }
+        else if (m.includes("F") || m.includes("D")) {
+            p += 2;
+        }
+        if (m.includes("2")) {
+            p *= 2;
+        }
+
+        sum += p;
+    }
+
+    return sum;
 }
 
 function goodState(state) {
