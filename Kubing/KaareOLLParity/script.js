@@ -30,11 +30,11 @@ function gen(n) {
 function genOPs(n) {
     let ops = {};
     let depth = 1;
-    let arr = moves4x4.slice();
+    let arr = moves4x4.slice().filter(a => {return !a.includes("U") && !a.includes("D")});
     
     while (depth <= n) {
         if (depth === 1) {
-            for (let m of arr.filter(a => {return !a.includes("U")})) {
+            for (let m of arr) {
                 let state = getNumberState(4, m + " " + op + " " + inverseAlg(m));
                 if (goodState(state)) {
                     let nState = getNewState(state);
