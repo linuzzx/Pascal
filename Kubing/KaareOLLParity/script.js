@@ -17,9 +17,9 @@ function gen(n) {
     $("#scrambleDiv").html(out);
 
     for (let i = 0; i < Object.keys(ops).length; i++) {
-        let alg = Object.values(ops)[i][0];
-        $("#scramble" + i).text(alg.replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]"));
-        drawScrambleNxN("#svgScramble" + i, 4, inverseAlg(alg), ["white", "gray", "gray", "gray", "gray", "gray"]);
+        let alg = inverseAlg(Object.values(ops)[i][0]);
+        $("#scramble" + i).text(alg.replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]"));
+        drawScrambleNxN("#svgScramble" + i, 4, alg, ["white", "gray", "gray", "gray", "gray", "gray"]);
     }
     
     if (Object.keys(ops).length === 0) {
@@ -35,13 +35,14 @@ function genOPs(n) {
     while (depth <= n) {
         if (depth === 1) {
             for (let m of arr) {
-                let state = getNumberState(4, m + " " + op + " " + inverseAlg(m));
+                let alg = inverseAlg(m + " " + op + " " + inverseAlg(m));
+                let state = getNumberState(4, inverseAlg(alg));
                 if (goodState(state)) {
                     let nState = getNewState(state);
                     if (!ops[nState]) {
                         ops[nState] = [];
                     }
-                    ops[nState].push(m + " " + op + " " + inverseAlg(m));
+                    ops[nState].push(alg);
                 }
             }
         }
@@ -52,13 +53,33 @@ function genOPs(n) {
                 let prevPrevMove = m1.split(" ")[m1.split(" ").length - 2] ? m1.split(" ")[m1.split(" ").length - 2][0] : "";
                 for (let m2 of moves4x4.filter(m => {return m[0] !== prevMove && prevMove + prevPrevMove !== "UD" && prevMove + prevPrevMove !== "DU"})) {
                     tArr.push(m1 + " " + m2);
-                    let state = getNumberState(4, m1 + " " + m2 + " " + op + " " + inverseAlg(m1 + " " + m2));
+                    let alg = m1 + " " + m2 + " " + op + " " + inverseAlg(m1 + " " + m2);
+                    let state = getNumberState(4, inverseAlg(alg));
                     if (goodState(state)) {
+                        let states = [getNumberState(4, inverseAlg(alg) + " U"), getNumberState(4, inverseAlg(alg) + " U2"), getNumberState(4, inverseAlg(alg) + " U'")];
                         let nState = getNewState(state);
-                        if (!ops[nState]) {
-                            ops[nState] = [];
+                        let dup = "";
+
+                        foundLoop : for (let s1 of states) {
+                            for (let s2 of Object.keys(ops)) {
+                                console.log(getNewState(s1), s2);
+                                if (getNewState(s1) === s2) {
+                                    dup = s2;
+                                    break foundLoop;
+                                }
+                            }
                         }
-                        ops[nState].push(m1 + " " + m2 + " " + op + " " + inverseAlg(m1 + " " + m2));
+                        
+                        if (dup === "") {
+                            if (!ops[nState]) {
+                                ops[nState] = [];
+                            }
+                            ops[nState].push(alg);
+                        }
+                        else {
+                            console.log(dup);
+                            ops[dup].push(alg);
+                        }
                     }
                 }
             }
@@ -66,6 +87,7 @@ function genOPs(n) {
         }
         depth++;
     }
+    console.log(ops);
     return ops;
 }
 
