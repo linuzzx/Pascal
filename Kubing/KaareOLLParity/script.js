@@ -62,7 +62,6 @@ function genOPs(n) {
 
                         foundLoop : for (let s1 of states) {
                             for (let s2 of Object.keys(ops)) {
-                                console.log(getNewState(s1), s2);
                                 if (getNewState(s1) === s2) {
                                     dup = s2;
                                     break foundLoop;
@@ -77,7 +76,6 @@ function genOPs(n) {
                             ops[nState].push(alg);
                         }
                         else {
-                            console.log(dup);
                             ops[dup].push(alg);
                         }
                     }
