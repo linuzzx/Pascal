@@ -723,7 +723,7 @@ function drawArrow() {
             
             let points = [];
 
-            let cFrom = parseInt(cs.indexOf(tileFrom.split("")[0]));
+            let cFrom = parseInt(cs.indexOf(tileFrom.split("")[0])); 
             let cTo = parseInt(cs.indexOf(tileTo.split("")[0]));
             let rFrom = parseInt(rs.indexOf(parseInt(tileFrom.split("")[1])));
             let rTo = parseInt(rs.indexOf(parseInt(tileTo.split("")[1])));
