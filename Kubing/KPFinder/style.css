@@ -31,8 +31,13 @@ body {
     margin: auto;
 }
 
+#inputDiv {
+    display: grid;
+    grid-template-columns: 1fr 4fr 4fr;
+    gap: 1%;
+}
+
 input {
-    width: 45%;
-    margin: auto;
+    width: 100%;
     font-size: 3vh;
 }
