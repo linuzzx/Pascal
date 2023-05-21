@@ -13,5 +13,6 @@ function updateCube() {
     let suf = $("#inpSuf").val();
     let alg = [pre, kp, suf].join(" ");
 
-    drawScrambleNxN("#svgScramble", 4, [ori, inverseAlg(alg)].join(" ")/* , ["white", "gray", "gray", "gray", "gray", "gray"] */);
+    drawScrambleNxN("#svgScramble1", 4, [ori, alg].join(" ")/* , ["white", "gray", "gray", "gray", "gray", "gray"] */);
+    drawScrambleNxN("#svgScramble2", 4, [ori, inverseAlg(alg)].join(" ")/* , ["white", "gray", "gray", "gray", "gray", "gray"] */);
 }

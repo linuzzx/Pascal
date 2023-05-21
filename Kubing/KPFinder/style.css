@@ -24,10 +24,13 @@ body {
     width: 90vw;
     margin: auto;
     text-align: center;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1%;
 }
 
-#svgScramble {
-    width: 40%;
+#svgScramble1, #svgScramble2 {
+    width: 50%;
     margin: auto;
 }
 
