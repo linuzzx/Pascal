@@ -29,7 +29,7 @@ function gen(n) {
     }
     
     if (Object.keys(ops).length === 0) {
-        $("#scrambleDiv").append("Need N to be at least 3");
+        $("#scrambleDiv").append("No algs found with the chosen N");
     }
 }
 
