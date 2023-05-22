@@ -25,7 +25,7 @@ function gen(n) {
             $("#scramble" + i).append("<h2>" + j + ". " + inverseAlg(Object.values(ops)[i][j - 1]).replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]") + "</h2>");
         }
         // $("#scramble" + i).text(alg.replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]"));
-        drawScrambleNxN("#svgScramble" + i, 4, alg, ["white", "gray", "gray", "gray", "gray", "gray"]);
+        drawScrambleNxN("#svgScramble" + i, 4, inverseAlg(alg), ["white", "gray", "gray", "gray", "gray", "gray"]);
     }
     
     if (Object.keys(ops).length === 0) {
@@ -72,10 +72,10 @@ function genOPs() {
     
     for (let m1 of affixes) {
         for (let m2 of affixes) {
-            let alg = [inverseAlg(m1), op, inverseAlg(m2)].join(" ");
+            let alg = [m1, inverseAlg(op), m2].join(" ");
             let state = getNumberState(4, inverseAlg(alg));
             if (goodState(state)) {
-                let states = [getNumberState(4, inverseAlg(alg) + " U"), getNumberState(4, inverseAlg(alg) + " U2"), getNumberState(4, inverseAlg(alg) + " U'")];
+                let states = [getNumberState(4, alg + " U"), getNumberState(4, alg + " U2"), getNumberState(4, alg + " U'")];
                 let nState = getNewState(state);
                 let dup = "";
 
@@ -92,7 +92,7 @@ function genOPs() {
                     if (!ops[nState]) {
                         ops[nState] = [];
                     }
-                    ops[nState].push(inverseAlg(alg));
+                    ops[nState].push(alg);
                 }
                 else {
                     ops[dup].push(alg);
