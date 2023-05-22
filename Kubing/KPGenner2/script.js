@@ -72,7 +72,7 @@ function genOPs() {
     
     for (let m1 of affixes) {
         for (let m2 of affixes) {
-            let alg = [m1, op, m2].join(" ");
+            let alg = [inverseAlg(m1), op, inverseAlg(m2)].join(" ");
             let state = getNumberState(4, inverseAlg(alg));
             if (goodState(state)) {
                 let states = [getNumberState(4, inverseAlg(alg) + " U"), getNumberState(4, inverseAlg(alg) + " U2"), getNumberState(4, inverseAlg(alg) + " U'")];
@@ -92,7 +92,7 @@ function genOPs() {
                     if (!ops[nState]) {
                         ops[nState] = [];
                     }
-                    ops[nState].push(alg);
+                    ops[nState].push(inverseAlg(alg));
                 }
                 else {
                     ops[dup].push(alg);
