@@ -20,9 +20,9 @@ function gen(n) {
     $("#scrambleDiv").html(out);
 
     for (let i = 0; i < Object.keys(ops).length; i++) {
-        let alg = inverseAlg(Object.values(ops)[i][0]);
+        let alg = Object.values(ops)[i][0];
         for (let j = 1; j <= Object.values(ops)[i].length; j++) {
-            $("#scramble" + i).append("<h2>" + j + ". " + inverseAlg(Object.values(ops)[i][j - 1]).replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]") + "</h2>");
+            $("#scramble" + i).append("<h2>" + j + ". " + Object.values(ops)[i][j - 1].replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]") + "</h2>");
         }
         // $("#scramble" + i).text(alg.replace("Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'", "[KP]").replace("Rw U2 Rw U2 Rw3' U Rw U2 R' U Rw U R Rw2 U Rw U' Rw", "[KP]"));
         drawScrambleNxN("#svgScramble" + i, 4, inverseAlg(alg), ["white", "gray", "gray", "gray", "gray", "gray"]);
@@ -71,9 +71,9 @@ function genOPs() {
     let ops = {};
     
     for (let m1 of affixes) {
-        for (let m2 of affixes) {
-            let alg = [m1, inverseAlg(op), m2].join(" ");
-            let state = getNumberState(4, inverseAlg(alg));
+        for (let m2 of affixes.filter(m => m.split(" ")[m.split(" ").length - 1].split("")[0] !== "U")) {
+            let alg = [m1, op, m2].join(" ");
+            let state = getNumberState(4, alg);
             if (goodState(state)) {
                 let states = [getNumberState(4, alg + " U"), getNumberState(4, alg + " U2"), getNumberState(4, alg + " U'")];
                 let nState = getNewState(state);
