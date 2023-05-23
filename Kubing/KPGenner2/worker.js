@@ -1,5 +1,5 @@
 let affixes = [];
-const op = "Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'";
+const kp = "Rw' U Rw' U' Rw2 R' U' Rw' U' R U2 Rw' U' Rw3 U2 Rw' U2 Rw'";
 const moves4x4 = ["R", "R2", "R'", "U", "U2", "U'", "F", "F2", "F'", "D", "D2", "D'"];
 let cleanState;
 const colors = ["white", "#FFAA00", "#00FF00", "red", "blue", "yellow"];
@@ -59,9 +59,26 @@ function genOPs() {
         for (let m2 of affixes.filter(m => m.split(" ")[m.split(" ").length - 1].split("")[0] !== "U")) {
             num++;
             postMessage(num);
-            let alg = [m1, op, m2].join(" ");
-            let state = getNumberState(4, alg);
+            let alg = [m1, kp, m2].join(" ");
+            let state = getNumberState(4, inverseAlg(alg));
+
             if (goodState(state)) {
+                let uf = state[14];
+                let ur = state[7];
+                let ul = state[8];
+                let ub = state[1];
+                
+                if (uf === "1" && ur !== "1") {
+                    alg = "U' " + alg;
+                }
+                else if (ur === "1" && ub !== "1") {
+                    alg = "U2 " + alg;
+                }
+                else if (ub === "1" && ul !== "1") {
+                    alg = "U " + alg;
+                }
+                state = getNumberState(4, inverseAlg(alg));
+
                 let states = [getNumberState(4, alg + " U"), getNumberState(4, alg + " U2"), getNumberState(4, alg + " U'")];
                 let nState = getNewState(state);
                 let dup = "";
@@ -148,7 +165,7 @@ function goodState(state) {
 
     return l2 === l1 && f2 === f1 && r2 === r1 && b2 === b1 && d2 === d1;
 }
-
+/* 
 function getNewState(state) {
     let u = state.slice(0, 16);
     let l = state.slice(16, 20);
@@ -157,6 +174,57 @@ function getNewState(state) {
     let b = state.slice(64, 68);
 
     return (u + l + f + r + b).replaceAll("2", "0").replaceAll("3", "0").replaceAll("4", "0").replaceAll("5", "0").replaceAll("6", "0");
+} */
+
+function getNewState(state) {
+    /* 
+    Codes:
+    Number axyz 
+    a = number of edges flipped, always 1 flipped UF and 1 non-flipped UL
+    x,y,z = code for how UFL, UFR, UBR are flipped respectively. 0 = top color up, 1 = top color R/L, 2 = top color on F/B
+    */
+    let u = state.slice(0, 16);
+    let l = state.slice(16, 20);
+    let f = state.slice(32, 36);
+    let r = state.slice(48, 52);
+    let b = state.slice(64, 68);
+    
+    let uf = u[14];
+    let ur = u[7];
+    let ul = u[8];
+    let ub = u[1];
+
+    let ufl;
+    let ufr;
+    let ubr;
+
+    let a = [ub, ul, ur, uf].filter(f => f !== "1").length;
+    
+    if (ul === "1" && uf !== "1") {
+        ufl = [u[12], l[3], f[0]];
+        ufr = [u[15], r[0], f[3]];
+        ubr = [u[3], r[3], b[0]];
+    }
+    else if (uf === "1" && ur !== "1") {
+        ufl = [u[15], f[3], r[0]];
+        ufr = [u[3], b[0], r[3]];
+        ubr = [u[0], b[3], l[0]];
+    }
+    else if (ur === "1" && ub !== "1") {
+        ufl = [u[3], r[3], b[0]];
+        ufr = [u[0], l[0], b[3]];
+        ubr = [u[12], l[3], f[0]];
+    }
+    else if (ub === "1" && ul !== "1") {
+        ufl = [u[0], b[3], l[0]];
+        ufr = [u[12], f[0], l[3]];
+        ubr = [u[15], f[3], r[0]];
+    }
+
+    let xyz = [ufl, ufr, ubr].map(c => c.indexOf("1")).join("");
+
+    // return (u + l + f + r + b).replaceAll("2", "0").replaceAll("3", "0").replaceAll("4", "0").replaceAll("5", "0").replaceAll("6", "0");
+    return a + xyz;
 }
 
 function getNumberState(n, scr) {
@@ -464,4 +532,28 @@ function rotate(matrix) {
         }
     }
     return matrix;
+}
+
+function inverseAlg(alg) {
+    let invAlg = "";
+    
+    if (alg.trim() === "") {
+        return "";
+    }
+    let arr = [];
+
+    for (let a of alg.split(" ")) {
+        if (a.includes("'")) {
+            arr.unshift(a.slice(0, -1));
+        }
+        else if (a.includes("2")) {
+            arr.unshift(a);
+        }
+        else {
+            arr.unshift(a + "'");
+        }
+    }
+    invAlg = arr.join(" ");
+
+    return invAlg;
 }
