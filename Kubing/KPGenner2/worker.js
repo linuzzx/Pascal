@@ -223,7 +223,6 @@ function getNewState(state) {
 
     let xyz = [ufl, ufr, ubr].map(c => c.indexOf("1")).join("");
 
-    // return (u + l + f + r + b).replaceAll("2", "0").replaceAll("3", "0").replaceAll("4", "0").replaceAll("5", "0").replaceAll("6", "0");
     return a + xyz;
 }
 
