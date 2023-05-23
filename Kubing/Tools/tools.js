@@ -142,6 +142,73 @@ let colors222 = [
         }
     }
 
+    function genAlgs(len = 1, moves = ["U", "U'", "U2", "D", "D'", "D2", "R", "R'", "R2", "L", "L'", "L2", "F", "F'", "F2", "B", "B'", "B2"], n = null, importantFaces = null) {
+        let algs = [];
+        let algsObj = {};
+        let depth = 1;
+        let arr = moves.slice();
+        let facesToExclude = importantFaces === null ? [] : ["U", "L", "F", "R", "B", "D"];
+
+        if (importantFaces !== null) {
+            for (let i = 0; i < facesToExclude.length; i++) {
+                let f = facesToExclude[i];
+                if (importantFaces.includes(f)) {
+                    facesToExclude.splice(i, 1);
+                }
+            }
+            facesToExclude = facesToExclude.map(m => m.replace("U", "1").replace("L", "6").replace("F", "3").replace("R", "5").replace("B", "4").replace("D", "2"));
+        }console.log(facesToExclude);
+        
+        while (depth < len + 1) {
+            if (depth === 1) {
+                for (let m of arr) {
+                    algs.push(m)
+                    if (n !== null) {
+                        let state = getNumberState(n, m);
+                        state = state.split("").map(s => facesToExclude.includes(s) ? "0" : s).join("");
+
+                        if (!algsObj[state]) {
+                            algsObj[state] = [];
+                        }
+
+                        algsObj[state].push(inverseAlg(m));
+                    }
+                }
+            }
+            else {
+                let tArr = arr.slice();
+                for (let m1 of arr) {
+                    let prevMoveRaw = m1.split(" ")[m1.split(" ").length - 1];
+                    let prevMoveE = prevMoveRaw.split("")[prevMoveRaw.length - 1];
+                    let prevMove = prevMoveE === "2" || prevMoveE === "'" ? prevMoveRaw.slice(0, prevMoveRaw.length - 1) : prevMoveRaw;
+                    for (let m2 of moves.filter(m => {return ((m.split("")[m.length - 1] === "2" || m.split("")[m.length - 1] === "'") ? m.slice(0, m.length - 1) : m) !== prevMove})) {
+                        tArr.push(m1 + " " + m2);
+                        algs.push(m1 + " " + m2);
+                        if (n !== null) {
+                            let state = getNumberState(n, m1 + " " + m2);
+                            state = state.split("").map(s => facesToExclude.includes(s) ? "0" : s).join("");
+
+                            if (!algsObj[state]) {
+                                algsObj[state] = [];
+                            }
+    
+                            algsObj[state].push(inverseAlg(m1 + " " + m2));
+                        }
+                    }
+                }
+                arr = tArr.slice();
+            }
+            depth++;
+        }
+
+        if (n === null) {
+            return algs;
+        }
+        else {
+            return algsObj;
+        }
+    }
+
     function getScramble333() {
         let scr = "";
         let moves = ["R", "L", "F", "B", "U", "D"];
@@ -627,6 +694,7 @@ let colors222 = [
         let size = ((width - 3 * space) / 4) / n;
         let fill = "";
         let strokeWidth = ((size / n) > 1) ? 1 : 0;
+        let stroke = "#1E1E1E";
     
         let coordinates = [
             {
@@ -722,6 +790,7 @@ let colors222 = [
         let space = w/3;
         let fill = "";
         let strokeWidth = 1;
+        let stroke = "#1E1E1E";
 
         let num = 0;
         for (let y = 0*h; y < 3*h; y += h) {
@@ -833,6 +902,7 @@ let colors222 = [
         let space = ($(svgID).width() / 13) / 3;
         let fill = "";
         let strokeWidth = 1;
+        let stroke = "#1E1E1E";
 
         let num = 0;
         for (let y = 0*h; y < 2*h; y += h) {
@@ -947,6 +1017,7 @@ let colors222 = [
         let colorE = "red";
         let colorEF = "#FFAA00";
         let colorBorder = "black";
+        let stroke = "#1E1E1E";
 
         let sSq1 = "";
 
