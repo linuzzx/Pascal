@@ -53,8 +53,8 @@ function genAffixes(n) {
 function genOPs() {
     let ops = {};
     let num = 0;
-    let maxN = affixes.length * affixes.length;
-    // postMessage(maxN.toString());
+    let maxN = affixes.length * affixes.filter(m => m.split(" ")[m.split(" ").length - 1].split("")[0] !== "U").length;
+    postMessage(maxN.toString());
     for (let m1 of affixes) {
         for (let m2 of affixes.filter(m => m.split(" ")[m.split(" ").length - 1].split("")[0] !== "U")) {
             num++;

@@ -15,10 +15,10 @@ function gen(n) {
     w.postMessage(n);
     w.onmessage = e => {
         if (typeof e.data === "number") {
-            // console.log(+parseFloat(e.data / maxN).toFixed(2));
+            $("#status").text(Math.round((e.data / maxN) * 100) + "%");
         }
         else if (typeof e.data === "string") {
-            // maxN = parseInt(e.data);
+            maxN = parseInt(e.data);
         }
         else {
             ops = e.data;
@@ -28,6 +28,7 @@ function gen(n) {
 }
 
 function getOps(ops) {
+    $("#status").text("");
     let out = "";
 
     out += "<button onclick=\"downloadFile()\">Download</button>";
