@@ -79,7 +79,7 @@ function genOPs() {
                 }
                 state = getNumberState(4, inverseAlg(alg));
 
-                let states = [getNumberState(4, alg + " U"), getNumberState(4, alg + " U2"), getNumberState(4, alg + " U'")];
+                let states = [getNumberState(4, inverseAlg(alg + " U")), getNumberState(4, inverseAlg(alg + " U2")), getNumberState(4, inverseAlg(alg + " U'"))];
                 let nState = getNewState(state);
                 let dup = "";
 

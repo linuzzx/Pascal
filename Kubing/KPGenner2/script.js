@@ -16,7 +16,7 @@ function gen(n) {
     w.postMessage(n);
     w.onmessage = e => {
         if (typeof e.data === "number") {
-            $("#status").text(Math.round((e.data / maxN) * 100) + "%");
+            $("#status").text(+parseFloat((e.data / maxN) * 100).toFixed(2) + "%");
         }
         else if (typeof e.data === "string") {
             maxN = parseInt(e.data);
