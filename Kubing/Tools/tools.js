@@ -4919,3 +4919,12 @@ function indexOf2d(arr, el) {
     }
     return i;
 }
+
+function splitN(str, delimiter, n) {
+    let arr = str.split(delimiter);
+    let nArr = [];
+    for (let i = 0; i < arr.length; i+=n) {
+        nArr.push(arr.slice(i, i + n).join(delimiter));
+    }
+    return nArr;
+}
