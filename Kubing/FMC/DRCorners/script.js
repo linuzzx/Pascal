@@ -9,7 +9,7 @@ $(() => {
 });
 
 function nextScramble() {
-    const solution = cornerAlgs[Math.floor(Math.random() * cornerAlgs.length - 1)];
+    const solution = cornerAlgs[Math.floor(Math.random() * cornerAlgs.length)];
     const scramble = inverseAlg(solution);
 
     drawScrambleNxN("#svgCube", 3, scramble);
