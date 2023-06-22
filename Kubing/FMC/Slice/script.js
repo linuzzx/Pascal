@@ -30,7 +30,7 @@ function getScrambleSlice() {
 
     scr = removeRedundantMoves(getMovesWithoutRotations(scr.trim()))
 
-    $("#solution").text(inverseAlg(removeRedundantMoves(getMovesWithoutRotations(rot + " " + htr.join(" ") + " " + dr.join(" ")))));
+    $("#skeleton").text(inverseAlg(removeRedundantMoves(getMovesWithoutRotations(rot + " " + htr.join(" ") + " " + dr.join(" ")))));
 
     return scr;
 }
