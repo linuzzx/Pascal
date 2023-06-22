@@ -29,10 +29,10 @@ function findTriggers(n) {
                     [stateArr[9], stateArr[11], stateArr[15], stateArr[17], stateArr[27], stateArr[29], stateArr[33], stateArr[35]].map(s => s === stateArr[13] || s === stateArr[31]).filter(s => s === false).length; */
         
         if (stateArr.slice(18, 27).filter(s => s === stateArr[22] || s === stateArr[40]).length === 9) {
-            if (!triggers[badEdges + "e" + badCorners + "c"]) {
-                triggers[badEdges + "e" + badCorners + "c"] = [];
+            if (!triggers[badCorners + "c" + badEdges + "e"]) {
+                triggers[badCorners + "c" + badEdges + "e"] = [];
             }
-            triggers[badEdges + "e" + badCorners + "c"].push(inverseAlg(s));
+            triggers[badCorners + "c" + badEdges + "e"].push(inverseAlg(s));
         }
 
         /* if (!triggers[badEdges + "e"]) {
@@ -49,5 +49,5 @@ function findTriggers(n) {
         Object.entries(triggers).map(([k, v]) => [k, v[0]])
     );
     console.log(nTriggers);
-    // console.log(triggers);
+    console.log(triggers);
 }
