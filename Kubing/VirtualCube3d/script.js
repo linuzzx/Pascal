@@ -469,6 +469,7 @@ function recon(t, scr, rec) {
 
     $("#btnRecon").css("display", "block");
     $("#btnRecon").attr("href", url);
+    reconMoves = [];
 }
 
 function getURL(tim, scr, rec) {
