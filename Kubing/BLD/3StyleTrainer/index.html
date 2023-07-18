@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../Tools/tools.js"></script>
     <script src="algs.js"></script>
+    <script src="../../CubePlayer/CubePlayer.js" type="module"></script>
     <script src="script.js" defer></script>
     <link rel="shortcut icon" href="https://einarkl.no/favicon.png" type="image/x-icon">
 </head>
@@ -32,13 +33,47 @@
                 <option value="Einar">Einar</option>
             </select>
         </div>
+        <div>
+            <select id="selOrientation" onchange="changeOrientation(this.value)">
+                <option value="" selected>WG</option>
+                <option value="y">WR</option>
+                <option value="y2">WB</option>
+                <option value="y'">WO</option>
+                
+                <option value="z2">YG</option>
+                <option value="z2 y">YR</option>
+                <option value="x2">YB</option>
+                <option value="z2 y'">YO</option>
+                
+                <option value="x y2">GW</option>
+                <option value="x y'">GO</option>
+                <option value="x">GY</option>
+                <option value="x y">GR</option>
+
+                <option value="x'">BW</option>
+                <option value="x' y">BR</option>
+                <option value="x' y2">BY</option>
+                <option value="x' y'">BO</option>
+
+                <option value="z' y'">RW</option>
+                <option value="z'">RG</option>
+                <option value="z' y">RY</option>
+                <option value="z' y2">RB</option>
+
+                <option value="z y">OW</option>
+                <option value="z y2">OB</option>
+                <option value="z y'">OY</option>
+                <option value="z">OG</option>
+            </select>
+        </div>
     </div>
     <div id="content">
-        <h1 id="scramble">Scramble</h1>
         <h1 id="letterPair">LetterPair</h1>
+        <div id="cpDiv"><cube-player cubestyle="hollow" playbutton="none"></cube-player></div>
         <h1 id="solution">Solution</h1>
     </div>
     <div id="btnDiv">
+        <button id="btnReset" onclick="resetCube()">Reset cube</button>
         <button id="btnNextComm" onclick="nextComm()">Next comm</button>
         <button id="btnShowComm" onclick="showComm()">Show comm</button>
     </div>

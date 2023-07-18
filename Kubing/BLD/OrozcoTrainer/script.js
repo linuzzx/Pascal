@@ -3,20 +3,25 @@ let commType;
 let letterScheme;
 let corners = ["UBL", "BUL", "LUB", "UBR", "BUR", "RUB", "UFL", "FUL", "LUF", "DFL", "FDL", "LDF", "DFR", "FDR", "RDF", "DBL", "BDL", "LDB", "DBR", "BDR", "RDB"];
 let edges = ["UB", "UL", "UR", "DF", "DL", "DR", "DB", "FL", "FR", "BR", "BL", "BU", "LU", "RU", "FD", "LD", "DR", "BD", "LF", "RF", "RB", "LB"];
-let curComm = "";
+let curComm = [];
+let curScramble = "";
+let curOrientation = "";
+let combinedScr = "";
 let start;
-let time;
-let timing;
-let timingInterval;
-let times;
 
 $(() => {
+    $("button").prop("disabled", true);
     locked = false;
-    timing = false;
 
     init();
     changeCommType();
     changeLetterScheme($("#selLetterScheme").val());
+    changeOrientation($("#selOrientation").val());
+    setTimeout(function() {
+        nextComm();
+        resetCube();
+        $("button").prop("disabled", false);
+    }, 1000);
 
     $(window).keydown(function(e) {
         if (!locked) {
@@ -31,15 +36,17 @@ $(() => {
 });
 
 function init() {
-    commType = localStorage.getItem("einarklOrozcoCommType") || "ufr_ubr";
-    let ls = localStorage.getItem("einarklOrozcoLetterScheme") || "Speffz";
+    commType = localStorage.getItem("einarklOrozcoCommType") !== undefined ? localStorage.getItem("einarklOrozcoCommType") : "ufr_ubr";
+    let ls = localStorage.getItem("einarklOrozcoLetterScheme") !== undefined ? localStorage.getItem("einarklOrozcoLetterScheme") : "Speffz";
+    curOrientation = localStorage.getItem("einarklOrientation") !== undefined ? localStorage.getItem("einarklOrientation") : "WG";
     $("input[name='radComms'][value='"+commType+"']").prop("checked",true);
     $("#selLetterScheme").val(ls).change();
-
-    initTimeList();
 }
 
 function nextComm() {
+    if (start) {
+        console.log(getHHmmsshh(Date.now() - start));
+    }
     $("#btnNextComm").blur();
 
     let pieces = [corners, edges, edges][["ufr_ubr", "uf_ur", "uf_bu"].indexOf(commType)].slice();
@@ -65,28 +72,32 @@ function nextComm() {
     }
 
     let l2 = pieces.splice(Math.floor(Math.random() * pieces.length), 1)[0];
-    curComm = l1 + "_" + l2;
+    curComm = [l1, l2];
     let lp = letterScheme[l1.toLowerCase()] + letterScheme[l2.toLowerCase()];
 
-    let ind = arr.findIndex(c => c.target === curComm);
-    let scr = removeRedundantMoves(arr[ind].scramble);
-    let sol = arr[ind].alg.replace("*", "<br>");
+    let ind1 = arr.findIndex(c => c.target === l1);
+    let ind2 = arr.findIndex(c => c.target === l2);
+    let scr = removeRedundantMoves(toAlg(arr[ind1].alg) + " " + inverseAlg(toAlg(arr[ind2].alg)));
+    curScramble = scr;
+    let sol = arr[ind1].alg + "<br>" + inverseAlg(arr[ind2].alg);
 
-    $("#scramble").text(scr);
+    $("#cpDiv cube-player").attr("scramble", [curOrientation, $("#cpDiv cube-player").attr("scramble"), scr].join(" ").trim());
     $("#letterPair").text(lp);
     $("#solution").html(sol);
 
-    $("#solution").css("visibility", "hidden");
+    $("#solution").css("display", "none");
+    start = Date.now();
+    combinedScr = [combinedScr, curScramble].join(" ");
 }
 
 function showComm() {
     $("#btnShowComm").blur();
 
-    if ($("#solution").css("visibility") === "hidden") {
-        $("#solution").css("visibility", "visible");
+    if ($("#solution").css("display") === "none") {
+        $("#solution").css("display", "block");
     }
     else {
-        $("#solution").css("visibility", "hidden");
+        $("#solution").css("display", "none");
     }
 }
 
@@ -108,9 +119,8 @@ function changeLetterScheme(ls) {
         }
     }
     
-    if (curComm !== "") {
-        let c = curComm.toLowerCase().split("_");
-        let lp = letterScheme[c[0]] + letterScheme[c[1]];
+    if (curComm.length !== 0) {
+        let lp = letterScheme[curComm[0].toLowerCase()] + letterScheme[curComm[1].toLowerCase()];
         $("#letterPair").text(lp);
     }
 
@@ -125,54 +135,189 @@ function changeCommType() {
     localStorage.setItem("einarklOrozcoCommType", commType);
 
     nextComm();
+    resetCube();
 }
 
-function startTimer() {
-    timing = true;
-    start = Date.now();
-    timingInterval = setInterval(() => {
-        time = getHHmmsshh(Date.now() - start);
-        $("#timer").text(time);
-    }, 10);
-}
-
-function stopTimer() {
-    timing = false;
-    clearInterval(timingInterval);
-
-    $("#timeList").prepend("<tr><td>" + ($("#timeList").children().length + 1) + "</td><td>" + time + "</td</tr>");
-
-    times.push(time);
-
-    localStorage.setItem("einarklOrozcoTrainerTimes", times.join(";"));
-}
-
-function initTimeList() {
-    times = localStorage.getItem("einarklOrozcoTrainerTimes") ? localStorage.getItem("einarklOrozcoTrainerTimes").split(";") : [];
-
-    let i = 1;
-    for (t of times) {
-        $("#timeList").prepend("<tr><td>" + i + "</td><td>" + t + "</td</tr>");
-        i++;
-    }
-}
-
-function resetTimeList() {
-    times = [];
-    $("#timeList").html("");
-    localStorage.removeItem("einarklOrozcoTrainerTimes");
+function changeOrientation(o) {
+    $("#cpDiv cube-player").attr("scramble", [o, combinedScr].join(" ").trim());
+    localStorage.setItem("einarklOrientation", o);
+    curOrientation = o;
 }
 
 function getKey(e) {
     if (e.which === 32) {// spacebar
-        if (timing) {
-            stopTimer();
-        }
-        else {
-            startTimer();
-        }
+        showComm();
     }
     else if (e.which === 13) {// enter
         nextComm();
     }
+    else if (e.which === 8) {// backspace
+        resetCube();
+    }
+}
+
+function toAlg(a) {
+    if (a.includes("(") || a.includes(")")) {
+        a = removeRedundantMoves(algxNtoAlg(a));
+    }
+    if ((a.includes("[") || a.includes("]")) && (a.includes(":") || a.includes(","))) {
+        if (a.includes("] [")) {
+            let c = a.split("] [");
+            let c1 = c[0] + "]";
+            let c2 = "[" + c[1];
+            a = removeRedundantMoves(commToAlg(c1) + " " + commToAlg(c2));
+        }
+        else {
+            a = removeRedundantMoves(commToAlg(a));
+        }
+    }
+
+    return a;
+}
+
+function algxNtoAlg(comm) {
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+    let commArr = [];
+
+    comm = cleanMoves(comm.replaceAll("(", " ( ").replaceAll(")", " ) "));
+    for (let c of comm.split(" ")) {
+        if (c === "(") {
+            commArr.push("b" + leftBrackets);
+            leftBrackets++;
+        }
+        else if (c === ")") {
+            commArr.push(c);
+            rightBrackets++;
+        }
+        else if(c !== " ") {
+            commArr.push(c);
+        }
+    }
+
+    if (leftBrackets !== rightBrackets) {
+        return "";
+    }
+    
+    for (let i = leftBrackets - 1; i >= 0; i--) {
+        let s = commArr.indexOf("b"+i);
+        let e = commArr.indexOf(")");
+        let c = commArr.slice(s + 1, e);
+        let n = parseInt(commArr[e + 1]);
+        commArr.splice(s, e + 2, translateComm(c, n));
+    }
+    
+    return commArr.join(" ") || "";
+
+    function translateComm(cm, n) {
+        let str = "";
+        for (let i = 0; i < n; i++) {
+            str += cm.join(" ") + " ";
+        }
+        return str.trim();
+    }
+}
+
+function commToAlg(comm) {
+    let leftSqBrackets = 0;
+    let rightSqBrackets = 0;
+    let colons = 0;
+    let commas = 0;
+    let commArr = [];
+
+    /* 
+    [A, B] = A B A' B'
+    [A: B] = A B A'
+    */
+
+    if (
+        comm.split("").filter(c => c === "[").length !== (comm.split("").filter(c => c === ",").length + comm.split("").filter(c => c === ":").length)
+    ) {
+        comm = comm.replaceAll(":", ":[")+"]";
+    }
+    comm = cleanMoves(comm.replaceAll("[", " [ ").replaceAll("]", " ] ").replaceAll(",", " , ").replaceAll(":", " : "));
+    for (let c of comm.split(" ")) {
+        if (c === "[") {
+            commArr.push("l" + leftSqBrackets);
+            leftSqBrackets++;
+        }
+        else if (c === "]") {
+            commArr.push(c);
+            rightSqBrackets++;
+        }
+        else if (c === ":") {
+            commArr.push(c);
+            colons++;
+        }
+        else if (c === ",") {
+            commArr.push(c);
+            commas++;
+        }
+        else if (c !== " ") {
+            commArr.push(c);
+        }
+    }
+
+    if (leftSqBrackets === rightSqBrackets + 1) {
+        commArr.push("]");
+        rightSqBrackets++;
+    }
+    
+    if (leftSqBrackets !== rightSqBrackets || colons > leftSqBrackets || commas > leftSqBrackets) {
+        return "";
+    }
+
+    let stack = [];
+    for (let i = leftSqBrackets - 1; i >= 0; i--) {
+        let s = commArr.indexOf("l"+i);
+        let e = commArr.indexOf("]");
+        let c = commArr.slice(s, e + 1);
+        commArr.splice(s, c.length, "stack"+stack.length);
+        stack.push(translateComm(c));
+    }
+
+    let newAlg = stack.pop() || "";
+    while (newAlg.includes("stack")) {
+        
+        let nArr = newAlg.split(" ");
+        for (let i = 0; i < nArr.length; i++) {
+            if (nArr[i].includes("stack")) {
+                nArr[i] = stack[parseInt(nArr[i].replace("stack", ""))];
+            }
+        }
+        
+        newAlg = nArr.join(" ");
+    }
+    
+    return newAlg;
+
+    function translateComm(cm) {
+        if (cm.includes(",")) {
+            let c1 = cm.slice(1, cm.indexOf(",")).join(" ");
+            let c2 = cm.slice(cm.indexOf(",") + 1, -1).join(" ");
+            return [c1, c2, inverseAlg(c1), inverseAlg(c2)].join(" ");
+        }
+        else if (cm.includes(":")) {
+            let c1 = cm.slice(1, cm.indexOf(":")).join(" ");
+            let c2 = cm.slice(cm.indexOf(":") + 1, -1).join(" ");
+            return [c1, c2, inverseAlg(c1)].join(" ");
+        }
+    }
+}
+
+function cleanMoves(moves) {
+    moves = moves.trim();
+    moves = moves.replaceAll(" ", ";");
+
+    while (moves.includes(";;")) {
+        moves = moves.replaceAll(";;", ";");
+    }
+
+    return moves.replaceAll(";", " ");
+}
+
+function resetCube() {
+    combinedScr = curScramble;
+    $("#btnReset").blur();
+    $("#cpDiv cube-player").attr("scramble", [curOrientation, curScramble].join(" ").trim());
 }

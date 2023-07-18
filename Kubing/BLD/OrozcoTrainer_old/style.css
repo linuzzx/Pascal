@@ -15,12 +15,6 @@ body {
     overflow: hidden;
 }
 
-#cpDiv {
-    width: 20%;
-    height: 20%;
-    margin: 0 auto;
-}
-
 #optionsDiv {
     min-width: 30%;
     max-width: 40%;
@@ -33,13 +27,31 @@ body {
 }
 
 #content {
-    height: 80%;
+    height: 60%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+}
+
+#contentLeft {
+    margin-top: 20%;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+
+#contentMiddle {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
 }
 
+#contentRight {
+    height: 100%;
+}
+
 #solution {
-    display: none;
+    visibility: hidden;
 }
 
 #tblRadBut {
@@ -57,6 +69,33 @@ h1 {
     font-size: 5vh;
 }
 
+#letterPair {
+    font-size: 7vh;
+}
+
+#contentLeft > button {
+    width: 50%;
+    margin: 5%;
+}
+
+#timeList {
+    max-height: 80%;
+    width: 75%;
+}
+
+#timeList tr td {
+    border-collapse: collapse;
+    color: #aaaaaa;
+    font-size: 2vh;
+    font-family: monospace;
+}
+
+#timer {
+    position: relative;
+    top: 50%;
+    font-size: 10vh;
+}
+
 #btnDiv {
     height: 20%;
     text-align: center;
@@ -72,4 +111,26 @@ h1 {
 #selLetterScheme {
     font-size: 3vh;
     font-family: monospace;
+}
+
+/*Scrollbar*/
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888888;
+    border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555555; 
 }

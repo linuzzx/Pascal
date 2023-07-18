@@ -5,11 +5,22 @@ let letterScheme;
 let corners = ["UBL", "BUL", "LUB", "UBR", "BUR", "RUB", "UFL", "FUL", "LUF", "DFL", "FDL", "LDF", "DFR", "FDR", "RDF", "DBL", "BDL", "LDB", "DBR", "BDR", "RDB"];
 let edges = ["UB", "UL", "UR", "DF", "DL", "DR", "DB", "FL", "FR", "BR", "BL", "BU", "LU", "RU", "FD", "LD", "DR", "BD", "LF", "RF", "RB", "LB"];
 let curComm = "";
+let curScramble = "";
+let curOrientation = "";
+let combinedScr = "";
+let start;
 
 $(() => {
+    $("button").prop("disabled", true);
     locked = false;
 
     init();
+    changeOrientation($("#selOrientation").val());
+    setTimeout(function() {
+        nextComm();
+        resetCube();
+        $("button").prop("disabled", false);
+    }, 1000);
 
     $(window).keydown(function(e) {
         if (!locked) {
@@ -24,9 +35,12 @@ $(() => {
 });
 
 function init() {
-    commType = localStorage.getItem("einarklCommType") || "ufr";
-    letterScheme = localStorage.getItem("einarklLetterScheme") || "Speffz";
-    commSet = localStorage.getItem("einarklCommSet") || "All";
+    /* commType = localStorage.getItem("einarklCommType") !== undefined ? localStorage.getItem("einarklCommType") : "ufr";
+    letterScheme = localStorage.getItem("einarklLetterScheme") !== undefined ? localStorage.getItem("einarklLetterScheme") : "Speffz";
+    commSet = localStorage.getItem("einarklCommSet") !== undefined ? localStorage.getItem("einarklCommSet") : "All"; */
+    commType = "ufr";
+    letterScheme = "Speffz";
+    commSet = "All";
 
     initCommSetOptions();
 
@@ -47,6 +61,10 @@ function initCommSetOptions() {
 }
 
 function nextComm() {
+    if (start) {
+        console.log(getHHmmsshh(Date.now() - start));
+    }
+
     $("#btnNextComm").blur();
 
     let arr = [ufr, uf][["ufr", "uf"].indexOf(commType)];
@@ -62,14 +80,17 @@ function nextComm() {
     let lp = letterScheme[t1.toLowerCase()] + letterScheme[t2.toLowerCase()];
 
     let ind = arr.findIndex(c => c.target === curComm);
-    let scr = removeRedundantMoves(arr[ind].scramble);
+    let scr = removeRedundantMoves(toAlg(arr[ind].alg));
+    curScramble = scr;
     let sol = arr[ind].alg.replace("*", "<br>");
 
-    $("#scramble").text(scr);
+    $("#cpDiv cube-player").attr("scramble", $("#cpDiv cube-player").attr("scramble") + " " + scr);
     $("#letterPair").text(lp);
     $("#solution").html(sol);
 
     $("#solution").css("display", "none");
+    start = Date.now();
+    combinedScr = [combinedScr, curScramble].join(" ");
 }
 
 function showComm() {
@@ -124,6 +145,12 @@ function changeCommType(ct) {
     nextComm();
 }
 
+function changeOrientation(o) {
+    $("#cpDiv cube-player").attr("scramble", [o, combinedScr].join(" ").trim());
+    localStorage.setItem("einarklOrientation", o);
+    curOrientation = o;
+}
+
 function changeCommSet(cs) {
     $("#selCommSet").blur();
 
@@ -132,6 +159,7 @@ function changeCommSet(cs) {
     localStorage.setItem("einarklCommSet", commSet);
 
     nextComm();
+    resetCube();
 }
 
 function getKey(e) {
@@ -141,4 +169,173 @@ function getKey(e) {
     else if (e.which === 13) {// enter
         nextComm();
     }
+    else if (e.which === 8) {// backspace
+        resetCube();
+    }
+}
+
+function toAlg(a) {
+    if (a.includes("(") || a.includes(")")) {
+        a = removeRedundantMoves(algxNtoAlg(a));
+    }
+    if ((a.includes("[") || a.includes("]")) && (a.includes(":") || a.includes(","))) {
+        if (a.includes("] [")) {
+            let c = a.split("] [");
+            let c1 = c[0] + "]";
+            let c2 = "[" + c[1];
+            a = removeRedundantMoves(commToAlg(c1) + " " + commToAlg(c2));
+        }
+        else {
+            a = removeRedundantMoves(commToAlg(a));
+        }
+    }
+
+    return a;
+}
+
+function algxNtoAlg(comm) {
+    let leftBrackets = 0;
+    let rightBrackets = 0;
+    let commArr = [];
+
+    comm = cleanMoves(comm.replaceAll("(", " ( ").replaceAll(")", " ) "));
+    for (let c of comm.split(" ")) {
+        if (c === "(") {
+            commArr.push("b" + leftBrackets);
+            leftBrackets++;
+        }
+        else if (c === ")") {
+            commArr.push(c);
+            rightBrackets++;
+        }
+        else if(c !== " ") {
+            commArr.push(c);
+        }
+    }
+
+    if (leftBrackets !== rightBrackets) {
+        return "";
+    }
+    
+    for (let i = leftBrackets - 1; i >= 0; i--) {
+        let s = commArr.indexOf("b"+i);
+        let e = commArr.indexOf(")");
+        let c = commArr.slice(s + 1, e);
+        let n = parseInt(commArr[e + 1]);
+        commArr.splice(s, e + 2, translateComm(c, n));
+    }
+    
+    return commArr.join(" ") || "";
+
+    function translateComm(cm, n) {
+        let str = "";
+        for (let i = 0; i < n; i++) {
+            str += cm.join(" ") + " ";
+        }
+        return str.trim();
+    }
+}
+
+function commToAlg(comm) {
+    let leftSqBrackets = 0;
+    let rightSqBrackets = 0;
+    let colons = 0;
+    let commas = 0;
+    let commArr = [];
+
+    /* 
+    [A, B] = A B A' B'
+    [A: B] = A B A'
+    */
+
+    if (
+        comm.split("").filter(c => c === "[").length !== (comm.split("").filter(c => c === ",").length + comm.split("").filter(c => c === ":").length)
+    ) {
+        comm = comm.replaceAll(":", ":[")+"]";
+    }
+    comm = cleanMoves(comm.replaceAll("[", " [ ").replaceAll("]", " ] ").replaceAll(",", " , ").replaceAll(":", " : "));
+    for (let c of comm.split(" ")) {
+        if (c === "[") {
+            commArr.push("l" + leftSqBrackets);
+            leftSqBrackets++;
+        }
+        else if (c === "]") {
+            commArr.push(c);
+            rightSqBrackets++;
+        }
+        else if (c === ":") {
+            commArr.push(c);
+            colons++;
+        }
+        else if (c === ",") {
+            commArr.push(c);
+            commas++;
+        }
+        else if (c !== " ") {
+            commArr.push(c);
+        }
+    }
+
+    if (leftSqBrackets === rightSqBrackets + 1) {
+        commArr.push("]");
+        rightSqBrackets++;
+    }
+    
+    if (leftSqBrackets !== rightSqBrackets || colons > leftSqBrackets || commas > leftSqBrackets) {
+        return "";
+    }
+
+    let stack = [];
+    for (let i = leftSqBrackets - 1; i >= 0; i--) {
+        let s = commArr.indexOf("l"+i);
+        let e = commArr.indexOf("]");
+        let c = commArr.slice(s, e + 1);
+        commArr.splice(s, c.length, "stack"+stack.length);
+        stack.push(translateComm(c));
+    }
+
+    let newAlg = stack.pop() || "";
+    while (newAlg.includes("stack")) {
+        
+        let nArr = newAlg.split(" ");
+        for (let i = 0; i < nArr.length; i++) {
+            if (nArr[i].includes("stack")) {
+                nArr[i] = stack[parseInt(nArr[i].replace("stack", ""))];
+            }
+        }
+        
+        newAlg = nArr.join(" ");
+    }
+    
+    return newAlg;
+
+    function translateComm(cm) {
+        if (cm.includes(",")) {
+            let c1 = cm.slice(1, cm.indexOf(",")).join(" ");
+            let c2 = cm.slice(cm.indexOf(",") + 1, -1).join(" ");
+            return [c1, c2, inverseAlg(c1), inverseAlg(c2)].join(" ");
+        }
+        else if (cm.includes(":")) {
+            let c1 = cm.slice(1, cm.indexOf(":")).join(" ");
+            let c2 = cm.slice(cm.indexOf(":") + 1, -1).join(" ");
+            return [c1, c2, inverseAlg(c1)].join(" ");
+        }
+    }
+}
+
+function cleanMoves(moves) {
+    moves = moves.trim();
+    moves = moves.replaceAll(" ", ";");
+
+    while (moves.includes(";;")) {
+        moves = moves.replaceAll(";;", ";");
+    }
+
+    return moves.replaceAll(";", " ");
+}
+
+function resetCube() {
+    combinedScr = curScramble;
+    $("#btnReset").blur();
+    $("#cpDiv cube-player").attr("scramble", [curOrientation, curScramble].join(" ").trim());
 }
