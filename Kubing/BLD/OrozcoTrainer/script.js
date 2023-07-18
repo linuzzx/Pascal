@@ -41,6 +41,7 @@ function init() {
     curOrientation = localStorage.getItem("einarklOrientation") !== undefined ? localStorage.getItem("einarklOrientation") : "WG";
     $("input[name='radComms'][value='"+commType+"']").prop("checked",true);
     $("#selLetterScheme").val(ls).change();
+    $("#selOrientation").val(curOrientation).change();
 }
 
 function nextComm() {
