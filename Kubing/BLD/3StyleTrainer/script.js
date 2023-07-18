@@ -62,9 +62,6 @@ function initCommSetOptions() {
     else if (arr[0].length == 2) {
         commArr = ["UB", "UR", "UL", "LU", "LF", "LD", "LB", "FR", "FD", "FL", "RU", "RB", "RD", "RF", "BU", "BL", "BD", "BL", "DF", "DR", "DB", "DL"];
     }
-    /* else {
-        commArr = arr;
-    } */
 
     let out = "<option value='All' selected>All</option>";
     for (let a of commArr) {
@@ -72,36 +69,6 @@ function initCommSetOptions() {
     }
 
     $("#selCommSet").html(out);
-}
-
-function algSort(arr) {
-    const firstLetterOrder = ['U', 'L', 'F', 'R', 'B', 'D'];
-    const secondThirdLetterOrder = ['U', 'D', 'F', 'B', 'R', 'L'];
-  
-    arr.sort((a, b) => {
-      const firstLetterA = a[0];
-      const firstLetterB = b[0];
-  
-      const secondLetterA = a[1];
-      const secondLetterB = b[1];
-  
-      const thirdLetterA = a[2];
-      const thirdLetterB = b[2];
-  
-      const firstLetterComparison = firstLetterOrder.indexOf(firstLetterA) - firstLetterOrder.indexOf(firstLetterB);
-      const secondLetterComparison = secondThirdLetterOrder.indexOf(secondLetterA) - secondThirdLetterOrder.indexOf(secondLetterB);
-      const thirdLetterComparison = secondThirdLetterOrder.indexOf(thirdLetterA) - secondThirdLetterOrder.indexOf(thirdLetterB);
-  
-      if (firstLetterComparison !== 0) {
-        return firstLetterComparison;
-      } else if (secondLetterComparison !== 0) {
-        return secondLetterComparison;
-      } else {
-        return thirdLetterComparison;
-      }
-    });
-  
-    return arr;
 }
 
 function nextComm() {
