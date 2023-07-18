@@ -69,7 +69,7 @@ h1 {
     font-family: monospace;
 }
 
-#selLetterScheme {
+#selLetterScheme, #selOrientation {
     font-size: 3vh;
     font-family: monospace;
 }
