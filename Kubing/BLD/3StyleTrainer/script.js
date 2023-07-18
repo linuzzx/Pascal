@@ -35,18 +35,21 @@ $(() => {
 });
 
 function init() {
-    /* commType = localStorage.getItem("einarklCommType") !== undefined ? localStorage.getItem("einarklCommType") : "ufr";
+    commType = localStorage.getItem("einarklCommType") !== undefined ? localStorage.getItem("einarklCommType") : "ufr";
     letterScheme = localStorage.getItem("einarklLetterScheme") !== undefined ? localStorage.getItem("einarklLetterScheme") : "Speffz";
-    commSet = localStorage.getItem("einarklCommSet") !== undefined ? localStorage.getItem("einarklCommSet") : "All"; */
-    commType = "ufr";
+    commSet = localStorage.getItem("einarklCommSet") !== undefined ? localStorage.getItem("einarklCommSet") : "All";
+    curOrientation = localStorage.getItem("einarklOrientation") !== undefined ? localStorage.getItem("einarklOrientation") : "";
+    /* commType = "ufr";
     letterScheme = "Speffz";
     commSet = "All";
+    curOrientation = ""; */
 
     initCommSetOptions();
 
     $("input[name='radComms'][value='"+commType+"']").prop("checked",true);
     $("#selCommSet").val(commSet).change();
     $("#selLetterScheme").val(letterScheme).change();
+    $("#selOrientation").val(curOrientation).change();
 }
 
 function initCommSetOptions() {

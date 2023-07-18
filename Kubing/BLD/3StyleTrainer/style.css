@@ -23,7 +23,7 @@ body {
 
 #optionsDiv {
     min-width: 30%;
-    max-width: 40%;
+    max-width: 50%;
     min-height: 5%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
