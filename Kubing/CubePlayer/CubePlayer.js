@@ -501,9 +501,9 @@ function resetState() {
         }
         movesApplied = [];
     }
-    /* for (let m of scramble.split(" ")) {
+    for (let m of scramble.split(" ")) {
         mv(m);
-    } */
+    }
 }
 
 function inverseAlg(alg) {

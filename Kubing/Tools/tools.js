@@ -105,14 +105,18 @@ let colors222 = [
             for (let i = 0; i < n; i++) {
                 let again = false;
                 let move = moves[Math.floor(Math.random() * moves.length)];
+                let m = move.replace("2", "").replace("'", "");
                 if (i >= 1) {
-                    if (move.split("")[0] === arr[i - 1].split("")[0]) {
+                    let pm = arr[i - 1].replace("2", "").replace("'", "");
+                    if (m === pm || m.includes("w") && pm === m.replace("w", "")) {
                         i--;
                         again = true;
                     }
                 }
                 if (i >= 2) {
-                    if (opp(move.split("")[0]) === arr[i - 1].split("")[0] && move.split("")[0] === arr[i - 2].split("")[0]) {
+                    let pm = arr[i - 1].replace("2", "").replace("'", "");
+                    let ppm = arr[i - 2].replace("2", "").replace("'", "");
+                    if (opp(m) === pm && m === ppm) {
                         i--;
                         again = true;
                     }
@@ -138,6 +142,18 @@ let colors222 = [
                     return "B";
                 case "B":
                     return "F";
+                case "Uw":
+                    return "Dw";
+                case "Dw":
+                    return "Uw";
+                case "Rw":
+                    return "Lw";
+                case "Lw":
+                    return "Rw";
+                case "Fw":
+                    return "Bw";
+                case "Bw":
+                    return "Fw";
             }
         }
     }

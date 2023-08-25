@@ -1,0 +1,97 @@
+html {
+    background-image: linear-gradient(to bottom, #181818, #464646);
+    background-attachment: fixed;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: transparent;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+h1 {
+    color: #aaaaaa;
+    margin: 0;
+    cursor: default;
+    font-weight: normal;
+    font-family: monospace;
+    font-size: 10vh;
+}
+
+h2 {
+    color: #aaaaaa;
+    margin: 0;
+    cursor: default;
+    font-weight: normal;
+    font-family: monospace;
+    font-size: 5vh;
+}
+
+h3 {
+    color: #aaaaaa;
+    margin: 0;
+    cursor: default;
+    font-weight: normal;
+    font-family: monospace;
+    font-size: 3vh;
+}
+
+label, span {
+    color: #aaa;
+    font-family: monospace;
+}
+
+#content {
+    text-align: center;
+}
+
+#cubePlayerDiv {
+    margin: auto;
+    width: 20%;
+    height: 20%;
+}
+
+#tablePlaybutton {
+    margin: auto;
+    width: 50%;
+    border-collapse: collapse;
+}
+
+#tableButtons {
+    margin: auto;
+    width: 50%;
+    border-collapse: collapse;
+}
+
+#tblKB {
+    margin: auto;
+    width: 50%;
+    border-collapse: collapse;
+}
+
+.inpKB {
+    width: 50%;
+    text-align: center;
+}
+
+.guessButtons {
+    width: 100%;
+    font-family: monospace;
+    font-size: 3vh;
+}
+
+#btnPlay {
+    font-family: monospace;
+    font-size: 3vh;
+}
+
+#keysDiv {
+    position: absolute;
+    top: 1%;
+    left: 0;
+}

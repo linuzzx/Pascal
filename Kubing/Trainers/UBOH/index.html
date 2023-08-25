@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBOH Trainer</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://einarkl.no/Kubing/Tools/tools.js"></script>
+    <script src='https://einarkl.github.io/Kubing/CubePlayer/CubePlayer.js' type='module'></script>
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="https://einarkl.no/favicon.png" type="image/x-icon">
+</head>
+<body>
+    <div id="content">
+        <div id="keysDiv">
+            <h3>Key bindings</h3>
+            <table id="tblKB">
+                <tr>
+                    <th><h3>-</h3></th>
+                    <th><input id="kbm" class="inpKB" type="text" onkeyup="updateBindings()" value="1" maxlength="1"></th>
+                </tr>
+                <tr>
+                    <th><h3>0</h3></th>
+                    <th><input id="kb0" class="inpKB" type="text" onkeyup="updateBindings()" value="2" maxlength="1"></th>
+                </tr>
+                <tr>
+                    <th><h3>+</h3></th>
+                    <th><input id="kbp" class="inpKB" type="text" onkeyup="updateBindings()" value="3" maxlength="1"></th>
+                </tr>
+                <tr>
+                    <th><h3>U</h3></th>
+                    <th><input id="kbU" class="inpKB" type="text" onkeyup="updateBindings()" value="4" maxlength="1"></th>
+                </tr>
+                <tr>
+                    <th><h3>R</h3></th>
+                    <th><input id="kbR" class="inpKB" type="text" onkeyup="updateBindings()" value="5" maxlength="1"></th>
+                </tr>
+            </table>
+        </div>
+        <h1 id="ubohState"></h1>
+        <label for="inpTPS">TPS: </label>
+        <input type="number" min="0.1" step="0.1" id="inpTPS" value="1"><br><br>
+        <label for="inpNMoves">Number of moves: </label>
+        <input type="number" min="1" step="1" id="inpNMoves" value="1">
+        <div id="contentGrid">
+            <div id="cubePlayerDiv">
+                <cube-player
+                scramble="" 
+                solution="" 
+                time="1000" 
+                cubestyle="solid" 
+                logo="./UB.png"
+                colors="
+                    #777,
+                    #777,
+                    #777,
+                    #777,
+                    #777,
+                    #777" 
+                plastic="#000000"
+                playbutton="none"
+                smartcube="none"
+                solvedfunc="cubeFinished"
+                usecontrols="true">
+                </cube-player>
+            </div>
+        </div>
+        <table id="tablePlaybutton">
+            <tr>
+                <th><button id="btnPlay" onclick="playMoves()">Play moves</button></th>
+            </tr>
+            <tr>
+                <th><h3>[Spacebar]</h3></th>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <br>
+        <h2>Guess state</h1>
+        <br>
+        <table id="tableButtons">
+            <tr>
+                <th><button id="btnm" class="guessButtons" onclick="guessState('-')" disabled>-</button></th>
+                <th><button id="btn0" class="guessButtons" onclick="guessState('0')" disabled>0</button></th>
+                <th><button id="btnp" class="guessButtons" onclick="guessState('+')" disabled>+</button></th>
+                <th><button id="btnU" class="guessButtons" onclick="guessState('U')" disabled>U</button></th>
+                <th><button id="btnR" class="guessButtons" onclick="guessState('R')" disabled>R</button></th>
+            </tr>
+            <tr>
+                <th><h3 id="infom">[1]</h3></th>
+                <th><h3 id="info0">[2]</h3></th>
+                <th><h3 id="infop">[3]</h3></th>
+                <th><h3 id="infoU">[4]</h3></th>
+                <th><h3 id="infoR">[5]</h3></th>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
