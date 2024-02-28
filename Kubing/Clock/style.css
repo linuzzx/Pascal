@@ -13,11 +13,23 @@ body {
     text-align: center;
 }
 
+#btnDiv:nth-child(1) {
+    text-align: right;
+}
+
 button {
     position: absolute;
+    width: fit-content;
     z-index: 1;
     font-size: 3vh;
-    transform: translateX(-50%);
+}
+
+#btnScramble {
+    left: 2%;
+}
+
+#btnToggleFlip {
+    right: 2%;
 }
 
 #clockDisplay {

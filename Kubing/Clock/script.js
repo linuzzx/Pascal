@@ -491,8 +491,7 @@ function toggleFlip() {
 }
 
 function updateFlip() {
-    let notFlip = flip === "y2" ? "x2" : "y2";
-    $("#btnToggleFlip").text("Change flip to " + notFlip);
+    $("#btnToggleFlip").text("Flip: " + flip);
     if (flip === "y2") {
         $("#bClock").css({"transform": "rotate(0deg)"});
         $("#bClock .pinActive").css({"transform": "rotate(0deg)"});

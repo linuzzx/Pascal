@@ -16,7 +16,10 @@
 		/>
 	</head>
 	<body>
-        <button id="btnToggleFlip" onclick="toggleFlip()">Change flip to x2</button>
+		<div id="btnDiv">
+			<button id="btnScramble" onclick="scrambleClock()">Scramble</button>
+        	<button id="btnToggleFlip" onclick="toggleFlip()">Flip: y2</button>
+		</div>
 		<div id="clockDisplay">
 			<div id="fClock" class="clockFaces">
 				<div class="clockColumns">
@@ -235,6 +238,5 @@
 				</div>
 			</div>
 		</div>
-		<button id="btnScramble" onclick="scrambleClock()">Scramble</button>
 	</body>
 </html>
