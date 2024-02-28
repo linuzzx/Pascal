@@ -1,3 +1,5 @@
+let flip = "y2";
+
 let clockFaces = {
     Cf: 0,
     Uf: 0,
@@ -36,6 +38,8 @@ function initActions() {
         let step = parseInt(wheel[wheel.length - 1] + 1);
         turnClock(wheelPos, step);
     });
+    flip = localStorage.getItem("clockFlip") ? localStorage.getItem("clockFlip") : flip;
+    updateFlip();
 }
 
 function initClockCircles() {
@@ -460,5 +464,27 @@ function updatePins() {
             $("#fClock .pin-" + key).removeClass("pinActive");
             $("#bClock .pin-" + key).addClass("pinActive");
         }
+    }
+}
+
+function toggleFlip() {
+    if (flip === "y2") {
+        flip = "x2";
+    }
+    else {
+        flip = "y2";
+    }
+    localStorage.setItem("clockFlip", flip);
+    updateFlip();
+}
+
+function updateFlip() {
+    let notFlip = flip === "y2" ? "x2" : "y2";
+    $("#btnToggleFlip").text("Change flip to " + notFlip);
+    if (flip === "y2") {
+        $("#bClock").css({"transform": "rotate(0deg)"});
+    }
+    else if(flip === "x2") {
+        $("#bClock").css({"transform": "rotate(180deg)"});
     }
 }

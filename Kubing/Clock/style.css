@@ -15,8 +15,10 @@ body {
     text-align: center;
 }
 
-#btnScramble {
+button {
+    position: absolute;
     font-size: 3vh;
+    transform: translateX(-50%);
 }
 
 #clockDisplay {
