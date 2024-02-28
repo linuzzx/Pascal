@@ -1,7 +1,7 @@
 let tabContents = [];
 let currentTab = 0;
 
-$(function() {
+$(() => {
     tabContents = $(".tabContent");
 
     adjustImg();

@@ -387,7 +387,7 @@ let colors222 = [
         return scr.trim();
     }
 
-    function getScrambleClock() {
+    function getScrambleClock(pins = false) {
         let c = ["UR","DR","DL","UL"];
         let e = ["U","R","D","L"];
         let x = ["ALL","y2 "];
@@ -401,9 +401,11 @@ let colors222 = [
                     e[2] + extra[Math.floor(Math.random() * extra.length)] + e[3] + extra[Math.floor(Math.random() * extra.length)] + 
                     x[0] + extra[Math.floor(Math.random() * extra.length)];
 
-        for (let p of c) {
-            if (Math.round(Math.random() * 1) === 1) {
-                scr += p + " ";
+        if (pins) {
+            for (let p of c) {
+                if (Math.round(Math.random() * 1) === 1) {
+                    scr += p + " ";
+                }
             }
         }
 
@@ -697,6 +699,339 @@ let colors222 = [
 // Draw scramble
 {
     let stroke = "#1E1E1E";
+
+    function drawScrambleNxN_new(svgID, n, scr, flagsStr = "") {
+        const clean = ["white", "#FFAA00", "#00FF00", "red", "blue", "yellow"];
+        $(svgID).empty();
+    
+        let cube = getState_new(n, scr);
+        let indCube = [];
+
+        let ind = 0;
+        for (let s = 0; s < 6; s++) {
+            indCube.push([]);
+            for (let i = 0; i < n; i++) {
+                indCube[s].push([]);
+                for (let j = 0; j < n; j++) {
+                    // indCube[s][i].push({s: s, r: i, c: j});
+                    indCube[s][i].push(ind);
+                    ind++;
+                }
+            }
+        }
+        
+        const corners = {
+            "ubl": [indCube[0][0][0]],
+            "ubr": [indCube[0][0][n-1]],
+            "ufr": [indCube[0][n-1][n-1]],
+            "ufl": [indCube[0][n-1][0]],
+            "dfl": [indCube[5][0][0]],
+            "dfr": [indCube[5][0][n-1]],
+            "dbr": [indCube[5][n-1][n-1]],
+            "dbl": [indCube[5][n-1][0]],
+            "ful": [indCube[2][0][0]],
+            "fur": [indCube[2][0][n-1]],
+            "fdr": [indCube[2][n-1][n-1]],
+            "fdl": [indCube[2][n-1][0]],
+            "bur": [indCube[4][0][0]],
+            "bul": [indCube[4][0][n-1]],
+            "bdl": [indCube[4][n-1][n-1]],
+            "bdr": [indCube[4][n-1][0]],
+            "ruf": [indCube[3][0][0]],
+            "rub": [indCube[3][0][n-1]],
+            "rdb": [indCube[3][n-1][n-1]],
+            "rdf": [indCube[3][n-1][0]],
+            "lub": [indCube[1][0][0]],
+            "luf": [indCube[1][0][n-1]],
+            "ldf": [indCube[1][n-1][n-1]],
+            "ldb": [indCube[1][n-1][0]],
+            "ulb": [indCube[0][0][0]],
+            "urb": [indCube[0][0][n-1]],
+            "urf": [indCube[0][n-1][n-1]],
+            "ulf": [indCube[0][n-1][0]],
+            "dlf": [indCube[5][0][0]],
+            "drf": [indCube[5][0][n-1]],
+            "drb": [indCube[5][n-1][n-1]],
+            "dlb": [indCube[5][n-1][0]],
+            "flu": [indCube[2][0][0]],
+            "fru": [indCube[2][0][n-1]],
+            "frd": [indCube[2][n-1][n-1]],
+            "fld": [indCube[2][n-1][0]],
+            "bru": [indCube[4][0][0]],
+            "blu": [indCube[4][0][n-1]],
+            "bld": [indCube[4][n-1][n-1]],
+            "brd": [indCube[4][n-1][0]],
+            "rfu": [indCube[3][0][0]],
+            "rbu": [indCube[3][0][n-1]],
+            "rbd": [indCube[3][n-1][n-1]],
+            "rfd": [indCube[3][n-1][0]],
+            "lbu": [indCube[1][0][0]],
+            "lfu": [indCube[1][0][n-1]],
+            "lfd": [indCube[1][n-1][n-1]],
+            "lbd": [indCube[1][n-1][0]]
+        }
+        
+        const edges = {
+            "ub": indCube[0][0].slice(1, -1),
+            "ur": transpose(indCube[0])[n-1].slice(1, -1),
+            "uf": indCube[0][n-1].slice(1, -1),
+            "ul": transpose(indCube[0])[0].slice(1, -1),
+            "df": indCube[5][0].slice(1, -1),
+            "dr": transpose(indCube[5])[n-1].slice(1, -1),
+            "db": indCube[5][n-1].slice(1, -1),
+            "dl": transpose(indCube[5])[0].slice(1, -1),
+            "fu": indCube[2][0].slice(1, -1),
+            "fr": transpose(indCube[2])[n-1].slice(1, -1),
+            "fd": indCube[2][n-1].slice(1, -1),
+            "fl": transpose(indCube[2])[0].slice(1, -1),
+            "bu": indCube[4][0].slice(1, -1),
+            "bl": transpose(indCube[4])[n-1].slice(1, -1),
+            "bd": indCube[4][n-1].slice(1, -1),
+            "br": transpose(indCube[4])[0].slice(1, -1),
+            "ru": indCube[3][0].slice(1, -1),
+            "rb": transpose(indCube[3])[n-1].slice(1, -1),
+            "rd": indCube[3][n-1].slice(1, -1),
+            "rf": transpose(indCube[3])[0].slice(1, -1),
+            "lu": indCube[1][0].slice(1, -1),
+            "lf": transpose(indCube[1])[n-1].slice(1, -1),
+            "ld": indCube[1][n-1].slice(1, -1),
+            "lb": transpose(indCube[1])[0].slice(1, -1),
+        }
+
+        const centers = {
+            "u": getCen(0),
+            "d": getCen(5),
+            "f": getCen(2),
+            "b": getCen(4),
+            "r": getCen(3),
+            "l": getCen(1),
+        }
+
+        let pieceFlags = {};
+
+        for (let k of Object.keys(corners)) {
+            pieceFlags[k + "_"] = corners[k];
+        }
+        for (let k of Object.keys(edges)) {
+            pieceFlags[k + "_"] = edges[k];
+        }
+        for (let k of Object.keys(corners)) {
+            let ks = k.split("");
+            let k2 = ks[1] + ks[2] + ks[0]
+            let k3 = ks[2] + ks[0] + ks[1]
+            pieceFlags[k] = corners[k].concat(corners[k2]).concat(corners[k3]);
+        }
+        for (let k of Object.keys(edges)) {
+            let ks = k.split("");
+            let k2 = ks[1] + ks[0]
+            pieceFlags[k] = edges[k].concat(edges[k2]);
+        }
+        for (let k of Object.keys(centers)) {
+            pieceFlags[k] = centers[k];
+        }
+
+        let flags = {};
+        
+        for (let k of Object.keys(pieceFlags)) {
+            flags[k] = pieceFlags[k];
+        }
+        
+        flags["all"] = $.map(cube, value => $.map(value, innerValue => innerValue));
+        flags["a"] = flags["all"];
+        flags["centers"] = flags["u"].concat(flags["d"], flags["f"], flags["b"], flags["r"], flags["l"]);
+        flags["edges"] = flags["ub"].concat(flags["ur"], flags["uf"], flags["ul"], flags["df"], flags["dr"], flags["db"], flags["dl"], flags["fl"], flags["fr"], flags["br"], flags["bl"]);
+        flags["corners"] = flags["ubl"].concat(flags["ubr"], flags["ufr"], flags["ufl"], flags["dfl"], flags["dfr"], flags["dbr"], flags["dbl"]);
+        flags["slice_m"] = flags["u"].concat(flags["d"], flags["f"], flags["b"], flags["ub"], flags["uf"], flags["df"], flags["db"]);
+        flags["slice_e"] = flags["f"].concat(flags["r"], flags["b"], flags["l"], flags["fl"], flags["fr"], flags["br"], flags["bl"]);
+        flags["slice_s"] = flags["u"].concat(flags["r"], flags["d"], flags["l"], flags["ul"], flags["ur"], flags["dr"], flags["dl"]);
+        flags["face_u"] = flags["u"].concat(flags["ubl_"], flags["ubr_"], flags["ufr_"], flags["ufl_"], flags["ub_"], flags["ur_"], flags["uf_"], flags["ul_"]);
+        flags["face_d"] = flags["d"].concat(flags["dbl_"], flags["dbr_"], flags["dfr_"], flags["dfl_"], flags["db_"], flags["dr_"], flags["df_"], flags["dl_"]);
+        flags["face_f"] = flags["f"].concat(flags["ful_"], flags["fur_"], flags["fdr_"], flags["fdl_"], flags["fu_"], flags["fr_"], flags["fd_"], flags["fl_"]);
+        flags["face_b"] = flags["b"].concat(flags["bul_"], flags["bur_"], flags["bdr_"], flags["bdl_"], flags["bu_"], flags["br_"], flags["bd_"], flags["bl_"]);
+        flags["face_r"] = flags["r"].concat(flags["ruf_"], flags["rub_"], flags["rdb_"], flags["rdf_"], flags["ru_"], flags["rb_"], flags["rd_"], flags["rf_"]);
+        flags["face_l"] = flags["l"].concat(flags["luf_"], flags["lub_"], flags["ldb_"], flags["ldf_"], flags["lu_"], flags["lb_"], flags["ld_"], flags["lf_"]);
+        flags["layer_u"] = flags["u"].concat(flags["ubl"], flags["ubr"], flags["ufr"], flags["ufl"], flags["ub"], flags["ur"], flags["uf"], flags["ul"]);
+        flags["layer_d"] = flags["d"].concat(flags["dbl"], flags["dbr"], flags["dfr"], flags["dfl"], flags["db"], flags["dr"], flags["df"], flags["dl"]);
+        flags["layer_f"] = flags["f"].concat(flags["ful"], flags["fur"], flags["fdr"], flags["fdl"], flags["fu"], flags["fr"], flags["fd"], flags["fl"]);
+        flags["layer_b"] = flags["b"].concat(flags["bul"], flags["bur"], flags["bdr"], flags["bdl"], flags["bu"], flags["br"], flags["bd"], flags["bl"]);
+        flags["layer_r"] = flags["r"].concat(flags["ruf"], flags["rub"], flags["rdb"], flags["rdf"], flags["ru"], flags["rb"], flags["rd"], flags["rf"]);
+        flags["layer_l"] = flags["l"].concat(flags["luf"], flags["lub"], flags["ldb"], flags["ldf"], flags["lu"], flags["lb"], flags["ld"], flags["lf"]);
+        flags["eo"] = flags["ub_"].concat(flags["ur_"], flags["uf_"], flags["ul_"], flags["df_"], flags["dr_"], flags["db_"], flags["dl_"], flags["fl_"], flags["fr_"], flags["br_"], flags["bl_"]);
+        flags["eo_f"] = flags["eo"];
+        flags["eo_b"] = flags["eo"];
+        flags["eo_r"] = flags["ub_"].concat(flags["ur_"], flags["uf_"], flags["ul_"], flags["df_"], flags["dr_"], flags["db_"], flags["dl_"], flags["lf_"], flags["rf_"], flags["rb_"], flags["lb_"]);
+        flags["eo_l"] = flags["eo_r"];
+        flags["eo_u"] = flags["bd_"].concat(flags["br_"], flags["bu_"], flags["bl_"], flags["fu_"], flags["fr_"], flags["fd_"], flags["fl_"], flags["ul_"], flags["ur_"], flags["dr_"], flags["dl_"]);
+        flags["eo_d"] = flags["eo_u"];
+        flags["eoline"] = flags["eo"].concat(flags["df"], flags["db"]);
+        flags["cross"] = flags["df"].concat(flags["dr"], flags["db"], flags["dl"]);
+        flags["f2l_fl"] = flags["dfl"].concat(flags["fl"]);
+        flags["f2l_fr"] = flags["dfr"].concat(flags["fr"]);
+        flags["f2l_bl"] = flags["dbl"].concat(flags["bl"]);
+        flags["f2l_br"] = flags["dbr"].concat(flags["br"]);
+        flags["f2l_b"] = flags["f2l_bl"].concat(flags["f2l_br"]);
+        flags["f2l_f"] = flags["f2l_fl"].concat(flags["f2l_fr"]);
+        flags["f2l_r"] = flags["f2l_fr"].concat(flags["f2l_br"]);
+        flags["f2l_l"] = flags["f2l_bl"].concat(flags["f2l_fl"]);
+        flags["f2l"] = flags["f2l_f"].concat(flags["f2l_b"]);
+        flags["oll"] = flags["face_u"];
+        flags["pll"] = flags["bu_"].concat(flags["ru_"], flags["fu_"], flags["lu_"], flags["bul_"], flags["bur_"], flags["fur_"], flags["ful_"], flags["lub_"], flags["rub_"], flags["ruf_"], flags["luf_"]);
+        flags["ll"] = flags["layer_u"];
+        flags["ell"] = flags["ub"].concat(flags["ur"], flags["uf"], flags["ul"]);
+        flags["cll"] = flags["ubl"].concat(flags["ubr"], flags["ufr"], flags["ufl"]);
+        flags["dr"] = flags["face_u"].concat(flags["face_d"]);
+        flags["dr_u"] = flags["dr"];
+        flags["dr_d"] = flags["dr"];
+        flags["dr_f"] = flags["face_f"].concat(flags["face_b"]);
+        flags["dr_b"] = flags["dr_f"];
+        flags["dr_r"] = flags["face_r"].concat(flags["face_l"]);
+        flags["dr_l"] = flags["dr_r"];
+        flags["fb"] = flags["f2l_l"].concat(flags["l"], flags["ld"]);
+        flags["sb"] = flags["f2l_r"].concat(flags["r"], flags["rd"]);
+        flags["l6e"] = flags["ub"].concat(flags["ur"], flags["uf"], flags["ul"], flags["df"], flags["db"]);
+        flags["lse"] = flags["l6e"];
+        
+        let inpFlags = {};
+
+        if (flagsStr.trim() === "") {
+            inpFlags["all"] = "";
+        }
+        else {
+            let flagsArr = flagsStr.split("-").filter(f => f.trim() !== "");
+            for (let f of flagsArr) {
+                const fs = f.split(" ");
+                inpFlags[fs[0]] = isValidColor(fs[1]) ? fs[1].trim() : "clean";
+            }
+        }
+        
+        let col = {};
+
+        for (let i = 0; i < 6*n*n; i++) {
+            col[i] = clean[Math.floor(i / (n*n))];
+        }
+        for (let k of Object.keys(inpFlags)) {
+            if (flags[k]) {
+                for (let v of flags[k]) {
+                    col[v] = inpFlags[k];
+                    
+                }
+            }
+        }
+
+        let width = $(svgID).width();
+        let height = 3 * width / 4;
+        $(svgID).height(height);
+        let space = width / 20;
+        let size = ((width - 3 * space) / 4) / n;
+        let fill = "";
+        let strokeWidth = ((size / n) > 1) ? 1 : 0;
+        let stroke = "#1E1E1E";
+    
+        let coordinates = [
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: 0,
+                y2: n * size,
+            },
+            {
+                x1: 0,
+                x2: n * size,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: 2 * n * size + 2 * space,
+                x2: 3 * n * size + 2 * space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: 3 * n * size + 3 * space,
+                x2: 4 * n * size + 3 * space,
+                y1: n * size + space,
+                y2: 2 * n * size + space,
+            },
+            {
+                x1: n * size + space,
+                x2: 2 * n * size + space,
+                y1: 2 * n * size + 2 * space,
+                y2: 3 * n * size + 2 * space,
+            }
+        ];
+        
+        for (let i = 0; i < 6; i++) {
+            let j = 0;
+            let x1 = coordinates[i].x1;
+            let x2 = coordinates[i].x2;
+            let y1 = coordinates[i].y1;
+            let y2 = coordinates[i].y2;
+    
+            let yCount = 0;
+            for (let y = y1; y < y2; y += size) {
+                let k = 0;
+                let xCount = 0;
+                for (let x = x1; x < x2; x += size) {
+                    fill = isValidColor(col[cube[i][j][k]]) ? col[cube[i][j][k]] : clean[Math.floor(cube[i][j][k] / (n*n))];
+                    
+                    let rect = document.createElementNS('http://www.w3.org/2000/svg', "rect");
+                    $(rect).attr("x", x);
+                    $(rect).attr("y", y);
+                    $(rect).attr("width", size);
+                    $(rect).attr("height", size);
+                    $(rect).attr("style", "fill:"+fill+";stroke:"+stroke+";stroke-width:"+strokeWidth);
+                    
+                    $(svgID).append(rect);
+                    k++;
+                    xCount++;
+                    if (xCount === n) {
+                        break;
+                    }
+                }
+                j++;
+                yCount++;
+                if (yCount === n) {
+                    break;
+                }
+            }
+        }
+
+        function transpose(arr) {
+            const rows = arr.length;
+            const cols = arr[0].length;
+
+            const transposed = [];
+            for (let i = 0; i < cols; i++) {
+                transposed[i] = [];
+                for (let j = 0; j < rows; j++) {
+                    transposed[i][j] = arr[j][i];
+                }
+            }
+
+            return transposed;
+        }
+
+        function getCen(s) {
+            let cen = [];
+            for (let i = 1; i < n - 1; i++) {
+                for (let j = 1; j < n - 1; j++) {
+                    cen.push(indCube[s][i][j]);
+                }
+            }
+            return cen;
+        }
+
+        function isValidColor(inputColor) {
+            const tempElement = $('<div>').css('color', 'transparent').css('color', inputColor);
+            return tempElement.css('color') !== 'transparent' && inputColor.trim() !== "";
+        }
+    }
 
     function drawScrambleNxN(svgID, n, scr, col = ["white", "#FFAA00", "#00FF00", "red", "blue", "yellow"]) {
         $(svgID).empty();
@@ -3631,6 +3966,100 @@ function cleanAlg(alg) {
     }
 
     return newAlg.replaceAll("r","Rw").replaceAll("l","Lw").replaceAll("u","Uw").replaceAll("d","Dw").replaceAll("f","Fw").replaceAll("b","Bw").trim();
+}
+
+function getState_new(n, scr) {
+    let cube = [];
+
+    let nScr = [];
+    for (let s of scr.split(" ")) {
+        if (s.includes("M2")) {
+            nScr.push("R2 L2 x2");
+        }
+        else if (s.includes("M'")) {
+            nScr.push("R' L x");
+        }
+        else if (s.includes("M")) {
+            nScr.push("R L' x'");
+        }
+        else if (s.includes("S2")) {
+            nScr.push("F2 B2 z2");
+        }
+        else if (s.includes("S'")) {
+            nScr.push("F B' z'");
+        }
+        else if (s.includes("S")) {
+            nScr.push("F' B Z");
+        }
+        else if (s.includes("E2")) {
+            nScr.push("U2 D2 y2");
+        }
+        else if (s.includes("E'")) {
+            nScr.push("U' D y");
+        }
+        else if (s.includes("E")) {
+            nScr.push("U D' y'");
+        }
+        else {
+            nScr.push(s);
+        }
+    }
+    scr = nScr.join(" ");
+
+    let ind = 0;
+    for (let s = 0; s < 6; s++) {
+        let side = [];
+        for (let i = 0; i < n; i++) {
+            let line = [];
+            for (let j = 0; j < n; j++) {
+                line.push(ind);
+                ind++;
+            }
+            side.push(line);
+        }
+        cube.push(side);
+    }
+    
+    for (let s of scr.split(" ")) {
+        if (!s.includes("w")) {
+            s = "1" + s;
+        }
+        else if (s.split("")[1] === "w") {
+            s = "2" + s;
+        }
+        s = s.replace("w", "").replace("'", "3");
+        
+        if (s.includes("R")) {
+            let r = parseInt(s.split("R")[1]) || 1;
+            move(cube, "R", parseInt(s.split("R")[0]), r);
+        }
+        else if (s.includes("L")) {
+            let r = parseInt(s.split("L")[1]) || 1;
+            move(cube, "L", parseInt(s.split("L")[0]), r);
+        }
+        else if (s.includes("U")) {
+            let r = parseInt(s.split("U")[1]) || 1;
+            move(cube, "U", parseInt(s.split("U")[0]), r);
+        }
+        else if (s.includes("D")) {
+            let r = parseInt(s.split("D")[1]) || 1;
+            move(cube, "D", parseInt(s.split("D")[0]), r);
+        }
+        else if (s.includes("F")) {
+            let r = parseInt(s.split("F")[1]) || 1;
+            move(cube, "F", parseInt(s.split("F")[0]), r);
+        }
+        else if (s.includes("B")) {
+            let r = parseInt(s.split("B")[1]) || 1;
+            move(cube, "B", parseInt(s.split("B")[0]), r);
+        }
+        else {
+            let r = parseInt(s.split("")[2]) || 1;
+            move(cube, s.split("")[1], 0, r);
+        }
+    }
+    
+    return cube;
 }
 
 function getState(n, scr) {
