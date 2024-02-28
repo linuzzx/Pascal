@@ -52,6 +52,65 @@ function initActions() {
     });
     flip = localStorage.getItem("clockFlip") ? localStorage.getItem("clockFlip") : flip;
     updateFlip();
+
+    $(document).on('keydown', function(event) {
+        const key = event.key.toLowerCase();
+        
+        console.log(`Key pressed: ${key}`);
+        if (key === " ") {
+            event.preventDefault();
+            scrambleClock();
+        }
+        else if (key === "e") {
+            turnClock("UL", -1);
+        }
+        else if (key === "r") {
+            turnClock("UL", +1);
+        }
+        else if (key === "u") {
+            turnClock("UR", -1);
+        }
+        else if (key === "i") {
+            turnClock("UR", +1);
+        }
+        else if (key === "d") {
+            turnClock("DL", +1);
+        }
+        else if (key === "c") {
+            turnClock("DL", -1);
+        }
+        else if (key === "k") {
+            turnClock("DR", -1);
+        }
+        else if (key === "m") {
+            turnClock("DR", +1);
+        }
+        else if (key === "f") {
+            togglePin("ul");
+        }
+        else if (key === "g") {
+            togglePin("dl");
+        }
+        else if (key === "h") {
+            togglePin("dr");
+        }
+        else if (key === "j") {
+            togglePin("ur");
+        }
+    });
+
+    $('#toggleMappings').click(function() {
+        $('#keyMappingsOverlay').toggle();
+    });
+
+    $('#keyMappingsOverlay').click(function() {
+        $(this).hide();
+    });
+
+    // Prevent hiding when clicking inside the mappings list
+    $('#keyMappings').click(function(event) {
+        event.stopPropagation();
+    });
 }
 
 function initClockCircles() {
