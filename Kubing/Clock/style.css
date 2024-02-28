@@ -12,6 +12,11 @@ body {
     height: 90%;
     margin: 0;
     padding: 1%;
+    text-align: center;
+}
+
+#btnScramble {
+    font-size: 3vh;
 }
 
 #clockDisplay {
