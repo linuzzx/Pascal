@@ -27,7 +27,6 @@ button {
     height: 100%;
     margin: auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 1%;
 }
 
@@ -81,13 +80,64 @@ button {
 }
 
 .pin {
+    position: relative; /* Make sure .pin is positioned */
     margin: 10%;
     border-radius: 50%;
-    background-color: #000;
 }
 
-.pinActive {
-    background-color: #ffff00 !important;
+#fClock .pin {
+    background-color: #252525;
+}
+
+#bClock .pin {
+    background-color: #ddd;
+}
+
+.pinActive::before {
+    content: ''; /* Necessary for creating a pseudo-element */
+    position: absolute; /* Position it in relation to .pin */
+    top: 25%; /* Adjust to position the square between the circles */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the square horizontally and vertically */
+    width: 98%; /* Size of the square, adjust as needed */
+    height: 80%; /* Size of the square, adjust as needed */
+}
+
+.pinActive::after {
+    content: ''; /* This is necessary to create a pseudo-element */
+    position: absolute; /* Position it in relation to .pin */
+    top: -20%; /* Adjust this value to move the circle above .pin */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Center the circle horizontally and move it slightly above */
+    width: 100%; /* Size of the circle, adjust as needed */
+    height: 100%; /* Size of the circle, adjust as needed */
+    border-radius: 50%; /* Make it round */
+}
+
+#fClock .pinActive {
+    background-color: #252525 !important;
+}
+
+#fClock .pinActive::before {
+    background-color: #252525 !important;
+}
+
+#fClock .pinActive::after {
+    background-color: #252525 !important;
+    border: 1px solid #ddd;
+}
+
+#bClock .pinActive {
+    background-color: #ddd !important;
+}
+
+#bClock .pinActive::before {
+    background-color: #ddd !important;
+}
+
+#bClock .pinActive::after {
+    background-color: #ddd !important;
+    border: 1px solid #252525;
 }
 
 #fClock {

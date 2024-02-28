@@ -25,12 +25,24 @@ let pins = {
 }
 
 $(() => {
+    initPins();
     initActions();
     initClockCircles();
-    initPins();
 });
 
 function initActions() {
+    if ($(window).width() > $(window).height()) {
+        $("#clockDisplay").css({
+            "grid-template-columns": "1fr 1fr",
+            "grid-template-rows": "",
+        });
+    }
+    else {
+        $("#clockDisplay").css({
+            "grid-template-rows": "1fr 1fr",
+            "grid-template-columns": "",
+        });
+    }
     $(".wheel").on("click", e => {
         e.stopPropagation();
         let wheel = $(e.target).data()["wheel"];
@@ -483,8 +495,10 @@ function updateFlip() {
     $("#btnToggleFlip").text("Change flip to " + notFlip);
     if (flip === "y2") {
         $("#bClock").css({"transform": "rotate(0deg)"});
+        $("#bClock .pinActive").css({"transform": "rotate(0deg)"});
     }
     else if(flip === "x2") {
         $("#bClock").css({"transform": "rotate(180deg)"});
+        $("#bClock .pinActive").css({"transform": "rotate(-180deg)"});
     }
 }
