@@ -337,6 +337,7 @@ function scrambleClock(scr = "") {
             let step = s.slice(s.length - 2, s.length - 1);
             let posNeg = s.slice(s.length - 1);
             setPins(pin, back);
+            updatePins();
             turnClock(wheel, parseInt(back ? -parseInt(posNeg + step) : parseInt(posNeg + step)));
         }
     }
