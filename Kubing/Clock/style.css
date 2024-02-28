@@ -1,6 +1,4 @@
 html {
-    /* background-image: linear-gradient(to bottom, #181818, #464646); */
-    /* background-attachment: fixed; */
     background-color: #555;
     height: 100%;
     margin: 0;
@@ -17,11 +15,14 @@ body {
 
 button {
     position: absolute;
+    z-index: 1;
     font-size: 3vh;
     transform: translateX(-50%);
 }
 
 #clockDisplay {
+    position: relative;
+    z-index: 0;
     width: 100%;
     height: 100%;
     margin: auto;
@@ -130,6 +131,10 @@ button {
     margin: 20%;
     border-radius: 50%;
     position: relative;
+}
+
+.wheel:hover {
+    background-color: #ffff00fe;
 }
 
 .arrow {
