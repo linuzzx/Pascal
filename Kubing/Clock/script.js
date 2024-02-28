@@ -56,7 +56,6 @@ function initActions() {
     $(document).on('keydown', function(event) {
         const key = event.key.toLowerCase();
         
-        console.log(`Key pressed: ${key}`);
         if (key === " ") {
             event.preventDefault();
             scrambleClock();
