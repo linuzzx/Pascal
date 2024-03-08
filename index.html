@@ -2,77 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Einar KL</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pascal's Triangle</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    <script src="index.js"></script>
-    <link rel="stylesheet" href="index.css">
     <link rel="shortcut icon" href="https://einarkl.no/favicon.png" type="image/x-icon">
 </head>
 <body>
-    <div id="header">
-        <div><button class="btnTabs" onclick="showHome()">Home</button></div>
-        <div><button class="btnTabs" onclick="showProjects()">Projects</button></div>
-        <div><button class="btnTabs" onclick="showApps()">Apps</button></div>
-    </div>
-    <div id="underline"></div>
-    <div id="content">
-        <div id="tabHome" class="tabContent">
-            <h1>Hi, my name is Einar. Welcome to my page!</h1>
-            <div id="socialLinks">
-                <a href="https://github.com/EinarKL/" target="_blank"><img src="./resources/GitHub_logo64.png" alt="GitHub" height="64" width="64"></a>
-                <a href="https://www.youtube.com/channel/UCdFBM4hrchDaiIICygbRM3g" target="_blank"><img src="./resources/YouTube_logo64.png" alt="YouTube" height="64" width="64"></a>
-                <a href="https://www.worldcubeassociation.org/persons/2015LUND03" target="_blank"><img src="./resources/WCA_logo.png" alt="WCA" height="64" width="64"></a>
-                <a href="https://ratings.fide.com/profile/1578391" target="_blank"><img src="./resources/fide-logo.png" alt="FIDE" width="64"></a>
-            </div>
-        </div>
-        <div id="tabProjects" class="tabContent">
-            <h1><input id="inputSearch" class="form-control" type="text" placeholder="Search the web..."></h1>
-            <h1><a href="Bachelor">Bacheloroppgave</a></h1>
-            <h1><a href="BF">Brain F**k reader</a></h1>
-            <h1><a href="Kubing">Kubing</a></h1>
-            <h1><a href="MiniEinar">Mini Einar</a></h1>
-            <h1><a href="Pascal">Pascal's Triangle</a></h1>
-            <h1><a href="PixelArt">PixelArt</a></h1>
-            <h1><a href="Pokemon/RNGTimer">RNG timer</a></h1>
-            <h1><a href="Sudoku Solver">Sudoku solver</a></h1>
-            <h1><a href="Fractals">Fractals</a></h1>
-            <h1><a href="SVG_testing">SVG testing</a></h1>
-            <h1><a href="Games/TicTacToe">Tic Tac Toe</a></h1>
-            <h1><a href="Chess/Chess">Chess</a></h1>
-            <h1><a href="Chess/ChessBoardTrainer">Chess Board Trainer</a></h1>
-            <h1><a href="URL">URL Shortener</a></h1>
-        </div>
-        <div id="tabApps" class="tabContent">
-            <h1>
-                <a href="https://play.google.com/store/apps/details?id=no.einarkl.space_timedistortiontimer" target="_blank">
-                    <div>
-                        <img class="tabAppsImg" src="./resources/DistortionTimer_logo.png" alt="Logo">
-                        Distortion Timer
-                    </div>
-                </a>
-            </h1>
-            <h1>
-                <a href="https://play.google.com/store/apps/details?id=no.einarkl.einarskubeapp" target="_blank">
-                    <div>
-                        <img class="tabAppsImg" src="./resources/EinarsKubeapp_logo.png" alt="Logo">
-                        Einars kubeapp
-                    </div>
-                </a>
-            </h1>
-            <h1>
-                <a href="https://play.google.com/store/apps/details?id=no.einarkl.sudoku" target="_blank">
-                    <div>
-                        <img class="tabAppsImg" src="./resources/Sudoku_logo.png" alt="Logo">
-                        Sudoku
-                    </div>
-                </a>
-            </h1>
-        </div>
-    </div>
+    <input id="inpN" type="number" maxLength="3" placeholder="Depth">
+    <button onclick="makePascal($('#inpN').val(), false)">Print Pascal</button>
+    <button onclick="makePascal($('#inpN').val(), true)">Print Pascal upside down</button>
+    <center><div id="result"></div></center>
 </body>
+<script src="index.js"></script>
 </html>
