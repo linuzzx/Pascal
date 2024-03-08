@@ -834,17 +834,21 @@ function drawArrow() {
 function drawSquare() {
     let s = $("#board").width() / 8;
     let squareStyles = [
-        "fill: rgb(255, 170, 0); opacity: 0.8;",//yellow "ctrl"
-        "fill: rgb(172, 206, 89); opacity: 0.8;",//green "shift"
-        "fill: rgb(82, 176, 220); opacity: 0.8;",//blue "alt"
-        "fill: rgb(235, 97, 80); opacity: 0.8;",//red ""
+        "rgba(255, 170, 0, 0.8)",//yellow "ctrl"
+        "rgba(159, 207, 63, 0.8)",//green "shift"
+        "rgba(72, 193, 249, 0.8)",//blue "alt"
+        "rgba(248, 85, 63, 0.8)",//red ""
     ];
 
     let tile = arrowUp;
     let id = "sq" + arrowUp;
-
-    if ($("#" + id).length !== 0) {
+    let squareCol = (curBtn === null ? squareStyles[squareStyles.length - 1] : squareStyles[buttons.indexOf(curBtn)]);
+    
+    if ($("#" + id).length !== 0 && $("#" + id).css("fill") === squareCol) {
         $("#" + id).remove();
+    }
+    else if ($("#" + id).length !== 0) {
+        $("#" + id).css("fill", squareCol);
     }
     else {
         let rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
@@ -853,7 +857,7 @@ function drawSquare() {
         $(rect).attr("width", s);
         $(rect).attr("height", s);
         $(rect).attr("id", id);
-        $(rect).attr("style", curBtn === null ? squareStyles[squareStyles.length - 1] : squareStyles[buttons.indexOf(curBtn)]);
+        $(rect).attr("style", "fill: " + (curBtn === null ? squareStyles[squareStyles.length - 1] : squareStyles[buttons.indexOf(curBtn)]) + "; opacity: 0.8;");
 
         $("#squareLayer").append(rect);
     }

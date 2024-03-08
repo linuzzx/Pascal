@@ -15,53 +15,12 @@
 <body>
     <div id="content">
         <h2>HTR Corner Subsets</h1>
-        <div id="subsets">
-            <h3 class="cornerSets">0cXe / 8cXe</h3>
-            <h4>See  if the corners can be solved with half turns or not. If they can't, it's either 3 or 4qt which can be determined either with a BLD trace, or by seeing if the corners naturally reduce to either a 2 cycle of corners or a 3 cycle of corners.</h4>
-            <br>
-            <h3>0qt</h3>
-            <h4>For 0qt corners you'll often have to do 2qt to get to HTR due to edges being missing. U R2 L2 D and U R2 F2 R2 U are useful triggers to know. Otherwise this set is fairly straight forward: Do any qt to give yourself 1qt 4C4E, then solve the 4C4E case somehow.</h4>
-            <br>
-            <h3>3qt</h3>
-            <h4>For 3qt, the general structure is something like U R2 U2 F2 U R2 U2 F2 U which is quite bad. In order to do the first qt correctly and not accidentally give yourself 4qt, make sure you corners look like either a Yperm, a pseudo Yperm (do R2 then Yperm to set up), or two sets of slashes (do Yperm F2 U2 R2 to set up). If it doesn't look like one of these 3 cases before doing a qt, you'll give yourself 4qt.</h4>
-            <br>
-            <h3>4qt</h3>
-            <h4>For 4qt the general structure is U R2 U R2 U2 F2 U R2 U which is still kind of bad, but in practice this set is a little nicer than 3qt 0CXE. It doesn't actually matter what the corners look like before doing a quarter turn, but to do the case optimally the direction of the first turn matters (unlike the previous case where the direction doesn't matter but the corner case does). Here I think the easiest method is to remember two key cases. If you have something that looks like triple sledge (do U (R' F R F')3 U' to set up), make sure the first qt brings the missing corners from U/D away from each other (in this case that would be U' followed by any side turn then any U/D quarter turn). Alternatively, if you do an F2 after the previous set up moves, you'll have a slightly different case which resembles a JJ PBL on 2x2 but in a pseudo formation. Here the direction of the first move is dictated by which move brings the bars away from each other. In this case you would want to do a U to achieve that.</h4>
-            <br>
-            <h3 class="cornerSets">4cXe</h3>
-            <h4>This set ranges from 1-4qt if it's 1qt lookalike corners (R), or 2-5qt if it's 2qt lookalike corners (R U2 R'). For all of these cases I'm going to recommend BLD+NISS tracing since it's very hard to cohesively cover all of these cases by learning corner case solutions. There will still be a handful of cases where I either recommend a tiny bit of brute forcing or learning some specific corner cases, but the core recognition will be BLD and NISS tracing.</h4>
-            <br>
-            <h3>1qt</h3>
-            <h4>1q lookalike on both sides + odd trace = 1qt corners. If you have 4C4E you can try solving the case directly, otherwise you can regress to a good 2qt subset and solve that case or solve the corners to HTR and do one of the edge only triggers from before.</h4>
-            <br>
-            <h3>2qt a</h3>
-            <h4>2q lookalike on both sides + even trace = 2qt corners. U R2 U, U R2 F2 U, and U R2 F2 B2 D are good triggers to know & attempt to set up to. You have to be careful with how you do the first quarter turn as you can accidentally give yourself fake HTR. If something like U R2 U fails, bring 3 misoriented corners to the same face, do a U2, and then solve the case from there.</h4>
-            <br>
-            <h3>2qt b</h3>
-            <h4>1q lookalike on both sides + even trace = 2qt corners. U R2 U2 F2 U is a good trigger to know for this case, and the general structure is to bring the misoriented corners to a slashes formation, do any quarter turn, and try to solve the 4C4E case.</h4>
-            <br>
-            <h3>3qt</h3>
-            <h4>1q/2q lookalike mismatch + odd trace = 3qt corners. Depending on the side of the scramble you're on, this will either follow a U R2 U R2 U2 F2 U structure, or a U R2 U2 F2 U R2 U structure. On the side of the scramble that looks like 2qt, do any set up to 1q look a like and you'll have the U R2 U2 F2 U style of 2qt. Make sure when setting up the 1qt lookalike corners you do the first move in such a way that your corners are 3 moves from being oriented instead of 2. On the side of the scramble that looks like 1qt, you have to be a bit careful with how you set up the corners before transforming the 1qt lookalike to 2qt lookalike. Understanding 4qt 0CXE and 4qt 4CXE will give you all of the relevant fake HTR fixes since there's a few clever ways you can get out of doing a qt of regression depending on where your corners initially are. It's worthwhile to also know a handful of corner cases that tell you whether or not you're ready to do a qt of progress. If your corners look like the JJ PBL, 4 adjacent bars (R2 U R2 U2 F2 to set up), or barslash with one matching bar and one opposite bar (R2 U R2 U' R2 U2 F2 to set up), you know you're good to go.</h4>
-            <br>
-            <h3>4qt</h3>
-            <h4>1q/2q lookalike mismatch + even trace = 4qt corners. This case follows a similar structure to 4qt 0CXE & also has a 2nd path which works on the side of the scramble that looks like 1qt. The side of the scramble that looks like 2qt is pretty easy and starts the same way 3qt 4CXE does. The only difference is that after doing your first move to reduce to 1qt lookalike & setting the corners up to be 3 moves from oriented, you insert a half turn while maintaining this 3 moves from oriented state, and then by adding a quarter turn you give yourself U R2 U style 2qt. On the side of the scramble that looks like 1qt, the easier (but worse) path is to simply give yourself 3qt 0CXE and then solve that case. The better path is to set the corners up such that they look like they're ready to be solved like a U R2 U2 F2 U case, do a quarter turn in any direction, and then deal with the 3qt 4CXE case looking for the same 3 corners cases mentioned previously.</h4>
-            <br>
-            <h3>5qt</h3>
-            <h4>2q lookalike on both sides + odd trace = 5qt corners. Since there's no such thing as a 6qt case, you can either turn this case into 1qt lookalike for 4qt 4CXE, or into 2CXE (or 6CXE) to give yourself 4qt 2CXE. The latter is a bit better generally speaking, but obviously 5qt corners is quite bad and something you'll almost always discard.</h4>
-            <br>
-            <h3 class="cornerSets">2cXe / 6cXe</h3>
-            <h4>For this set, we won't be using any NISS tracing and will instead use a mix of BLD tracing and brute force. This set ranges from 3-5qt, so if you get an even trace you know for certain that it's 4qt 2CXE. If you get an odd trace, I recommend brute force testing to see if it's 3 or 5 qt.<br><br>For odd trace 2CXE, set up the 2 misoriented corners such that they're on opposing layers and try doing U followed by 4 more moves to orient all of the corners. If that fails to produce HTR corners, undo those 5 total moves and try U' instead of U. If that also fails, you have 5qt 2CXE. If one of them works however, you have 3qt 2CXE.</h4>
-            <br>
-            <h3>3qt</h3>
-            <h4>For 3qt 2CXE the general structure is U R2 U R2 U, and it's good to know U R2 U R2 U and D L2 U R2 U as triggers. Note that for this subset you can do any number of half turns before the first quarter turn. You just have to make sure you do the quarter turn in the correct direction & have the 2 misoriented corners on opposing layers.</h4>
-            <br>
-            <h3>4qt</h3>
-            <h4>For 4qt 2CXE, you have 2 possible paths you can take, though again one path is much, much better than the other. The ideal path is to put the two misoriented corners on the same layer & then do a quarter turn to give yourself 3qt 2CXE, leading to a U R2 U' R2 U R2 U structure. This is another case where you have to be careful before doing the first quarter turn since you can accidentally give yourself 5qt 2CXE, and here I once again recommend learning a handful of corner cases to use as visual cues that indicate it's safe to do a quarter turn. The bars+slashes with one matching and one opposite bar from before is one of the cues. Another one is the R2 U R2 U' R2 corner case (or the R2 F2 R2 equivalent). You could also have "commutator" corners that look like R' F' R B2 R' F R B2 (or the R2 F2 R2 equivalent). Lastly, you could have 3 opposite bars and one matching bar stacked on top of each other (R2 U R2 U' R2 U R2 U to set up, also has an R2 F2 R2 equivalent).</h4>
-            <br>
-            <h3>5qt</h3>
-            <h4>For 5qt 2CXE, again you can either set up to 4qt 2CXE or 4qt 4CXE. The better path is 2CXE, but again you'll almost always discard a DR with this case.</h4>
-            <br>
-        </div>
+        <br>
+        <br>
+        <table id="subsets"></table>
+        <br>
+        <br>
+        <br>
         <br>
         <br>
         <br>
